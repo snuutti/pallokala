@@ -1,0 +1,38 @@
+import { ColorSchemeName } from "react-native";
+
+export type Colors = {
+    primary: string;
+    primaryHover: string;
+    backdrop: string;
+    background: string;
+    text: string;
+    textDisabled: string;
+    textPrimary: string;
+};
+
+const primary = "#07a7e3";
+const primaryHover = "#07a7e326";
+
+export const darkColors: Colors = {
+    primary: primary,
+    primaryHover: primaryHover,
+    backdrop: "#292929",
+    background: "#333",
+    text: "rgba(240, 240, 240, 0.87)",
+    textDisabled: "rgba(240, 240, 240, 0.5)",
+    textPrimary: "#eee"
+};
+
+export const lightColors: Colors = {
+    primary: primary,
+    primaryHover: primaryHover,
+    backdrop: "#eee",
+    background: "#fff",
+    text: "rgba(16, 16, 16, 0.75)",
+    textDisabled: "rgba(16, 16, 16, 0.5)",
+    textPrimary: "#333"
+};
+
+export function getColors(colorScheme: ColorSchemeName): Colors {
+    return colorScheme === "dark" ? darkColors : lightColors;
+}

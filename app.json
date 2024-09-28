@@ -1,0 +1,36 @@
+{
+    "expo": {
+        "name": "Pallokala for PufferPanel",
+        "slug": "pallokala",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/images/icon.png",
+        "scheme": "pallokala",
+        "userInterfaceStyle": "automatic",
+        "splash": {
+            "image": "./assets/images/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "ios": {
+            "supportsTablet": true
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/images/adaptive-icon.png",
+                "backgroundColor": "#ffffff"
+            }
+        },
+        "androidNavigationBar": {
+            "barStyle": "dark-content",
+            "backgroundColor": "#ffffff"
+        },
+        "plugins": [
+            "expo-router",
+            "expo-font"
+        ],
+        "experiments": {
+            "typedRoutes": true
+        }
+    }
+}
