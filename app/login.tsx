@@ -1,19 +1,33 @@
 import { useState } from "react";
 import { View, ScrollView, TextInput, TouchableOpacity, Text, StyleSheet, useColorScheme } from "react-native";
 import { router } from "expo-router";
+import { useAccount } from "@/context/AccountProvider";
 import { Colors, getColors } from "@/constants/Colors";
+import { OAuthAccount } from "@/types/account";
 
 export default function Login() {
     const colorScheme = useColorScheme();
+    const { addAccount } = useAccount();
     const [address, setAddress] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [id, setId] = useState("");
+    const [secret, setSecret] = useState("");
 
     const colors = getColors(colorScheme);
     const styles = styling(colors);
 
-    const logIn = () => {
-        router.replace("/");
+    const logIn = async () => {
+        const account: OAuthAccount = {
+            serverAddress: address,
+            type: "oauth",
+            clientId: id,
+            clientSecret: secret
+        };
+
+        if (await addAccount(account)) {
+            router.replace("/");
+        } else {
+            console.error("Login failed");
+        }
     };
 
     return (
@@ -35,20 +49,19 @@ export default function Login() {
                     />
 
                     <TextInput
-                        defaultValue={email}
-                        onChangeText={setEmail}
-                        placeholder="Email"
+                        defaultValue={id}
+                        onChangeText={setId}
+                        placeholder="Client ID"
                         placeholderTextColor={colors.textPrimary}
                         autoCapitalize="none"
-                        autoComplete="email"
-                        keyboardType="email-address"
+                        autoComplete="off"
                         style={styles.input}
                     />
 
                     <TextInput
-                        defaultValue={password}
-                        onChangeText={setPassword}
-                        placeholder="Password"
+                        defaultValue={secret}
+                        onChangeText={setSecret}
+                        placeholder="Client secret"
                         placeholderTextColor={colors.textPrimary}
                         autoCapitalize="none"
                         autoComplete="password"
@@ -57,7 +70,7 @@ export default function Login() {
                     />
 
                     <TouchableOpacity style={styles.button} onPress={logIn}>
-                        <Text style={styles.buttonText}>Login</Text>
+                        <Text style={styles.buttonText}>Add account</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

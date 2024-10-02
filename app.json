@@ -14,6 +14,9 @@
             "backgroundColor": "#ffffff"
         },
         "ios": {
+            "config": {
+                "usesNonExemptEncryption": false
+            },
             "supportsTablet": true
         },
         "android": {
@@ -28,7 +31,8 @@
         },
         "plugins": [
             "expo-router",
-            "expo-font"
+            "expo-font",
+            "expo-secure-store"
         ],
         "experiments": {
             "typedRoutes": true

@@ -2,11 +2,16 @@ import { StyleSheet, Text, TouchableOpacity, View, useColorScheme } from "react-
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import { Image } from "expo-image";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useApiClient } from "@/context/ApiClientProvider";
+import { useAccount } from "@/context/AccountProvider";
 import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
 import { Colors, getColors } from "@/constants/Colors";
+import { md5 } from "js-md5";
 
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
     const colorScheme = useColorScheme();
+    const { config } = useApiClient();
+    const { activeAccount, user } = useAccount();
     const { present } = useSwitchServerModal();
 
     const colors = getColors(colorScheme);
@@ -18,13 +23,13 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                 <View style={styles.userContainer}>
                     <TouchableOpacity>
                         <Image
-                            source="https://www.gravatar.com/avatar/0?d=mp"
+                            source={`https://www.gravatar.com/avatar/${md5(user?.email?.trim().toLowerCase() || "")}?d=mp`}
                             style={styles.avatar}
                         />
                     </TouchableOpacity>
 
-                    <Text style={styles.username}>username</Text>
-                    <Text style={styles.server}>branding name</Text>
+                    <Text style={styles.username}>{user?.username}</Text>
+                    <Text style={styles.server}>{config?.branding.name}</Text>
                 </View>
 
                 <View style={styles.itemsContainer}>
@@ -41,7 +46,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                         </Text>
 
                         <Text style={styles.actionTextSubheader}>
-                            https://pufferpanel.server.url
+                            {activeAccount?.serverAddress}
                         </Text>
                     </View>
                 </TouchableOpacity>

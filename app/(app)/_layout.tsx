@@ -1,19 +1,22 @@
 import { StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
-import { Redirect } from "expo-router";
 import { Drawer } from "expo-router/drawer";
+import LoadingScreen from "@/components/LoadingScreen";
 import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
+import { useApiClient } from "@/context/ApiClientProvider";
+import { useAccount } from "@/context/AccountProvider";
 import { getColors } from "@/constants/Colors";
 
 export default function AppLayout() {
     const colorScheme = useColorScheme();
-    const loggedIn = true;
+    const { apiClient, config } = useApiClient();
+    const { loading } = useAccount();
 
     const colors = getColors(colorScheme);
     const styles = styling();
 
-    if (!loggedIn) {
-        return <Redirect href="../login" />;
+    if (apiClient === undefined || !config || loading) {
+        return <LoadingScreen />;
     }
 
     return (
