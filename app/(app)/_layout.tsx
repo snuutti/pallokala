@@ -45,6 +45,20 @@ export default function AppLayout() {
                 }}
             />
 
+            <Drawer.Screen
+                name="nodes/index"
+                options={{
+                    drawerLabel: "Nodes",
+                    drawerIcon: ({ color }) => (
+                        <NavigationIcon name="server-network" color={color} />
+                    ),
+                    drawerItemStyle: {
+                        display: apiClient.auth.hasScope("nodes.view") ? undefined : "none"
+                    },
+                    title: "Nodes"
+                }}
+            />
+
             {/* We have to manually tell the Expo router which screens not to show. */}
             {/* According to them this is working as expected. I disagree. */}
             <Drawer.Screen
