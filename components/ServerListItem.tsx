@@ -39,8 +39,8 @@ export default function ServerListItem(props: ServerListItemProps) {
     return (
         <TouchableOpacity style={style.server} onPress={onPress}>
             <View style={style.infoView}>
-                <Text style={style.name}>{props.server.name}</Text>
-                <Text style={style.node}>{props.server.node.publicHost}:{props.server.port} @ {props.server.node.name}</Text>
+                <Text style={style.name} numberOfLines={1}>{props.server.name}</Text>
+                <Text style={style.node} numberOfLines={1}>{props.server.node.publicHost}:{props.server.port} @ {props.server.node.name}</Text>
             </View>
 
             <View style={style.iconView}>
@@ -78,11 +78,11 @@ function styling(colors: Colors) {
             color: colors.textDisabled
         },
         iconView: {
-            flex: 1
+            minWidth: 20,
         },
         iconImage: {
-            width: "100%",
-            height: "100%"
+            height: "100%",
+            width: 40
         },
         statusIcon: {
             position: "absolute",

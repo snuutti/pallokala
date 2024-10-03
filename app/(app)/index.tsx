@@ -60,7 +60,6 @@ export default function ServersScreen() {
                 <ServerListItem server={item} />
             )}
             contentContainerStyle={style.serversContainer}
-            style={style.servers}
             refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
@@ -71,10 +70,9 @@ export default function ServersScreen() {
 function styling() {
     return StyleSheet.create({
         serversContainer: {
+            paddingTop: 10,
+            paddingBottom: 20,
             gap: 10
-        },
-        servers: {
-            marginVertical: 10
         }
     });
 }
