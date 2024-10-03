@@ -45,5 +45,26 @@ function patchSessionStoreJs() {
     console.log("patchPackages.cjs - sessionStore.js patched!");
 }
 
+function patchServersJs() {
+    const serversPath = path.resolve(__dirname, "../node_modules/pufferpanel/src/servers.js");
+
+    const lines = fs.readFileSync(serversPath, "utf8").split("\n");
+    if (lines[0] === "//patched") {
+        console.log("patchPackages.cjs - servers.js already patched.");
+        return;
+    }
+
+    const socketIndex = lines.findIndex(line => line.startsWith("    this._socket = new WebSocket"));
+    if (socketIndex !== -1) {
+        lines[socketIndex] = "    this._socket = new WebSocket(`${protocol}://${host}/api/servers/${this.id}/socket`, null, { headers: { \"Authorization\": \"Bearer \" + this._api.auth.getToken() } })";
+    }
+
+    lines.unshift("//patched");
+    fs.writeFileSync(serversPath, lines.join("\n"), "utf8");
+
+    console.log("patchPackages.cjs - servers.js patched!");
+}
+
 patchPackageJson();
 patchSessionStoreJs();
+patchServersJs();

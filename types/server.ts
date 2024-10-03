@@ -1,19 +1,4 @@
-export type Node = {
-    id: number;
-    name: string;
-    publicHost: string;
-    publicPort: number;
-    sftpPort: number;
-    isLocal: boolean;
-};
+import { ServerStatus, ServerView } from "pufferpanel";
 
-export type Server = {
-    id: string;
-    name: string;
-    node: Node;
-    ip: string;
-    port: number;
-    type: string;
-    icon: string;
-    canGetStatus: boolean;
-};
+export type ExtendedServerStatus = ServerStatus | "loading" | undefined;
+export type ExtendedServerView = ServerView & { online: ExtendedServerStatus };

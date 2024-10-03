@@ -10,6 +10,7 @@ import * as NavigationBar from "expo-navigation-bar";
 import { ApiClientProvider } from "@/context/ApiClientProvider";
 import { AccountProvider } from "@/context/AccountProvider";
 import { SwitchServerModalProvider } from "@/context/SwitchServerModalProvider";
+import { ServerProvider } from "@/context/ServerProvider";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -41,7 +42,9 @@ export default function RootLayout() {
                     <ApiClientProvider>
                         <AccountProvider>
                             <SwitchServerModalProvider>
-                                <Slot />
+                                <ServerProvider>
+                                    <Slot />
+                                </ServerProvider>
                             </SwitchServerModalProvider>
                         </AccountProvider>
                     </ApiClientProvider>

@@ -5,12 +5,14 @@ import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
+import { useServer } from "@/context/ServerProvider";
 import { getColors } from "@/constants/Colors";
 
 export default function AppLayout() {
     const colorScheme = useColorScheme();
     const { apiClient, config } = useApiClient();
     const { loading } = useAccount();
+    const { server } = useServer();
 
     const colors = getColors(colorScheme);
     const styles = styling();
@@ -51,7 +53,7 @@ export default function AppLayout() {
                     drawerItemStyle: {
                         display: "none"
                     },
-                    title: "server name" // TODO: set this dynamically
+                    title: server?.name || "Servers"
                 }}
             />
         </Drawer>

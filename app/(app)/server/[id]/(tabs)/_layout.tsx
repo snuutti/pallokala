@@ -1,10 +1,20 @@
+import { useEffect } from "react";
 import { Tabs, useLocalSearchParams } from "expo-router";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
+import LoadingScreen from "@/components/LoadingScreen";
+import { useServer } from "@/context/ServerProvider";
 
 export default function TabsLayout() {
+    const { server, switchServer } = useServer();
     const { id } = useLocalSearchParams<{ id: string }>();
 
-    console.log({ id });
+    useEffect(() => {
+        switchServer(id);
+    }, [id]);
+
+    if (!server || server.id !== id) {
+        return <LoadingScreen />;
+    }
 
     return (
         <Tabs>

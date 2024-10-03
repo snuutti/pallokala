@@ -3,7 +3,7 @@ import { router } from "expo-router";
 import { Image } from "expo-image";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Colors, getColors } from "@/constants/Colors";
-import { Server } from "@/types/server";
+import { ExtendedServerView } from "@/types/server";
 
 const icons: Record<string, string> = {
     "7days2die": require("@/assets/images/icons/7days2die.png"),
@@ -23,7 +23,7 @@ const icons: Record<string, string> = {
 };
 
 type ServerListItemProps = {
-    server: Server;
+    server: ExtendedServerView;
 };
 
 export default function ServerListItem(props: ServerListItemProps) {
@@ -31,6 +31,40 @@ export default function ServerListItem(props: ServerListItemProps) {
 
     const colors = getColors(colorScheme);
     const style = styling(colors);
+
+    const getServerAddress = () => {
+        let ip = props.server.node?.publicHost;
+        if (props.server.ip && props.server.ip !== "0.0.0.0") {
+            ip = props.server.ip;
+        }
+
+        return ip + (props.server.port ? ":" + props.server.port : "");
+    };
+
+    const getStatusIcon = () => {
+        if (props.server.online === "installing") {
+            return "package-down";
+        }
+
+        if (props.server.online === "offline") {
+            return "stop-circle";
+        }
+
+        if (props.server.online === "online") {
+            return "play-circle";
+        }
+
+        // TODO: Use "loading" and make it spin
+        return "reload";
+    };
+
+    const getStatusColor = () => {
+        if (props.server.online === "installing" || props.server.online === "online") {
+            return colors.primary;
+        }
+
+        return colors.textDisabled;
+    }
 
     const onPress = () => {
         router.push(`./server/${props.server.id}`);
@@ -40,17 +74,24 @@ export default function ServerListItem(props: ServerListItemProps) {
         <TouchableOpacity style={style.server} onPress={onPress}>
             <View style={style.infoView}>
                 <Text style={style.name} numberOfLines={1}>{props.server.name}</Text>
-                <Text style={style.node} numberOfLines={1}>{props.server.node.publicHost}:{props.server.port} @ {props.server.node.name}</Text>
+                <Text style={style.node} numberOfLines={1}>{getServerAddress()} @ {props.server.node?.name}</Text>
             </View>
 
             <View style={style.iconView}>
-                <Image
-                    source={icons[props.server.icon]}
-                    contentFit="contain"
-                    style={style.iconImage}
-                />
+                {props.server.icon && (
+                    <Image
+                        source={icons[props.server.icon]}
+                        contentFit="contain"
+                        style={style.iconImage}
+                    />
+                )}
 
-                <MaterialCommunityIcons size={20} color={colors.textDisabled} name="stop-circle" style={style.statusIcon} />
+                <MaterialCommunityIcons
+                    size={20}
+                    color={getStatusColor()}
+                    name={getStatusIcon()}
+                    style={style.statusIcon}
+                />
             </View>
         </TouchableOpacity>
     );
