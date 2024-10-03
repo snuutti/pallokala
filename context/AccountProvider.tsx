@@ -98,6 +98,9 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
             await setLastAccountId(account.id!);
 
             setUser(await apiClient.self.get());
+
+            // We need to do this with OAuth accounts to get the scopes
+            await apiClient.auth.reauth();
         } else {
             console.error("Login failed");
         }
