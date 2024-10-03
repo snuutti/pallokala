@@ -59,6 +59,20 @@ export default function AppLayout() {
                 }}
             />
 
+            <Drawer.Screen
+                name="users/index"
+                options={{
+                    drawerLabel: "Users",
+                    drawerIcon: ({ color }) => (
+                        <NavigationIcon name="account-multiple" color={color} />
+                    ),
+                    drawerItemStyle: {
+                        display: apiClient.auth.hasScope("users.info.view") ? undefined : "none"
+                    },
+                    title: "Users"
+                }}
+            />
+
             {/* We have to manually tell the Expo router which screens not to show. */}
             {/* According to them this is working as expected. I disagree. */}
             <Drawer.Screen
