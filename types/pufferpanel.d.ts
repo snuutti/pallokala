@@ -127,9 +127,8 @@ declare module "pufferpanel" {
         async delete(id: number): Promise<boolean>;
     }
 
-    export type UserSearchResponse = {
+    export type UserSearchResponse = Metadata & {
         users: User[];
-        metadata: Metadata;
     };
 
     export type Metadata = {
@@ -138,7 +137,7 @@ declare module "pufferpanel" {
 
     export type Paging = {
         page: number;
-        size: number;
+        pageSize: number;
         maxSize: number;
         total: number;
     };
@@ -255,9 +254,8 @@ declare module "pufferpanel" {
         async delete(id: string): Promise<boolean>;
     }
 
-    export type ServerSearchResponse = {
+    export type ServerSearchResponse = Metadata & {
         servers: ServerView[];
-        metadata: Metadata;
     };
 
     export type ServerStatus = "installing" | "online" | "offline";
@@ -308,7 +306,7 @@ declare module "pufferpanel" {
 
         hasScope(scope: string): boolean;
 
-        on(event: string, cb: (data: any) => void): void;
+        on(event: string, cb: (data: any) => void): () => void;
 
         emit(event: string, data: any): void;
 
