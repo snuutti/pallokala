@@ -1,7 +1,11 @@
 import { useCallback, useState, useEffect } from "react";
 import { Alert, RefreshControl } from "react-native";
 import { FlashList } from "@shopify/flash-list";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
 import FileItem from "@/components/server/files/FileItem";
+import { useApiClient } from "@/context/ApiClientProvider";
+import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
 import useBackHandler from "@/hooks/useBackHandler";
 import { FileDesc } from "pufferpanel";
@@ -23,6 +27,8 @@ function sortFiles(a: FileDesc, b: FileDesc) {
 }
 
 export default function FilesScreen() {
+    const { apiClient } = useApiClient();
+    const { activeAccount } = useAccount();
     const { server } = useServer();
     const [files, setFiles] = useState<FileDesc[]>([]);
     const [currentPath, setCurrentPath] = useState<FileDesc[]>([]);
@@ -82,6 +88,21 @@ export default function FilesScreen() {
         setRefreshing(false);
     }, [server, getCurrentPath, currentPath]);
 
+    const onDownload = async (file: FileDesc) => {
+        const filePath = server!.getFileUrl(getCurrentPath() + "/" + file.name);
+        const url = activeAccount!.serverAddress + filePath;
+
+        const { uri } = await FileSystem.downloadAsync(url, FileSystem.cacheDirectory + file.name, {
+            headers: {
+                "Authorization": `Bearer ${apiClient!.auth.getToken()}`
+            }
+        });
+
+        await Sharing.shareAsync(uri, {
+            dialogTitle: "Select where to save the file"
+        });
+    };
+
     const deleteAlert = (file: FileDesc) => {
         Alert.alert(
             "Delete File",
@@ -136,7 +157,7 @@ export default function FilesScreen() {
                 <FileItem
                     file={item}
                     onOpen={openFile}
-                    onDownload={() => {}}
+                    onDownload={onDownload}
                     onDelete={deleteAlert}
                     onArchive={onArchive}
                     onExtract={onExtract}
