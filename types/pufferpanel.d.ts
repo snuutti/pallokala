@@ -237,7 +237,7 @@ declare module "pufferpanel" {
 
         getFileUrl(id: string, path: string): string;
 
-        async getFile(id: string, path?: string = "", raw?: boolean = false): Promise<any>;
+        async getFile(id: string, path?: string = "", raw?: boolean = false): Promise<FileDesc[] | string>;
 
         async fileExists(id: string, path: string): Promise<"file" | "folder" | false>;
 
@@ -245,7 +245,7 @@ declare module "pufferpanel" {
 
         async createFolder(id: string, path: string): Promise<boolean>;
 
-        async archiveFile(id: string, destination: string, files: string[]): Promise<boolean>;
+        async archiveFile(id: string, destination: string, files: string | string[]): Promise<boolean>;
 
         async extractFile(id: string, path: string, destination: string): Promise<boolean>;
 
@@ -290,6 +290,14 @@ declare module "pufferpanel" {
         username?: string;
         email: string;
         scopes: string[];
+    };
+
+    export type FileDesc = {
+        name: string;
+        modifyTime?: number;
+        size?: number;
+        isFile: boolean;
+        extension?: string;
     };
 
     export class Server {
@@ -356,7 +364,7 @@ declare module "pufferpanel" {
 
         getFileUrl(path: string): string;
 
-        async getFile(path?: string = "", raw?: boolean = false): Promise<any>;
+        async getFile(path?: string = "", raw?: boolean = false): Promise<FileDesc[] | string>;
 
         async fileExists(path: string): Promise<"file" | "folder" | false>;
 
@@ -364,7 +372,7 @@ declare module "pufferpanel" {
 
         async createFolder(path: string): Promise<boolean>;
 
-        async archiveFile(destination: string, files: string[]): Promise<boolean>;
+        async archiveFile(destination: string, files: string | string[]): Promise<boolean>;
 
         async extractFile(path: string, destination: string): Promise<boolean>;
 

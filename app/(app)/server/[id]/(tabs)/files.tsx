@@ -1,147 +1,12 @@
-import { useCallback, useState } from "react";
-import { RefreshControl } from "react-native";
+import { useCallback, useState, useEffect } from "react";
+import { Alert, RefreshControl } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import FileItem from "@/components/server/files/FileItem";
-import { ServerFile } from "@/types/file";
+import { useServer } from "@/context/ServerProvider";
+import useBackHandler from "@/hooks/useBackHandler";
+import { FileDesc } from "pufferpanel";
 
-const filesUnsorted: ServerFile[] = [
-    {
-        "name": "logs",
-        "isFile": false
-    },
-    {
-        "name": "version_history.json",
-        "modifyTime": 1726673230,
-        "size": 51,
-        "isFile": true,
-        "extension": ".json"
-    },
-    {
-        "name": "usercache.json",
-        "modifyTime": 1726869870,
-        "size": 2,
-        "isFile": true,
-        "extension": ".json"
-    },
-    {
-        "name": "plugins",
-        "isFile": false
-    },
-    {
-        "name": "world",
-        "isFile": false
-    },
-    {
-        "name": "versions",
-        "isFile": false
-    },
-    {
-        "name": "server.properties",
-        "modifyTime": 1726869864,
-        "size": 1422,
-        "isFile": true,
-        "extension": ".properties"
-    },
-    {
-        "name": "banned-players.json",
-        "modifyTime": 1726869870,
-        "size": 2,
-        "isFile": true,
-        "extension": ".json"
-    },
-    {
-        "name": "help.yml",
-        "modifyTime": 1726673223,
-        "isFile": true,
-        "extension": ".yml"
-    },
-    {
-        "name": "bukkit.yml",
-        "modifyTime": 1726869869,
-        "size": 697,
-        "isFile": true,
-        "extension": ".yml"
-    },
-    {
-        "name": "world_the_end",
-        "isFile": false
-    },
-    {
-        "name": "ops.json",
-        "modifyTime": 1726869870,
-        "size": 2,
-        "isFile": true,
-        "extension": ".json"
-    },
-    {
-        "name": "cache",
-        "isFile": false
-    },
-    {
-        "name": "permissions.yml",
-        "modifyTime": 1726673230,
-        "isFile": true,
-        "extension": ".yml"
-    },
-    {
-        "name": "config",
-        "isFile": false
-    },
-    {
-        "name": "spigot.yml",
-        "modifyTime": 1726869871,
-        "size": 4920,
-        "isFile": true,
-        "extension": ".yml"
-    },
-    {
-        "name": "libraries",
-        "isFile": false
-    },
-    {
-        "name": "server.jar",
-        "modifyTime": 1726585988,
-        "size": 49326293,
-        "isFile": true,
-        "extension": ".jar"
-    },
-    {
-        "name": "whitelist.json",
-        "modifyTime": 1726673230,
-        "size": 2,
-        "isFile": true,
-        "extension": ".json"
-    },
-    {
-        "name": "banned-ips.json",
-        "modifyTime": 1726869870,
-        "size": 2,
-        "isFile": true,
-        "extension": ".json"
-    },
-    {
-        "name": "eula.txt",
-        "modifyTime": 1726673186,
-        "size": 9,
-        "isFile": true,
-        "extension": ".txt"
-    },
-    {
-        "name": "world_nether",
-        "isFile": false
-    },
-    {
-        "name": "commands.yml",
-        "modifyTime": 1726869869,
-        "size": 104,
-        "isFile": true,
-        "extension": ".yml"
-    }
-];
-
-const files = filesUnsorted.sort(sortFiles);
-
-function sortFiles(a: ServerFile, b: ServerFile) {
+function sortFiles(a: FileDesc, b: FileDesc) {
     if (a.isFile && !b.isFile) {
         return 1;
     }
@@ -158,23 +23,128 @@ function sortFiles(a: ServerFile, b: ServerFile) {
 }
 
 export default function FilesScreen() {
+    const { server } = useServer();
+    const [files, setFiles] = useState<FileDesc[]>([]);
+    const [currentPath, setCurrentPath] = useState<FileDesc[]>([]);
     const [refreshing, setRefreshing] = useState(false);
 
-    const onRefresh = useCallback(() => {
+    useEffect(() => {
+        if (server === undefined) {
+            return;
+        }
+
+        refresh();
+    }, [server]);
+
+    useBackHandler(() => {
+        if (currentPath.length > 0) {
+            openFile({ name: "..", isFile: false });
+            return true;
+        }
+
+        return false;
+    });
+
+    const getCurrentPath = useCallback(() => {
+        return currentPath.map(e => e.name).join("/");
+    }, [currentPath]);
+
+    const refresh = useCallback(async () => {
         setRefreshing(true);
-        setTimeout(() => {
-            setRefreshing(false);
-        }, 2000);
-    }, []);
+
+        const res = await server?.getFile(getCurrentPath()) as FileDesc[];
+        setFiles(res.sort(sortFiles));
+
+        setRefreshing(false);
+    }, [server, getCurrentPath]);
+
+    const openFile = useCallback(async (file: FileDesc) => {
+        setRefreshing(true);
+
+        if (file.isFile) {
+            // TODO
+        } else {
+            let pathString: string;
+            if (file.name === "..") {
+                const newPath = currentPath;
+                newPath.pop();
+                setCurrentPath(newPath);
+                pathString = getCurrentPath();
+            } else {
+                setCurrentPath([...currentPath, file]);
+                pathString = getCurrentPath() + "/" + file.name;
+            }
+
+            const res = await server?.getFile(pathString) as FileDesc[];
+            setFiles(res.sort(sortFiles));
+        }
+
+        setRefreshing(false);
+    }, [server, getCurrentPath, currentPath]);
+
+    const deleteAlert = (file: FileDesc) => {
+        Alert.alert(
+            "Delete File",
+            `Are you sure you want to delete ${file.name}?`,
+            [
+                { text: "Cancel", style: "cancel" },
+                { text: "Delete", style: "destructive", onPress: () => deleteConfirm(file) }
+            ],
+            {
+                cancelable: true
+            }
+        );
+    };
+
+    const deleteConfirm = async (file: FileDesc) => {
+        setRefreshing(true);
+        await server?.deleteFile(getCurrentPath() + "/" + file.name);
+        await refresh();
+    };
+
+    const onArchive = async (file: FileDesc) => {
+        setRefreshing(true);
+        await server?.archiveFile(await makeArchiveName(file.name), `${getCurrentPath()}/${file.name}`);
+        await refresh();
+    };
+
+    const makeArchiveName = async (fileName: string) => {
+        let destination = `${getCurrentPath()}/${fileName}.zip`;
+        for (let i = 2; await server?.fileExists(destination); i++) {
+            destination = `${getCurrentPath()}/${fileName} (${i}).zip`;
+        }
+
+        return destination;
+    };
+
+    const onExtract = async (file: FileDesc) => {
+        let dest = getCurrentPath();
+        if (!dest.startsWith("/")) {
+            dest = "/" + dest;
+        }
+
+        setRefreshing(true);
+        await server?.extractFile(`${getCurrentPath()}/${file.name}`, dest);
+        await refresh();
+    };
 
     return (
         <FlashList
             data={files}
             keyExtractor={(item) => item.name}
-            renderItem={({ item }) => <FileItem file={item} />}
+            renderItem={({ item }) => (
+                <FileItem
+                    file={item}
+                    onOpen={openFile}
+                    onDownload={() => {}}
+                    onDelete={deleteAlert}
+                    onArchive={onArchive}
+                    onExtract={onExtract}
+                />
+            )}
             estimatedItemSize={58}
             refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                <RefreshControl refreshing={refreshing} onRefresh={refresh} />
             }
         />
     );

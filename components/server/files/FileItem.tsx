@@ -1,10 +1,29 @@
 import { StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Colors, getColors } from "@/constants/Colors";
-import { ServerFile } from "@/types/file";
+import { FileDesc } from "pufferpanel";
+
+const archiveExtensions = [
+    ".7z",
+    ".bz2",
+    ".gz",
+    ".lz",
+    ".lzma",
+    ".rar",
+    ".tar",
+    ".tgz",
+    ".xz",
+    ".zip",
+    ".zipx"
+];
 
 type FileItemProps = {
-    file: ServerFile;
+    file: FileDesc;
+    onOpen: (file: FileDesc) => void;
+    onDownload: (file: FileDesc) => void;
+    onDelete: (file: FileDesc) => void;
+    onArchive: (file: FileDesc) => void;
+    onExtract: (file: FileDesc) => void;
 };
 
 export default function FileItem(props: FileItemProps) {
@@ -74,8 +93,19 @@ export default function FileItem(props: FileItemProps) {
         return numFormat.format(props.file.size / Math.pow(2, 40)) + " TiB";
     };
 
+    const isArchive = (): boolean => {
+        const filename = props.file.name.toLowerCase();
+        for (let i = 0; i < archiveExtensions.length; i++) {
+            if (filename.endsWith(archiveExtensions[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     return (
-        <TouchableOpacity style={style.file}>
+        <TouchableOpacity style={style.file} onPress={() => props.onOpen(props.file)}>
             <MaterialCommunityIcons name={getIcon()} size={30} color={colors.text} style={style.icon} />
 
             <View style={style.infoView}>
@@ -86,21 +116,29 @@ export default function FileItem(props: FileItemProps) {
                 )}
             </View>
 
-            <View style={style.actionsView}>
-                {props.file.isFile ? (
-                    <TouchableOpacity>
-                        <MaterialCommunityIcons name="download" size={30} color={colors.text} />
-                    </TouchableOpacity>
-                ) : (
-                    <TouchableOpacity>
-                        <MaterialCommunityIcons name="archive-arrow-down" size={30} color={colors.text} />
-                    </TouchableOpacity>
-                )}
+            {props.file.name !== ".." && (
+                <View style={style.actionsView}>
+                    {props.file.isFile && isArchive() && (
+                        <TouchableOpacity onPress={() => props.onExtract(props.file)}>
+                            <MaterialCommunityIcons name="archive-arrow-up" size={30} color={colors.text} style={style.extract} />
+                        </TouchableOpacity>
+                    )}
 
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name="trash-can" size={30} color={colors.text} style={style.delete} />
-                </TouchableOpacity>
-            </View>
+                    {props.file.isFile ? (
+                        <TouchableOpacity onPress={() => props.onDownload(props.file)}>
+                            <MaterialCommunityIcons name="download" size={30} color={colors.text} />
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity onPress={() => props.onArchive(props.file)}>
+                            <MaterialCommunityIcons name="archive-arrow-down" size={30} color={colors.text} />
+                        </TouchableOpacity>
+                    )}
+
+                    <TouchableOpacity onPress={() => props.onDelete(props.file)}>
+                        <MaterialCommunityIcons name="trash-can" size={30} color={colors.text} style={style.delete} />
+                    </TouchableOpacity>
+                </View>
+            )}
         </TouchableOpacity>
     );
 }
@@ -129,6 +167,9 @@ function styling(colors: Colors) {
         actionsView: {
             flexDirection: "row",
             marginHorizontal: 10
+        },
+        extract: {
+            marginRight: 10
         },
         delete: {
             marginLeft: 10
