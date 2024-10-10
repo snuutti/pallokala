@@ -1,5 +1,6 @@
 import { StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
 import { Drawer } from "expo-router/drawer";
+import LoginErrorScreen from "@/components/LoginErrorScreen";
 import LoadingScreen from "@/components/LoadingScreen";
 import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
@@ -11,11 +12,15 @@ import { getColors } from "@/constants/Colors";
 export default function AppLayout() {
     const colorScheme = useColorScheme();
     const { apiClient, config } = useApiClient();
-    const { loading } = useAccount();
+    const { loading, error } = useAccount();
     const { server } = useServer();
 
     const colors = getColors(colorScheme);
     const styles = styling();
+
+    if (error) {
+        return <LoginErrorScreen />;
+    }
 
     if (apiClient === undefined || !config || loading) {
         return <LoadingScreen />;

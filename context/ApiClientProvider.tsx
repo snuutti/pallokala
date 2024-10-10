@@ -28,7 +28,7 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
                 setConfig(config);
             })
             .catch(error => {
-                console.log(error);
+                console.log("Failed to get config", error);
                 setConfig({
                     branding: {
                         name: "PufferPanel"

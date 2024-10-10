@@ -17,6 +17,7 @@ type AccountContextType = {
     activeAccount: Account | null;
     user: User | null;
     loading: boolean;
+    error: boolean;
     changeAccount: (account: Account) => Promise<void>;
     deleteAccount: (account: Account) => Promise<void>;
     addAccount: (account: Account) => Promise<boolean>;
@@ -34,6 +35,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     const [activeAccount, setActiveAccount] = useState<Account | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         loadAccounts();
@@ -86,23 +88,35 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     const changeAccount = async (account: Account) => {
         console.log("Switching to account", account);
         setLoading(true);
+        setError(false);
+        setActiveAccount(null);
         setUser(null);
 
         const apiClient = changeServer(account.serverAddress);
         const oauthAccount = account as OAuthAccount; // TODO: handle email/password login
 
-        const result = await apiClient.auth.oauth(oauthAccount.clientId, oauthAccount.clientSecret);
-        if (result) {
-            setActiveAccount(account);
-            router.replace("/");
-            await setLastAccountId(account.id!);
+        try {
+            const result = await apiClient.auth.oauth(oauthAccount.clientId, oauthAccount.clientSecret);
+            if (result) {
+                setActiveAccount(account);
+                router.replace("/");
+                await setLastAccountId(account.id!);
 
-            setUser(await apiClient.self.get());
+                setUser(await apiClient.self.get());
 
-            // We need to do this with OAuth accounts to get the scopes
-            await apiClient.auth.reauth();
-        } else {
-            console.error("Login failed");
+                // This doesn't work on v2, so in order to keep some compatibility with it we need to wrap it in a try/catch
+                try {
+                    // We need to do this with OAuth accounts to get the scopes
+                    await apiClient.auth.reauth();
+                } catch (e) {
+                    console.error("Reauth failed", e);
+                }
+            } else {
+                console.error("Login failed");
+            }
+        } catch (e) {
+            console.error("Login errored", e);
+            setError(true);
         }
 
         setLoading(false);
@@ -137,7 +151,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     };
 
     return (
-        <AccountContext.Provider value={{ accounts, activeAccount, user, loading, changeAccount, deleteAccount, addAccount }}>
+        <AccountContext.Provider value={{ accounts, activeAccount, user, loading, error, changeAccount, deleteAccount, addAccount }}>
             {children}
         </AccountContext.Provider>
     );
