@@ -27,6 +27,7 @@ export default function TabsLayout() {
                         <NavigationIcon name="console-line" color={color} />
                     )
                 }}
+                redirect={!server.hasScope("server.console") && !server.hasScope("server.console.send")}
             />
 
             <Tabs.Screen
@@ -38,6 +39,7 @@ export default function TabsLayout() {
                         <NavigationIcon name="chart-line" color={color} />
                     )
                 }}
+                redirect={!server.hasScope("server.stats")}
             />
 
             <Tabs.Screen
@@ -49,6 +51,7 @@ export default function TabsLayout() {
                         <NavigationIcon name="file" color={color} />
                     )
                 }}
+                redirect={!server.hasScope("server.files.view")}
             />
         </Tabs>
     );

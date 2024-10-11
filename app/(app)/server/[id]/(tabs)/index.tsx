@@ -21,7 +21,10 @@ export default function ConsoleScreen() {
             return;
         }
 
-        server.getConsole().then(onMessage);
+        if (server.hasScope("server.console")) {
+            server.getConsole().then(onMessage);
+        }
+
         setUnbindEvent(() => server.on("console", onMessage));
 
         setTask(server.startTask(async () => {
@@ -67,32 +70,38 @@ export default function ConsoleScreen() {
 
     return (
         <KeyboardAvoidingView style={style.container} behavior="height" keyboardVerticalOffset={100}>
-            <FlashList
-                data={lines}
-                keyExtractor={(_, index) => index.toString()}
-                renderItem={({ item }) => <ConsoleText text={item} />}
-                estimatedItemSize={30}
-                contentContainerStyle={style.logContainer}
-            />
+            {server?.hasScope("server.console") && (
+                <>
+                    <FlashList
+                        data={lines}
+                        keyExtractor={(_, index) => index.toString()}
+                        renderItem={({ item }) => <ConsoleText text={item} />}
+                        estimatedItemSize={30}
+                        contentContainerStyle={style.logContainer}
+                    />
 
-            <TouchableOpacity style={style.clearConsole} onPress={clearConsole}>
-                <MaterialCommunityIcons name="text-box-remove" size={30} color="#fff" />
-            </TouchableOpacity>
+                    <TouchableOpacity style={style.clearConsole} onPress={clearConsole}>
+                        <MaterialCommunityIcons name="text-box-remove" size={30} color="#fff" />
+                    </TouchableOpacity>
+                </>
+            )}
 
-            <View style={style.commandContainer}>
-                <TextInput
-                    style={style.commandInput}
-                    placeholder="Command"
-                    placeholderTextColor={colors.textDisabled}
-                    value={command}
-                    onChangeText={setCommand}
-                    onSubmitEditing={sendCommand}
-                />
+            {server?.hasScope("server.console.send") && (
+                <View style={style.commandContainer}>
+                    <TextInput
+                        style={style.commandInput}
+                        placeholder="Command"
+                        placeholderTextColor={colors.textDisabled}
+                        value={command}
+                        onChangeText={setCommand}
+                        onSubmitEditing={sendCommand}
+                    />
 
-                <TouchableOpacity style={style.sendButton} onPress={sendCommand}>
-                    <MaterialCommunityIcons name="send" size={30} color={colors.text} />
-                </TouchableOpacity>
-            </View>
+                    <TouchableOpacity style={style.sendButton} onPress={sendCommand}>
+                        <MaterialCommunityIcons name="send" size={30} color={colors.text} />
+                    </TouchableOpacity>
+                </View>
+            )}
         </KeyboardAvoidingView>
     );
 }

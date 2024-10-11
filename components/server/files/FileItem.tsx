@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useServer } from "@/context/ServerProvider";
 import { Colors, getColors } from "@/constants/Colors";
 import { FileDesc } from "pufferpanel";
 
@@ -28,9 +29,12 @@ type FileItemProps = {
 
 export default function FileItem(props: FileItemProps) {
     const colorScheme = useColorScheme();
+    const { server } = useServer();
 
     const colors = getColors(colorScheme);
     const style = styling(colors);
+
+    const canEdit = server?.hasScope("server.files.edit");
 
     const getIcon = (): any => {
         if (!props.file.isFile) {
@@ -118,7 +122,7 @@ export default function FileItem(props: FileItemProps) {
 
             {props.file.name !== ".." && (
                 <View style={style.actionsView}>
-                    {props.file.isFile && isArchive() && (
+                    {(props.file.isFile && isArchive() && canEdit) && (
                         <TouchableOpacity onPress={() => props.onExtract(props.file)}>
                             <MaterialCommunityIcons name="archive-arrow-up" size={30} color={colors.text} style={style.extract} />
                         </TouchableOpacity>
@@ -128,15 +132,17 @@ export default function FileItem(props: FileItemProps) {
                         <TouchableOpacity onPress={() => props.onDownload(props.file)}>
                             <MaterialCommunityIcons name="download" size={30} color={colors.text} />
                         </TouchableOpacity>
-                    ) : (
+                    ) : canEdit && (
                         <TouchableOpacity onPress={() => props.onArchive(props.file)}>
                             <MaterialCommunityIcons name="archive-arrow-down" size={30} color={colors.text} />
                         </TouchableOpacity>
                     )}
 
-                    <TouchableOpacity onPress={() => props.onDelete(props.file)}>
-                        <MaterialCommunityIcons name="trash-can" size={30} color={colors.text} style={style.delete} />
-                    </TouchableOpacity>
+                    {canEdit && (
+                        <TouchableOpacity onPress={() => props.onDelete(props.file)}>
+                            <MaterialCommunityIcons name="trash-can" size={30} color={colors.text} style={style.delete} />
+                        </TouchableOpacity>
+                    )}
                 </View>
             )}
         </TouchableOpacity>

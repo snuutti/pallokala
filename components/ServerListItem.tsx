@@ -86,12 +86,14 @@ export default function ServerListItem(props: ServerListItemProps) {
                     />
                 )}
 
-                <MaterialCommunityIcons
-                    size={20}
-                    color={getStatusColor()}
-                    name={getStatusIcon()}
-                    style={style.statusIcon}
-                />
+                {props.server.canGetStatus && (
+                    <MaterialCommunityIcons
+                        size={20}
+                        color={getStatusColor()}
+                        name={getStatusIcon()}
+                        style={style.statusIcon}
+                    />
+                )}
             </View>
         </TouchableOpacity>
     );
