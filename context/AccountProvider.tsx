@@ -7,7 +7,8 @@ import {
     getLastAccountId,
     removeAccount,
     setLastAccountId,
-    storeAccount
+    storeAccount,
+    updateAccount
 } from "@/utils/accountStorage";
 import { Account, OAuthAccount } from "@/types/account";
 import { User } from "pufferpanel";
@@ -30,7 +31,7 @@ type AccountProviderProps = {
 };
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
-    const { apiClient, changeServer } = useApiClient();
+    const { apiClient, config, changeServer } = useApiClient();
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [activeAccount, setActiveAccount] = useState<Account | null>(null);
     const [user, setUser] = useState<User | null>(null);
@@ -48,6 +49,20 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
         initialLogin();
     }, [apiClient]);
+
+    useEffect(() => {
+        if (!apiClient || !config || !activeAccount || !user) {
+            return;
+        }
+
+        const updatedAccount = activeAccount;
+        updatedAccount.nickname = user.username + " @ " + config.branding.name;
+
+        updateAccount(updatedAccount).then(() => {
+            setActiveAccount(updatedAccount);
+            loadAccounts();
+        });
+    }, [apiClient, config, activeAccount, user]);
 
     const loadAccounts = () => {
         getAccounts().then(setAccounts);

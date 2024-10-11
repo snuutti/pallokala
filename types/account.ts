@@ -1,6 +1,7 @@
 export type BaseAccount = {
     id?: number;
     serverAddress: string;
+    nickname: string;
     type: "oauth" | "email";
 };
 

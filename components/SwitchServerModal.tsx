@@ -69,8 +69,8 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
         return (
             <TouchableOpacity style={[style.item, isActive && style.itemActive]} onPress={switchAccount} disabled={isActive}>
                 <View style={style.infoView}>
-                    <Text style={style.address}>{item.serverAddress}</Text>
-                    <Text style={style.user}>{item.id}</Text>
+                    <Text style={style.address} numberOfLines={1}>{item.serverAddress}</Text>
+                    <Text style={style.user} numberOfLines={1}>{item.nickname}</Text>
                 </View>
 
                 <TouchableOpacity style={style.actionsView} onPress={deleteAlert}>
@@ -141,6 +141,7 @@ function styling(colors: Colors) {
         },
         infoView: {
             flexGrow: 1,
+            flexShrink: 1,
             flexDirection: "column",
             justifyContent: "center"
         },
