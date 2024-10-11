@@ -51,6 +51,20 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     }, [apiClient]);
 
     useEffect(() => {
+        const interval = setInterval(() => {
+            if (apiClient?.auth.isLoggedIn()) {
+                try {
+                    apiClient?.auth.reauth();
+                } catch (e) {
+                    console.error("Reauth failed", e);
+                }
+            }
+        }, 1000 * 60 * 15);
+
+        return () => clearInterval(interval);
+    }, [apiClient]);
+
+    useEffect(() => {
         if (!apiClient || !config || !activeAccount || !user) {
             return;
         }
