@@ -1,10 +1,13 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { Server } from "pufferpanel";
+import { ExtendedFileDesc } from "@/types/server";
 
 type ServerContextType = {
     server?: Server;
     id?: string;
+    openFile?: ExtendedFileDesc;
+    setOpenFile: (file: ExtendedFileDesc) => void;
     switchServer: (id: string) => void;
 };
 
@@ -18,6 +21,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     const { apiClient } = useApiClient();
     const [server, setServer] = useState<Server | undefined>(undefined);
     const [id, setId] = useState<string | undefined>(undefined);
+    const [openFile, setOpenFile] = useState<ExtendedFileDesc | undefined>(undefined);
 
     useEffect(() => {
         return () => {
@@ -43,7 +47,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     };
 
     return (
-        <ServerContext.Provider value={{ server, id, switchServer }}>
+        <ServerContext.Provider value={{ server, id, openFile, setOpenFile, switchServer }}>
             {children}
         </ServerContext.Provider>
     );

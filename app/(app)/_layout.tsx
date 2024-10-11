@@ -81,7 +81,7 @@ export default function AppLayout() {
             {/* We have to manually tell the Expo router which screens not to show. */}
             {/* According to them this is working as expected. I disagree. */}
             <Drawer.Screen
-                name="server/[id]/(tabs)"
+                name="server/[id]"
                 options={{
                     drawerItemStyle: {
                         display: "none"

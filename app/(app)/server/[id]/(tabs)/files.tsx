@@ -3,11 +3,13 @@ import { Alert, RefreshControl } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
+import { router } from "expo-router";
 import FileItem from "@/components/server/files/FileItem";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
 import useBackHandler from "@/hooks/useBackHandler";
+import { ExtendedFileDesc } from "@/types/server";
 import { FileDesc } from "pufferpanel";
 
 function sortFiles(a: FileDesc, b: FileDesc) {
@@ -29,7 +31,7 @@ function sortFiles(a: FileDesc, b: FileDesc) {
 export default function FilesScreen() {
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
-    const { server } = useServer();
+    const { server, setOpenFile } = useServer();
     const [files, setFiles] = useState<FileDesc[]>([]);
     const [currentPath, setCurrentPath] = useState<FileDesc[]>([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -68,7 +70,14 @@ export default function FilesScreen() {
         setRefreshing(true);
 
         if (file.isFile) {
-            // TODO
+            // TODO: file size warn
+            const openFile: ExtendedFileDesc = {
+                ...file,
+                path: getCurrentPath() + "/" + file.name
+            };
+
+            setOpenFile(openFile);
+            router.push(`../(modal)/editfile`);
         } else {
             let pathString: string;
             if (file.name === "..") {

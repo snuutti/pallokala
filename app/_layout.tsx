@@ -12,6 +12,9 @@ import { AccountProvider } from "@/context/AccountProvider";
 import { SwitchServerModalProvider } from "@/context/SwitchServerModalProvider";
 import { ServerProvider } from "@/context/ServerProvider";
 
+// Polyfill
+import "fast-text-encoding";
+
 SplashScreen.preventAutoHideAsync();
 
 NavigationBar.setPositionAsync("absolute");
