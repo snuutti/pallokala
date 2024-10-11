@@ -109,10 +109,10 @@ export default function FileItem(props: FileItemProps) {
             <MaterialCommunityIcons name={getIcon()} size={30} color={colors.text} style={style.icon} />
 
             <View style={style.infoView}>
-                <Text style={style.name}>{props.file.name}</Text>
+                <Text style={style.name} numberOfLines={1}>{props.file.name}</Text>
 
                 {props.file.isFile && (
-                    <Text style={style.size}>{formatFileSize()}</Text>
+                    <Text style={style.size} numberOfLines={1}>{formatFileSize()}</Text>
                 )}
             </View>
 
@@ -155,6 +155,7 @@ function styling(colors: Colors) {
         },
         infoView: {
             flexGrow: 1,
+            flexShrink: 1,
             flexDirection: "column",
             justifyContent: "center"
         },
