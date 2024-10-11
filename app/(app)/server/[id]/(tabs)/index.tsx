@@ -56,6 +56,10 @@ export default function ConsoleScreen() {
         setLines((lines) => [...lines, ...newLines]);
     };
 
+    const clearConsole = () => {
+        setLines([]);
+    };
+
     const sendCommand = () => {
         server?.sendCommand(command);
         setCommand("");
@@ -70,6 +74,10 @@ export default function ConsoleScreen() {
                 estimatedItemSize={30}
                 contentContainerStyle={style.logContainer}
             />
+
+            <TouchableOpacity style={style.clearConsole} onPress={clearConsole}>
+                <MaterialCommunityIcons name="text-box-remove" size={30} color="#fff" />
+            </TouchableOpacity>
 
             <View style={style.commandContainer}>
                 <TextInput
@@ -93,6 +101,11 @@ function styling(colors: Colors) {
     return StyleSheet.create({
         container: {
             flex: 1
+        },
+        clearConsole: {
+            position: "absolute",
+            top: 5,
+            right: 5
         },
         logContainer: {
             backgroundColor: "#000"
