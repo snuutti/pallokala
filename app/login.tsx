@@ -18,6 +18,7 @@ export default function Login() {
     const logIn = async () => {
         const account: OAuthAccount = {
             serverAddress: address,
+            nickname: "",
             type: "oauth",
             clientId: id,
             clientSecret: secret
