@@ -14,7 +14,7 @@ declare module "pufferpanel" {
         constructor(
             host: string,
             sessionStore?: SessionStore = new InMemorySessionStore(),
-            errorHandler?: (result: any) => void,
+            errorHandler?: (result: ErrorHandlerResult) => void,
             axios?: AxiosInstance = ax.create()
         );
 
@@ -32,6 +32,15 @@ declare module "pufferpanel" {
 
         async getTheme(name: string): Promise<ArrayBuffer>;
     }
+
+    export type ErrorHandlerResult = {
+        status: number;
+        statusText: string;
+        response: any;
+        request: any;
+        code: string;
+        msg: string;
+    };
 
     export type EditableConfigSettings = {
         branding: BrandingConfig;

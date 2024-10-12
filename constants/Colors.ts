@@ -8,6 +8,8 @@ export type Colors = {
     text: string;
     textDisabled: string;
     textPrimary: string;
+    success: string;
+    error: string;
 };
 
 const primary = "#07a7e3";
@@ -20,7 +22,9 @@ export const darkColors: Colors = {
     background: "#333",
     text: "rgba(240, 240, 240, 0.87)",
     textDisabled: "rgba(240, 240, 240, 0.5)",
-    textPrimary: "#eee"
+    textPrimary: "#eee",
+    success: "#4caf50",
+    error: "#fe4242"
 };
 
 export const lightColors: Colors = {
@@ -30,7 +34,9 @@ export const lightColors: Colors = {
     background: "#fff",
     text: "rgba(16, 16, 16, 0.75)",
     textDisabled: "rgba(16, 16, 16, 0.5)",
-    textPrimary: "#333"
+    textPrimary: "#333",
+    success: "#4caf50",
+    error: "#dc3131"
 };
 
 export function getColors(colorScheme: ColorSchemeName): Colors {
