@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, useColorScheme } from "react-native";
+import { StyleSheet } from "react-native";
 import { Image } from "expo-image";
 import { WebView } from "react-native-webview";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
+import { useStyle } from "@/hooks/useStyle";
 import { getType, skipDownload } from "@/utils/files";
-import { Colors, getColors } from "@/constants/Colors";
+import { Colors } from "@/constants/Colors";
 
 export default function EditFileScreen() {
-    const colorScheme = useColorScheme();
+    const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
     const { server, openFile } = useServer();
@@ -25,9 +26,6 @@ export default function EditFileScreen() {
 
         server?.getFile(openFile?.path, true).then(res => setContent(res as string));
     }, [openFile]);
-
-    const colors = getColors(colorScheme);
-    const style = styling(colors);
 
     if (!openFile || (content === null && !skipDownload(openFile))) {
         return <LoadingScreen />;

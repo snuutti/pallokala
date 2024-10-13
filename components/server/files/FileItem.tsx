@@ -1,7 +1,8 @@
-import { StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useServer } from "@/context/ServerProvider";
-import { Colors, getColors } from "@/constants/Colors";
+import { useStyle } from "@/hooks/useStyle";
+import { Colors } from "@/constants/Colors";
 import { FileDesc } from "pufferpanel";
 
 const archiveExtensions = [
@@ -28,11 +29,8 @@ type FileItemProps = {
 };
 
 export default function FileItem(props: FileItemProps) {
-    const colorScheme = useColorScheme();
+    const { style, colors } = useStyle(styling);
     const { server } = useServer();
-
-    const colors = getColors(colorScheme);
-    const style = styling(colors);
 
     const canEdit = server?.hasScope("server.files.edit");
 

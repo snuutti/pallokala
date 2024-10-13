@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, StyleSheet, useColorScheme } from "react-native";
+import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, StyleSheet } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ConsoleText from "@/components/server/console/ConsoleText";
 import { useServer } from "@/context/ServerProvider";
-import { Colors, getColors } from "@/constants/Colors";
+import { useStyle } from "@/hooks/useStyle";
+import { Colors } from "@/constants/Colors";
 import { ServerLogs } from "pufferpanel";
 
 export default function ConsoleScreen() {
-    const colorScheme = useColorScheme();
+    const { style, colors } = useStyle(styling);
     const { server } = useServer();
     const [unbindEvent, setUnbindEvent] = useState<(() => void) | undefined>(undefined);
     const [task, setTask] = useState<NodeJS.Timeout | undefined>(undefined);
@@ -38,9 +39,6 @@ export default function ConsoleScreen() {
             task && server.stopTask(task);
         };
     }, [server]);
-
-    const colors = getColors(colorScheme);
-    const style = styling(colors);
 
     const onMessage = (e: ServerLogs) => {
         if (e.epoch) {

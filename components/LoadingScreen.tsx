@@ -1,11 +1,9 @@
-import { View, ActivityIndicator, StyleSheet, useColorScheme } from "react-native";
-import { Colors, getColors } from "@/constants/Colors";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { useStyle } from "@/hooks/useStyle";
+import { Colors } from "@/constants/Colors";
 
 export default function LoadingScreen() {
-    const colorScheme = useColorScheme();
-
-    const colors = getColors(colorScheme);
-    const style = styling(colors);
+    const { style, colors } = useStyle(styling);
 
     return (
         <View style={style.container}>

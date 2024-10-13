@@ -1,5 +1,6 @@
-import { StyleSheet, Text, TouchableOpacity, useColorScheme } from "react-native";
-import { Colors, getColors } from "@/constants/Colors";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useStyle } from "@/hooks/useStyle";
+import { Colors } from "@/constants/Colors";
 import { Node } from "pufferpanel";
 
 type NodeListItemProps = {
@@ -7,10 +8,7 @@ type NodeListItemProps = {
 };
 
 export default function NodeListItem(props: NodeListItemProps) {
-    const colorScheme = useColorScheme();
-
-    const colors = getColors(colorScheme);
-    const style = styling(colors);
+    const { style } = useStyle(styling);
 
     return (
         <TouchableOpacity style={style.node}>

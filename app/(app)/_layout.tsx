@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { Drawer } from "expo-router/drawer";
 import LoginErrorScreen from "@/components/LoginErrorScreen";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -7,16 +7,13 @@ import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
-import { getColors } from "@/constants/Colors";
+import { useStyle } from "@/hooks/useStyle";
 
 export default function AppLayout() {
-    const colorScheme = useColorScheme();
+    const { style, colors } = useStyle(styling);
     const { apiClient, config } = useApiClient();
     const { loading, error } = useAccount();
     const { server } = useServer();
-
-    const colors = getColors(colorScheme);
-    const styles = styling();
 
     if (error) {
         return <LoginErrorScreen />;
@@ -32,7 +29,7 @@ export default function AppLayout() {
             screenOptions={{
                 headerTintColor: colors.text,
                 headerRight: () => (
-                    <TouchableOpacity style={styles.searchIcon}>
+                    <TouchableOpacity style={style.searchIcon}>
                         <NavigationIcon name="magnify" color={colors.text} />
                     </TouchableOpacity>
                 ),

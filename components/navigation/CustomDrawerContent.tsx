@@ -1,51 +1,49 @@
-import { StyleSheet, Text, TouchableOpacity, View, useColorScheme } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import { Image } from "expo-image";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
-import { Colors, getColors } from "@/constants/Colors";
+import { useStyle } from "@/hooks/useStyle";
+import { Colors } from "@/constants/Colors";
 import { md5 } from "js-md5";
 
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
-    const colorScheme = useColorScheme();
+    const { style, colors } = useStyle(styling);
     const { config } = useApiClient();
     const { activeAccount, user } = useAccount();
     const { present } = useSwitchServerModal();
 
-    const colors = getColors(colorScheme);
-    const styles = styling(colors);
-
     return (
-        <View style={styles.drawerContainer}>
+        <View style={style.drawerContainer}>
             <DrawerContentScrollView {...props}>
-                <View style={styles.userContainer}>
+                <View style={style.userContainer}>
                     <TouchableOpacity>
                         <Image
                             source={`https://www.gravatar.com/avatar/${md5(user?.email?.trim().toLowerCase() || "")}?d=mp`}
-                            style={styles.avatar}
+                            style={style.avatar}
                         />
                     </TouchableOpacity>
 
-                    <Text style={styles.username}>{user?.username}</Text>
-                    <Text style={styles.server}>{config?.branding.name}</Text>
+                    <Text style={style.username}>{user?.username}</Text>
+                    <Text style={style.server}>{config?.branding.name}</Text>
                 </View>
 
-                <View style={styles.itemsContainer}>
+                <View style={style.itemsContainer}>
                     <DrawerItemList {...props} />
                 </View>
             </DrawerContentScrollView>
 
-            <View style={styles.actionsContainer}>
-                <TouchableOpacity style={styles.action} onPress={present}>
+            <View style={style.actionsContainer}>
+                <TouchableOpacity style={style.action} onPress={present}>
                     <MaterialCommunityIcons name="swap-horizontal" size={22} color={colors.text} />
-                    <View style={styles.actionTextContainer}>
-                        <Text style={styles.actionTextHeader}>
+                    <View style={style.actionTextContainer}>
+                        <Text style={style.actionTextHeader}>
                             Switch server
                         </Text>
 
-                        <Text style={styles.actionTextSubheader}>
+                        <Text style={style.actionTextSubheader}>
                             {activeAccount?.serverAddress}
                         </Text>
                     </View>

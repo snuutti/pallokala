@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Text, StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
@@ -9,7 +9,8 @@ import Animated, {
     interpolate,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { Colors, getColors } from "@/constants/Colors";
+import { useStyle } from "@/hooks/useStyle";
+import { Colors } from "@/constants/Colors";
 
 export type ToastType = "success" | "error";
 
@@ -22,7 +23,7 @@ type ToastProps = {
 };
 
 export default function Toast(props: ToastProps) {
-    const colorScheme = useColorScheme();
+    const { style } = useStyle(styling);
     const translateX = useSharedValue(0);
     const opacity = useSharedValue(0);
 
@@ -30,9 +31,6 @@ export default function Toast(props: ToastProps) {
         translateX.value = withSpring(0);
         opacity.value = withTiming(1, { duration: 500 });
     }, []);
-
-    const colors = getColors(colorScheme);
-    const style = styling(colors);
 
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [{ translateX: translateX.value }],

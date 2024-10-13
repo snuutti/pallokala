@@ -1,13 +1,11 @@
-import { View, ScrollView, Text, TouchableOpacity, StyleSheet, useColorScheme } from "react-native";
+import { View, ScrollView, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
-import { Colors, getColors } from "@/constants/Colors";
+import { useStyle } from "@/hooks/useStyle";
+import { Colors } from "@/constants/Colors";
 
 export default function LoginErrorScreen() {
-    const colorScheme = useColorScheme();
+    const { style } = useStyle(styling);
     const { present } = useSwitchServerModal();
-
-    const colors = getColors(colorScheme);
-    const style = styling(colors);
 
     return (
         <View style={style.container}>

@@ -1,12 +1,12 @@
 import { useState, useCallback, ReactNode } from "react";
-import { StyleSheet, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent, useColorScheme } from "react-native";
+import { StyleSheet, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
     withTiming,
     useDerivedValue,
 } from "react-native-reanimated";
-import { getColors } from "@/constants/Colors";
+import { useStyle } from "@/hooks/useStyle";
 
 type FloatingActionButtonProps = {
     visible?: boolean;
@@ -16,11 +16,8 @@ type FloatingActionButtonProps = {
 };
 
 export default function FloatingActionButton({ visible = true, color, onPress, children }: FloatingActionButtonProps) {
-    const colorScheme = useColorScheme();
+    const { style, colors } = useStyle(styling);
     const fabVisible = useSharedValue(1);
-
-    const colors = getColors(colorScheme);
-    const style = styling();
 
     useDerivedValue(() => {
         fabVisible.value = visible ? 1 : 0;

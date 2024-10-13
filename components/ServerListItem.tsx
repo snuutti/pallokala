@@ -1,8 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { Image } from "expo-image";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Colors, getColors } from "@/constants/Colors";
+import { useStyle } from "@/hooks/useStyle";
+import { Colors } from "@/constants/Colors";
 import { ExtendedServerView } from "@/types/server";
 
 const icons: Record<string, string> = {
@@ -27,10 +28,7 @@ type ServerListItemProps = {
 };
 
 export default function ServerListItem(props: ServerListItemProps) {
-    const colorScheme = useColorScheme();
-
-    const colors = getColors(colorScheme);
-    const style = styling(colors);
+    const { style, colors } = useStyle(styling);
 
     const getServerAddress = () => {
         let ip = props.server.node?.publicHost;

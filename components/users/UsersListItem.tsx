@@ -1,6 +1,7 @@
-import { StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
-import { Colors, getColors } from "@/constants/Colors";
+import { useStyle } from "@/hooks/useStyle";
+import { Colors } from "@/constants/Colors";
 import { md5 } from "js-md5";
 import { User } from "pufferpanel";
 
@@ -9,10 +10,7 @@ type UsersListItemProps = {
 };
 
 export default function UsersListItem(props: UsersListItemProps) {
-    const colorScheme = useColorScheme();
-
-    const colors = getColors(colorScheme);
-    const style = styling(colors);
+    const { style } = useStyle(styling);
 
     return (
         <TouchableOpacity style={style.user}>

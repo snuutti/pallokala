@@ -1,19 +1,17 @@
 import { useState } from "react";
-import { View, ScrollView, TextInput, TouchableOpacity, Text, StyleSheet, useColorScheme } from "react-native";
+import { View, ScrollView, TextInput, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { useAccount } from "@/context/AccountProvider";
-import { Colors, getColors } from "@/constants/Colors";
+import { useStyle } from "@/hooks/useStyle";
+import { Colors } from "@/constants/Colors";
 import { OAuthAccount } from "@/types/account";
 
 export default function Login() {
-    const colorScheme = useColorScheme();
+    const { style, colors } = useStyle(styling);
     const { addAccount } = useAccount();
     const [address, setAddress] = useState("");
     const [id, setId] = useState("");
     const [secret, setSecret] = useState("");
-
-    const colors = getColors(colorScheme);
-    const styles = styling(colors);
 
     const logIn = async () => {
         const account: OAuthAccount = {
@@ -32,11 +30,11 @@ export default function Login() {
     };
 
     return (
-        <View style={styles.container}>
-            <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
-                <View style={styles.content}>
-                    <Text style={styles.header}>Welcome!</Text>
-                    <Text style={styles.subheader}>Add a new PufferPanel server to get started.</Text>
+        <View style={style.container}>
+            <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}>
+                <View style={style.content}>
+                    <Text style={style.header}>Welcome!</Text>
+                    <Text style={style.subheader}>Add a new PufferPanel server to get started.</Text>
 
                     <TextInput
                         defaultValue={address}
@@ -46,7 +44,7 @@ export default function Login() {
                         autoCapitalize="none"
                         autoComplete="url"
                         keyboardType="url"
-                        style={styles.input}
+                        style={style.input}
                     />
 
                     <TextInput
@@ -56,7 +54,7 @@ export default function Login() {
                         placeholderTextColor={colors.textPrimary}
                         autoCapitalize="none"
                         autoComplete="off"
-                        style={styles.input}
+                        style={style.input}
                     />
 
                     <TextInput
@@ -67,11 +65,11 @@ export default function Login() {
                         autoCapitalize="none"
                         autoComplete="password"
                         secureTextEntry={true}
-                        style={styles.input}
+                        style={style.input}
                     />
 
-                    <TouchableOpacity style={styles.button} onPress={logIn}>
-                        <Text style={styles.buttonText}>Add account</Text>
+                    <TouchableOpacity style={style.button} onPress={logIn}>
+                        <Text style={style.buttonText}>Add account</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
