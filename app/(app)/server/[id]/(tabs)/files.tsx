@@ -36,6 +36,8 @@ export default function FilesScreen() {
     const [currentPath, setCurrentPath] = useState<FileDesc[]>([]);
     const [refreshing, setRefreshing] = useState(false);
 
+    const canEdit = server?.hasScope("server.files.edit") || false;
+
     useEffect(() => {
         if (server === undefined) {
             return;
@@ -165,6 +167,7 @@ export default function FilesScreen() {
             renderItem={({ item }) => (
                 <FileItem
                     file={item}
+                    canEdit={canEdit}
                     onOpen={openFile}
                     onDownload={onDownload}
                     onDelete={deleteAlert}
