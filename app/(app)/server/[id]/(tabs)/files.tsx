@@ -4,11 +4,14 @@ import { FlashList } from "@shopify/flash-list";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { router } from "expo-router";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FileItem from "@/components/server/files/FileItem";
+import FloatingActionButton, { useFabVisible } from "@/components/FloatingActionButton";
 import { useModal } from "@/context/ModalProvider";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
+import { useColors } from "@/hooks/useStyle";
 import useBackHandler from "@/hooks/useBackHandler";
 import { ExtendedFileDesc } from "@/types/server";
 import { FileDesc } from "pufferpanel";
@@ -30,10 +33,12 @@ function sortFiles(a: FileDesc, b: FileDesc) {
 }
 
 export default function FilesScreen() {
+    const colors = useColors();
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
     const { server, setOpenFile } = useServer();
-    const { createAlertModal } = useModal();
+    const { fabVisible, setFabVisible, onScroll } = useFabVisible();
+    const { createAlertModal, createPromptModal, createListModal } = useModal();
     const [files, setFiles] = useState<FileDesc[]>([]);
     const [currentPath, setCurrentPath] = useState<FileDesc[]>([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -96,6 +101,7 @@ export default function FilesScreen() {
 
             const res = await server?.getFile(pathString) as FileDesc[];
             setFiles(res.sort(sortFiles));
+            setFabVisible(true);
         }
 
         setRefreshing(false);
@@ -164,25 +170,127 @@ export default function FilesScreen() {
         await refresh();
     };
 
+    const archiveCurrentDirectory = async () => {
+        const item = currentPath[currentPath.length - 1];
+        let lastPathEntry = server?.id;
+        if (item !== undefined) {
+            lastPathEntry = currentPath[currentPath.length - 1].name;
+        }
+
+        setRefreshing(true);
+        await server?.archiveFile(await makeArchiveName(lastPathEntry!), getCurrentPath());
+        await refresh();
+    };
+
+    const uploadFile = async () => {
+        // TODO
+    };
+
+    const createFile = async (name: string) => {
+        if (name.trim() === "") {
+            return;
+        }
+
+        // TODO: doesn't work. why?
+        await server?.uploadFile(getCurrentPath() + "/" + name, "");
+        await openFile({ name, size: 0, isFile: true });
+        await refresh();
+    };
+
+    const createFolder = async (name: string) => {
+        if (name.trim() === "") {
+            return;
+        }
+
+        await server?.createFolder(getCurrentPath() + "/" + name);
+        await openFile({ name, isFile: false });
+    };
+
+    const openMenu = () => {
+        createListModal(
+            [
+                {
+                    text: "Archive current folder",
+                    icon: "archive-arrow-down",
+                    onPress: archiveCurrentDirectory
+                },
+                {
+                    text: "Upload file",
+                    icon: "file-upload",
+                    onPress: uploadFile
+                },
+                {
+                    text: "Create file",
+                    icon: "file-plus",
+                    onPress: () => {
+                        createPromptModal(
+                            "Create File",
+                            "Name",
+                            "default",
+                            [
+                                {
+                                    text: "Create",
+                                    icon: "file-plus",
+                                    style: "success",
+                                    onPress: createFile
+                                },
+                                { text: "Cancel" }
+                            ]
+                        );
+                    }
+                },
+                {
+                    text: "Create folder",
+                    icon: "folder-plus",
+                    onPress: () => {
+                        createPromptModal(
+                            "Create Folder",
+                            "Name",
+                            "default",
+                            [
+                                {
+                                    text: "Create",
+                                    icon: "folder-plus",
+                                    style: "success",
+                                    onPress: createFolder
+                                },
+                                { text: "Cancel" }
+                            ]
+                        );
+                    }
+                }
+            ]
+        );
+    };
+
     return (
-        <FlashList
-            data={files}
-            keyExtractor={(item) => item.name}
-            renderItem={({ item }) => (
-                <FileItem
-                    file={item}
-                    canEdit={canEdit}
-                    onOpen={openFile}
-                    onDownload={onDownload}
-                    onDelete={deleteAlert}
-                    onArchive={onArchive}
-                    onExtract={onExtract}
-                />
+        <>
+            <FlashList
+                data={files}
+                keyExtractor={(item) => item.name}
+                renderItem={({ item }) => (
+                    <FileItem
+                        file={item}
+                        canEdit={canEdit}
+                        onOpen={openFile}
+                        onDownload={onDownload}
+                        onDelete={deleteAlert}
+                        onArchive={onArchive}
+                        onExtract={onExtract}
+                    />
+                )}
+                estimatedItemSize={58}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+                }
+                onScroll={onScroll}
+            />
+
+            {canEdit && (
+                <FloatingActionButton visible={fabVisible} onPress={openMenu}>
+                    <MaterialCommunityIcons name="dots-vertical" size={30} color={colors.text} />
+                </FloatingActionButton>
             )}
-            estimatedItemSize={58}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={refresh} />
-            }
-        />
+        </>
     );
 }
