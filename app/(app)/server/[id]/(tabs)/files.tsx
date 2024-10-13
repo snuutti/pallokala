@@ -1,10 +1,11 @@
 import { useCallback, useState, useEffect } from "react";
-import { Alert, RefreshControl } from "react-native";
+import { RefreshControl } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { router } from "expo-router";
 import FileItem from "@/components/server/files/FileItem";
+import { useModal } from "@/context/ModalProvider";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
@@ -32,6 +33,7 @@ export default function FilesScreen() {
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
     const { server, setOpenFile } = useServer();
+    const { createAlertModal } = useModal();
     const [files, setFiles] = useState<FileDesc[]>([]);
     const [currentPath, setCurrentPath] = useState<FileDesc[]>([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -115,16 +117,18 @@ export default function FilesScreen() {
     };
 
     const deleteAlert = (file: FileDesc) => {
-        Alert.alert(
+        createAlertModal(
             "Delete File",
             `Are you sure you want to delete ${file.name}?`,
             [
-                { text: "Cancel", style: "cancel" },
-                { text: "Delete", style: "destructive", onPress: () => deleteConfirm(file) }
-            ],
-            {
-                cancelable: true
-            }
+                {
+                    text: "Delete",
+                    icon: "trash-can",
+                    style: "danger",
+                    onPress: () => deleteConfirm(file)
+                },
+                { text: "Cancel" }
+            ]
         );
     };
 

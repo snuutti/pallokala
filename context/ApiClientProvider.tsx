@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
-import { Alert } from "react-native";
 import { useToast } from "@/context/ToastProvider";
+import { useModal } from "@/context/ModalProvider";
 import { ApiClient, EditableConfigSettings, InMemorySessionStore, ErrorHandlerResult } from "pufferpanel";
 
 type ApiClientContextType = {
@@ -17,6 +17,7 @@ type ApiClientProviderProps = {
 
 export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
     const { showError } = useToast();
+    const { createAlertModal } = useModal();
     const [apiClient, setApiClient] = useState<ApiClient | undefined>(undefined);
     const [config, setConfig] = useState<EditableConfigSettings | undefined>(undefined);
 
@@ -132,15 +133,12 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
 
         const details = `${statusMessage}\n\nEndpoint: ${error.request.method} ${error.request.url}\n\n${body ? "Request Body: " + body : ""}`;
 
-        Alert.alert(
+        createAlertModal(
             "Error Details",
             details,
             [
                 { text: "OK" }
-            ],
-            {
-                cancelable: true
-            }
+            ]
         );
     };
 

@@ -1,10 +1,11 @@
 import { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from "react";
-import { Text, TouchableOpacity, View, StyleSheet, Alert } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import type { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/src/components/bottomSheetBackdrop/types";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useAccount } from "@/context/AccountProvider";
+import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 import { Account } from "@/types/account";
@@ -15,6 +16,7 @@ export type SwitchServerModalRef = {
 
 export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
     const { style, colors } = useStyle(styling);
+    const { createAlertModal } = useModal();
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
     const { accounts, activeAccount, changeAccount, deleteAccount } = useAccount();
 
@@ -43,16 +45,13 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
         };
 
         const deleteAlert = () => {
-            Alert.alert(
+            createAlertModal(
                 "Remove Account",
                 "Are you sure you want to remove this account?",
                 [
-                    { text: "Cancel", style: "cancel" },
-                    { text: "Remove", style: "destructive", onPress: deleteConfirm }
-                ],
-                {
-                    cancelable: true
-                }
+                    { text: "Remove", icon: "trash-can", style: "danger", onPress: deleteConfirm },
+                    { text: "Cancel" }
+                ]
             );
         };
 

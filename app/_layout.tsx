@@ -8,6 +8,7 @@ import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import * as NavigationBar from "expo-navigation-bar";
 import { ToastProvider } from "@/context/ToastProvider";
+import { ModalProvider } from "@/context/ModalProvider";
 import { ApiClientProvider } from "@/context/ApiClientProvider";
 import { AccountProvider } from "@/context/AccountProvider";
 import { SwitchServerModalProvider } from "@/context/SwitchServerModalProvider";
@@ -43,17 +44,19 @@ export default function RootLayout() {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
                 <ToastProvider>
-                    <BottomSheetModalProvider>
-                        <ApiClientProvider>
-                            <AccountProvider>
-                                <SwitchServerModalProvider>
-                                    <ServerProvider>
-                                        <Slot />
-                                    </ServerProvider>
-                                </SwitchServerModalProvider>
-                            </AccountProvider>
-                        </ApiClientProvider>
-                    </BottomSheetModalProvider>
+                    <ModalProvider>
+                        <BottomSheetModalProvider>
+                            <ApiClientProvider>
+                                <AccountProvider>
+                                    <SwitchServerModalProvider>
+                                        <ServerProvider>
+                                            <Slot />
+                                        </ServerProvider>
+                                    </SwitchServerModalProvider>
+                                </AccountProvider>
+                            </ApiClientProvider>
+                        </BottomSheetModalProvider>
+                    </ModalProvider>
                 </ToastProvider>
             </ThemeProvider>
         </GestureHandlerRootView>
