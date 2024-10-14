@@ -86,6 +86,26 @@ export default function AppLayout() {
                     title: server?.name || "Servers"
                 }}
             />
+
+            <Drawer.Screen
+                name="users/[id]"
+                options={{
+                    drawerItemStyle: {
+                        display: "none"
+                    },
+                    title: "User"
+                }}
+            />
+
+            <Drawer.Screen
+                name="users/new"
+                options={{
+                    drawerItemStyle: {
+                        display: "none"
+                    },
+                    title: "Create User"
+                }}
+            />
         </Drawer>
     );
 }

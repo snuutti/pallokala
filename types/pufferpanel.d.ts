@@ -131,13 +131,17 @@ declare module "pufferpanel" {
 
         async update(id: number, user: User): Promise<boolean>;
 
-        async updatePermissions(id: number, permissions: string[]): Promise<boolean>;
+        async updatePermissions(id: number, permissions: PermissionView): Promise<boolean>;
 
         async delete(id: number): Promise<boolean>;
     }
 
     export type UserSearchResponse = Metadata & {
         users: User[];
+    };
+
+    export type PermissionView = {
+        scopes: string[];
     };
 
     export type Metadata = {

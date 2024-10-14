@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 import { Image } from "expo-image";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
@@ -12,8 +13,12 @@ type UsersListItemProps = {
 export default function UsersListItem(props: UsersListItemProps) {
     const { style } = useStyle(styling);
 
+    const onPress = () => {
+        router.push(`./${props.user.id}`);
+    };
+
     return (
-        <TouchableOpacity style={style.user}>
+        <TouchableOpacity style={style.user} onPress={onPress}>
             <View style={style.avatarView}>
                 <Image
                     source={`https://www.gravatar.com/avatar/${md5(props.user.email?.trim().toLowerCase() || "")}?d=mp`}

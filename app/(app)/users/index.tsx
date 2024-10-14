@@ -1,11 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { RefreshControl, FlatList, StyleSheet } from "react-native";
+import { router } from "expo-router";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UsersListItem from "@/components/users/UsersListItem";
+import FloatingActionButton, { useFabVisible } from "@/components/FloatingActionButton";
 import { useApiClient } from "@/context/ApiClientProvider";
+import { useColors } from "@/hooks/useStyle";
 import { User } from "pufferpanel";
 
 export default function UsersScreen() {
+    const colors = useColors();
     const { apiClient } = useApiClient();
+    const { fabVisible, onScroll } = useFabVisible();
     const [users, setUsers] = useState<User[]>([]);
     const [refreshing, setRefreshing] = useState(true);
 
@@ -38,15 +44,22 @@ export default function UsersScreen() {
     }, []);
 
     return (
-        <FlatList
-            data={users}
-            keyExtractor={user => String(user.id)}
-            renderItem={({ item }) => <UsersListItem user={item} />}
-            contentContainerStyle={style.usersContainer}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={loadUsers} />
-            }
-        />
+        <>
+            <FlatList
+                data={users}
+                keyExtractor={user => String(user.id)}
+                renderItem={({ item }) => <UsersListItem user={item} />}
+                contentContainerStyle={style.usersContainer}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={loadUsers} />
+                }
+                onScroll={onScroll}
+            />
+
+            <FloatingActionButton visible={fabVisible} onPress={() => router.push("./new")}>
+                <MaterialCommunityIcons name="plus" size={30} color={colors.textPrimary} />
+            </FloatingActionButton>
+        </>
     );
 }
 
