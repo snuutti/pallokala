@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { View, ScrollView, TextInput, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, ScrollView, Text, StyleSheet } from "react-native";
+import TextInput from "@/components/ui/TextInput";
+import Button from "@/components/ui/Button";
 import { router } from "expo-router";
 import { useAccount } from "@/context/AccountProvider";
 import { useStyle } from "@/hooks/useStyle";
@@ -7,7 +9,7 @@ import { Colors } from "@/constants/Colors";
 import { OAuthAccount } from "@/types/account";
 
 export default function Login() {
-    const { style, colors } = useStyle(styling);
+    const { style } = useStyle(styling);
     const { addAccount } = useAccount();
     const [address, setAddress] = useState("");
     const [id, setId] = useState("");
@@ -40,37 +42,29 @@ export default function Login() {
                         defaultValue={address}
                         onChangeText={setAddress}
                         placeholder="Server address"
-                        placeholderTextColor={colors.textPrimary}
                         autoCapitalize="none"
                         autoComplete="url"
                         keyboardType="url"
-                        style={style.input}
                     />
 
                     <TextInput
                         defaultValue={id}
                         onChangeText={setId}
                         placeholder="Client ID"
-                        placeholderTextColor={colors.textPrimary}
                         autoCapitalize="none"
                         autoComplete="off"
-                        style={style.input}
                     />
 
                     <TextInput
                         defaultValue={secret}
                         onChangeText={setSecret}
                         placeholder="Client secret"
-                        placeholderTextColor={colors.textPrimary}
                         autoCapitalize="none"
                         autoComplete="password"
                         secureTextEntry={true}
-                        style={style.input}
                     />
 
-                    <TouchableOpacity style={style.button} onPress={logIn}>
-                        <Text style={style.buttonText}>Add account</Text>
-                    </TouchableOpacity>
+                    <Button text="Add Account" onPress={logIn} />
                 </View>
             </ScrollView>
         </View>
@@ -104,36 +98,6 @@ function styling(colors: Colors) {
             color: colors.text,
             fontSize: 16,
             marginBottom: 5
-        },
-        input: {
-            width: "100%",
-            marginVertical: 5,
-            padding: 16,
-            borderRadius: 16,
-            borderColor: "#D7D7D7", // TODO
-            borderWidth: 2,
-            color: colors.textPrimary,
-            backgroundColor: colors.background
-        },
-        button: {
-            width: "100%",
-            height: 48,
-            marginVertical: 5,
-            backgroundColor: colors.primary,
-            justifyContent: "center",
-            borderRadius: 16,
-            shadowColor: "#000",
-            shadowOffset: {
-                width: 0,
-                height: 2
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5
-        },
-        buttonText: {
-            color: colors.textPrimary,
-            textAlign: "center"
         }
     });
 }

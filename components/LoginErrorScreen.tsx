@@ -1,4 +1,5 @@
-import { View, ScrollView, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, ScrollView, Text, StyleSheet } from "react-native";
+import Button from "@/components/ui/Button";
 import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
@@ -14,9 +15,7 @@ export default function LoginErrorScreen() {
                     <Text style={style.header}>Error</Text>
                     <Text style={style.subheader}>Failed to login to the server.</Text>
 
-                    <TouchableOpacity style={style.button} onPress={present}>
-                        <Text style={style.buttonText}>Select server</Text>
-                    </TouchableOpacity>
+                    <Button text="Select Server" onPress={present} />
                 </View>
             </ScrollView>
         </View>
@@ -50,26 +49,6 @@ function styling(colors: Colors) {
             color: colors.text,
             fontSize: 16,
             marginBottom: 5
-        },
-        button: {
-            width: "100%",
-            height: 48,
-            marginVertical: 5,
-            backgroundColor: colors.primary,
-            justifyContent: "center",
-            borderRadius: 16,
-            shadowColor: "#000",
-            shadowOffset: {
-                width: 0,
-                height: 2
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5
-        },
-        buttonText: {
-            color: colors.textPrimary,
-            textAlign: "center"
         }
     });
 }
