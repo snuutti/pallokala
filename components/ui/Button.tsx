@@ -29,7 +29,7 @@ export default function Button(props: ButtonProps) {
                 <MaterialCommunityIcons
                     name={props.icon}
                     size={30}
-                    color={colors.text}
+                    color={colors.textPrimary}
                     style={style.icon}
                 />
             )}

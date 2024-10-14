@@ -288,7 +288,7 @@ export default function FilesScreen() {
 
             {canEdit && (
                 <FloatingActionButton visible={fabVisible} onPress={openMenu}>
-                    <MaterialCommunityIcons name="dots-vertical" size={30} color={colors.text} />
+                    <MaterialCommunityIcons name="dots-vertical" size={30} color={colors.textPrimary} />
                 </FloatingActionButton>
             )}
         </>

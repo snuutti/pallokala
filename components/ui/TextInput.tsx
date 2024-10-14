@@ -25,7 +25,7 @@ function styling(colors: Colors) {
             borderRadius: 16,
             borderColor: colors.textDisabled,
             borderWidth: 2,
-            color: colors.textPrimary,
+            color: colors.text,
             backgroundColor: colors.background
         }
     });

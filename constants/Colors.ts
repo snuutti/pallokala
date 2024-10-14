@@ -34,7 +34,7 @@ export const lightColors: Colors = {
     background: "#fff",
     text: "rgba(16, 16, 16, 0.75)",
     textDisabled: "rgba(16, 16, 16, 0.5)",
-    textPrimary: "#333",
+    textPrimary: "#eee",
     success: "#4caf50",
     error: "#dc3131"
 };
