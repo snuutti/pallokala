@@ -7,7 +7,7 @@ import { Colors } from "@/constants/Colors";
 export type ButtonProps = {
     text: string;
     icon?: ComponentProps<typeof MaterialCommunityIcons>["name"];
-    style?: "default" | "danger" | "success";
+    style?: "default" | "danger" | "success" | "neutral";
     onPress: () => void;
     disabled?: boolean;
 };
@@ -20,7 +20,8 @@ export default function Button(props: ButtonProps) {
             style={[
                 style.button,
                 props.style === "danger" && style.danger,
-                props.style === "success" && style.success
+                props.style === "success" && style.success,
+                props.style === "neutral" && style.neutral
             ]}
             onPress={props.onPress}
             disabled={props.disabled}
@@ -64,6 +65,9 @@ function styling(colors: Colors) {
         },
         success: {
             backgroundColor: colors.success
+        },
+        neutral: {
+            backgroundColor: colors.backdrop
         },
         icon: {
             marginRight: 10
