@@ -88,6 +88,26 @@ export default function AppLayout() {
             />
 
             <Drawer.Screen
+                name="nodes/[id]"
+                options={{
+                    drawerItemStyle: {
+                        display: "none"
+                    },
+                    title: "Node"
+                }}
+            />
+
+            <Drawer.Screen
+                name="nodes/new"
+                options={{
+                    drawerItemStyle: {
+                        display: "none"
+                    },
+                    title: "Create Node"
+                }}
+            />
+
+            <Drawer.Screen
                 name="users/[id]"
                 options={{
                     drawerItemStyle: {

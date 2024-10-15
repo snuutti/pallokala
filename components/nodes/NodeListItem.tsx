@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 import { Node } from "pufferpanel";
@@ -10,8 +11,12 @@ type NodeListItemProps = {
 export default function NodeListItem(props: NodeListItemProps) {
     const { style } = useStyle(styling);
 
+    const onPress = () => {
+        router.push(`./${props.node.id}`);
+    };
+
     return (
-        <TouchableOpacity style={style.node}>
+        <TouchableOpacity style={style.node} onPress={onPress}>
             <Text style={style.name} numberOfLines={1}>{props.node.name}</Text>
             <Text style={style.address} numberOfLines={1}>{props.node.publicHost}:{props.node.publicPort}</Text>
         </TouchableOpacity>
