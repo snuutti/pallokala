@@ -56,9 +56,11 @@ export default function UsersScreen() {
                 onScroll={onScroll}
             />
 
-            <FloatingActionButton visible={fabVisible} onPress={() => router.push("./new")} safeArea={true}>
-                <MaterialCommunityIcons name="plus" size={30} color={colors.textPrimary} />
-            </FloatingActionButton>
+            {apiClient?.auth.hasScope("users.info.edit") && (
+                <FloatingActionButton visible={fabVisible} onPress={() => router.push("./new")} safeArea={true}>
+                    <MaterialCommunityIcons name="plus" size={30} color={colors.textPrimary} />
+                </FloatingActionButton>
+            )}
         </>
     );
 }
