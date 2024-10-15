@@ -10,7 +10,7 @@ export default function TextInput(props: TextInputProps) {
     return (
         <RNTextInput
             {...props}
-            style={[style.input, props.style]}
+            style={[style.input, props.style, !props.editable && style.disabled]}
             placeholderTextColor={colors.textDisabled}
         />
     );
@@ -27,6 +27,9 @@ function styling(colors: Colors) {
             borderWidth: 2,
             color: colors.text,
             backgroundColor: colors.background
+        },
+        disabled: {
+            opacity: 0.5
         }
     });
 }

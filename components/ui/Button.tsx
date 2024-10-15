@@ -21,7 +21,8 @@ export default function Button(props: ButtonProps) {
                 style.button,
                 props.style === "danger" && style.danger,
                 props.style === "success" && style.success,
-                props.style === "neutral" && style.neutral
+                props.style === "neutral" && style.neutral,
+                props.disabled && style.disabled
             ]}
             onPress={props.onPress}
             disabled={props.disabled}
@@ -68,6 +69,9 @@ function styling(colors: Colors) {
         },
         neutral: {
             backgroundColor: colors.backdrop
+        },
+        disabled: {
+            opacity: 0.5
         },
         icon: {
             marginRight: 10
