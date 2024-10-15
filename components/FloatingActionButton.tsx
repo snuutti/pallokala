@@ -6,18 +6,21 @@ import Animated, {
     withTiming,
     useDerivedValue,
 } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useStyle } from "@/hooks/useStyle";
 
 type FloatingActionButtonProps = {
     visible?: boolean;
     color?: string;
     onPress: () => void;
+    safeArea?: boolean;
     children: ReactNode;
 };
 
-export default function FloatingActionButton({ visible = true, color, onPress, children }: FloatingActionButtonProps) {
+export default function FloatingActionButton({ visible = true, color, onPress, safeArea, children }: FloatingActionButtonProps) {
     const { style, colors } = useStyle(styling);
     const fabVisible = useSharedValue(1);
+    const insets = useSafeAreaInsets();
 
     useDerivedValue(() => {
         fabVisible.value = visible ? 1 : 0;
@@ -35,7 +38,7 @@ export default function FloatingActionButton({ visible = true, color, onPress, c
     });
 
     return (
-        <Animated.View style={[style.container, fabStyle]}>
+        <Animated.View style={[style.container, fabStyle, safeArea && { marginBottom: insets.bottom }]}>
             <TouchableOpacity
                 style={[style.fab, { backgroundColor: color || colors.primary }]}
                 onPress={onPress}

@@ -56,7 +56,7 @@ export default function UsersScreen() {
                 onScroll={onScroll}
             />
 
-            <FloatingActionButton visible={fabVisible} onPress={() => router.push("./new")}>
+            <FloatingActionButton visible={fabVisible} onPress={() => router.push("./new")} safeArea={true}>
                 <MaterialCommunityIcons name="plus" size={30} color={colors.textPrimary} />
             </FloatingActionButton>
         </>
