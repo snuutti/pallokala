@@ -98,7 +98,15 @@ declare module "pufferpanel" {
 
         async disableOtp(token: string): Promise<boolean>;
 
-        // TODO: missing stuff
+        async getSettings(): Promise<Record<string, string>>;
+
+        async updateSetting(key: string, value: string): Promise<boolean>;
+
+        async getOAuthClients(): Promise<OAuthClient[]>;
+
+        async createOAuthClient(name: string, description: string): Promise<OAuthClient>;
+
+        async deleteOAuthClient(clientId: string): Promise<boolean>;
     }
 
     export type User = {
@@ -112,6 +120,13 @@ declare module "pufferpanel" {
     export type OtpEnrollResponse = {
         secret: string;
         img: string;
+    };
+
+    export type OAuthClient = {
+        client_id: string;
+        client_secret: string;
+        name: string;
+        description: string;
     };
 
     export class UserApi {
