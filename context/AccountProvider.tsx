@@ -22,6 +22,7 @@ type AccountContextType = {
     changeAccount: (account: Account) => Promise<void>;
     deleteAccount: (account: Account) => Promise<void>;
     addAccount: (account: Account) => Promise<boolean>;
+    refreshSelf: () => Promise<void>;
 };
 
 export const AccountContext = createContext<AccountContextType | undefined>(undefined);
@@ -179,8 +180,16 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         return false;
     };
 
+    const refreshSelf = async () => {
+        if (!apiClient || !activeAccount) {
+            return;
+        }
+
+        setUser(await apiClient.self.get());
+    };
+
     return (
-        <AccountContext.Provider value={{ accounts, activeAccount, user, loading, error, changeAccount, deleteAccount, addAccount }}>
+        <AccountContext.Provider value={{ accounts, activeAccount, user, loading, error, changeAccount, deleteAccount, addAccount, refreshSelf }}>
             {children}
         </AccountContext.Provider>
     );

@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
+import { router } from "expo-router";
 import { Image } from "expo-image";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useApiClient } from "@/context/ApiClientProvider";
@@ -19,7 +20,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
         <View style={style.drawerContainer}>
             <DrawerContentScrollView {...props}>
                 <View style={style.userContainer}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => router.push("/self")}>
                         <Image
                             source={`https://www.gravatar.com/avatar/${md5(user?.email?.trim().toLowerCase() || "")}?d=mp`}
                             style={style.avatar}
