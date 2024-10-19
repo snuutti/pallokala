@@ -10,7 +10,7 @@ export default function TextInput(props: TextInputProps) {
     return (
         <RNTextInput
             {...props}
-            style={[style.input, props.style, !props.editable && style.disabled]}
+            style={[style.input, props.style, props.editable === false && style.disabled]}
             placeholderTextColor={colors.textDisabled}
         />
     );
