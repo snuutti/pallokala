@@ -32,6 +32,18 @@ export default function SelfLayout() {
             />
 
             <Tabs.Screen
+                name="2fa"
+                options={{
+                    title: "Two factor authentication",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="two-factor-authentication" color={color} />
+                    )
+                }}
+                redirect={!apiClient?.auth.hasScope("self.edit")}
+            />
+
+            <Tabs.Screen
                 name="oauth"
                 options={{
                     title: "OAuth2 Clients",
