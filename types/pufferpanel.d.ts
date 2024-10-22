@@ -484,11 +484,11 @@ declare module "pufferpanel" {
     export class SettingsApi {
         constructor(api: ApiClient);
 
-        async get(key: string): Promise<any>;
+        async get(key: string): Promise<string>;
 
-        async set(data: Record<string, any>): Promise<any>;
+        async set(data: Record<string, string>): Promise<string>;
 
-        async getUserSettings(): Promise<Array<{ key: string, value: any }>>;
+        async getUserSettings(): Promise<Record<string, string>>;
 
         async setUserSetting(key: string, value: any): Promise<boolean>;
     }
