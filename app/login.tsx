@@ -113,7 +113,7 @@ function styling(colors: Colors) {
         content: {
             width: "100%",
             maxWidth: 400,
-            paddingHorizontal: 20
+            padding: 20
         },
         header: {
             color: colors.text,

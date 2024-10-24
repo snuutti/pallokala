@@ -75,6 +75,7 @@ function styling(colors: Colors) {
         },
         modal: {
             width: "80%",
+            maxWidth: 400,
             backgroundColor: colors.backdrop,
             padding: 20,
             borderRadius: 16,
