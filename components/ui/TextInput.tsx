@@ -11,6 +11,10 @@ export default function TextInput(props: TextInputProps) {
 
     return (
         <>
+            {props.placeholder && (
+                <Text style={style.label}>{props.placeholder}</Text>
+            )}
+
             <RNTextInput
                 {...props}
                 style={[
@@ -31,6 +35,12 @@ export default function TextInput(props: TextInputProps) {
 
 function styling(colors: Colors) {
     return StyleSheet.create({
+        label: {
+            color: colors.text,
+            marginHorizontal: 16,
+            marginTop: 5,
+            alignSelf: "flex-start"
+        },
         input: {
             width: "100%",
             marginVertical: 5,
@@ -49,7 +59,9 @@ function styling(colors: Colors) {
         },
         errorText: {
             color: colors.error,
-            marginBottom: 5
+            marginHorizontal: 16,
+            marginBottom: 5,
+            alignSelf: "flex-start"
         }
     });
 }
