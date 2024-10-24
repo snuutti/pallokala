@@ -75,7 +75,6 @@ export default function ConsoleScreen() {
                         keyExtractor={(_, index) => index.toString()}
                         renderItem={({ item }) => <ConsoleText text={item} />}
                         estimatedItemSize={30}
-                        contentContainerStyle={style.logContainer}
                     />
 
                     <TouchableOpacity style={style.clearConsole} onPress={clearConsole}>
@@ -107,17 +106,16 @@ export default function ConsoleScreen() {
 function styling(colors: Colors) {
     return StyleSheet.create({
         container: {
-            flex: 1
+            flex: 1,
+            backgroundColor: "#000"
         },
         clearConsole: {
             position: "absolute",
             top: 5,
             right: 5
         },
-        logContainer: {
-            backgroundColor: "#000"
-        },
         commandContainer: {
+            backgroundColor: colors.backdrop,
             flexDirection: "row",
             height: 50
         },
