@@ -1,4 +1,5 @@
 import { ColorSchemeName } from "react-native";
+import { Theme as NavigationTheme } from "@react-navigation/native";
 
 export type Colors = {
     primary: string;
@@ -41,4 +42,20 @@ export const lightColors: Colors = {
 
 export function getColors(colorScheme: ColorSchemeName): Colors {
     return colorScheme === "dark" ? darkColors : lightColors;
+}
+
+export function getNavigationColors(colorScheme: ColorSchemeName): NavigationTheme {
+    const colors = getColors(colorScheme);
+
+    return {
+        dark: colorScheme === "dark",
+        colors: {
+            primary: colors.primary,
+            background: colors.backdrop,
+            card: colors.background,
+            text: colors.text,
+            border: colors.textDisabled,
+            notification: colors.error
+        }
+    };
 }
