@@ -1,9 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { ScrollView, View, Text, StyleSheet } from "react-native";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Image } from "expo-image";
 import LoadingScreen from "@/components/LoadingScreen";
 import Copyable from "@/components/ui/Copyable";
-import TextInput from "@/components/ui/TextInput";
+import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
@@ -12,16 +15,30 @@ import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 import { OtpEnrollResponse } from "pufferpanel";
 
+const schema = z.object({
+    code: z.string().length(6)
+});
+
+type Schema = z.infer<typeof schema>;
+
+const defaultValues = {
+    code: ""
+};
+
 export default function TwoFactorAuthScreen() {
-    const { style, colors } = useStyle(styling);
+    const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createPromptModal } = useModal();
+    const { control, handleSubmit, reset, formState: { errors, isValid } } = useForm<Schema>({
+        defaultValues,
+        resolver: zodResolver(schema),
+        mode: "onBlur"
+    });
     const [loading, setLoading] = useState(true);
     const [enabled, setEnabled] = useState(false);
     const [enrolling, setEnrolling] = useState(false);
     const [data, setData] = useState<OtpEnrollResponse | null>(null);
-    const [code, setCode] = useState("");
 
     useEffect(() => {
         refreshOtpStatus();
@@ -37,11 +54,11 @@ export default function TwoFactorAuthScreen() {
         setLoading(false);
     }, []);
 
-    const confirmOtpEnroll = async () => {
+    const confirmOtpEnroll = async (data: Schema) => {
         setLoading(true);
 
         try {
-            await apiClient!.self.validateOtpEnroll(code);
+            await apiClient!.self.validateOtpEnroll(data.code);
             await refreshOtpStatus();
             setEnrolling(false);
             showSuccess("2FA has been enabled");
@@ -54,7 +71,7 @@ export default function TwoFactorAuthScreen() {
         setLoading(true);
 
         try {
-            setCode("");
+            reset();
             setData(await apiClient!.self.startOtpEnroll());
             setEnrolling(true);
         } finally {
@@ -108,17 +125,19 @@ export default function TwoFactorAuthScreen() {
 
                     <Copyable text={data!.secret} />
 
-                    <TextInput
-                        value={code}
-                        onChangeText={setCode}
+                    <FormTextInput
+                        control={control}
+                        name="code"
                         keyboardType="number-pad"
                         placeholder="Confirm using a 2FA code"
+                        error={errors.code?.message}
                     />
 
                     <Button
                         text="Enable 2FA"
                         style="success"
-                        onPress={confirmOtpEnroll}
+                        onPress={handleSubmit(confirmOtpEnroll)}
+                        disabled={!isValid}
                     />
 
                     <Button

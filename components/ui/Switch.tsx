@@ -2,8 +2,8 @@ import { Switch as RNSwitch, View, Text, StyleSheet } from "react-native";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 
-type SwitchProps = {
-    name: string;
+export type SwitchProps = {
+    label: string;
     description?: string;
     value: boolean;
     onValueChange: (value: boolean) => void;
@@ -25,7 +25,7 @@ export default function Switch(props: SwitchProps) {
             />
 
             <View style={style.textContainer}>
-                <Text style={style.name}>{props.name}</Text>
+                <Text style={style.name}>{props.label}</Text>
 
                 {props.description && (
                     <Text style={style.description}>{props.description}</Text>

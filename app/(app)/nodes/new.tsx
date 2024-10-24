@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import TextInput from "@/components/ui/TextInput";
-import Switch from "@/components/ui/Switch";
+import NodeOptions, { NodeDefaultValues, NodeSchema, NodeSchemaType } from "@/components/nodes/NodeOptions";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
@@ -13,42 +14,33 @@ export default function NewNodeScreen() {
     const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
-    const [name, setName] = useState("");
-    const [publicHost, setPublicHost] = useState("");
-    const [publicPort, setPublicPort] = useState(8080);
-    const [privateHost, setPrivateHost] = useState("");
-    const [privatePort, setPrivatePort] = useState(8080);
-    const [sftpPort, setSftpPort] = useState(5657);
-    const [withPrivateHost, setWithPrivateHost] = useState(false);
+    const { control, handleSubmit, watch, reset, formState: { errors, isValid } } = useForm<NodeSchemaType>({
+        defaultValues: NodeDefaultValues,
+        resolver: zodResolver(NodeSchema),
+        mode: "onBlur"
+    });
     const [loading, setLoading] = useState(false);
 
-    const createNode = async () => {
+    const createNode = async (data: NodeSchemaType) => {
         setLoading(true);
 
         const node = {
-            name,
-            publicHost,
-            publicPort,
-            privateHost: publicHost,
-            privatePort: publicPort,
-            sftpPort
+            name: data.name,
+            publicHost: data.publicHost,
+            publicPort: data.publicPort,
+            privateHost: data.publicHost,
+            privatePort: data.publicPort,
+            sftpPort: data.sftpPort
         };
 
-        if (withPrivateHost) {
-            node.privateHost = privateHost;
-            node.privatePort = privatePort;
+        if (data.private.withPrivateHost) {
+            node.privateHost = data.private.privateHost;
+            node.privatePort = data.private.privatePort;
         }
 
         try {
             const id = await apiClient?.node.create(node as Node);
-
-            setName("");
-            setPublicHost("");
-            setPublicPort(8080);
-            setPrivateHost("");
-            setPrivatePort(8080);
-            setSftpPort(5657);
-            setWithPrivateHost(false);
+            reset();
 
             showSuccess("Node created successfully");
             router.push(`./${id}`);
@@ -60,69 +52,19 @@ export default function NewNodeScreen() {
     return (
         <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}>
             <View style={style.content}>
-                <TextInput
-                    defaultValue={name}
-                    onChangeText={setName}
-                    placeholder="Name"
+                <NodeOptions
+                    control={control}
+                    errors={errors}
                     editable={!loading}
+                    withPrivateHost={watch("private.withPrivateHost")!}
                 />
 
-                <TextInput
-                    defaultValue={publicHost}
-                    onChangeText={setPublicHost}
-                    placeholder="Public Host"
-                    autoCapitalize="none"
-                    autoComplete="url"
-                    keyboardType="url"
-                    editable={!loading}
+                <Button
+                    text="Create Node"
+                    icon="content-save"
+                    onPress={handleSubmit(createNode)}
+                    disabled={loading || !isValid}
                 />
-
-                <TextInput
-                    defaultValue={String(publicPort)}
-                    onChangeText={(value) => setPublicPort(Number(value))}
-                    placeholder="Public Port"
-                    keyboardType="number-pad"
-                    editable={!loading}
-                />
-
-                <Switch
-                    name="Use a different host/port for server to server communication"
-                    value={withPrivateHost}
-                    onValueChange={setWithPrivateHost}
-                    disabled={loading}
-                />
-
-                {withPrivateHost && (
-                    <>
-                        <TextInput
-                            defaultValue={privateHost}
-                            onChangeText={setPrivateHost}
-                            placeholder="Private Host"
-                            autoCapitalize="none"
-                            autoComplete="url"
-                            keyboardType="url"
-                            editable={!loading}
-                        />
-
-                        <TextInput
-                            defaultValue={String(privatePort)}
-                            onChangeText={(value) => setPrivatePort(Number(value))}
-                            placeholder="Private Port"
-                            keyboardType="number-pad"
-                            editable={!loading}
-                        />
-                    </>
-                )}
-
-                <TextInput
-                    defaultValue={String(sftpPort)}
-                    onChangeText={(value) => setSftpPort(Number(value))}
-                    placeholder="SFTP Port"
-                    keyboardType="number-pad"
-                    editable={!loading}
-                />
-
-                <Button text="Create Node" icon="content-save" onPress={createNode} disabled={loading} />
             </View>
         </ScrollView>
     );

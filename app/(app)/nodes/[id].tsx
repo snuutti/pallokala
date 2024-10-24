@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { ScrollView, View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { router, useGlobalSearchParams } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import LoadingScreen from "@/components/LoadingScreen";
-import TextInput from "@/components/ui/TextInput";
+import NodeOptions, { NodeDefaultValues, NodeSchema, NodeSchemaType } from "@/components/nodes/NodeOptions";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
@@ -11,7 +13,6 @@ import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 import { Node, NodeFeatures } from "pufferpanel";
-import Switch from "@/components/ui/Switch";
 
 export default function NodeScreen() {
     const { style, colors } = useStyle(styling);
@@ -19,16 +20,14 @@ export default function NodeScreen() {
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
     const { id } = useGlobalSearchParams<{ id: string }>();
+    const { control, handleSubmit, setValue, watch, formState: { errors, isValid } } = useForm<NodeSchemaType>({
+        defaultValues: NodeDefaultValues,
+        resolver: zodResolver(NodeSchema),
+        mode: "onBlur"
+    });
     const [node, setNode] = useState<Node | null>(null);
     const [features, setFeatures] = useState<NodeFeatures | null>(null);
     const [featuresFetched, setFeaturesFetched] = useState(false);
-    const [name, setName] = useState("");
-    const [publicHost, setPublicHost] = useState("");
-    const [publicPort, setPublicPort] = useState(8080);
-    const [privateHost, setPrivateHost] = useState("");
-    const [privatePort, setPrivatePort] = useState(8080);
-    const [sftpPort, setSftpPort] = useState(5657);
-    const [withPrivateHost, setWithPrivateHost] = useState(false);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -41,14 +40,14 @@ export default function NodeScreen() {
         }
 
         apiClient?.node.get(Number(id)).then((node) => {
+            setValue("name", node.name || NodeDefaultValues.name);
+            setValue("publicHost", node.publicHost || NodeDefaultValues.publicHost);
+            setValue("publicPort", node.publicPort || NodeDefaultValues.publicPort);
+            setValue("private.withPrivateHost", !(node.publicHost === node.privateHost && node.publicPort === node.privatePort));
+            setValue("private.privateHost", node.privateHost || NodeDefaultValues.private.privateHost);
+            setValue("private.privatePort", node.privatePort || NodeDefaultValues.private.privatePort);
+            setValue("sftpPort", node.sftpPort || NodeDefaultValues.sftpPort);
             setNode(node);
-            setName(node.name || "");
-            setPublicHost(node.publicHost || "");
-            setPublicPort(node.publicPort || 8080);
-            setPrivateHost(node.privateHost || "");
-            setPrivatePort(node.privatePort || 8080);
-            setSftpPort(node.sftpPort || 5657);
-            setWithPrivateHost(!(node.publicHost === node.privateHost && node.publicPort === node.privatePort));
 
             apiClient?.node.features(Number(id))
                 .then(setFeatures)
@@ -56,21 +55,21 @@ export default function NodeScreen() {
         });
     }, [id]);
 
-    const updateNode = async () => {
+    const updateNode = async (data: NodeSchemaType) => {
         setLoading(true);
 
         const node = {
-            name,
-            publicHost,
-            publicPort,
-            privateHost: publicHost,
-            privatePort: publicPort,
-            sftpPort
+            name: data.name,
+            publicHost: data.publicHost,
+            publicPort: data.publicPort,
+            privateHost: data.publicHost,
+            privatePort: data.publicPort,
+            sftpPort: data.sftpPort
         };
 
-        if (withPrivateHost) {
-            node.privateHost = privateHost;
-            node.privatePort = privatePort;
+        if (data.private.withPrivateHost) {
+            node.privateHost = data.private.privateHost;
+            node.privatePort = data.private.privatePort;
         }
 
         try {
@@ -115,7 +114,7 @@ export default function NodeScreen() {
     return (
         <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}>
             <View style={style.content}>
-                <Text style={style.header}>{name}</Text>
+                <Text style={style.header}>{node.name}</Text>
 
                 {!featuresFetched && (
                     <ActivityIndicator size="large" color={colors.primary} style={style.statusLoading} />
@@ -163,74 +162,19 @@ export default function NodeScreen() {
 
                 {(id !== undefined && Number(id) !== 0) ? (
                     <>
-                        <TextInput
-                            defaultValue={name}
-                            onChangeText={setName}
-                            placeholder="Name"
+                        <NodeOptions
+                            control={control}
+                            errors={errors}
                             editable={!loading}
-                        />
-
-                        <TextInput
-                            defaultValue={publicHost}
-                            onChangeText={setPublicHost}
-                            placeholder="Public Host"
-                            autoCapitalize="none"
-                            autoComplete="url"
-                            keyboardType="url"
-                            editable={!loading}
-                        />
-
-                        <TextInput
-                            defaultValue={String(publicPort)}
-                            onChangeText={(value) => setPublicPort(Number(value))}
-                            placeholder="Public Port"
-                            keyboardType="number-pad"
-                            editable={!loading}
-                        />
-
-                        <Switch
-                            name="Use a different host/port for server to server communication"
-                            value={withPrivateHost}
-                            onValueChange={setWithPrivateHost}
-                            disabled={loading}
-                        />
-
-                        {withPrivateHost && (
-                            <>
-                                <TextInput
-                                    defaultValue={privateHost}
-                                    onChangeText={setPrivateHost}
-                                    placeholder="Private Host"
-                                    autoCapitalize="none"
-                                    autoComplete="url"
-                                    keyboardType="url"
-                                    editable={!loading}
-                                />
-
-                                <TextInput
-                                    defaultValue={String(privatePort)}
-                                    onChangeText={(value) => setPrivatePort(Number(value))}
-                                    placeholder="Private Port"
-                                    keyboardType="number-pad"
-                                    editable={!loading}
-                                />
-                            </>
-                        )}
-
-                        <TextInput
-                            defaultValue={String(sftpPort)}
-                            onChangeText={(value) => setSftpPort(Number(value))}
-                            placeholder="SFTP Port"
-                            keyboardType="number-pad"
-                            editable={!loading}
+                            withPrivateHost={watch("private.withPrivateHost")!}
                         />
 
                         {apiClient?.auth.hasScope("nodes.edit") && (
                             <Button
                                 text="Update Node"
                                 icon="content-save"
-                                onPress={updateNode}
-                                disabled={loading}
+                                onPress={handleSubmit(updateNode)}
+                                disabled={loading || !isValid}
                             />
                         )}
 

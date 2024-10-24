@@ -110,7 +110,7 @@ export default function PermissionScreen() {
                         {scopes.map(scope => (
                             <Switch
                                 key={scope}
-                                name={scope}
+                                label={scope}
                                 value={permissions.includes(scope)}
                                 onValueChange={() => togglePermission(scope)}
                                 disabled={permissionDisabled(scope)}

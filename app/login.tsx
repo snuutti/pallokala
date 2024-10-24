@@ -1,27 +1,45 @@
-import { useState } from "react";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
-import TextInput from "@/components/ui/TextInput";
-import Button from "@/components/ui/Button";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
+import FormTextInput from "@/components/ui/form/FormTextInput";
+import Button from "@/components/ui/Button";
 import { useAccount } from "@/context/AccountProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 import { OAuthAccount } from "@/types/account";
 
+const schema = z.object({
+    address: z.string().url(),
+    id: z.string().uuid(),
+    secret: z.string().length(48)
+});
+
+type Schema = z.infer<typeof schema>;
+
+const defaultValues = {
+    address: "",
+    id: "",
+    secret: ""
+};
+
 export default function Login() {
     const { style } = useStyle(styling);
     const { addAccount } = useAccount();
-    const [address, setAddress] = useState("");
-    const [id, setId] = useState("");
-    const [secret, setSecret] = useState("");
+    const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
+        defaultValues,
+        resolver: zodResolver(schema),
+        mode: "onBlur"
+    });
 
-    const logIn = async () => {
+    const logIn = async (data: Schema) => {
         const account: OAuthAccount = {
-            serverAddress: address,
+            serverAddress: data.address,
             nickname: "",
             type: "oauth",
-            clientId: id,
-            clientSecret: secret
+            clientId: data.id,
+            clientSecret: data.secret
         };
 
         if (await addAccount(account)) {
@@ -38,33 +56,40 @@ export default function Login() {
                     <Text style={style.header}>Welcome!</Text>
                     <Text style={style.subheader}>Add a new PufferPanel server to get started.</Text>
 
-                    <TextInput
-                        defaultValue={address}
-                        onChangeText={setAddress}
+                    <FormTextInput
+                        control={control}
+                        name="address"
                         placeholder="Server address"
                         autoCapitalize="none"
                         autoComplete="url"
                         keyboardType="url"
+                        error={errors.address?.message}
                     />
 
-                    <TextInput
-                        defaultValue={id}
-                        onChangeText={setId}
+                    <FormTextInput
+                        control={control}
+                        name="id"
                         placeholder="Client ID"
                         autoCapitalize="none"
                         autoComplete="off"
+                        error={errors.id?.message}
                     />
 
-                    <TextInput
-                        defaultValue={secret}
-                        onChangeText={setSecret}
+                    <FormTextInput
+                        control={control}
+                        name="secret"
                         placeholder="Client secret"
                         autoCapitalize="none"
                         autoComplete="password"
                         secureTextEntry={true}
+                        error={errors.secret?.message}
                     />
 
-                    <Button text="Add Account" onPress={logIn} />
+                    <Button
+                        text="Add Account"
+                        onPress={handleSubmit(logIn)}
+                        disabled={!isValid}
+                    />
                 </View>
             </ScrollView>
         </View>
