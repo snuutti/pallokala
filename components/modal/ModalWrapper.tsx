@@ -1,9 +1,10 @@
 import { useEffect, cloneElement, ReactNode } from "react";
-import { TouchableWithoutFeedback, StyleSheet } from "react-native";
+import { TouchableWithoutFeedback, StyleSheet, Keyboard } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming, withSpring, runOnJS } from "react-native-reanimated";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import useBackHandler from "@/hooks/useBackHandler";
+import { Colors } from "@/constants/Colors";
 
 type ModalWrapperProps = {
     id: string;
@@ -42,6 +43,7 @@ export default function ModalWrapper(props: ModalWrapperProps) {
     });
 
     const handleClose = () => {
+        Keyboard.dismiss();
         modalOpacity.value = withTiming(0, { duration: 200 });
         scale.value = withSpring(0);
         opacity.value = withTiming(0, { duration: 200 }, () => {
@@ -52,11 +54,13 @@ export default function ModalWrapper(props: ModalWrapperProps) {
     return (
         <TouchableWithoutFeedback onPress={handleClose}>
             <Animated.View style={[style.overlay, backgroundStyle]}>
-                <TouchableWithoutFeedback>
-                    <Animated.View style={[style.modal, modalStyle]}>
-                        {cloneElement(props.content as any, { handleClose })}
-                    </Animated.View>
-                </TouchableWithoutFeedback>
+                <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={style.modalWrapper}>
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <Animated.View style={[style.modal, modalStyle]}>
+                            {cloneElement(props.content as any, { handleClose })}
+                        </Animated.View>
+                    </TouchableWithoutFeedback>
+                </KeyboardAvoidingView>
             </Animated.View>
         </TouchableWithoutFeedback>
     );
@@ -73,9 +77,11 @@ function styling(colors: Colors) {
             width: "100%",
             height: "100%"
         },
-        modal: {
+        modalWrapper: {
             width: "80%",
-            maxWidth: 400,
+            maxWidth: 400
+        },
+        modal: {
             backgroundColor: colors.backdrop,
             padding: 20,
             borderRadius: 16,
