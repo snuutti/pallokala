@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Image } from "expo-image";
 import { WebView } from "react-native-webview";
-import LoadingScreen from "@/components/LoadingScreen";
+import LoadingScreen from "@/components/screen/LoadingScreen";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";

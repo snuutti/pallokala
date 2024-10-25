@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import * as WebBrowser from "expo-web-browser";
-import LoadingScreen from "@/components/LoadingScreen";
+import LoadingScreen from "@/components/screen/LoadingScreen";
 import Button from "@/components/ui/Button";
 import OAuthClientListItem from "@/components/self/OAuthClientListItem";
 import { useApiClient } from "@/context/ApiClientProvider";

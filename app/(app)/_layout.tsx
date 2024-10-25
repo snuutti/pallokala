@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Drawer } from "expo-router/drawer";
-import LoginErrorScreen from "@/components/LoginErrorScreen";
-import LoadingScreen from "@/components/LoadingScreen";
+import LoginErrorScreen from "@/components/screen/LoginErrorScreen";
+import LoadingScreen from "@/components/screen/LoadingScreen";
 import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useApiClient } from "@/context/ApiClientProvider";

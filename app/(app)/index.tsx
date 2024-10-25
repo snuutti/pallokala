@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { RefreshControl, FlatList, StyleSheet } from "react-native";
-import ServerListItem from "@/components/ServerListItem";
+import ServerListItem from "@/components/server/ServerListItem";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { ExtendedServerStatus, ExtendedServerView } from "@/types/server";
 import { ServerView } from "pufferpanel";

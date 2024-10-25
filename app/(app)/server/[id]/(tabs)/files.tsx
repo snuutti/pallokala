@@ -6,7 +6,7 @@ import * as Sharing from "expo-sharing";
 import { router } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FileItem from "@/components/server/files/FileItem";
-import FloatingActionButton, { useFabVisible } from "@/components/FloatingActionButton";
+import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useModal } from "@/context/ModalProvider";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";

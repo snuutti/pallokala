@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, useLocalSearchParams } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import LoadingScreen from "@/components/LoadingScreen";
+import LoadingScreen from "@/components/screen/LoadingScreen";
 import NodeOptions, { NodeDefaultValues, NodeSchema, NodeSchemaType } from "@/components/nodes/NodeOptions";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";

@@ -1,5 +1,5 @@
 import { createContext, useContext, useRef, useCallback, ReactNode } from "react";
-import { SwitchServerModal, SwitchServerModalRef } from "@/components/SwitchServerModal";
+import { SwitchServerModal, SwitchServerModalRef } from "@/components/navigation/SwitchServerModal";
 
 type SwitchServerModalContextType = {
     present: () => void;

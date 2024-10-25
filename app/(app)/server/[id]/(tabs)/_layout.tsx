@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Tabs, useLocalSearchParams } from "expo-router";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
-import LoadingScreen from "@/components/LoadingScreen";
+import LoadingScreen from "@/components/screen/LoadingScreen";
 import { useServer } from "@/context/ServerProvider";
 
 export default function TabsLayout() {

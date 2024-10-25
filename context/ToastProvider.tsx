@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { View, StyleSheet } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
-import Toast, { ToastType } from "@/components/Toast";
+import Toast, { ToastType } from "@/components/ui/Toast";
 
 type ToastContextType = {
     showToast: (type: ToastType, message: string, onPress?: () => void) => void;

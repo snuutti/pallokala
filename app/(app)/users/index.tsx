@@ -3,7 +3,7 @@ import { RefreshControl, FlatList, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UsersListItem from "@/components/users/UsersListItem";
-import FloatingActionButton, { useFabVisible } from "@/components/FloatingActionButton";
+import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useColors } from "@/hooks/useStyle";
 import { User } from "pufferpanel";

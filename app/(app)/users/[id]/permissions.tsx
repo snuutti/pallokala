@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import { ScrollView, View, Text, StyleSheet } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import LoadingScreen from "@/components/LoadingScreen";
+import LoadingScreen from "@/components/screen/LoadingScreen";
 import Switch from "@/components/ui/Switch";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
