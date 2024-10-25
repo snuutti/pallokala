@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { ScrollView, View, Text, StyleSheet } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Image } from "expo-image";
 import LoadingScreen from "@/components/screen/LoadingScreen";
+import ContentWrapper from "@/components/screen/ContentWrapper";
 import Copyable from "@/components/ui/Copyable";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
@@ -114,79 +115,63 @@ export default function TwoFactorAuthScreen() {
     // TODO: This should probably be a modal instead
     if (enrolling) {
         return (
-            <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}>
-                <View style={style.content}>
-                    <Image
-                        source={{ uri: data!.img }}
-                        style={style.qrCode}
-                    />
+            <ContentWrapper>
+                <Image
+                    source={{ uri: data!.img }}
+                    style={style.qrCode}
+                />
 
-                    <Text style={style.header}>Scan the QR code using your authenticator application or copy the secret code below into it.</Text>
+                <Text style={style.header}>Scan the QR code using your authenticator application or copy the secret code below into it.</Text>
 
-                    <Copyable text={data!.secret} />
+                <Copyable text={data!.secret} />
 
-                    <FormTextInput
-                        control={control}
-                        name="code"
-                        keyboardType="number-pad"
-                        placeholder="Confirm using a 2FA code"
-                        error={errors.code?.message}
-                    />
+                <FormTextInput
+                    control={control}
+                    name="code"
+                    keyboardType="number-pad"
+                    placeholder="Confirm using a 2FA code"
+                    error={errors.code?.message}
+                />
 
-                    <Button
-                        text="Enable 2FA"
-                        style="success"
-                        onPress={handleSubmit(confirmOtpEnroll)}
-                        disabled={!isValid}
-                    />
+                <Button
+                    text="Enable 2FA"
+                    style="success"
+                    onPress={handleSubmit(confirmOtpEnroll)}
+                    disabled={!isValid}
+                />
 
-                    <Button
-                        text="Cancel"
-                        onPress={() => setEnrolling(false)}
-                    />
-                </View>
-            </ScrollView>
+                <Button
+                    text="Cancel"
+                    onPress={() => setEnrolling(false)}
+                />
+            </ContentWrapper>
         );
     }
 
     return (
-        <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}>
-            <View style={style.content}>
-                <Text style={style.text}>Two-factor authentication adds an additional layer of security to your account by requiring more than just a password to log in.</Text>
+        <ContentWrapper>
+            <Text style={style.text}>Two-factor authentication adds an additional layer of security to your account by requiring more than just a password to log in.</Text>
 
-                {enabled ? (
-                    <Button
-                        text="Disable 2FA"
-                        icon="lock-off"
-                        style="danger"
-                        onPress={confirmDisableOtp}
-                    />
-                ) : (
-                    <Button
-                        text="Enable 2FA"
-                        icon="lock"
-                        onPress={startOtpEnroll}
-                    />
-                )}
-            </View>
-        </ScrollView>
+            {enabled ? (
+                <Button
+                    text="Disable 2FA"
+                    icon="lock-off"
+                    style="danger"
+                    onPress={confirmDisableOtp}
+                />
+            ) : (
+                <Button
+                    text="Enable 2FA"
+                    icon="lock"
+                    onPress={startOtpEnroll}
+                />
+            )}
+        </ContentWrapper>
     );
 }
 
 function styling(colors: Colors) {
     return StyleSheet.create({
-        scrollView: {
-            width: "100%"
-        },
-        contentContainer: {
-            flexGrow: 1,
-            alignItems: "center"
-        },
-        content: {
-            width: "100%",
-            maxWidth: 400,
-            padding: 20
-        },
         text: {
             color: colors.text
         },

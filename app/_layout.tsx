@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ThemeProvider } from "@react-navigation/native";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -43,21 +44,23 @@ export default function RootLayout() {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemeProvider value={theme}>
-                <ToastProvider>
-                    <ModalProvider>
-                        <BottomSheetModalProvider>
-                            <ApiClientProvider>
-                                <AccountProvider>
-                                    <SwitchServerModalProvider>
-                                        <ServerProvider>
-                                            <Slot />
-                                        </ServerProvider>
-                                    </SwitchServerModalProvider>
-                                </AccountProvider>
-                            </ApiClientProvider>
-                        </BottomSheetModalProvider>
-                    </ModalProvider>
-                </ToastProvider>
+                <KeyboardProvider statusBarTranslucent={true} navigationBarTranslucent={true}>
+                    <ToastProvider>
+                        <ModalProvider>
+                            <BottomSheetModalProvider>
+                                <ApiClientProvider>
+                                    <AccountProvider>
+                                        <SwitchServerModalProvider>
+                                            <ServerProvider>
+                                                <Slot />
+                                            </ServerProvider>
+                                        </SwitchServerModalProvider>
+                                    </AccountProvider>
+                                </ApiClientProvider>
+                            </BottomSheetModalProvider>
+                        </ModalProvider>
+                    </ToastProvider>
+                </KeyboardProvider>
             </ThemeProvider>
         </GestureHandlerRootView>
     );

@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, useLocalSearchParams } from "expo-router";
 import LoadingScreen from "@/components/screen/LoadingScreen";
+import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
-import { useStyle } from "@/hooks/useStyle";
 import { User } from "pufferpanel";
 
 const schema = z.object({
@@ -28,7 +27,6 @@ const defaultValues = {
 };
 
 export default function UserDetailsScreen() {
-    const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
@@ -101,76 +99,57 @@ export default function UserDetailsScreen() {
     }
 
     return (
-        <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}>
-            <View style={style.content}>
-                <FormTextInput
-                    control={control}
-                    name="username"
-                    placeholder="Username"
-                    autoCapitalize="none"
-                    autoComplete="username"
-                    editable={canEdit}
-                    error={errors.username?.message}
-                />
+        <ContentWrapper>
+            <FormTextInput
+                control={control}
+                name="username"
+                placeholder="Username"
+                autoCapitalize="none"
+                autoComplete="username"
+                editable={canEdit}
+                error={errors.username?.message}
+            />
 
-                <FormTextInput
-                    control={control}
-                    name="email"
-                    placeholder="Email"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    keyboardType="email-address"
-                    editable={canEdit}
-                    error={errors.email?.message}
-                />
+            <FormTextInput
+                control={control}
+                name="email"
+                placeholder="Email"
+                autoCapitalize="none"
+                autoComplete="email"
+                keyboardType="email-address"
+                editable={canEdit}
+                error={errors.email?.message}
+            />
 
-                <FormTextInput
-                    control={control}
-                    name="password"
-                    placeholder="Password"
-                    autoCapitalize="none"
-                    autoComplete="password"
-                    secureTextEntry={true}
-                    editable={canEdit}
-                    error={errors.password?.message}
-                />
+            <FormTextInput
+                control={control}
+                name="password"
+                placeholder="Password"
+                autoCapitalize="none"
+                autoComplete="password"
+                secureTextEntry={true}
+                editable={canEdit}
+                error={errors.password?.message}
+            />
 
-                {canEdit && (
-                    <>
-                        <Button
-                            text="Update User Details"
-                            icon="content-save"
-                            onPress={handleSubmit(updateUser)}
-                            disabled={loading || !isValid}
-                        />
+            {canEdit && (
+                <>
+                    <Button
+                        text="Update User Details"
+                        icon="content-save"
+                        onPress={handleSubmit(updateUser)}
+                        disabled={loading || !isValid}
+                    />
 
-                        <Button
-                            text="Delete User"
-                            icon="trash-can"
-                            style="danger"
-                            onPress={deleteAlert}
-                            disabled={loading}
-                        />
-                    </>
-                )}
-            </View>
-        </ScrollView>
+                    <Button
+                        text="Delete User"
+                        icon="trash-can"
+                        style="danger"
+                        onPress={deleteAlert}
+                        disabled={loading}
+                    />
+                </>
+            )}
+        </ContentWrapper>
     );
-}
-
-function styling() {
-    return StyleSheet.create({
-        scrollView: {
-            width: "100%"
-        },
-        contentContainer: {
-            flexGrow: 1,
-            alignItems: "center"
-        },
-        content: {
-            width: "100%",
-            maxWidth: 400,
-            padding: 20
-        }
-    });
 }

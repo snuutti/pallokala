@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import LoadingScreen from "@/components/screen/LoadingScreen";
+import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
 import OAuthClientListItem from "@/components/self/OAuthClientListItem";
 import { useApiClient } from "@/context/ApiClientProvider";
@@ -102,44 +103,30 @@ export default function OAuthScreen() {
     }
 
     return (
-        <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}>
-            <View style={style.content}>
-                <Text style={style.text}>The OAuth2 Clients listed here inherit all of your accounts permissions</Text>
+        <ContentWrapper>
+            <Text style={style.text}>The OAuth2 Clients listed here inherit all of your accounts permissions</Text>
 
-                <TouchableOpacity onPress={openDocs}>
-                    <Text style={style.link}>Find API documentation here</Text>
-                </TouchableOpacity>
+            <TouchableOpacity onPress={openDocs}>
+                <Text style={style.link}>Find API documentation here</Text>
+            </TouchableOpacity>
 
-                <View style={style.clients}>
-                    {clients.map(client => (
-                        <OAuthClientListItem key={client.client_id} client={client} onDelete={deleteAlert} />
-                    ))}
-                </View>
-
-                <Button
-                    text="Create new OAuth2 Client"
-                    icon="plus"
-                    onPress={createAlert}
-                />
+            <View style={style.clients}>
+                {clients.map(client => (
+                    <OAuthClientListItem key={client.client_id} client={client} onDelete={deleteAlert} />
+                ))}
             </View>
-        </ScrollView>
+
+            <Button
+                text="Create new OAuth2 Client"
+                icon="plus"
+                onPress={createAlert}
+            />
+        </ContentWrapper>
     );
 }
 
 function styling(colors: Colors) {
     return StyleSheet.create({
-        scrollView: {
-            width: "100%"
-        },
-        contentContainer: {
-            flexGrow: 1,
-            alignItems: "center"
-        },
-        content: {
-            width: "100%",
-            maxWidth: 400,
-            padding: 20
-        },
         text: {
             color: colors.text
         },

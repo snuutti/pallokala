@@ -1,7 +1,8 @@
 import { useState, useEffect, Fragment } from "react";
-import { ScrollView, View, Text, StyleSheet } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import LoadingScreen from "@/components/screen/LoadingScreen";
+import ContentWrapper from "@/components/screen/ContentWrapper";
 import Switch from "@/components/ui/Switch";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
@@ -102,49 +103,35 @@ export default function PermissionScreen() {
     }
 
     return (
-        <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}>
-            <View style={style.content}>
-                {Object.entries(scopes).map(([categoryName, scopes]) => (
-                    <Fragment key={categoryName}>
-                        <Text style={style.header}>{categoryName}</Text>
-                        {scopes.map(scope => (
-                            <Switch
-                                key={scope}
-                                label={scope}
-                                value={permissions.includes(scope)}
-                                onValueChange={() => togglePermission(scope)}
-                                disabled={permissionDisabled(scope)}
-                            />
-                        ))}
-                    </Fragment>
-                ))}
+        <ContentWrapper>
+            {Object.entries(scopes).map(([categoryName, scopes]) => (
+                <Fragment key={categoryName}>
+                    <Text style={style.header}>{categoryName}</Text>
+                    {scopes.map(scope => (
+                        <Switch
+                            key={scope}
+                            label={scope}
+                            value={permissions.includes(scope)}
+                            onValueChange={() => togglePermission(scope)}
+                            disabled={permissionDisabled(scope)}
+                        />
+                    ))}
+                </Fragment>
+            ))}
 
-                {apiClient?.auth.hasScope("user.perms.edit") && (
-                    <Button
-                        text="Update User Permissions"
-                        icon="content-save"
-                        onPress={updatePermissions}
-                    />
-                )}
-            </View>
-        </ScrollView>
+            {apiClient?.auth.hasScope("user.perms.edit") && (
+                <Button
+                    text="Update User Permissions"
+                    icon="content-save"
+                    onPress={updatePermissions}
+                />
+            )}
+        </ContentWrapper>
     );
 }
 
 function styling(colors: Colors) {
     return StyleSheet.create({
-        scrollView: {
-            width: "100%"
-        },
-        contentContainer: {
-            flexGrow: 1,
-            alignItems: "center"
-        },
-        content: {
-            width: "100%",
-            maxWidth: 400,
-            padding: 20
-        },
         header: {
             color: colors.text,
             fontSize: 16

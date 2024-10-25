@@ -1,8 +1,9 @@
-import { View, ScrollView, Text, StyleSheet } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
+import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useAccount } from "@/context/AccountProvider";
@@ -50,70 +51,55 @@ export default function Login() {
     };
 
     return (
-        <View style={style.container}>
-            <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}>
-                <View style={style.content}>
-                    <Text style={style.header}>Welcome!</Text>
-                    <Text style={style.subheader}>Add a new PufferPanel server to get started.</Text>
+        <ContentWrapper scrollViewStyle={style.scrollView} contentContainerStyle={style.contentContainer}>
+            <Text style={style.header}>Welcome!</Text>
+            <Text style={style.subheader}>Add a new PufferPanel server to get started.</Text>
 
-                    <FormTextInput
-                        control={control}
-                        name="address"
-                        placeholder="Server address"
-                        autoCapitalize="none"
-                        autoComplete="url"
-                        keyboardType="url"
-                        error={errors.address?.message}
-                    />
+            <FormTextInput
+                control={control}
+                name="address"
+                placeholder="Server address"
+                autoCapitalize="none"
+                autoComplete="url"
+                keyboardType="url"
+                error={errors.address?.message}
+            />
 
-                    <FormTextInput
-                        control={control}
-                        name="id"
-                        placeholder="Client ID"
-                        autoCapitalize="none"
-                        autoComplete="off"
-                        error={errors.id?.message}
-                    />
+            <FormTextInput
+                control={control}
+                name="id"
+                placeholder="Client ID"
+                autoCapitalize="none"
+                autoComplete="off"
+                error={errors.id?.message}
+            />
 
-                    <FormTextInput
-                        control={control}
-                        name="secret"
-                        placeholder="Client secret"
-                        autoCapitalize="none"
-                        autoComplete="password"
-                        secureTextEntry={true}
-                        error={errors.secret?.message}
-                    />
+            <FormTextInput
+                control={control}
+                name="secret"
+                placeholder="Client secret"
+                autoCapitalize="none"
+                autoComplete="password"
+                secureTextEntry={true}
+                error={errors.secret?.message}
+            />
 
-                    <Button
-                        text="Add Account"
-                        onPress={handleSubmit(logIn)}
-                        disabled={!isValid}
-                    />
-                </View>
-            </ScrollView>
-        </View>
+            <Button
+                text="Add Account"
+                onPress={handleSubmit(logIn)}
+                disabled={!isValid}
+            />
+        </ContentWrapper>
     );
 }
 
 function styling(colors: Colors) {
     return StyleSheet.create({
-        container: {
-            flex: 1,
+        scrollView: {
             backgroundColor: colors.background
         },
-        scrollView: {
-            width: "100%"
-        },
         contentContainer: {
-            flexGrow: 1,
-            alignItems: "center",
             justifyContent: "center"
-        },
-        content: {
-            width: "100%",
-            maxWidth: 400,
-            padding: 20
         },
         header: {
             color: colors.text,
