@@ -123,7 +123,8 @@ export default function AppLayout() {
                     drawerItemStyle: {
                         display: "none"
                     },
-                    title: "User"
+                    title: "User",
+                    unmountOnBlur: true
                 }}
             />
 

@@ -3,7 +3,7 @@ import { ScrollView, View, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { router, useGlobalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import LoadingScreen from "@/components/LoadingScreen";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
@@ -32,7 +32,7 @@ export default function UserDetailsScreen() {
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
-    const { id } = useGlobalSearchParams<{ id: string }>();
+    const { id } = useLocalSearchParams<{ id: string }>();
     const { control, handleSubmit, setValue, getValues, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),

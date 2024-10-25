@@ -1,9 +1,10 @@
-import { Tabs } from "expo-router";
+import { Tabs, useLocalSearchParams } from "expo-router";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useApiClient } from "@/context/ApiClientProvider";
 
 export default function UserViewLayout() {
     const { apiClient } = useApiClient();
+    const { id } = useLocalSearchParams<{ id: string }>();
 
     return (
         <Tabs>
@@ -16,6 +17,7 @@ export default function UserViewLayout() {
                         <NavigationIcon name="account" color={color} />
                     )
                 }}
+                initialParams={{ id }}
                 redirect={!apiClient?.auth.hasScope("users.info.view")}
             />
 
@@ -28,6 +30,7 @@ export default function UserViewLayout() {
                         <NavigationIcon name="lock-open" color={color} />
                     )
                 }}
+                initialParams={{ id }}
                 redirect={!apiClient?.auth.hasScope("users.perms.view")}
             />
         </Tabs>

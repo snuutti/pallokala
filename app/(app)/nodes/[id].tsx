@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ScrollView, View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { router, useGlobalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import LoadingScreen from "@/components/LoadingScreen";
 import NodeOptions, { NodeDefaultValues, NodeSchema, NodeSchemaType } from "@/components/nodes/NodeOptions";
@@ -19,7 +19,7 @@ export default function NodeScreen() {
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
-    const { id } = useGlobalSearchParams<{ id: string }>();
+    const { id } = useLocalSearchParams<{ id: string }>();
     const { control, handleSubmit, setValue, watch, formState: { errors, isValid } } = useForm<NodeSchemaType>({
         defaultValues: NodeDefaultValues,
         resolver: zodResolver(NodeSchema),

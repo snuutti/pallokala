@@ -1,6 +1,6 @@
 import { useState, useEffect, Fragment } from "react";
 import { ScrollView, View, Text, StyleSheet } from "react-native";
-import { useGlobalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import LoadingScreen from "@/components/LoadingScreen";
 import Switch from "@/components/ui/Switch";
 import Button from "@/components/ui/Button";
@@ -47,7 +47,7 @@ export default function PermissionScreen() {
     const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
-    const { id } = useGlobalSearchParams<{ id: string }>();
+    const { id } = useLocalSearchParams<{ id: string }>();
     const [permissions, setPermissions] = useState<string[] | null>(null);
 
     useEffect(() => {
