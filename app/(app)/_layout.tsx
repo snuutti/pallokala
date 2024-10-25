@@ -35,6 +35,7 @@ export default function AppLayout() {
                 ),
                 drawerActiveBackgroundColor: colors.primaryHover,
             }}
+            backBehavior="history"
         >
             <Drawer.Screen
                 name="index"
