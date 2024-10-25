@@ -42,6 +42,7 @@ export default function PromptModal(props: PromptModalProps) {
                 autoCapitalize="none"
                 keyboardType={props.inputType}
                 editable={!hasSelected}
+                autoFocus={true}
             />
 
             <View style={style.buttons}>
