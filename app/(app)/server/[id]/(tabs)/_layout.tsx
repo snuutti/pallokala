@@ -53,6 +53,30 @@ export default function TabsLayout() {
                 }}
                 redirect={!server.hasScope("server.files.view")}
             />
+
+            <Tabs.Screen
+                name="sftp"
+                options={{
+                    title: "SFTP Information",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="nas" color={color} />
+                    )
+                }}
+                redirect={!server.hasScope("server.sftp")}
+            />
+
+            <Tabs.Screen
+                name="admin"
+                options={{
+                    title: "Admin",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="account-star" color={color} />
+                    )
+                }}
+                redirect={!server.hasScope("server.definition.view") && !server.hasScope("server.delete")}
+            />
         </Tabs>
     );
 }
