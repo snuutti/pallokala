@@ -1,16 +1,16 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
 import { Drawer } from "expo-router/drawer";
 import LoginErrorScreen from "@/components/screen/LoginErrorScreen";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
+import DrawerHeaderButton from "@/components/navigation/DrawerHeaderButton";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
-import { useStyle } from "@/hooks/useStyle";
+import { useColors } from "@/hooks/useStyle";
 
 export default function AppLayout() {
-    const { style, colors } = useStyle(styling);
+    const colors = useColors();
     const { apiClient, config } = useApiClient();
     const { loading, error } = useAccount();
     const { server } = useServer();
@@ -28,12 +28,8 @@ export default function AppLayout() {
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={{
                 headerTintColor: colors.text,
-                headerRight: () => (
-                    <TouchableOpacity style={style.searchIcon}>
-                        <NavigationIcon name="magnify" color={colors.text} />
-                    </TouchableOpacity>
-                ),
-                drawerActiveBackgroundColor: colors.primaryHover,
+                headerRight: () => <DrawerHeaderButton />,
+                drawerActiveBackgroundColor: colors.primaryHover
             }}
             backBehavior="history"
         >
@@ -140,12 +136,4 @@ export default function AppLayout() {
             />
         </Drawer>
     );
-}
-
-function styling() {
-    return StyleSheet.create({
-        searchIcon: {
-            marginHorizontal: 11
-        }
-    });
 }
