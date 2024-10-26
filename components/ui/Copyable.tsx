@@ -5,6 +5,7 @@ import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 
 export type CopyableProps = {
+    label?: string;
     text: string;
 };
 
@@ -16,27 +17,39 @@ export default function Copyable(props: CopyableProps) {
     };
 
     return (
-        <View style={style.container}>
-            <ScrollView horizontal={true}>
-                <Text selectable={true} style={style.text}>{props.text}</Text>
-            </ScrollView>
+        <>
+            {props.label && (
+                <Text style={style.label}>{props.label}</Text>
+            )}
 
-            <TouchableOpacity style={style.copy} onPress={copyToClipboard}>
-                <MaterialCommunityIcons name="content-copy" size={30} color={colors.text} />
-            </TouchableOpacity>
-        </View>
+            <View style={style.container}>
+                <ScrollView horizontal={true}>
+                    <Text selectable={true} style={style.text}>{props.text}</Text>
+                </ScrollView>
+
+                <TouchableOpacity style={style.copy} onPress={copyToClipboard}>
+                    <MaterialCommunityIcons name="content-copy" size={30} color={colors.text} />
+                </TouchableOpacity>
+            </View>
+        </>
     );
 }
 
 function styling(colors: Colors) {
     return StyleSheet.create({
+        label: {
+            color: colors.text,
+            marginHorizontal: 16,
+            marginTop: 5,
+            alignSelf: "flex-start"
+        },
         container: {
             width: "100%",
             flexDirection: "row",
             flexWrap: "nowrap",
             alignItems: "center",
             marginVertical: 5,
-            padding: 10,
+            padding: 16,
             borderRadius: 16,
             borderColor: colors.textDisabled,
             borderWidth: 2,
