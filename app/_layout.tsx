@@ -28,7 +28,9 @@ export default function RootLayout() {
     const theme = useNavigationColors();
     const [loaded] = useFonts({
         UbuntuMono: require("../assets/fonts/UbuntuMono-R.ttf"),
-        UbuntuMonoBold: require("../assets/fonts/UbuntuMono-B.ttf")
+        UbuntuMonoBold: require("../assets/fonts/UbuntuMono-B.ttf"),
+        UbuntuMonoItalic: require("../assets/fonts/UbuntuMono-RI.ttf"),
+        UbuntuMonoBoldItalic: require("../assets/fonts/UbuntuMono-BI.ttf")
     });
 
     useEffect(() => {

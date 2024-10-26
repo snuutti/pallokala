@@ -15,6 +15,8 @@ export default function AnsiText(props: AnsiTextProps) {
 
     const applyStyle = (item: Anser.AnserJsonEntry): TextStyle => {
         const style: TextStyle = { ...props.style };
+        let bold = false;
+        let italic = false;
 
         if (item.fg) {
             style.color = `rgb(${item.fg})`;
@@ -25,7 +27,7 @@ export default function AnsiText(props: AnsiTextProps) {
         }
 
         if (item.decorations.includes("bold")) {
-            style.fontFamily = "UbuntuMonoBold";
+            bold = true;
         }
 
         if (item.decorations.includes("dim")) {
@@ -37,7 +39,15 @@ export default function AnsiText(props: AnsiTextProps) {
         }
 
         if (item.decorations.includes("italic")) {
-            style.fontStyle = "italic";
+            italic = true;
+        }
+
+        if (bold && italic) {
+            style.fontFamily = "UbuntuMonoBoldItalic";
+        } else if (bold) {
+            style.fontFamily = "UbuntuMonoBold";
+        } else if (italic) {
+            style.fontFamily = "UbuntuMonoItalic";
         }
 
         return style;
