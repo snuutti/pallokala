@@ -334,7 +334,7 @@ declare module "pufferpanel" {
         public id: string;
         public ip: string;
         public name: string;
-        public node: string;
+        public node: Node;
         public port: number;
         public type: string;
 
