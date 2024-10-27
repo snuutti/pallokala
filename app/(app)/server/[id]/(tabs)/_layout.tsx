@@ -55,6 +55,18 @@ export default function TabsLayout() {
             />
 
             <Tabs.Screen
+                name="users"
+                options={{
+                    title: "Users",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="account-multiple" color={color} />
+                    )
+                }}
+                redirect={!server.hasScope("server.users.view")}
+            />
+
+            <Tabs.Screen
                 name="sftp"
                 options={{
                     title: "SFTP Information",

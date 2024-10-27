@@ -4,17 +4,21 @@ import { Image } from "expo-image";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 import { md5 } from "js-md5";
-import { User } from "pufferpanel";
+import { User, UserPermissionsView } from "pufferpanel";
 
 type UsersListItemProps = {
-    user: User;
+    user: User | UserPermissionsView;
 };
 
 export default function UsersListItem(props: UsersListItemProps) {
     const { style } = useStyle(styling);
 
     const onPress = () => {
-        router.push(`./${props.user.id}`);
+        if ((props.user as User).id) {
+            router.push(`./${(props.user as User).id}`);
+        } else {
+            router.push(`../(modal)/edituser?email=${(props.user as UserPermissionsView).email}`);
+        }
     };
 
     return (

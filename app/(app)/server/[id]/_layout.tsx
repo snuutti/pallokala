@@ -21,6 +21,15 @@ export default function ServerLayout() {
                     animation: "fade_from_bottom",
                 }}
             />
+
+            <Stack.Screen
+                name="(modal)/edituser"
+                options={{
+                    title: "Edit User",
+                    presentation: "modal",
+                    animation: "fade_from_bottom",
+                }}
+            />
         </Stack>
     );
 }
