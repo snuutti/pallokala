@@ -56,6 +56,7 @@ function styling(colors: Colors) {
         },
         infoView: {
             flexGrow: 1,
+            flexShrink: 1,
             flexDirection: "column",
             justifyContent: "center"
         },
