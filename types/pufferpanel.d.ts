@@ -253,7 +253,15 @@ declare module "pufferpanel" {
 
         async setFlags(id: string, flags: ServerFlags): Promise<boolean>;
 
-        // TODO: definition, data
+        async getDefinition(id: string): Promise<ServerDefinition>;
+
+        async updateDefinition(id: string, data: ServerDefinition): Promise<boolean>;
+
+        async getData(id: string): Promise<ServerSettings>;
+
+        async adminUpdateData(id: string, data: Record<string, unknown>): Promise<boolean>;
+
+        async updateData(id: string, data: Record<string, unknown>): Promise<boolean>;
 
         async getUsers(id: string): Promise<UserPermissionsView[]>;
 
@@ -309,9 +317,98 @@ declare module "pufferpanel" {
     };
 
     export type ServerFlags = {
+        [key: string]: boolean;
         autoStart?: boolean;
         autoRestartOnCrash?: boolean;
         autoRestartOnGraceful?: boolean;
+    };
+
+    export type ServerDefinition = {
+        type: string;
+        id?: string;
+        display?: string;
+        icon?: string;
+        data?: Record<string, Variable>;
+        groups?: Group[];
+        install?: ConditionalMetadataType[];
+        uninstall?: ConditionalMetadataType[];
+        run: Execution;
+        environment: MetadataType;
+        supportedEnvironments?: MetadataType[];
+        requirements?: Requirements;
+        stats?: MetadataType;
+        query?: MetadataType;
+    };
+
+    export type Variable = {
+        type: string;
+        value: unknown;
+        display?: string;
+        desc?: string;
+        required: boolean;
+        internal?: boolean;
+        userEdit: boolean;
+        options?: VariableOption[];
+    };
+
+    export type VariableOption = {
+        value: string;
+        display: string;
+    };
+
+    export type Group = {
+        if?: string;
+        display: string;
+        description: string;
+        variables: string[];
+        order: number;
+    };
+
+    export type MetadataType = {
+        [key: string]: boolean;
+        type?: string;
+    };
+
+    export type ConditionalMetadataType = MetadataType & {
+        if?: string;
+    };
+
+    export type Execution = {
+        command: Command[];
+        stop?: string;
+        stopCode?: number;
+        pre?: ConditionalMetadataType[];
+        post?: ConditionalMetadataType[];
+        environmentVars?: Record<string, string>;
+        workingDirectory?: string;
+        stdin?: StdinConsoleConfiguration;
+        autostart: boolean;
+        autorecover: boolean;
+        autorestart: boolean;
+        expectedExitCode?: number;
+    };
+
+    export type Command = {
+        command: string;
+        if?: string;
+    };
+
+    export type StdinConsoleConfiguration = {
+        type?: string;
+        ip?: string;
+        port?: string;
+        password?: string;
+    };
+
+    export type Requirements = {
+        os?: string;
+        arch?: string;
+        binaries?: string[];
+    };
+
+    export type ServerSettings = {
+        data: Record<string, Variable>;
+        groups?: Group[];
     };
 
     export type UserPermissionsView = {
@@ -380,7 +477,15 @@ declare module "pufferpanel" {
 
         async setFlags(flags: ServerFlags): Promise<boolean>;
 
-        // TODO: definition, data
+        async getDefinition(): Promise<ServerDefinition>;
+
+        async updateDefinition(data: ServerDefinition): Promise<boolean>;
+
+        async getData(): Promise<ServerSettings>;
+
+        async adminUpdateData(data: Record<string, unknown>): Promise<boolean>;
+
+        async updateData(data: Record<string, unknown>): Promise<boolean>;
 
         async delete(): Promise<boolean>;
 
@@ -467,10 +572,7 @@ declare module "pufferpanel" {
         isLocal: boolean;
     };
 
-    export type Template = {
-        // TODO: missing stuff
-        type: string;
-        display?: string;
+    export type Template = ServerDefinition & {
         name: string;
         readme?: string;
     };
