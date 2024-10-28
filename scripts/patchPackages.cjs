@@ -59,6 +59,22 @@ function patchServersJs() {
         lines[socketIndex] = "    this._socket = new WebSocket(`${protocol}://${host}/api/servers/${this.id}/socket`, null, { headers: { \"Authorization\": \"Bearer \" + this._api.auth.getToken() } })";
     }
 
+    const dataIndex = lines.findIndex(line => line.startsWith("    const data = new FormData()"));
+    if (dataIndex !== -1) {
+        lines[dataIndex] = "    const data = new RNBlob([blob])";
+    }
+
+    const dataAppendIndex = lines.findIndex(line => line.startsWith("    data.append('file', blob)"));
+    if (dataAppendIndex !== -1) {
+        lines.splice(dataAppendIndex, 1);
+    }
+
+    lines.push("class RNBlob extends Blob {\n" +
+        "  get [Symbol.toStringTag]() {\n" +
+        "    return 'Blob'\n" +
+        "  }\n" +
+        "}");
+
     lines.unshift("//patched");
     fs.writeFileSync(serversPath, lines.join("\n"), "utf8");
 

@@ -191,7 +191,6 @@ export default function FilesScreen() {
             return;
         }
 
-        // TODO: doesn't work. why?
         await server?.uploadFile(getCurrentPath() + "/" + name, "");
         await openFile({ name, size: 0, isFile: true });
         await refresh();
