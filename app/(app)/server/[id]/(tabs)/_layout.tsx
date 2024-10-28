@@ -55,6 +55,18 @@ export default function TabsLayout() {
             />
 
             <Tabs.Screen
+                name="settings"
+                options={{
+                    title: "Settings",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="cog" color={color} />
+                    )
+                }}
+                redirect={!server.hasScope("server.data.view") && !server.hasScope("server.flags.view")}
+            />
+
+            <Tabs.Screen
                 name="users"
                 options={{
                     title: "Users",
