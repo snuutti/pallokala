@@ -4,6 +4,7 @@ import { Colors } from "@/constants/Colors";
 
 export type TextInputProps = RNTextInputProps & {
     error?: string;
+    description?: string;
 };
 
 export default function TextInput(props: TextInputProps) {
@@ -28,6 +29,10 @@ export default function TextInput(props: TextInputProps) {
 
             {props.error && (
                 <Text style={style.errorText}>{props.error}</Text>
+            )}
+
+            {props.description && (
+                <Text style={style.description}>{props.description}</Text>
             )}
         </>
     );
@@ -59,6 +64,12 @@ function styling(colors: Colors) {
         },
         errorText: {
             color: colors.error,
+            marginHorizontal: 16,
+            marginBottom: 5,
+            alignSelf: "flex-start"
+        },
+        description: {
+            color: colors.textDisabled,
             marginHorizontal: 16,
             marginBottom: 5,
             alignSelf: "flex-start"
