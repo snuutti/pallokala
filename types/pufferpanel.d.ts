@@ -277,7 +277,7 @@ declare module "pufferpanel" {
 
         async fileExists(id: string, path: string): Promise<"file" | "folder" | false>;
 
-        async uploadFile(id: string, path: string, content: any, onUploadProgress?: (progressEvent: any) => void): Promise<boolean>;
+        async uploadFile(id: string, path: string, content: any, onUploadProgress?: (progressEvent: ProgressEvent) => void): Promise<boolean>;
 
         async createFolder(id: string, path: string): Promise<boolean>;
 
@@ -501,7 +501,7 @@ declare module "pufferpanel" {
 
         async fileExists(path: string): Promise<"file" | "folder" | false>;
 
-        async uploadFile(path: string, content: any, onUploadProgress?: (progressEvent: any) => void): Promise<boolean>;
+        async uploadFile(path: string, content: any, onUploadProgress?: (progressEvent: ProgressEvent) => void): Promise<boolean>;
 
         async createFolder(path: string): Promise<boolean>;
 
