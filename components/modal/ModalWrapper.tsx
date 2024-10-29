@@ -8,6 +8,7 @@ import { Colors } from "@/constants/Colors";
 
 type ModalWrapperProps = {
     id: string;
+    closable?: boolean;
     content: ReactNode;
     closeModal: (id: string) => void;
 };
@@ -38,9 +39,21 @@ export default function ModalWrapper(props: ModalWrapperProps) {
     }, []);
 
     useBackHandler(() => {
+        if (props.closable === false) {
+            return true;
+        }
+
         handleClose();
         return true;
     });
+
+    const tryClose = () => {
+        if (props.closable === false) {
+            return;
+        }
+
+        handleClose();
+    };
 
     const handleClose = () => {
         Keyboard.dismiss();
@@ -52,7 +65,7 @@ export default function ModalWrapper(props: ModalWrapperProps) {
     };
 
     return (
-        <TouchableWithoutFeedback onPress={handleClose}>
+        <TouchableWithoutFeedback onPress={tryClose}>
             <Animated.View style={[style.overlay, backgroundStyle]}>
                 <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={style.modalWrapper}>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

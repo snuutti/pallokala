@@ -9,20 +9,23 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 type ModalContextType = {
     createModal: (
         content: ReactNode,
-        onClose?: () => void
+        onClose?: () => void,
+        closable?: boolean
     ) => string;
     createAlertModal: (
         title?: string,
         message?: string,
         buttons?: ModalButton[],
-        onClose?: () => void
+        onClose?: () => void,
+        closable?: boolean
     ) => string;
     createPromptModal: (
         title?: string,
         placeholder?: string,
         inputType?: KeyboardTypeOptions,
         buttons?: PromptModalButton[],
-        onClose?: () => void
+        onClose?: () => void,
+        closable?: boolean
     ) => string;
     createListModal: (items: ModalButton[]) => string;
     closeModal: (id: string) => void;
@@ -36,6 +39,7 @@ type ModalProviderProps = {
 
 type ModalItem = {
     id: string;
+    closable?: boolean;
     content: ReactNode;
     onClose?: () => void;
 };
@@ -56,10 +60,11 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
 
     const createModal = (
         content: ReactNode,
-        onClose?: () => void
+        onClose?: () => void,
+        closable = true
     ) => {
         const id = Math.random().toString(36);
-        setModals((prevModals) => [...prevModals, { id, content, onClose }]);
+        setModals((prevModals) => [...prevModals, { id, closable, content, onClose }]);
         return id;
     };
 
@@ -67,7 +72,8 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
         title?: string,
         message?: string,
         buttons?: ModalButton[],
-        onClose?: () => void
+        onClose?: () => void,
+        closable?: boolean
     ) => {
         return createModal(
             <AlertModal
@@ -75,7 +81,8 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
                 message={message}
                 buttons={buttons}
             />,
-            onClose
+            onClose,
+            closable
         );
     };
 
@@ -84,7 +91,8 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
         placeholder?: string,
         inputType?: KeyboardTypeOptions,
         buttons?: PromptModalButton[],
-        onClose?: () => void
+        onClose?: () => void,
+        closable?: boolean
     ) => {
         return createModal(
             <PromptModal
@@ -93,7 +101,8 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
                 inputType={inputType}
                 buttons={buttons}
             />,
-            onClose
+            onClose,
+            closable
         );
     };
 
@@ -126,6 +135,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
                 <ModalWrapper
                     key={modal.id}
                     id={modal.id}
+                    closable={modal.closable}
                     content={modal.content}
                     closeModal={closeModal}
                 />
