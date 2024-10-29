@@ -3,8 +3,10 @@ import { RefreshControl } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
+import * as DocumentPicker from "expo-document-picker";
 import { router } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import UploadProgressModal, { UploadFile, UploadState } from "@/components/server/files/UploadProgressModal";
 import FileItem from "@/components/server/files/FileItem";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useModal } from "@/context/ModalProvider";
@@ -38,7 +40,7 @@ export default function FilesScreen() {
     const { activeAccount } = useAccount();
     const { server, setOpenFile } = useServer();
     const { fabVisible, setFabVisible, onScroll } = useFabVisible();
-    const { createAlertModal, createPromptModal, createListModal } = useModal();
+    const { createAlertModal, createPromptModal, createListModal, createModal } = useModal();
     const [files, setFiles] = useState<FileDesc[]>([]);
     const [currentPath, setCurrentPath] = useState<FileDesc[]>([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -182,8 +184,39 @@ export default function FilesScreen() {
         await refresh();
     };
 
+    const onUploadFile = async (file: UploadFile, onUploadProgress: (event: ProgressEvent) => void) => {
+        const blob = await FileSystem.readAsStringAsync(file.uri, {
+            encoding: FileSystem.EncodingType.Base64
+        });
+
+        await server?.uploadFile(file.path, blob, onUploadProgress);
+    };
+
     const uploadFile = async () => {
-        // TODO
+        const files = await DocumentPicker.getDocumentAsync({ multiple: true });
+        if (files.canceled) {
+            return;
+        }
+
+        const newUploadState: UploadState = {
+            total: files.assets.length,
+            files: files.assets.map((file) => ({
+                uri: file.uri,
+                name: file.name,
+                path: getCurrentPath() + "/" + file.name,
+                size: file.size || 0,
+                progress: 0
+            }))
+        };
+
+        createModal(
+            <UploadProgressModal
+                state={newUploadState}
+                uploadFile={onUploadFile}
+            />,
+            async () => await refresh(),
+            false
+        );
     };
 
     const createFile = async (name: string) => {
