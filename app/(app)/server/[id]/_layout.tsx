@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import SaveButton from "@/components/server/files/SaveButton";
 import { useServer } from "@/context/ServerProvider";
 
 export default function ServerLayout() {
@@ -19,6 +20,7 @@ export default function ServerLayout() {
                     title: openFile?.name || "Edit File",
                     presentation: "modal",
                     animation: "fade_from_bottom",
+                    headerRight: SaveButton
                 }}
             />
 

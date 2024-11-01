@@ -8,6 +8,8 @@ type ServerContextType = {
     id?: string;
     openFile?: ExtendedFileDesc;
     setOpenFile: (file: ExtendedFileDesc) => void;
+    fileContent: string | null;
+    setFileContent: (content: string | null) => void;
     switchServer: (id: string) => void;
 };
 
@@ -22,6 +24,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     const [server, setServer] = useState<Server | undefined>(undefined);
     const [id, setId] = useState<string | undefined>(undefined);
     const [openFile, setOpenFile] = useState<ExtendedFileDesc | undefined>(undefined);
+    const [fileContent, setFileContent] = useState<string | null>(null);
 
     useEffect(() => {
         return () => {
@@ -47,7 +50,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     };
 
     return (
-        <ServerContext.Provider value={{ server, id, openFile, setOpenFile, switchServer }}>
+        <ServerContext.Provider value={{ server, id, openFile, setOpenFile, fileContent, setFileContent, switchServer }}>
             {children}
         </ServerContext.Provider>
     );

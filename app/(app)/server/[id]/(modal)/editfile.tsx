@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { Image } from "expo-image";
 import { WebView } from "react-native-webview";
@@ -14,20 +14,19 @@ export default function EditFileScreen() {
     const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
-    const { server, openFile } = useServer();
-    const [content, setContent] = useState<string | null>(null);
+    const { server, openFile, fileContent, setFileContent } = useServer();
 
     useEffect(() => {
-        setContent(null);
+        setFileContent(null);
 
         if (skipDownload(openFile!)) {
             return;
         }
 
-        server?.getFile(openFile?.path, true).then(res => setContent(res as string));
+        server?.getFile(openFile?.path, true).then(res => setFileContent(res as string));
     }, [openFile]);
 
-    if (!openFile || (content === null && !skipDownload(openFile))) {
+    if (!openFile || (fileContent === null && !skipDownload(openFile))) {
         return <LoadingScreen />;
     }
 
@@ -52,12 +51,12 @@ export default function EditFileScreen() {
             scrollEnabled={false}
             source={require("@/assets/editor/editor.html")}
             injectedJavaScriptObject={{
-                content,
+                content: fileContent,
                 name: openFile.name,
                 readOnly: !server?.hasScope("server.files.edit")
             }}
             onMessage={(event) => {
-                setContent(event.nativeEvent.data);
+                setFileContent(event.nativeEvent.data);
             }}
         />
     );

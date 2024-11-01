@@ -38,7 +38,7 @@ export default function FilesScreen() {
     const colors = useColors();
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
-    const { server, setOpenFile } = useServer();
+    const { server, setOpenFile, setFileContent } = useServer();
     const { fabVisible, setFabVisible, onScroll } = useFabVisible();
     const { createAlertModal, createPromptModal, createListModal, createModal } = useModal();
     const [files, setFiles] = useState<FileDesc[]>([]);
@@ -88,6 +88,7 @@ export default function FilesScreen() {
             };
 
             setOpenFile(openFile);
+            setFileContent(null);
             router.push(`../(modal)/editfile`);
         } else {
             let pathString: string;
