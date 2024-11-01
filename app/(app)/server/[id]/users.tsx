@@ -60,7 +60,7 @@ export default function UsersScreen() {
         };
 
         await server?.updateUser(newUser);
-        router.push(`../(modal)/edituser?email=${email}`);
+        router.push(`/(modal)/edituser?email=${email}`);
 
         showSuccess("User invited successfully");
 

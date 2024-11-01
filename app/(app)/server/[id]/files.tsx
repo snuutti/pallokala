@@ -89,7 +89,7 @@ export default function FilesScreen() {
 
             setOpenFile(openFile);
             setFileContent(null);
-            router.push(`../(modal)/editfile`);
+            router.push(`/(modal)/editfile`);
         } else {
             let pathString: string;
             if (file.name === "..") {

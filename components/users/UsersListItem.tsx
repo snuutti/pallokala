@@ -17,7 +17,7 @@ export default function UsersListItem(props: UsersListItemProps) {
         if ((props.user as User).id) {
             router.push(`./${(props.user as User).id}`);
         } else {
-            router.push(`../(modal)/edituser?email=${(props.user as UserPermissionsView).email}`);
+            router.push(`/(modal)/edituser?email=${(props.user as UserPermissionsView).email}`);
         }
     };
 

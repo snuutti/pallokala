@@ -1,37 +1,106 @@
-import { Stack } from "expo-router";
-import SaveButton from "@/components/server/files/SaveButton";
+import { useEffect } from "react";
+import { Tabs, useLocalSearchParams } from "expo-router";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
+import LoadingScreen from "@/components/screen/LoadingScreen";
 import { useServer } from "@/context/ServerProvider";
 
-export default function ServerLayout() {
-    const { openFile } = useServer();
+export default function TabsLayout() {
+    const { server, switchServer } = useServer();
+    const { id } = useLocalSearchParams<{ id: string }>();
+
+    useEffect(() => {
+        switchServer(id);
+    }, [id]);
+
+    if (!server || server.id !== id) {
+        return <LoadingScreen />;
+    }
 
     return (
-        <Stack>
-            <Stack.Screen
-                name="(tabs)"
+        <Tabs>
+            <Tabs.Screen
+                name="index"
                 options={{
-                    headerShown: false
+                    title: "Console",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="console-line" color={color} />
+                    )
                 }}
+                redirect={!server.hasScope("server.console") && !server.hasScope("server.console.send")}
             />
 
-            <Stack.Screen
-                name="(modal)/editfile"
+            <Tabs.Screen
+                name="statistics"
                 options={{
-                    title: openFile?.name || "Edit File",
-                    presentation: "modal",
-                    animation: "fade_from_bottom",
-                    headerRight: SaveButton
+                    title: "Statistics",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="chart-line" color={color} />
+                    )
                 }}
+                redirect={!server.hasScope("server.stats")}
             />
 
-            <Stack.Screen
-                name="(modal)/edituser"
+            <Tabs.Screen
+                name="files"
                 options={{
-                    title: "Edit User",
-                    presentation: "modal",
-                    animation: "fade_from_bottom",
+                    title: "Files",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="file" color={color} />
+                    )
                 }}
+                redirect={!server.hasScope("server.files.view")}
             />
-        </Stack>
+
+            <Tabs.Screen
+                name="settings"
+                options={{
+                    title: "Settings",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="cog" color={color} />
+                    )
+                }}
+                redirect={!server.hasScope("server.data.view") && !server.hasScope("server.flags.view")}
+            />
+
+            <Tabs.Screen
+                name="users"
+                options={{
+                    title: "Users",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="account-multiple" color={color} />
+                    )
+                }}
+                redirect={!server.hasScope("server.users.view")}
+            />
+
+            <Tabs.Screen
+                name="sftp"
+                options={{
+                    title: "SFTP Information",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="nas" color={color} />
+                    )
+                }}
+                redirect={!server.hasScope("server.sftp")}
+            />
+
+            <Tabs.Screen
+                name="admin"
+                options={{
+                    title: "Admin",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="account-star" color={color} />
+                    )
+                }}
+                redirect={!server.hasScope("server.definition.view") && !server.hasScope("server.delete")}
+            />
+        </Tabs>
     );
 }
