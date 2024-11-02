@@ -40,7 +40,8 @@ function styling(colors: Colors) {
         container: {
             flexDirection: "row",
             flexWrap: "nowrap",
-            alignItems: "center"
+            alignItems: "center",
+            marginVertical: 5
         },
         disabled: {
             opacity: 0.5
