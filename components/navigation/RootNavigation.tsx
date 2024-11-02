@@ -42,6 +42,15 @@ export default function RootNavigation() {
                     animation: "fade_from_bottom"
                 }}
             />
+
+            <Stack.Screen
+                name="(modal)/enroll2fa"
+                options={{
+                    title: "Two Factor Authentication",
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
         </Stack>
     );
 }
