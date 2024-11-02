@@ -51,6 +51,15 @@ export default function RootNavigation() {
                     animation: "fade_from_bottom"
                 }}
             />
+
+            <Stack.Screen
+                name="(modal)/oauthcreds"
+                options={{
+                    title: "OAuth2 Client Credentials",
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
         </Stack>
     );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import * as WebBrowser from "expo-web-browser";
+import { router } from "expo-router";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
@@ -90,12 +91,7 @@ export default function OAuthScreen() {
         const client = await apiClient?.self.createOAuthClient(name, description);
         await refreshClients();
 
-        // TODO: copy to clipboard
-        createAlertModal(
-            "OAuth2 Client Credentials",
-            `Client ID: ${client!.client_id}\nClient Secret: ${client!.client_secret}`,
-            [{ text: "Ok" }]
-        );
+        router.push(`/(modal)/oauthcreds?id=${client!.client_id}&secret=${client!.client_secret}`);
     };
 
     if (loading) {
