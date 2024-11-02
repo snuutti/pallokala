@@ -21,7 +21,7 @@ export default function NodeScreen() {
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
     const { id } = useLocalSearchParams<{ id: string }>();
-    const { control, handleSubmit, setValue, watch, formState: { errors, isValid } } = useForm<NodeSchemaType>({
+    const { control, handleSubmit, setValue, getValues, watch, formState: { errors, isValid } } = useForm<NodeSchemaType>({
         defaultValues: NodeDefaultValues,
         resolver: zodResolver(NodeSchema),
         mode: "onBlur"
@@ -105,10 +105,10 @@ export default function NodeScreen() {
     };
 
     const deployNode = () => {
-        // TODO
+        router.push(`/(modal)/deploynode?id=${id}&port=${getValues("private.privatePort")}&sftp=${getValues("sftpPort")}`);
     };
 
-    if (!node) {
+    if (!node || node.id !== Number(id)) {
         return <LoadingScreen />;
     }
 
