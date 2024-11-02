@@ -72,6 +72,20 @@ export default function AppLayout() {
                 }}
             />
 
+            <Drawer.Screen
+                name="templates/index"
+                options={{
+                    drawerLabel: "Templates",
+                    drawerIcon: ({ color }) => (
+                        <NavigationIcon name="file-code" color={color} />
+                    ),
+                    drawerItemStyle: {
+                        display: apiClient.auth.hasScope("templates.view") ? undefined : "none"
+                    },
+                    title: "Templates"
+                }}
+            />
+
             {/* We have to manually tell the Expo router which screens not to show. */}
             {/* According to them this is working as expected. I disagree. */}
             <Drawer.Screen

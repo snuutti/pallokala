@@ -547,7 +547,7 @@ declare module "pufferpanel" {
 
         async listRepoTemplates(repo: number): Promise<Template[]>;
 
-        async listAllTemplates(): Promise<AllTemplatesResponse>;
+        async listAllTemplates(): Promise<AllTemplatesResponse[]>;
 
         async get(repo: number, name: string): Promise<Template>;
 
