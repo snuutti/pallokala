@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
+import { router } from "expo-router";
 import { useRoute } from "@react-navigation/core";
 import * as DropdownMenu from "zeego/dropdown-menu";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
@@ -48,7 +49,7 @@ export default function DrawerHeaderButton() {
 
     if (!server || route.name !== "server/[id]") {
         return (
-            <TouchableOpacity style={style.searchIcon}>
+            <TouchableOpacity style={style.searchIcon} onPress={() => router.push("/(modal)/search")}>
                 <NavigationIcon name="magnify" color={colors.text} />
             </TouchableOpacity>
         );
