@@ -86,6 +86,20 @@ export default function AppLayout() {
                 }}
             />
 
+            <Drawer.Screen
+                name="settings"
+                options={{
+                    drawerLabel: "Settings",
+                    drawerIcon: ({ color }) => (
+                        <NavigationIcon name="cog" color={color} />
+                    ),
+                    drawerItemStyle: {
+                        display: apiClient.auth.hasScope("settings.edit") ? undefined : "none"
+                    },
+                    title: "Settings"
+                }}
+            />
+
             {/* We have to manually tell the Expo router which screens not to show. */}
             {/* According to them this is working as expected. I disagree. */}
             <Drawer.Screen
