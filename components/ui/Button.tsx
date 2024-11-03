@@ -78,7 +78,8 @@ function styling(colors: Colors) {
         },
         text: {
             color: colors.textPrimary,
-            textAlign: "center"
+            textAlign: "center",
+            flexShrink: 1
         }
     });
 }
