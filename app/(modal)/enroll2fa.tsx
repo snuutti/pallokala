@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { Image } from "expo-image";
+import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Copyable from "@/components/ui/Copyable";
@@ -27,6 +28,7 @@ const defaultValues = {
 };
 
 export default function EnrollTwoFactorScreen() {
+    const { t } = useTranslation();
     const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
@@ -49,7 +51,7 @@ export default function EnrollTwoFactorScreen() {
 
         try {
             await apiClient!.self.validateOtpEnroll(data.code);
-            showSuccess("2FA has been enabled");
+            showSuccess(t("users:UpdateSuccess"));
 
             router.navigate(`/self/2fa?refresh=${data.code}`);
         } finally {
@@ -68,7 +70,7 @@ export default function EnrollTwoFactorScreen() {
                 style={style.qrCode}
             />
 
-            <Text style={style.header}>Scan the QR code using your authenticator application or copy the secret code below into it.</Text>
+            <Text style={style.header}>{t("users:OtpSetupHint")}</Text>
 
             <Copyable text={data!.secret} />
 
@@ -76,12 +78,12 @@ export default function EnrollTwoFactorScreen() {
                 control={control}
                 name="code"
                 keyboardType="number-pad"
-                placeholder="Confirm using a 2FA code"
+                placeholder={t("users:OtpConfirm")}
                 error={errors.code?.message}
             />
 
             <Button
-                text="Enable 2FA"
+                text={t("users:OtpEnable")}
                 style="success"
                 onPress={handleSubmit(confirmOtpEnroll)}
                 disabled={!isValid}

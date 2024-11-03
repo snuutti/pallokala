@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { useRoute } from "@react-navigation/core";
 import * as DropdownMenu from "zeego/dropdown-menu";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
@@ -9,6 +10,7 @@ import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 
 export default function DrawerHeaderButton() {
+    const { t } = useTranslation();
     const { style, colors } = useStyle(styling);
     const { server } = useServer();
     const { createPromptModal } = useModal();
@@ -32,17 +34,17 @@ export default function DrawerHeaderButton() {
         }
 
         createPromptModal(
-            "Edit server name",
-            "Name",
+            t("servers:EditName"),
+            t("servers:Name"),
             "default",
             [
                 {
-                    text: "Save",
+                    text: t("common:Save"),
                     icon: "content-save",
                     style: "success",
                     onPress: async (name) => await server.updateName(name)
                 },
-                { text: "Cancel" }
+                { text: t("common:Cancel") }
             ]
         );
     };
@@ -70,31 +72,31 @@ export default function DrawerHeaderButton() {
             <DropdownMenu.Content>
                 {server.hasScope("server.start") && (
                     <DropdownMenu.Item key="start" onSelect={() => server?.start()}>
-                        <DropdownMenu.ItemTitle>Start</DropdownMenu.ItemTitle>
+                        <DropdownMenu.ItemTitle>{t("servers:Start")}</DropdownMenu.ItemTitle>
                     </DropdownMenu.Item>
                 )}
 
                 {server.hasScope("server.stop") && (
                     <DropdownMenu.Item key="stop" onSelect={() => server?.stop()}>
-                        <DropdownMenu.ItemTitle>Stop</DropdownMenu.ItemTitle>
+                        <DropdownMenu.ItemTitle>{t("servers:Stop")}</DropdownMenu.ItemTitle>
                     </DropdownMenu.Item>
                 )}
 
                 {server.hasScope("server.kill") && (
                     <DropdownMenu.Item key="kill" onSelect={() => server?.kill()}>
-                        <DropdownMenu.ItemTitle>Kill</DropdownMenu.ItemTitle>
+                        <DropdownMenu.ItemTitle>{t("servers:Kill")}</DropdownMenu.ItemTitle>
                     </DropdownMenu.Item>
                 )}
 
                 {server.hasScope("server.install") && (
                     <DropdownMenu.Item key="install" onSelect={() => server?.install()}>
-                        <DropdownMenu.ItemTitle>Install</DropdownMenu.ItemTitle>
+                        <DropdownMenu.ItemTitle>{t("servers:Install")}</DropdownMenu.ItemTitle>
                     </DropdownMenu.Item>
                 )}
 
                 {server.hasScope("server.name.edit") && (
                     <DropdownMenu.Item key="name" onSelect={editServerName}>
-                        <DropdownMenu.ItemTitle>Edit server name</DropdownMenu.ItemTitle>
+                        <DropdownMenu.ItemTitle>{t("servers:EditName")}</DropdownMenu.ItemTitle>
                     </DropdownMenu.Item>
                 )}
             </DropdownMenu.Content>

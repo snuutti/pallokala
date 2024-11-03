@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
@@ -14,6 +15,7 @@ import { Colors } from "@/constants/Colors";
 import { OAuthClient } from "pufferpanel";
 
 export default function OAuthScreen() {
+    const { t } = useTranslation();
     const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
@@ -37,16 +39,16 @@ export default function OAuthScreen() {
 
     const deleteAlert = (client: OAuthClient) => {
         createAlertModal(
-            "Delete OAuth2 Client",
-            `Are you sure you want to delete the OAuth2 Client "${client.name || "Unnamed OAuth2 Client"}"?`,
+            t("oauth:Delete"),
+            t("oauth:ConfirmDelete", { name: client.name || t("oauth:UnnamedClient") }),
             [
                 {
-                    text: "Delete",
+                    text: t("oauth:Delete"),
                     icon: "trash-can",
                     style: "danger",
                     onPress: () => deleteClient(client)
                 },
-                { text: "Cancel" }
+                { text: t("common:Cancel") }
             ]
         );
     };
@@ -59,29 +61,29 @@ export default function OAuthScreen() {
 
     const createAlert = () => {
         createPromptModal(
-            "Create new OAuth2 Client",
-            "Name",
+            t("oauth:Create"),
+            t("common:Name"),
             "default",
             [
                 {
-                    text: "Next",
+                    text: t("common:Next"),
                     onPress: (name) => {
                         createPromptModal(
-                            "Create new OAuth2 Client",
-                            "Description",
+                            t("oauth:Create"),
+                            t("common:Description"),
                             "default",
                             [
                                 {
-                                    text: "Create new OAuth2 Client",
+                                    text: t("oauth:Create"),
                                     icon: "content-save",
                                     onPress: (description) => createClient(name, description)
                                 },
-                                { text: "Cancel" }
+                                { text: t("common:Cancel") }
                             ]
                         );
                     }
                 },
-                { text: "Cancel" }
+                { text: t("common:Cancel") }
             ]
         );
     };
@@ -100,10 +102,10 @@ export default function OAuthScreen() {
 
     return (
         <ContentWrapper>
-            <Text style={style.text}>The OAuth2 Clients listed here inherit all of your accounts permissions</Text>
+            <Text style={style.text}>{t("oauth:AccountDescription")}</Text>
 
             <TouchableOpacity onPress={openDocs}>
-                <Text style={style.link}>Find API documentation here</Text>
+                <Text style={style.link}>{t("oauth:Docs")}</Text>
             </TouchableOpacity>
 
             <View style={style.clients}>
@@ -113,7 +115,7 @@ export default function OAuthScreen() {
             </View>
 
             <Button
-                text="Create new OAuth2 Client"
+                text={t("oauth:Create")}
                 icon="plus"
                 onPress={createAlert}
             />

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import TextInput from "@/components/ui/TextInput";
@@ -47,6 +48,7 @@ const defaultEmailSettings: EmailSettings = {
 };
 
 export default function EmailSettingScreen() {
+    const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { createListModal } = useModal();
     const { showSuccess } = useToast();
@@ -87,7 +89,7 @@ export default function EmailSettingScreen() {
 
         await apiClient?.settings.set(data);
 
-        showSuccess("Email settings saved");
+        showSuccess(t("settings:Saved"));
     };
 
     const pickEmailProvider = () => {
@@ -95,7 +97,7 @@ export default function EmailSettingScreen() {
 
         for (const provider in emailProviderConfigs) {
             items.push({
-                text: `settings.emailProviders.${provider}`,
+                text: t(`settings:emailProviders.${provider}`),
                 onPress: () => setEmailProvider(provider)
             });
         }
@@ -110,7 +112,7 @@ export default function EmailSettingScreen() {
     return (
         <ContentWrapper>
             <Button
-                text={`settings.emailProviders.${emailProvider}`}
+                text={`${t("settings:EmailProvider")}: ${t(`settings:emailProviders.${emailProvider}`)}`}
                 onPress={pickEmailProvider}
             />
 
@@ -119,14 +121,14 @@ export default function EmailSettingScreen() {
                     key={setting.key}
                     value={emailSettings[setting.key]}
                     onChangeText={(value) => setEmailSettings({ ...emailSettings, [setting.key]: value })}
-                    placeholder={`settings.email.${setting.key}`}
+                    placeholder={t(`settings:email.${setting.key}`)}
                     autoCapitalize="none"
                     secureTextEntry={setting.type === "password"}
                 />
             ))}
 
             <Button
-                text="Save Email Settings"
+                text={t("settings:SaveEmailSettings")}
                 icon="content-save"
                 onPress={saveSettings}
             />

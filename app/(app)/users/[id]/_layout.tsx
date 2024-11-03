@@ -1,8 +1,10 @@
 import { Tabs, useLocalSearchParams } from "expo-router";
+import { useTranslation } from "react-i18next";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useApiClient } from "@/context/ApiClientProvider";
 
 export default function UserViewLayout() {
+    const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { id } = useLocalSearchParams<{ id: string }>();
 
@@ -11,7 +13,7 @@ export default function UserViewLayout() {
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: "User Details",
+                    title: t("users:Details"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <NavigationIcon name="account" color={color} />
@@ -24,7 +26,7 @@ export default function UserViewLayout() {
             <Tabs.Screen
                 name="permissions"
                 options={{
-                    title: "Permissions",
+                    title: t("users:Permissions"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <NavigationIcon name="lock-open" color={color} />

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import NodeOptions, { NodeDefaultValues, NodeSchema, NodeSchemaType } from "@/components/nodes/NodeOptions";
 import Button from "@/components/ui/Button";
@@ -10,6 +11,7 @@ import { useToast } from "@/context/ToastProvider";
 import { Node } from "pufferpanel";
 
 export default function NewNodeScreen() {
+    const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { control, handleSubmit, watch, reset, formState: { errors, isValid } } = useForm<NodeSchemaType>({
@@ -40,7 +42,7 @@ export default function NewNodeScreen() {
             const id = await apiClient?.node.create(node as Node);
             reset();
 
-            showSuccess("Node created successfully");
+            showSuccess(t("nodes:Created"));
             router.push(`./${id}`);
         } finally {
             setLoading(false);
@@ -57,7 +59,7 @@ export default function NewNodeScreen() {
             />
 
             <Button
-                text="Create Node"
+                text={t("nodes:Create")}
                 icon="content-save"
                 onPress={handleSubmit(createNode)}
                 disabled={loading || !isValid}

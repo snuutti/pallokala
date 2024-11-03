@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import TextInput from "@/components/ui/TextInput";
@@ -8,6 +9,7 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 
 export default function PanelSettingsScreen() {
+    const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const [masterUrl, setMasterUrl] = useState("");
@@ -33,7 +35,7 @@ export default function PanelSettingsScreen() {
             "panel.registrationEnabled": registrationEnabled.toString()
         });
 
-        showSuccess("Panel settings saved");
+        showSuccess(t("settings:Saved"));
     };
 
     if (loading) {
@@ -45,7 +47,8 @@ export default function PanelSettingsScreen() {
             <TextInput
                 value={masterUrl}
                 onChangeText={setMasterUrl}
-                placeholder="Master URL"
+                placeholder={t("settings:MasterUrl")}
+                description={t("settings:MasterUrlHint")}
                 autoCapitalize="none"
                 keyboardType="url"
             />
@@ -53,18 +56,18 @@ export default function PanelSettingsScreen() {
             <TextInput
                 value={companyName}
                 onChangeText={setCompanyName}
-                placeholder="Company Name"
+                placeholder={t("settings:CompanyName")}
             />
 
             <Switch
-                label="Allow users to register themselves"
-                description="Self registered users can't do anything until given permissions Disabling this only prevents direct registration, invitation to a server and the Users page are not affected"
+                label={t("settings:RegistrationEnabled")}
+                description={t("settings:RegistrationEnabledHint")}
                 value={registrationEnabled}
                 onValueChange={setRegistrationEnabled}
             />
 
             <Button
-                text="Save Panel Settings"
+                text={t("settings:SavePanelSettings")}
                 icon="content-save"
                 onPress={saveSettings}
             />

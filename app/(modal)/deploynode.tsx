@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, Text } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
@@ -11,6 +12,7 @@ import { Colors } from "@/constants/Colors";
 import { NodeDeployment } from "pufferpanel";
 
 export default function DeployNodeScreen() {
+    const { t } = useTranslation();
     const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
@@ -61,16 +63,16 @@ export default function DeployNodeScreen() {
 
     return (
         <ContentWrapper>
-            <Text style={style.text}>nodes.deploy.Step{step}</Text>
+            <Text style={style.text}>{t(`nodes:deploy.Step${step}`, { config: getDeployConfig() })}</Text>
 
             {step < 5 ? (
                 <Button
-                    text="Next"
+                    text={t("common:Next")}
                     onPress={() => setStep(step + 1)}
                 />
             ) : (
                 <Button
-                    text="Close"
+                    text={t("common:Close")}
                     onPress={() => router.back()}
                 />
             )}

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
@@ -23,6 +24,7 @@ const defaultValues = {
 };
 
 export default function NewUserScreen() {
+    const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { control, handleSubmit, reset, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
@@ -48,7 +50,7 @@ export default function NewUserScreen() {
             <FormTextInput
                 control={control}
                 name="username"
-                placeholder="Username"
+                placeholder={t("users:Username")}
                 autoCapitalize="none"
                 autoComplete="username"
                 editable={!loading}
@@ -58,7 +60,7 @@ export default function NewUserScreen() {
             <FormTextInput
                 control={control}
                 name="email"
-                placeholder="Email"
+                placeholder={t("users:Email")}
                 autoCapitalize="none"
                 autoComplete="email"
                 keyboardType="email-address"
@@ -69,7 +71,7 @@ export default function NewUserScreen() {
             <FormTextInput
                 control={control}
                 name="password"
-                placeholder="Password"
+                placeholder={t("users:Password")}
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
@@ -78,7 +80,7 @@ export default function NewUserScreen() {
             />
 
             <Button
-                text="Create User"
+                text={t("users:Create")}
                 onPress={handleSubmit(createUser)}
                 disabled={loading || !isValid}
             />

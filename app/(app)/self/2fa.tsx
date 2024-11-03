@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import { router, useLocalSearchParams } from "expo-router";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
@@ -11,6 +12,7 @@ import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 
 export default function TwoFactorAuthScreen() {
+    const { t } = useTranslation();
     const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
@@ -35,12 +37,12 @@ export default function TwoFactorAuthScreen() {
 
     const confirmDisableOtp = () => {
         createPromptModal(
-            "Disable 2FA",
-            "Confirm using a 2FA code",
+            t("users:OtpDisable"),
+            t("users:OtpConfirm"),
             "number-pad",
             [
                 {
-                    text: "Disable 2FA",
+                    text: t("users:OtpDisable"),
                     style: "danger",
                     onPress: async (code: string) => {
                         setLoading(true);
@@ -48,14 +50,14 @@ export default function TwoFactorAuthScreen() {
                         try {
                             await apiClient?.self.disableOtp(code);
                             await refreshOtpStatus();
-                            showSuccess("2FA has been disabled");
+                            showSuccess(t("users:UpdateSuccess"));
                         } finally {
                             setLoading(false);
                         }
                     }
                 },
                 {
-                    text: "Cancel"
+                    text: t("common:Cancel")
                 }
             ]
         );
@@ -67,18 +69,18 @@ export default function TwoFactorAuthScreen() {
 
     return (
         <ContentWrapper>
-            <Text style={style.text}>Two-factor authentication adds an additional layer of security to your account by requiring more than just a password to log in.</Text>
+            <Text style={style.text}>{t("users:OtpHint")}</Text>
 
             {enabled ? (
                 <Button
-                    text="Disable 2FA"
+                    text={t("users:OtpDisable")}
                     icon="lock-off"
                     style="danger"
                     onPress={confirmDisableOtp}
                 />
             ) : (
                 <Button
-                    text="Enable 2FA"
+                    text={t("users:OtpEnable")}
                     icon="lock"
                     onPress={() => router.push("/(modal)/enroll2fa")}
                 />

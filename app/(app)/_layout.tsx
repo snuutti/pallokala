@@ -1,4 +1,5 @@
 import { Drawer } from "expo-router/drawer";
+import { useTranslation } from "react-i18next";
 import LoginErrorScreen from "@/components/screen/LoginErrorScreen";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
@@ -11,6 +12,7 @@ import { useColors } from "@/hooks/useStyle";
 
 export default function AppLayout() {
     const colors = useColors();
+    const { t } = useTranslation();
     const { apiClient, config } = useApiClient();
     const { loading, error } = useAccount();
     const { server } = useServer();
@@ -36,67 +38,67 @@ export default function AppLayout() {
             <Drawer.Screen
                 name="index"
                 options={{
-                    drawerLabel: "Servers",
+                    drawerLabel: t("servers:Servers"),
                     drawerIcon: ({ color }) => (
                         <NavigationIcon name="server" color={color} />
                     ),
-                    title: "Servers"
+                    title: t("servers:Servers")
                 }}
             />
 
             <Drawer.Screen
                 name="nodes/index"
                 options={{
-                    drawerLabel: "Nodes",
+                    drawerLabel: t("nodes:Nodes"),
                     drawerIcon: ({ color }) => (
                         <NavigationIcon name="server-network" color={color} />
                     ),
                     drawerItemStyle: {
                         display: apiClient.auth.hasScope("nodes.view") ? undefined : "none"
                     },
-                    title: "Nodes"
+                    title: t("nodes:Nodes")
                 }}
             />
 
             <Drawer.Screen
                 name="users/index"
                 options={{
-                    drawerLabel: "Users",
+                    drawerLabel: t("users:Users"),
                     drawerIcon: ({ color }) => (
                         <NavigationIcon name="account-multiple" color={color} />
                     ),
                     drawerItemStyle: {
                         display: apiClient.auth.hasScope("users.info.view") ? undefined : "none"
                     },
-                    title: "Users"
+                    title: t("users:Users")
                 }}
             />
 
             <Drawer.Screen
                 name="templates/index"
                 options={{
-                    drawerLabel: "Templates",
+                    drawerLabel: t("templates:Templates"),
                     drawerIcon: ({ color }) => (
                         <NavigationIcon name="file-code" color={color} />
                     ),
                     drawerItemStyle: {
                         display: apiClient.auth.hasScope("templates.view") ? undefined : "none"
                     },
-                    title: "Templates"
+                    title: t("templates:Templates")
                 }}
             />
 
             <Drawer.Screen
                 name="settings"
                 options={{
-                    drawerLabel: "Settings",
+                    drawerLabel: t("settings:Settings"),
                     drawerIcon: ({ color }) => (
                         <NavigationIcon name="cog" color={color} />
                     ),
                     drawerItemStyle: {
                         display: apiClient.auth.hasScope("settings.edit") ? undefined : "none"
                     },
-                    title: "Settings"
+                    title: t("settings:Settings")
                 }}
             />
 
@@ -118,7 +120,7 @@ export default function AppLayout() {
                     drawerItemStyle: {
                         display: "none"
                     },
-                    title: server?.name || "Servers"
+                    title: server?.name || t("servers:Servers")
                 }}
             />
 
@@ -138,7 +140,7 @@ export default function AppLayout() {
                     drawerItemStyle: {
                         display: "none"
                     },
-                    title: "Create Node"
+                    title: t("nodes:Create")
                 }}
             />
 
@@ -159,7 +161,7 @@ export default function AppLayout() {
                     drawerItemStyle: {
                         display: "none"
                     },
-                    title: "Create User"
+                    title: t("users:Create")
                 }}
             />
         </Drawer>

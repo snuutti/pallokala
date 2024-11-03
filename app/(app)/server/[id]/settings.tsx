@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Variables from "@/components/server/settings/Variables";
@@ -12,6 +13,7 @@ import { Colors } from "@/constants/Colors";
 import { ServerDefinition, ServerSettings, ServerFlags } from "pufferpanel";
 
 export default function SettingsScreen() {
+    const { t, i18n } = useTranslation();
     const { style } = useStyle(styling);
     const { server } = useServer();
     const { showSuccess } = useToast();
@@ -52,6 +54,15 @@ export default function SettingsScreen() {
         setFlags(newFlags);
     };
 
+    const getFlagDescription = (flag: string) => {
+        const key = `servers:flags.hint.${flag}`;
+        if (!i18n.exists(key)) {
+            return undefined;
+        }
+
+        return t(key);
+    };
+
     const save = async () => {
         if (!server || !variables) {
             return;
@@ -72,7 +83,7 @@ export default function SettingsScreen() {
             await server.setFlags(flags!);
         }
 
-        showSuccess("Settings saved");
+        showSuccess(t("servers:SettingsSaved"));
     };
 
     if (!variables || !flags) {
@@ -87,12 +98,13 @@ export default function SettingsScreen() {
                 disabled={!server?.hasScope("server.data.edit")}
             />
 
-            <Text style={style.header}>Autostart conditions</Text>
+            <Text style={style.header}>{t("servers:FlagsHeader")}</Text>
 
             {Object.entries(flags).map(([key, value]) => (
                 <Switch
                     key={key}
-                    label={key}
+                    label={t(`servers:flags.${key}`)}
+                    description={getFlagDescription(key)}
                     value={value}
                     onValueChange={() => toggleFlag(key)}
                     disabled={!server?.hasScope("server.flags.edit")}
@@ -100,7 +112,7 @@ export default function SettingsScreen() {
             ))}
 
             <Button
-                text="Save Settings"
+                text={t("servers:SaveSettings")}
                 icon="content-save"
                 onPress={save}
             />

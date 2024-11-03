@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +25,7 @@ const defaultValues = {
 };
 
 export default function AccountDetailsScreen() {
+    const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { user, refreshSelf } = useAccount();
     const { showSuccess } = useToast();
@@ -46,7 +48,7 @@ export default function AccountDetailsScreen() {
             await apiClient?.self.updateDetails(data.username, data.email, data.password);
             await refreshSelf();
 
-            showSuccess("Account updated successfully");
+            showSuccess(t("users:InfoChanged"));
         } finally {
             setSaving(false);
         }
@@ -57,7 +59,7 @@ export default function AccountDetailsScreen() {
             <FormTextInput
                 control={control}
                 name="username"
-                placeholder="Username"
+                placeholder={t("users:Username")}
                 autoCapitalize="none"
                 autoComplete="username"
                 editable={!saving}
@@ -67,7 +69,7 @@ export default function AccountDetailsScreen() {
             <FormTextInput
                 control={control}
                 name="email"
-                placeholder="Email"
+                placeholder={t("users:Email")}
                 autoCapitalize="none"
                 autoComplete="email"
                 keyboardType="email-address"
@@ -78,7 +80,7 @@ export default function AccountDetailsScreen() {
             <FormTextInput
                 control={control}
                 name="password"
-                placeholder="Confirm Password"
+                placeholder={t("users:ConfirmPassword")}
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
@@ -87,7 +89,7 @@ export default function AccountDetailsScreen() {
             />
 
             <Button
-                text="Change Account Details"
+                text={t("users:ChangeInfo")}
                 icon="content-save"
                 onPress={handleSubmit(updateUser)}
                 disabled={saving || !isValid}

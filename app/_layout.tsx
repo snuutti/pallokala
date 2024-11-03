@@ -4,6 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import * as NavigationBar from "expo-navigation-bar";
 import Providers from "@/components/Providers";
 import RootNavigation from "@/components/navigation/RootNavigation";
+import "@/constants/i18n";
 
 // Polyfill
 import "fast-text-encoding";

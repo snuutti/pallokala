@@ -1,9 +1,11 @@
 import { Stack } from "expo-router";
+import { useTranslation } from "react-i18next";
 import SaveButton from "@/components/server/files/SaveButton";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
 
 export default function RootNavigation() {
+    const { t } = useTranslation();
     const { accounts } = useAccount();
     const { openFile } = useServer();
 
@@ -19,7 +21,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="login"
                 options={{
-                    title: "Login",
+                    title: t("users:Login"),
                     headerShown: accounts.length > 0
                 }}
             />
@@ -46,7 +48,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="(modal)/deploynode"
                 options={{
-                    title: "Deploy Node",
+                    title: t("nodes:Deploy"),
                     presentation: "modal",
                     animation: "fade_from_bottom"
                 }}
@@ -55,7 +57,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="(modal)/edituser"
                 options={{
-                    title: "Edit User",
+                    title: t("users:Edit"),
                     presentation: "modal",
                     animation: "fade_from_bottom"
                 }}
@@ -64,7 +66,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="(modal)/enroll2fa"
                 options={{
-                    title: "Two Factor Authentication",
+                    title: t("users:Otp"),
                     presentation: "modal",
                     animation: "fade_from_bottom"
                 }}
@@ -73,7 +75,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="(modal)/oauthcreds"
                 options={{
-                    title: "OAuth2 Client Credentials",
+                    title: t("oauth:Credentials"),
                     presentation: "modal",
                     animation: "fade_from_bottom"
                 }}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, Text } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Switch from "@/components/ui/Switch";
@@ -42,6 +43,7 @@ const perms = [
 ];
 
 export default function EditUserScreen() {
+    const { t, i18n } = useTranslation();
     const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { server } = useServer();
@@ -54,6 +56,19 @@ export default function EditUserScreen() {
             setUser(user[0]);
         });
     }, [email]);
+
+    const scopeLabel = (scope: string) => {
+        return t(`scopes:name.${scope.replace(/\./g, "-")}`);
+    };
+
+    const scopeDescription = (scope: string) => {
+        const key = `scopes:hint.${scope.replace(/\./g, "-")}`;
+        if (!i18n.exists(key)) {
+            return undefined;
+        }
+
+        return t(key);
+    };
 
     const togglePermission = async (scope: string) => {
         if (!user) {
@@ -72,7 +87,7 @@ export default function EditUserScreen() {
         setUser(updatedUser);
         await server?.updateUser(updatedUser);
 
-        showSuccess("Permissions updated");
+        showSuccess(t("users:UpdateSuccess"));
     };
 
     const permissionDisabled = (scope: string) => {
@@ -91,7 +106,7 @@ export default function EditUserScreen() {
         await server?.deleteUser(user.email);
         router.back();
 
-        showSuccess("User deleted");
+        showSuccess(t("users:DeleteSuccess"));
     };
 
     if (!user) {
@@ -105,7 +120,8 @@ export default function EditUserScreen() {
             {perms.map((scope) => (
                 <Switch
                     key={scope}
-                    label={scope}
+                    label={scopeLabel(scope)}
+                    description={scopeDescription(scope)}
                     value={user.scopes.includes(scope)}
                     onValueChange={() => togglePermission(scope)}
                     disabled={permissionDisabled(scope)}
@@ -114,7 +130,7 @@ export default function EditUserScreen() {
 
             {server?.hasScope("server.users.delete") && (
                 <Button
-                    text="Delete User"
+                    text={t("users:Delete")}
                     icon="trash-can"
                     style="danger"
                     onPress={deleteUser}

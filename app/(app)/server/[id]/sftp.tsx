@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Copyable from "@/components/ui/Copyable";
 import { useServer } from "@/context/ServerProvider";
@@ -8,6 +9,7 @@ import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 
 export default function SFTPScreen() {
+    const { t } = useTranslation();
     const { style } = useStyle(styling);
     const { server } = useServer();
     const { user } = useAccount();
@@ -25,10 +27,10 @@ export default function SFTPScreen() {
 
     return (
         <ContentWrapper>
-            <Copyable label="Host/Port:" text={host} />
-            <Copyable label="Username:" text={username} />
+            <Copyable label={`${t("common:Host")}/${t("common:Port")}:`} text={host} />
+            <Copyable label={t("users:Username")} text={username} />
 
-            <Text style={style.password}>Password: Account Password</Text>
+            <Text style={style.password}>{t("users:Password")}: {t("users:AccountPassword")}</Text>
         </ContentWrapper>
     );
 }

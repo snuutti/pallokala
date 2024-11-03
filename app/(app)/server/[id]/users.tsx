@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { RefreshControl, FlatList, Text, StyleSheet } from "react-native";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UsersListItem from "@/components/users/UsersListItem";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
@@ -12,6 +13,7 @@ import { Colors } from "@/constants/Colors";
 import { UserPermissionsView } from "pufferpanel";
 
 export default function UsersScreen() {
+    const { t } = useTranslation();
     const { style, colors } = useStyle(styling);
     const { server } = useServer();
     const { fabVisible, onScroll } = useFabVisible();
@@ -36,17 +38,17 @@ export default function UsersScreen() {
 
     const createAlert = () => {
         createPromptModal(
-            "Invite User",
-            "Email",
+            t("servers:InviteUser"),
+            t("users:Email"),
             "email-address",
             [
                 {
-                    text: "Invite user",
+                    text: t("servers:InviteUser"),
                     icon: "plus",
                     style: "success",
                     onPress: inviteUser
                 },
-                { text: "Cancel" }
+                { text: t("common:Cancel") }
             ]
         );
     };
@@ -62,7 +64,7 @@ export default function UsersScreen() {
         await server?.updateUser(newUser);
         router.push(`/(modal)/edituser?email=${email}`);
 
-        showSuccess("User invited successfully");
+        showSuccess(t("users.UserInvited"));
 
         await loadUsers();
     };
@@ -78,7 +80,7 @@ export default function UsersScreen() {
                     <RefreshControl refreshing={refreshing} onRefresh={loadUsers} />
                 }
                 onScroll={onScroll}
-                ListEmptyComponent={<Text style={style.emptyText}>This server does not have any associated users</Text>}
+                ListEmptyComponent={<Text style={style.emptyText}>{t("servers:NoUsers")}</Text>}
             />
 
             {server?.hasScope("server.users.create") && (

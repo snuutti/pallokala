@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,6 +26,7 @@ const defaultValues = {
 };
 
 export default function ChangePasswordScreen() {
+    const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
@@ -40,7 +42,7 @@ export default function ChangePasswordScreen() {
         try {
             await apiClient?.self.changePassword(data.old, data.new);
 
-            showSuccess("Password updated successfully");
+            showSuccess(t("users:PasswordChanged"));
         } finally {
             setSaving(false);
         }
@@ -51,7 +53,7 @@ export default function ChangePasswordScreen() {
             <FormTextInput
                 control={control}
                 name="old"
-                placeholder="Old Password"
+                placeholder={t("users:OldPassword")}
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
@@ -62,7 +64,7 @@ export default function ChangePasswordScreen() {
             <FormTextInput
                 control={control}
                 name="new"
-                placeholder="New Password"
+                placeholder={t("users:NewPassword")}
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
@@ -73,7 +75,7 @@ export default function ChangePasswordScreen() {
             <FormTextInput
                 control={control}
                 name="confirm"
-                placeholder="Confirm Password"
+                placeholder={t("users:ConfirmPassword")}
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
@@ -82,7 +84,7 @@ export default function ChangePasswordScreen() {
             />
 
             <Button
-                text="Change Password"
+                text={t("users:ChangePassword")}
                 icon="content-save"
                 onPress={handleSubmit(updatePassword)}
                 disabled={saving || !isValid}

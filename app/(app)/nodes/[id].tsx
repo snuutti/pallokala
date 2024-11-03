@@ -3,6 +3,7 @@ import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, useLocalSearchParams } from "expo-router";
+import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
@@ -16,6 +17,7 @@ import { Colors } from "@/constants/Colors";
 import { Node, NodeFeatures } from "pufferpanel";
 
 export default function NodeScreen() {
+    const { t } = useTranslation();
     const { style, colors } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
@@ -75,7 +77,7 @@ export default function NodeScreen() {
 
         try {
             await apiClient?.node.update(Number(id), node as Node);
-            showSuccess("Node updated successfully");
+            showSuccess(t("nodes:Updated"));
         } finally {
             setLoading(false);
         }
@@ -100,7 +102,7 @@ export default function NodeScreen() {
     const deleteNode = async () => {
         setLoading(true);
         await apiClient?.node.delete(Number(id));
-        showSuccess("Node deleted successfully");
+        showSuccess(t("nodes:Deleted"));
         router.back();
     };
 
@@ -123,7 +125,7 @@ export default function NodeScreen() {
             {(featuresFetched && features === null) && (
                 <View style={style.statusContainer}>
                     <MaterialCommunityIcons name="stop-circle" size={20} color={colors.error} style={style.statusIcon} />
-                    <Text style={style.text}>This node is either not set up correctly or currently unavailable</Text>
+                    <Text style={style.text}>{t("nodes:Unreachable")}</Text>
                 </View>
             )}
 
@@ -131,34 +133,34 @@ export default function NodeScreen() {
                 <View>
                     <View style={style.statusContainer}>
                         <MaterialCommunityIcons name="play-circle" size={20} color={colors.primary} style={style.statusIcon} />
-                        <Text style={style.text}>This node is correctly set up and running</Text>
+                        <Text style={style.text}>{t("nodes:Reachable")}</Text>
                     </View>
 
                     <View style={style.features}>
                         <View style={style.feature}>
-                            <Text style={style.featureName}>Operating System</Text>
-                            <Text style={style.text}>{features.os}</Text>
+                            <Text style={style.featureName}>{t("nodes:features.os.label")}</Text>
+                            <Text style={style.text}>{t(`nodes:features.os.${features.os}`)}</Text>
                         </View>
 
                         <View style={style.feature}>
-                            <Text style={style.featureName}>CPU Architecture</Text>
-                            <Text style={style.text}>{features.arch}</Text>
+                            <Text style={style.featureName}>{t("nodes:features.arch.label")}</Text>
+                            <Text style={style.text}>{t(`nodes:features.arch.${features.arch}`)}</Text>
                         </View>
 
                         <View style={style.feature}>
-                            <Text style={style.featureName}>Available Environments</Text>
+                            <Text style={style.featureName}>{t("nodes:features.envs")}</Text>
                             <Text style={style.text}>{features.environments.join(", ")}</Text>
                         </View>
 
                         <View style={style.feature}>
-                            <Text style={style.featureName}>Docker</Text>
-                            <Text style={style.text}>Docker {features.features.includes("docker") ? "available" : "unavailable"}</Text>
+                            <Text style={style.featureName}>{t("env:docker.name")}</Text>
+                            <Text style={style.text}>{t(`nodes:features.docker.${features.features.includes("docker")}`)}</Text>
                         </View>
                     </View>
                 </View>
             )}
 
-            <Text style={style.header}>Edit Node</Text>
+            <Text style={style.header}>{t("nodes:Edit")}</Text>
 
             {(id !== undefined && Number(id) !== 0) ? (
                 <>
@@ -171,7 +173,7 @@ export default function NodeScreen() {
 
                     {apiClient?.auth.hasScope("nodes.edit") && (
                         <Button
-                            text="Update Node"
+                            text={t("nodes:Update")}
                             icon="content-save"
                             onPress={handleSubmit(updateNode)}
                             disabled={loading || !isValid}
@@ -180,7 +182,7 @@ export default function NodeScreen() {
 
                     {apiClient?.auth.hasScope("nodes.delete") && (
                         <Button
-                            text="Delete Node"
+                            text={t("nodes:Delete")}
                             style="danger"
                             icon="trash-can"
                             onPress={deleteAlert}
@@ -190,7 +192,7 @@ export default function NodeScreen() {
 
                     {apiClient?.auth.hasScope("nodes.deploy") && (
                         <Button
-                            text="Deploy Node"
+                            text={t("nodes:Deploy")}
                             style="neutral"
                             onPress={deployNode}
                             disabled={loading}
@@ -198,11 +200,7 @@ export default function NodeScreen() {
                     )}
                 </>
             ) : (
-                <Text style={style.text}>
-                    The local node does not have any editable settings
-
-                    To change the host displayed with servers hosted on this node adjust the panels master url in the panel settings
-                </Text>
+                <Text style={style.text}>{t("nodes:LocalNodeEdit")}</Text>
             )}
         </ContentWrapper>
     );

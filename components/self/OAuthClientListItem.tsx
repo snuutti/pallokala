@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useAccount } from "@/context/AccountProvider";
 import { useStyle } from "@/hooks/useStyle";
@@ -13,6 +14,7 @@ type OAuthClientListItemProps = {
 };
 
 export default function OAuthClientListItem(props: OAuthClientListItemProps) {
+    const { t } = useTranslation();
     const { activeAccount } = useAccount();
     const { style, colors } = useStyle(styling);
 
@@ -28,7 +30,7 @@ export default function OAuthClientListItem(props: OAuthClientListItemProps) {
     return (
         <View style={style.client}>
             <View style={style.infoView}>
-                <Text style={style.text} numberOfLines={1}>{props.client.name || "Unnamed OAuth2 Client"}</Text>
+                <Text style={style.text} numberOfLines={1}>{props.client.name || t("oauth:UnnamedClient")}</Text>
                 <Text style={style.text} numberOfLines={1}>{props.client.client_id}</Text>
             </View>
 

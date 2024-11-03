@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { useDebouncedCallback } from "use-debounce";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import TextInput from "@/components/ui/TextInput";
@@ -10,6 +11,7 @@ import { Colors } from "@/constants/Colors";
 import { ServerView, User, Node } from "pufferpanel";
 
 export default function SearchScreen() {
+    const { t } = useTranslation();
     const { style, colors } = useStyle(styling);
     const { apiClient } = useApiClient();
     const [servers, setServers] = useState<ServerView[]>([]);
@@ -110,14 +112,14 @@ export default function SearchScreen() {
             )}
 
             {(empty && !loading && hasSearched) && (
-                <Text style={style.header}>No results</Text>
+                <Text style={style.header}>{t("common:NoResults")}</Text>
             )}
 
             {!loading && (
                 <>
                     {servers.length > 0 && (
                         <>
-                            <Text style={style.header}>Servers</Text>
+                            <Text style={style.header}>{t("servers:Servers")}</Text>
                             {servers.map(s => (
                                 <SearchItem
                                     key={s.id}
@@ -131,7 +133,7 @@ export default function SearchScreen() {
 
                     {users.length > 0 && (
                         <>
-                            <Text style={style.header}>Users</Text>
+                            <Text style={style.header}>{t("users:Users")}</Text>
                             {users.map(u => (
                                 <SearchItem
                                     key={u.id}
@@ -145,7 +147,7 @@ export default function SearchScreen() {
 
                     {nodes.length > 0 && (
                         <>
-                            <Text style={style.header}>Nodes</Text>
+                            <Text style={style.header}>{t("nodes:Nodes")}</Text>
                             {nodes.map(n => (
                                 <SearchItem
                                     key={n.id}

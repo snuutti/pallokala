@@ -5,6 +5,7 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import * as DocumentPicker from "expo-document-picker";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UploadProgressModal, { UploadFile, UploadState } from "@/components/server/files/UploadProgressModal";
 import FileItem from "@/components/server/files/FileItem";
@@ -35,6 +36,7 @@ function sortFiles(a: FileDesc, b: FileDesc) {
 }
 
 export default function FilesScreen() {
+    const { t } = useTranslation();
     const colors = useColors();
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
@@ -127,16 +129,16 @@ export default function FilesScreen() {
 
     const deleteAlert = (file: FileDesc) => {
         createAlertModal(
-            "Delete File",
-            `Are you sure you want to delete ${file.name}?`,
+            t("files:Delete"),
+            t("files:ConfirmDelete", { name: file.name }),
             [
                 {
-                    text: "Delete",
+                    text: t("files:Delete"),
                     icon: "trash-can",
                     style: "danger",
                     onPress: () => deleteConfirm(file)
                 },
-                { text: "Cancel" }
+                { text: t("common:Cancel") }
             ]
         );
     };
@@ -243,51 +245,51 @@ export default function FilesScreen() {
         createListModal(
             [
                 {
-                    text: "Archive current folder",
+                    text: t("files:ArchiveCurrent"),
                     icon: "archive-arrow-down",
                     onPress: archiveCurrentDirectory
                 },
                 {
-                    text: "Upload file",
+                    text: t("files:UploadFile"),
                     icon: "file-upload",
                     onPress: uploadFile
                 },
                 {
-                    text: "Create file",
+                    text: t("files:CreateFile"),
                     icon: "file-plus",
                     onPress: () => {
                         createPromptModal(
-                            "Create File",
-                            "Name",
+                            t("files:CreateFile"),
+                            t("common:Name"),
                             "default",
                             [
                                 {
-                                    text: "Create",
+                                    text: t("files:CreateFile"),
                                     icon: "file-plus",
                                     style: "success",
                                     onPress: createFile
                                 },
-                                { text: "Cancel" }
+                                { text: t("common:Cancel") }
                             ]
                         );
                     }
                 },
                 {
-                    text: "Create folder",
+                    text: t("files:CreateFolder"),
                     icon: "folder-plus",
                     onPress: () => {
                         createPromptModal(
-                            "Create Folder",
-                            "Name",
+                            t("files:CreateFolder"),
+                            t("common:Name"),
                             "default",
                             [
                                 {
-                                    text: "Create",
+                                    text: t("files:CreateFolder"),
                                     icon: "folder-plus",
                                     style: "success",
                                     onPress: createFolder
                                 },
-                                { text: "Cancel" }
+                                { text: t("common:Cancel") }
                             ]
                         );
                     }

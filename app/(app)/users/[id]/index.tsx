@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, useLocalSearchParams } from "expo-router";
+import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
@@ -27,6 +28,7 @@ const defaultValues = {
 };
 
 export default function UserDetailsScreen() {
+    const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
@@ -65,7 +67,7 @@ export default function UserDetailsScreen() {
                 password: data.password || undefined
             });
 
-            showSuccess("User updated successfully");
+            showSuccess(t("users:UpdateSuccess"));
         } finally {
             setLoading(false);
         }
@@ -73,16 +75,16 @@ export default function UserDetailsScreen() {
 
     const deleteAlert = () => {
         createAlertModal(
-            "Delete User",
-            `Are you sure you want to delete ${getValues("username")}?`,
+            t("users:Delete"),
+            t("users:ConfirmDelete", { name: getValues("username") }),
             [
                 {
-                    text: "Delete",
+                    text: t("users:Delete"),
                     icon: "trash-can",
                     style: "danger",
                     onPress: deleteUser
                 },
-                { text: "Cancel" }
+                { text: t("common:Cancel") }
             ]
         );
     };
@@ -90,7 +92,7 @@ export default function UserDetailsScreen() {
     const deleteUser = async () => {
         setLoading(true);
         await apiClient?.user.delete(Number(id));
-        showSuccess("User deleted successfully");
+        showSuccess(t("users:DeleteSuccess"));
         router.back();
     };
 
@@ -103,7 +105,7 @@ export default function UserDetailsScreen() {
             <FormTextInput
                 control={control}
                 name="username"
-                placeholder="Username"
+                placeholder={t("users:Username")}
                 autoCapitalize="none"
                 autoComplete="username"
                 editable={canEdit}
@@ -113,7 +115,7 @@ export default function UserDetailsScreen() {
             <FormTextInput
                 control={control}
                 name="email"
-                placeholder="Email"
+                placeholder={t("users:Email")}
                 autoCapitalize="none"
                 autoComplete="email"
                 keyboardType="email-address"
@@ -124,7 +126,7 @@ export default function UserDetailsScreen() {
             <FormTextInput
                 control={control}
                 name="password"
-                placeholder="Password"
+                placeholder={t("users:Password")}
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
@@ -135,14 +137,14 @@ export default function UserDetailsScreen() {
             {canEdit && (
                 <>
                     <Button
-                        text="Update User Details"
+                        text={t("users:UpdateDetails")}
                         icon="content-save"
                         onPress={handleSubmit(updateUser)}
                         disabled={loading || !isValid}
                     />
 
                     <Button
-                        text="Delete User"
+                        text={t("users:Delete")}
                         icon="trash-can"
                         style="danger"
                         onPress={deleteAlert}

@@ -1,4 +1,5 @@
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
 import { useServer } from "@/context/ServerProvider";
@@ -6,29 +7,30 @@ import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 
 export default function AdminScreen() {
+    const { t } = useTranslation();
     const { server } = useServer();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
 
     const deleteAlert = () => {
         createAlertModal(
-            "Delete Server",
-            `Are you sure you want to delete ${server?.name}?`,
+            t("servers:Delete"),
+            t("servers:ConfirmDelete", { name: server?.name }),
             [
                 {
-                    text: "Delete",
+                    text: t("servers:Delete"),
                     icon: "trash-can",
                     style: "danger",
                     onPress: deleteServer
                 },
-                { text: "Cancel" },
+                { text: t("common:Cancel") },
             ]
         );
     };
 
     const deleteServer = async () => {
         await server?.delete();
-        showSuccess("Server deleted successfully");
+        showSuccess(t("servers:Deleted"));
 
         // Expo Router sucks
         while (router.canGoBack()) {
@@ -42,7 +44,7 @@ export default function AdminScreen() {
         <ContentWrapper>
             {server?.hasScope("server.delete") && (
                 <Button
-                    text="Delete server"
+                    text={t("servers:Delete")}
                     icon="trash-can"
                     style="danger"
                     onPress={deleteAlert}

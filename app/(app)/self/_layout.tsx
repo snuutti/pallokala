@@ -1,8 +1,10 @@
 import { Tabs } from "expo-router";
+import { useTranslation } from "react-i18next";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useApiClient } from "@/context/ApiClientProvider";
 
 export default function SelfLayout() {
+    const { t } = useTranslation();
     const { apiClient } = useApiClient();
 
     return (
@@ -10,7 +12,7 @@ export default function SelfLayout() {
             <Tabs.Screen
                 name="account"
                 options={{
-                    title: "Change Account Details",
+                    title: t("users:ChangeInfo"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <NavigationIcon name="account" color={color} />
@@ -22,7 +24,7 @@ export default function SelfLayout() {
             <Tabs.Screen
                 name="password"
                 options={{
-                    title: "Change Password",
+                    title: t("users:ChangePassword"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <NavigationIcon name="lock" color={color} />
@@ -34,7 +36,7 @@ export default function SelfLayout() {
             <Tabs.Screen
                 name="2fa"
                 options={{
-                    title: "Two factor authentication",
+                    title: t("users:Otp"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <NavigationIcon name="two-factor-authentication" color={color} />
@@ -46,7 +48,7 @@ export default function SelfLayout() {
             <Tabs.Screen
                 name="oauth"
                 options={{
-                    title: "OAuth2 Clients",
+                    title: t("oauth:Clients"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <NavigationIcon name="xml" color={color} />

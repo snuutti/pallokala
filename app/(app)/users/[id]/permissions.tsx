@@ -1,6 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import { Text, StyleSheet } from "react-native";
 import { useLocalSearchParams } from "expo-router";
+import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Switch from "@/components/ui/Switch";
@@ -45,6 +46,7 @@ const scopes = {
 };
 
 export default function PermissionScreen() {
+    const { t, i18n } = useTranslation();
     const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
@@ -60,6 +62,30 @@ export default function PermissionScreen() {
 
         apiClient?.user.getPermissions(Number(id)).then(setPermissions);
     }, [id]);
+
+    const permissionCategoryHeading = (category: string) => {
+        const map: Record<string, string> = {
+            servers: "servers:Servers",
+            nodes: "nodes:Nodes",
+            users: "users:Users",
+            templates: "templates:Templates"
+        };
+
+        return t(map[category]);
+    };
+
+    const scopeLabel = (scope: string) => {
+        return t(`scopes:name.${scope.replace(/\./g, "-")}`);
+    };
+
+    const scopeDescription = (scope: string) => {
+        const key = `scopes:hint.${scope.replace(/\./g, "-")}`;
+        if (!i18n.exists(key)) {
+            return undefined;
+        }
+
+        return t(key);
+    };
 
     const togglePermission = (scope: string) => {
         if (permissions === null) {
@@ -95,7 +121,7 @@ export default function PermissionScreen() {
 
     const updatePermissions = async () => {
         await apiClient?.user.updatePermissions(Number(id), { scopes: permissions! });
-        showSuccess("User permissions have been updated.");
+        showSuccess(t("users:UpdateSuccess"));
     };
 
     if (!permissions) {
@@ -106,11 +132,15 @@ export default function PermissionScreen() {
         <ContentWrapper>
             {Object.entries(scopes).map(([categoryName, scopes]) => (
                 <Fragment key={categoryName}>
-                    <Text style={style.header}>{categoryName}</Text>
+                    {categoryName !== "general" && (
+                        <Text style={style.header}>{permissionCategoryHeading(categoryName)}</Text>
+                    )}
+
                     {scopes.map(scope => (
                         <Switch
                             key={scope}
-                            label={scope}
+                            label={scopeLabel(scope)}
+                            description={scopeDescription(scope)}
                             value={permissions.includes(scope)}
                             onValueChange={() => togglePermission(scope)}
                             disabled={permissionDisabled(scope)}
@@ -121,7 +151,7 @@ export default function PermissionScreen() {
 
             {apiClient?.auth.hasScope("user.perms.edit") && (
                 <Button
-                    text="Update User Permissions"
+                    text={t("users:UpdatePermissions")}
                     icon="content-save"
                     onPress={updatePermissions}
                 />

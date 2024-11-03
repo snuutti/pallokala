@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import ProgressBar from "@/components/ui/ProgressBar";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
@@ -24,6 +25,7 @@ type UploadProgressModalProps = {
 };
 
 export default function UploadProgressModal(props: UploadProgressModalProps) {
+    const { t } = useTranslation();
     const { style } = useStyle(styling);
     const [state, setState] = useState<UploadState>(props.state);
     const currentRef = useRef(0);
@@ -54,21 +56,21 @@ export default function UploadProgressModal(props: UploadProgressModalProps) {
 
     return (
         <View style={style.container}>
-            <Text style={style.title}>Upload progress</Text>
+            <Text style={style.title}>{t("files:UploadProgress")}</Text>
 
-            <Text style={style.body}>Uploading file {currentRef.current + 1}/{state.total}</Text>
+            <Text style={style.body}>{t("files:CurrentlyUploading", { current: currentRef.current + 1, total: state.total })}</Text>
             <Text style={style.body}>{state.files[currentRef.current].name}</Text>
 
             <ProgressBar
                 max={state.files[currentRef.current].size}
                 value={state.files[currentRef.current].progress}
-                text="Current"
+                text={t("files:Current")}
             />
 
             <ProgressBar
                 max={state.files.reduce((acc, file) => acc + file.size, 0)}
                 value={state.files.reduce((acc, file) => acc + file.progress, 0)}
-                text="Total"
+                text={t("files:Total")}
             />
         </View>
     );

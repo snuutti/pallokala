@@ -1,5 +1,6 @@
 import { Control, FieldErrors } from "react-hook-form";
 import { z } from "zod";
+import { useTranslation } from "react-i18next";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import FormSwitch from "@/components/ui/form/FormSwitch";
 
@@ -42,12 +43,14 @@ type NodeOptionsProps = {
 };
 
 export default function NodeOptions(props: NodeOptionsProps) {
+    const { t } = useTranslation();
+
     return (
         <>
             <FormTextInput
                 control={props.control}
                 name="name"
-                placeholder="Name"
+                placeholder={t("common:Name")}
                 editable={props.editable}
                 error={props.errors.name?.message}
             />
@@ -55,7 +58,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
             <FormTextInput
                 control={props.control}
                 name="publicHost"
-                placeholder="Public Host"
+                placeholder={t("nodes:PublicHost")}
                 autoCapitalize="none"
                 autoComplete="url"
                 keyboardType="url"
@@ -66,7 +69,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
             <FormTextInput
                 control={props.control}
                 name="publicPort"
-                placeholder="Public Port"
+                placeholder={t("nodes:PublicPort")}
                 keyboardType="number-pad"
                 editable={props.editable}
                 error={props.errors.publicPort?.message}
@@ -76,7 +79,8 @@ export default function NodeOptions(props: NodeOptionsProps) {
             <FormSwitch
                 control={props.control}
                 name="private.withPrivateHost"
-                label="Use a different host/port for server to server communication"
+                label={t("nodes:WithPrivateAddress")}
+                description={t("nodes:WithPrivateAddressHint")}
                 disabled={!props.editable}
             />
 
@@ -85,7 +89,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
                     <FormTextInput
                         control={props.control}
                         name="private.privateHost"
-                        placeholder="Private Host"
+                        placeholder={t("nodes:PrivateHost")}
                         autoCapitalize="none"
                         autoComplete="url"
                         keyboardType="url"
@@ -98,7 +102,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
                     <FormTextInput
                         control={props.control}
                         name="private.privatePort"
-                        placeholder="Private Port"
+                        placeholder={t("nodes:PrivatePort")}
                         keyboardType="number-pad"
                         editable={props.editable}
                         // @ts-ignore
@@ -111,7 +115,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
             <FormTextInput
                 control={props.control}
                 name="sftpPort"
-                placeholder="SFTP Port"
+                placeholder={t("nodes:SftpPort")}
                 keyboardType="number-pad"
                 editable={props.editable}
                 error={props.errors.sftpPort?.message}

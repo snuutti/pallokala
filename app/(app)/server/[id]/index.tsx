@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import { FlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ConsoleText from "@/components/server/console/ConsoleText";
@@ -9,6 +10,7 @@ import { Colors } from "@/constants/Colors";
 import { ServerLogs } from "pufferpanel";
 
 export default function ConsoleScreen() {
+    const { t } = useTranslation();
     const { style, colors } = useStyle(styling);
     const { server } = useServer();
     const [unbindEvent, setUnbindEvent] = useState<(() => void) | undefined>(undefined);
@@ -87,7 +89,7 @@ export default function ConsoleScreen() {
                 <View style={style.commandContainer}>
                     <TextInput
                         style={style.commandInput}
-                        placeholder="Command"
+                        placeholder={t("servers:Command")}
                         placeholderTextColor={colors.textDisabled}
                         value={command}
                         onChangeText={setCommand}

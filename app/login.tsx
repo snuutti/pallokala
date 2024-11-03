@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
@@ -26,6 +27,7 @@ const defaultValues = {
 };
 
 export default function Login() {
+    const { t } = useTranslation();
     const { style } = useStyle(styling);
     const { addAccount } = useAccount();
     const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
@@ -68,7 +70,7 @@ export default function Login() {
             <FormTextInput
                 control={control}
                 name="id"
-                placeholder="Client ID"
+                placeholder={t("oauth:ClientId")}
                 autoCapitalize="none"
                 autoComplete="off"
                 error={errors.id?.message}
@@ -77,7 +79,7 @@ export default function Login() {
             <FormTextInput
                 control={control}
                 name="secret"
-                placeholder="Client secret"
+                placeholder={t("oauth:ClientSecret")}
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}

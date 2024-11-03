@@ -1,0 +1,4 @@
+[submodule "pufferpanel"]
+	path = pufferpanel
+	url = https://github.com/pufferpanel/pufferpanel.git
+	branch = v3
