@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { Image } from "expo-image";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 import { md5 } from "js-md5";
@@ -11,7 +12,7 @@ type UsersListItemProps = {
 };
 
 export default function UsersListItem(props: UsersListItemProps) {
-    const { style } = useStyle(styling);
+    const { style, colors } = useStyle(styling);
 
     const onPress = () => {
         if ((props.user as User).id) {
@@ -35,6 +36,12 @@ export default function UsersListItem(props: UsersListItemProps) {
                 <Text style={style.username} numberOfLines={1}>{props.user.username}</Text>
                 <Text style={style.email} numberOfLines={1}>{props.user.email}</Text>
             </View>
+
+            {"otpActive" in props.user && props.user.otpActive && (
+                <View style={style.otpView}>
+                    <MaterialCommunityIcons name="two-factor-authentication" size={30} color={colors.text} style={style.otpIcon} />
+                </View>
+            )}
         </TouchableOpacity>
     );
 }
@@ -63,6 +70,13 @@ function styling(colors: Colors) {
             flexShrink: 1,
             flexDirection: "column",
             justifyContent: "center"
+        },
+        otpView: {
+            marginLeft: 5
+        },
+        otpIcon: {
+            height: "100%",
+            textAlignVertical: "center"
         },
         username: {
             color: colors.text

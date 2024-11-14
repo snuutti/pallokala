@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Text, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +12,8 @@ import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
+import { useStyle } from "@/hooks/useStyle";
+import { Colors } from "@/constants/Colors";
 import { User } from "pufferpanel";
 
 const schema = z.object({
@@ -29,6 +32,7 @@ const defaultValues = {
 
 export default function UserDetailsScreen() {
     const { t } = useTranslation();
+    const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
@@ -134,6 +138,12 @@ export default function UserDetailsScreen() {
                 error={errors.password?.message}
             />
 
+            {apiClient?.auth.hasScope("users.perms.view") && (
+                <Text style={style.text}>
+                    {t("users:OtpEnabled")}: {user.otpActive ? t("common:Yes") : t("common:No")}
+                </Text>
+            )}
+
             {canEdit && (
                 <>
                     <Button
@@ -154,4 +164,13 @@ export default function UserDetailsScreen() {
             )}
         </ContentWrapper>
     );
+}
+
+function styling(colors: Colors) {
+    return StyleSheet.create({
+        text: {
+            color: colors.text,
+            marginVertical: 5
+        }
+    });
 }

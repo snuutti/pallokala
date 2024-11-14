@@ -113,6 +113,7 @@ declare module "pufferpanel" {
         id?: number;
         username?: string;
         email?: string;
+        otpActive?: boolean;
         password?: string;
         newPassword?: string;
     };
