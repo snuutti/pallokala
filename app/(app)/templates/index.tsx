@@ -1,54 +1,73 @@
-import { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import LoadingScreen from "@/components/screen/LoadingScreen";
-import ContentWrapper from "@/components/screen/ContentWrapper";
+import { useState, useEffect, useCallback } from "react";
+import { Text, RefreshControl, StyleSheet } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import TemplatesListItem from "@/components/templates/TemplatesListItem";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
-import { AllTemplatesResponse } from "pufferpanel";
+import { Template } from "pufferpanel";
 
 export default function TemplatesScreen() {
     const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
-    const [templatesByRepo, setTemplatesByRepo] = useState<AllTemplatesResponse[]>([]);
+    const [data, setData] = useState<(string | Template)[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        apiClient?.template.listAllTemplates().then((data) => {
-            const sortedRepos = data.sort((a, b) => a.id - b.id);
-            setTemplatesByRepo(sortedRepos);
-            setLoading(false);
-        });
+        loadTemplates();
     }, []);
 
-    if (loading) {
-        return <LoadingScreen />;
-    }
+    const loadTemplates = useCallback(async () => {
+        setLoading(true);
+
+        const data = await apiClient!.template.listAllTemplates();
+        const sortedRepos = data.sort((a, b) => a.id - b.id);
+        const newData: (string | Template)[] = [];
+
+        for (const repository of sortedRepos) {
+            newData.push(repository.name);
+            for (const template of repository.templates) {
+                newData.push(template);
+            }
+        }
+
+        setData(newData);
+        setLoading(false);
+    }, []);
 
     return (
-        <ContentWrapper>
-            {templatesByRepo.map((repository) => (
-                <View key={repository.id}>
-                    <Text style={style.header}>{repository.name}</Text>
+        <FlashList
+            data={data}
+            renderItem={({ item }) => {
+                if (typeof item === "string") {
+                    return <Text style={style.header}>{item}</Text>;
+                }
 
-                    {repository.templates.map((template) => (
-                        <TemplatesListItem
-                            key={template.name}
-                            template={template}
-                        />
-                    ))}
-                </View>
-            ))}
-        </ContentWrapper>
+                return <TemplatesListItem template={item as Template} />;
+            }}
+            getItemType={(item) => {
+                return typeof item === "string" ? "header" : "template";
+            }}
+            estimatedItemSize={80}
+            contentContainerStyle={style.templatesContainer}
+            refreshControl={
+                <RefreshControl refreshing={loading} onRefresh={loadTemplates} />
+            }
+        />
     );
 }
 
 function styling(colors: Colors) {
     return StyleSheet.create({
+        templatesContainer: {
+            paddingTop: 10,
+            paddingBottom: 20
+        },
         header: {
             color: colors.text,
-            fontSize: 16
+            fontSize: 16,
+            marginHorizontal: 10,
+            marginVertical: 5
         }
     });
 }

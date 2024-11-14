@@ -31,6 +31,7 @@ function styling(colors: Colors) {
             flexDirection: "column",
             justifyContent: "center",
             backgroundColor: colors.background,
+            marginHorizontal: 10,
             marginVertical: 5,
             borderRadius: 15
         },
