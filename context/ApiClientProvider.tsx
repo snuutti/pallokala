@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { ApiClient, EditableConfigSettings, InMemorySessionStore, ErrorHandlerResult } from "pufferpanel";
@@ -16,6 +17,7 @@ type ApiClientProviderProps = {
 };
 
 export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
+    const { t } = useTranslation();
     const { showError } = useToast();
     const { createAlertModal } = useModal();
     const [apiClient, setApiClient] = useState<ApiClient | undefined>(undefined);
@@ -60,13 +62,13 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
         if (error.status === 401) {
             // TODO: this probably doesn't work but i'm too lazy to test right now
             await apiClient?.auth.logout();
-            showError("Session expired, please log in again");
+            showError(t("errors:ErrSessionTimedOut"));
         } else if (error.code === "ErrGeneric" && error.msg) {
-            showError(error.msg);
+            showError(t(error.msg));
         } else if (error.code === "ErrUnknownError") {
-            showError("An unknown error occurred", () => showErrorDetails(error));
+            showError(t("errors:ErrUnknownError"), () => showErrorDetails(error));
         } else {
-            showError(error.code);
+            showError(t("errors:" + error.code));
         }
     }, [apiClient]);
 
@@ -134,10 +136,10 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
         const details = `${statusMessage}\n\nEndpoint: ${error.request.method} ${error.request.url}\n\n${body ? "Request Body: " + body : ""}`;
 
         createAlertModal(
-            "Error Details",
+            t("common:ErrorDetails"),
             details,
             [
-                { text: "OK" }
+                { text: t("common:Close") }
             ]
         );
     };
