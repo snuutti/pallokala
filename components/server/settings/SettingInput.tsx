@@ -1,5 +1,5 @@
-import { Text } from "react-native";
 import Switch from "@/components/ui/Switch";
+import Dropdown from "@/components/ui/Dropdown";
 import TextInput from "@/components/ui/TextInput";
 import { Variable } from "pufferpanel";
 
@@ -21,9 +21,27 @@ export default function SettingInput(props: SettingInputProps) {
             />
         );
     } else if (props.variable.type === "option") {
-        return <Text>Dropdown not yet implemented</Text>;
+        return (
+            <Dropdown
+                options={props.variable.options!}
+                value={props.variable.value as string}
+                onChange={props.setVariable}
+                label={props.variable.display}
+                description={props.variable.desc}
+                disabled={props.disabled}
+            />
+        );
     } else if (props.variable.options) {
-        return <Text>Suggestion text input not yet implemented</Text>;
+        return (
+            <Dropdown
+                options={props.variable.options}
+                value={props.variable.value as string}
+                onChange={props.setVariable}
+                label={props.variable.display}
+                description={props.variable.desc}
+                disabled={props.disabled}
+            />
+        );
     }
 
     return (
