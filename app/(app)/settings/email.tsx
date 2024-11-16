@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
+import Dropdown from "@/components/ui/Dropdown";
 import TextInput from "@/components/ui/TextInput";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
-import { useModal, ModalButton } from "@/context/ModalProvider";
 import { useToast } from "@/context/ToastProvider";
 
 const emailProviderConfigs: Record<string, { key: string; type: string }[]> = {
@@ -50,7 +50,6 @@ const defaultEmailSettings: EmailSettings = {
 export default function EmailSettingScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
-    const { createListModal } = useModal();
     const { showSuccess } = useToast();
     const [emailProvider, setEmailProvider] = useState("");
     const [emailSettings, setEmailSettings] = useState<EmailSettings>(defaultEmailSettings);
@@ -59,6 +58,13 @@ export default function EmailSettingScreen() {
     useEffect(() => {
         loadSettings();
     }, []);
+
+    const emailProviders = useMemo(() => {
+        return Object.keys(emailProviderConfigs).map((key) => ({
+            value: key,
+            display: t(`settings:emailProviders.${key}`)
+        }));
+    }, [t]);
 
     const loadSettings = async () => {
         let provider = await apiClient!.settings.get("panel.email.provider");
@@ -92,28 +98,17 @@ export default function EmailSettingScreen() {
         showSuccess(t("settings:Saved"));
     };
 
-    const pickEmailProvider = () => {
-        const items: ModalButton[] = [];
-
-        for (const provider in emailProviderConfigs) {
-            items.push({
-                text: t(`settings:emailProviders.${provider}`),
-                onPress: () => setEmailProvider(provider)
-            });
-        }
-
-        createListModal(items);
-    };
-
     if (loading) {
         return <LoadingScreen />;
     }
 
     return (
         <ContentWrapper>
-            <Button
-                text={`${t("settings:EmailProvider")}: ${t(`settings:emailProviders.${emailProvider}`)}`}
-                onPress={pickEmailProvider}
+            <Dropdown
+                options={emailProviders}
+                value={emailProvider}
+                onChange={setEmailProvider}
+                label={t("settings:EmailProvider")}
             />
 
             {emailProviderConfigs[emailProvider].map((setting) => (
