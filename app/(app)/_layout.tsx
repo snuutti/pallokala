@@ -2,6 +2,7 @@ import { Drawer } from "expo-router/drawer";
 import { useTranslation } from "react-i18next";
 import LoginErrorScreen from "@/components/screen/LoginErrorScreen";
 import LoadingScreen from "@/components/screen/LoadingScreen";
+import OtpRequiredScreen from "@/components/screen/OtpRequiredScreen";
 import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
 import DrawerHeaderButton from "@/components/navigation/DrawerHeaderButton";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
@@ -14,7 +15,7 @@ export default function AppLayout() {
     const colors = useColors();
     const { t } = useTranslation();
     const { apiClient, config } = useApiClient();
-    const { loading, error } = useAccount();
+    const { otpRequired, loading, error } = useAccount();
     const { server } = useServer();
 
     if (error) {
@@ -23,6 +24,10 @@ export default function AppLayout() {
 
     if (apiClient === undefined || !config || loading) {
         return <LoadingScreen />;
+    }
+
+    if (otpRequired) {
+        return <OtpRequiredScreen />;
     }
 
     return (

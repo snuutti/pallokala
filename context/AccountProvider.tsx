@@ -10,18 +10,21 @@ import {
     storeAccount,
     updateAccount
 } from "@/utils/accountStorage";
-import { Account, OAuthAccount } from "@/types/account";
-import { User } from "pufferpanel";
+import UnifiedSessionStore from "@/utils/sessionStore";
+import { Account, OAuthAccount, EmailAccount } from "@/types/account";
+import { User, ApiClient } from "pufferpanel";
 
 type AccountContextType = {
     accounts: Account[];
     activeAccount: Account | null;
     user: User | null;
+    otpRequired: boolean;
     loading: boolean;
     error: boolean;
     changeAccount: (account: Account) => Promise<void>;
     deleteAccount: (account: Account) => Promise<void>;
-    addAccount: (account: Account) => Promise<boolean>;
+    addAccount: (account: Account) => Promise<[success: boolean, error?: string]>;
+    submitOtp: (code: string) => Promise<void>;
     refreshSelf: () => Promise<void>;
 };
 
@@ -35,7 +38,9 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     const { apiClient, config, changeServer } = useApiClient();
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [activeAccount, setActiveAccount] = useState<Account | null>(null);
+    const [newAccount, setNewAccount] = useState<Account | null>(null);
     const [user, setUser] = useState<User | null>(null);
+    const [otpRequired, setOtpRequired] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
@@ -98,7 +103,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
             const accounts = await getAccounts();
             if (accounts.length === 0) {
                 console.log("No accounts found");
-                router.replace("../login");
+                router.replace("../(auth)/email");
                 return;
             }
 
@@ -108,7 +113,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
         if (account === null) {
             console.log("Account returned was null?");
-            router.replace("../login");
+            router.replace("../(auth)/email");
             return;
         }
 
@@ -120,29 +125,39 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         setLoading(true);
         setError(false);
         setActiveAccount(null);
+        setNewAccount(account);
         setUser(null);
+        setOtpRequired(false);
 
         const apiClient = changeServer(account.serverAddress);
-        const oauthAccount = account as OAuthAccount; // TODO: handle email/password login
 
         try {
-            const result = await apiClient.auth.oauth(oauthAccount.clientId, oauthAccount.clientSecret);
-            if (result) {
-                setActiveAccount(account);
-                router.replace("/");
-                await setLastAccountId(account.id!);
+            let success = false;
 
-                setUser(await apiClient.self.get());
+            if (account.type === "oauth") {
+                const oauthAccount = account as OAuthAccount;
 
-                // This doesn't work on v2, so in order to keep some compatibility with it we need to wrap it in a try/catch
-                try {
-                    // We need to do this with OAuth accounts to get the scopes
-                    await apiClient.auth.reauth();
-                } catch (e) {
-                    console.error("Reauth failed", e);
+                const result = await apiClient.auth.oauth(oauthAccount.clientId, oauthAccount.clientSecret);
+                if (result) {
+                    success = true;
+                } else {
+                    console.error("Login failed");
                 }
-            } else {
-                console.error("Login failed");
+            } else if (account.type === "email") {
+                const emailAccount = account as EmailAccount;
+
+                const result = await apiClient.auth.login(emailAccount.email, emailAccount.password);
+                if (result === true) {
+                    success = true;
+                } else if (result === "otp") {
+                    setOtpRequired(true);
+                } else {
+                    console.error("Login failed");
+                }
+            }
+
+            if (success) {
+                await postLogin(apiClient, account);
             }
         } catch (e) {
             console.error("Login errored", e);
@@ -150,6 +165,15 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         }
 
         setLoading(false);
+    };
+
+    const postLogin = async (apiClient: ApiClient, account: Account) => {
+        setActiveAccount(account);
+        router.replace("/");
+        await setLastAccountId(account.id!);
+        setUser(await apiClient.self.get());
+        await apiClient.auth.reauth();
+        setNewAccount(null);
     };
 
     const deleteAccount = async (account: Account) => {
@@ -165,19 +189,43 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         }
     };
 
-    const addAccount = async (account: Account): Promise<boolean> => {
-        const apiClient = changeServer(account.serverAddress);
-        const oauthAccount = account as OAuthAccount; // TODO: handle email/password login
+    const addAccount = async (account: Account): Promise<[success: boolean, error?: string]> => {
+        const apiClient = new ApiClient(account.serverAddress, new UnifiedSessionStore());
+        let success = false;
+        let tryVersion = true;
 
-        const result = await apiClient.auth.oauth(oauthAccount.clientId, oauthAccount.clientSecret);
-        if (result) {
+        if (account.type === "oauth") {
+            const oauthAccount = account as OAuthAccount;
+            success = await apiClient.auth.oauth(oauthAccount.clientId, oauthAccount.clientSecret);
+        } else if (account.type === "email") {
+            const emailAccount = account as EmailAccount;
+            const result = await apiClient.auth.login(emailAccount.email, emailAccount.password);
+            success = result === true || result === "otp";
+            tryVersion = result === true;
+        }
+
+        if (success && tryVersion) {
+            try {
+                await apiClient.auth.reauth();
+            } catch {
+                return [false, "Unsupported PufferPanel version"];
+            }
+        }
+
+        if (success) {
             await storeAccount(account);
             loadAccounts();
             await changeAccount(account);
-            return true;
+            return [true];
         }
 
-        return false;
+        return [false];
+    };
+
+    const submitOtp = async (code: string) => {
+        await apiClient!.auth.loginOtp(code);
+        await postLogin(apiClient!, newAccount!);
+        setOtpRequired(false);
     };
 
     const refreshSelf = async () => {
@@ -189,7 +237,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     };
 
     return (
-        <AccountContext.Provider value={{ accounts, activeAccount, user, loading, error, changeAccount, deleteAccount, addAccount, refreshSelf }}>
+        <AccountContext.Provider value={{ accounts, activeAccount, user, otpRequired, loading, error, changeAccount, deleteAccount, addAccount, submitOtp, refreshSelf }}>
             {children}
         </AccountContext.Provider>
     );

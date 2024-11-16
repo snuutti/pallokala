@@ -45,6 +45,70 @@ function patchSessionStoreJs() {
     console.log("patchPackages.cjs - sessionStore.js patched!");
 }
 
+function patchClientJs() {
+    const clientPath = path.resolve(__dirname, "../node_modules/pufferpanel/src/client.js");
+
+    const lines = fs.readFileSync(clientPath, "utf8").split("\n");
+    if (lines[0] === "//patched") {
+        console.log("patchPackages.cjs - client.js already patched.");
+        return;
+    }
+
+    const headersIndex = lines.findIndex(line => line.startsWith("    return headers"));
+    if (headersIndex !== -1) {
+        lines[headersIndex] = "    if ('getAuthCookie' in this.auth._sessionStore) {\n" +
+            "      const sessionCookie = this.auth._sessionStore.getSessionCookie()\n" +
+            "      const authCookie = this.auth._sessionStore.getAuthCookie()\n" +
+            "      return {\n" +
+            "        ...headers,\n" +
+            "        Cookie: `session=${sessionCookie || ''}; puffer_auth=${authCookie || ''}`\n" +
+            "      }\n" +
+            "    }\n" +
+            "    return headers";
+    }
+
+    lines.unshift("//patched");
+    fs.writeFileSync(clientPath, lines.join("\n"), "utf8");
+
+    console.log("patchPackages.cjs - client.js patched!");
+}
+
+function patchAuthJs() {
+    const authPath = path.resolve(__dirname, "../node_modules/pufferpanel/src/auth.js");
+
+    const lines = fs.readFileSync(authPath, "utf8").split("\n");
+    if (lines[0] === "//patched") {
+        console.log("patchPackages.cjs - auth.js already patched.");
+        return;
+    }
+
+    const loginIndex = lines.findIndex(line => line.startsWith("    const res = await this._api.post('/auth/login', { email, password })"));
+    if (loginIndex !== -1) {
+        lines[loginIndex] = "    const res = await this._api.post('/auth/login', { email, password })\n" +
+            "    const cookies = res.headers['set-cookie'][0]\n" +
+            "    if (res.data.otpNeeded) {\n" +
+            "      const session = cookies.split('session=')[1].split(';')[0]\n" +
+            "      this._sessionStore.setSessionCookie(session)\n" +
+            "    } else {\n" +
+            "      const pufferAuth = cookies.split('puffer_auth=')[1].split(';')[0]\n" +
+            "      this._sessionStore.setAuthCookie(pufferAuth)\n" +
+            "    }";
+    }
+
+    const loginOtpIndex = lines.findIndex(line => line.startsWith("    const res = await this._api.post('/auth/otp', { token })"));
+    if (loginOtpIndex !== -1) {
+        lines[loginOtpIndex] = "    const res = await this._api.post('/auth/otp', { token })\n" +
+            "    const cookies = res.headers['set-cookie'][0]\n" +
+            "    const pufferAuth = cookies.split('puffer_auth=')[1].split(';')[0]\n" +
+            "    this._sessionStore.setAuthCookie(pufferAuth)";
+    }
+
+    lines.unshift("//patched");
+    fs.writeFileSync(authPath, lines.join("\n"), "utf8");
+
+    console.log("patchPackages.cjs - auth.js patched!");
+}
+
 function patchServersJs() {
     const serversPath = path.resolve(__dirname, "../node_modules/pufferpanel/src/servers.js");
 
@@ -56,7 +120,7 @@ function patchServersJs() {
 
     const socketIndex = lines.findIndex(line => line.startsWith("    this._socket = new WebSocket"));
     if (socketIndex !== -1) {
-        lines[socketIndex] = "    this._socket = new WebSocket(`${protocol}://${host}/api/servers/${this.id}/socket`, null, { headers: { \"Authorization\": \"Bearer \" + this._api.auth.getToken() } })";
+        lines[socketIndex] = "    this._socket = new WebSocket(`${protocol}://${host}/api/servers/${this.id}/socket`, null, { headers: this._api._enhanceHeaders({}) })";
     }
 
     const dataIndex = lines.findIndex(line => line.startsWith("    const data = new FormData()"));
@@ -83,4 +147,6 @@ function patchServersJs() {
 
 patchPackageJson();
 patchSessionStoreJs();
+patchClientJs();
+patchAuthJs();
 patchServersJs();

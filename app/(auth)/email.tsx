@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Text, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -8,48 +9,74 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useAccount } from "@/context/AccountProvider";
+import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
-import { OAuthAccount } from "@/types/account";
+import { EmailAccount } from "@/types/account";
+import { ErrorHandlerResult } from "pufferpanel";
 
 const schema = z.object({
     address: z.string().url(),
-    id: z.string().uuid(),
-    secret: z.string().length(48)
+    email: z.string(),
+    password: z.string()
 });
 
 type Schema = z.infer<typeof schema>;
 
 const defaultValues = {
     address: "",
-    id: "",
-    secret: ""
+    email: "",
+    password: ""
 };
 
-export default function Login() {
+export default function EmailLoginScreen() {
     const { t } = useTranslation();
     const { style } = useStyle(styling);
     const { addAccount } = useAccount();
+    const { createAlertModal } = useModal();
     const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
     });
+    const [loading, setLoading] = useState(false);
 
     const logIn = async (data: Schema) => {
-        const account: OAuthAccount = {
+        setLoading(true);
+
+        const account: EmailAccount = {
             serverAddress: data.address,
             nickname: "",
-            type: "oauth",
-            clientId: data.id,
-            clientSecret: data.secret
+            type: "email",
+            email: data.email,
+            password: data.password
         };
 
-        if (await addAccount(account)) {
-            router.replace("/");
-        } else {
-            console.error("Login failed");
+        try {
+            const [success, error] = await addAccount(account);
+
+            if (success) {
+                router.replace("/");
+            } else {
+                createAlertModal(
+                    "Error",
+                    error ? error : "Login failed",
+                    [
+                        { text: t("common:Close") }
+                    ]
+                );
+            }
+        } catch (e) {
+            createAlertModal(
+                t("errors:" + (e as ErrorHandlerResult).code),
+                (e as ErrorHandlerResult).msg,
+                [
+                    { text: t("common:Close") }
+                ]
+            );
         }
+
+        setLoading(false);
     };
 
     return (
@@ -64,32 +91,35 @@ export default function Login() {
                 autoCapitalize="none"
                 autoComplete="url"
                 keyboardType="url"
+                editable={!loading}
                 error={errors.address?.message}
             />
 
             <FormTextInput
                 control={control}
-                name="id"
-                placeholder={t("oauth:ClientId")}
+                name="email"
+                placeholder={t("users:Email")}
                 autoCapitalize="none"
                 autoComplete="off"
-                error={errors.id?.message}
+                editable={!loading}
+                error={errors.email?.message}
             />
 
             <FormTextInput
                 control={control}
-                name="secret"
-                placeholder={t("oauth:ClientSecret")}
+                name="password"
+                placeholder={t("users:Password")}
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
-                error={errors.secret?.message}
+                editable={!loading}
+                error={errors.password?.message}
             />
 
             <Button
                 text="Add Account"
                 onPress={handleSubmit(logIn)}
-                disabled={!isValid}
+                disabled={!isValid || loading}
             />
         </ContentWrapper>
     );

@@ -68,6 +68,8 @@ declare module "pufferpanel" {
 
         async login(email: string, password: string): Promise<"otp" | boolean>;
 
+        async loginOtp(token: string): Promise<boolean>;
+
         async register(username: string, email: string, password: string): Promise<boolean>;
 
         async reauth(): Promise<void>;
@@ -596,7 +598,7 @@ declare module "pufferpanel" {
         async setUserSetting(key: string, value: any): Promise<boolean>;
     }
 
-    export class SessionStore {
+    export interface SessionStore {
         setToken(token: string): void;
 
         setScopes(scopes: string[]): void;
@@ -608,23 +610,5 @@ declare module "pufferpanel" {
         isLoggedIn(): boolean;
 
         deleteSession(): void;
-    }
-
-    export type CookieOptions = {
-        domain: string;
-        path: string;
-        secure: boolean;
-        sameSite: "Strict" | "Lax" | "None";
-    };
-
-    export class InMemorySessionStore extends SessionStore {
-    }
-
-    export class ClientCookieSessionStore extends SessionStore {
-        constructor(options?: CookieOptions);
-    }
-
-    export class ServerCookieSessionStore extends SessionStore {
-        constructor(options?: CookieOptions);
     }
 }

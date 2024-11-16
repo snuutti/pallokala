@@ -2,7 +2,8 @@ import { createContext, useContext, useState, useEffect, useCallback, ReactNode 
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
-import { ApiClient, EditableConfigSettings, InMemorySessionStore, ErrorHandlerResult } from "pufferpanel";
+import UnifiedSessionStore from "@/utils/sessionStore";
+import { ApiClient, EditableConfigSettings, ErrorHandlerResult } from "pufferpanel";
 
 type ApiClientContextType = {
     apiClient?: ApiClient;
@@ -50,7 +51,7 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
     }, [apiClient]);
 
     const changeServer = (url: string): ApiClient => {
-        const newApiClient = new ApiClient(url, new InMemorySessionStore(), handleError);
+        const newApiClient = new ApiClient(url, new UnifiedSessionStore(), handleError);
 
         setConfig(undefined);
         setApiClient(newApiClient);

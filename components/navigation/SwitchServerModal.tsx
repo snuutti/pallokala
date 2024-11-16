@@ -83,7 +83,7 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
 
     const addAccount = () => {
         bottomSheetModalRef.current?.dismiss();
-        router.push("/login");
+        router.push("/(auth)/email");
     };
 
     return (

@@ -19,7 +19,7 @@ export default function RootNavigation() {
             />
 
             <Stack.Screen
-                name="login"
+                name="(auth)"
                 options={{
                     title: t("users:Login"),
                     headerShown: accounts.length > 0
