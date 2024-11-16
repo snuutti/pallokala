@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
@@ -33,6 +33,11 @@ export default function SettingsScreen() {
 
         server.getFlags().then(setFlags);
     }, [server]);
+
+    const anyItems = useMemo(() => {
+        return Object.keys(variables?.data || {}).length > 0
+            || Object.keys(flags || {}).length > 0;
+    }, [variables, flags]);
 
     const setVariable = (key: string, value: unknown) => {
         if (!variables) {
@@ -88,6 +93,14 @@ export default function SettingsScreen() {
 
     if (!variables || !flags) {
         return <LoadingScreen />;
+    }
+
+    if (!anyItems) {
+        return (
+            <ContentWrapper>
+                <Text style={style.header}>{t("servers:NoSettings")}</Text>
+            </ContentWrapper>
+        );
     }
 
     return (
