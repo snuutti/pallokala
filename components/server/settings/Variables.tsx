@@ -2,6 +2,7 @@ import { useMemo, useCallback } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import SettingInput from "@/components/server/settings/SettingInput";
 import { useStyle } from "@/hooks/useStyle";
+import { resolve_if } from "@/utils/conditions";
 import { Colors } from "@/constants/Colors";
 import { ServerDefinition, ServerSettings, Variable, Group } from "pufferpanel";
 
@@ -14,13 +15,32 @@ type VariablesProps = {
 export default function Variables(props: VariablesProps) {
     const { style } = useStyle(styling);
 
-    const sortedGroups = useMemo(() => {
-        if (!props.variables.groups || props.variables.groups.length === 0) {
+    const visibleGroups = useMemo(() => {
+        if (!props.variables.groups) {
             return null;
         }
 
-        return props.variables.groups.sort((a, b) => a.order - b.order);
-    }, [props.variables.groups]);
+        const data: Record<string, any> = {};
+        for (const [key, value] of Object.entries(props.variables.data!)) {
+            data[key] = value.value;
+        }
+
+        return props.variables.groups!.filter(group => {
+            if (group.if) {
+                return resolve_if(group.if, data);
+            }
+
+            return true;
+        });
+    }, [props.variables]);
+
+    const sortedGroups = useMemo(() => {
+        if (!visibleGroups || visibleGroups.length === 0) {
+            return null;
+        }
+
+        return visibleGroups.sort((a, b) => a.order - b.order);
+    }, [visibleGroups]);
 
     const renderVariables = (variables: Record<string, Variable>) => {
         return Object.entries(variables).map(([name, variable]) => (
