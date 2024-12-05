@@ -1,19 +1,17 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, Text } from "react-native";
+import * as Clipboard from "expo-clipboard";
 import { router, useLocalSearchParams } from "expo-router";
 import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
+import Markdown from "@/components/ui/Markdown";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
-import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { NodeDeployment } from "pufferpanel";
 
 export default function DeployNodeScreen() {
     const { t } = useTranslation();
-    const { style } = useStyle(styling);
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
     const { id, port, sftp } = useLocalSearchParams<{ id: string, port: string, sftp: string }>();
@@ -57,13 +55,27 @@ export default function DeployNodeScreen() {
         return JSON.stringify(config, undefined, 2);
     };
 
+    const copyConfig = async () => {
+        await Clipboard.setStringAsync(getDeployConfig());
+    };
+
     if (loading) {
         return <LoadingScreen />;
     }
 
     return (
         <ContentWrapper>
-            <Text style={style.text}>{t(`nodes:deploy.Step${step}`, { config: getDeployConfig() })}</Text>
+            <Markdown
+                text={t(`nodes:deploy.Step${step}`, { config: getDeployConfig() })}
+            />
+
+            {step === 3 && (
+                <Button
+                    text={t("common:Copy")}
+                    style="neutral"
+                    onPress={copyConfig}
+                />
+            )}
 
             {step < 5 ? (
                 <Button
@@ -78,12 +90,4 @@ export default function DeployNodeScreen() {
             )}
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        text: {
-            color: colors.text
-        }
-    });
 }
