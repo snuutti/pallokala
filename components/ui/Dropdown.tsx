@@ -15,7 +15,7 @@ export type DropdownProps = {
     value: string;
     onChange: (value: string) => void;
     label?: string;
-    description?: string;
+    description?: string | JSX.Element | JSX.Element[];
     disabled?: boolean;
 };
 

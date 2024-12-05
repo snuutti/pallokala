@@ -4,7 +4,7 @@ import { Colors } from "@/constants/Colors";
 
 export type SwitchProps = {
     label: string;
-    description?: string;
+    description?: string | JSX.Element | JSX.Element[];
     value: boolean;
     onValueChange: (value: boolean) => void;
     disabled?: boolean;

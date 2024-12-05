@@ -4,7 +4,7 @@ import { Colors } from "@/constants/Colors";
 
 export type TextInputProps = RNTextInputProps & {
     error?: string;
-    description?: string;
+    description?: string | JSX.Element | JSX.Element[];
 };
 
 export default function TextInput(props: TextInputProps) {
