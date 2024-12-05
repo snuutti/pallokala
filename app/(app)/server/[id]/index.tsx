@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
 import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, StyleSheet } from "react-native";
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+    useDerivedValue,
+} from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
 import { FlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ConsoleText from "@/components/server/console/ConsoleText";
 import { useServer } from "@/context/ServerProvider";
 import { useStyle } from "@/hooks/useStyle";
+import useAutoScroll from "@/hooks/useAutoScroll";
 import { Colors } from "@/constants/Colors";
 import { ServerLogs } from "pufferpanel";
 
@@ -13,9 +20,12 @@ export default function ConsoleScreen() {
     const { t } = useTranslation();
     const { style, colors } = useStyle(styling);
     const { server } = useServer();
+    const [lines, setLines] = useState<string[]>([]);
+    const { listRef, isAtBottom, listMounted, handleScroll, handleContentSizeChange, goToBottom } = useAutoScroll<string>({ data: lines });
+    const chevronVisible = useSharedValue(0);
+    const [initialScroll, setInitialScroll] = useState(true);
     const [unbindEvent, setUnbindEvent] = useState<(() => void) | undefined>(undefined);
     const [task, setTask] = useState<NodeJS.Timeout | undefined>(undefined);
-    const [lines, setLines] = useState<string[]>([]);
     const [lastMessageTime, setLastMessageTime] = useState(0);
     const [command, setCommand] = useState("");
 
@@ -41,6 +51,23 @@ export default function ConsoleScreen() {
             task && server.stopTask(task);
         };
     }, [server]);
+
+    useEffect(() => {
+        if (initialScroll && listMounted) {
+            goToBottom();
+            setInitialScroll(false);
+        }
+    }, [initialScroll, listMounted]);
+
+    useDerivedValue(() => {
+        chevronVisible.value = isAtBottom ? 0 : 1;
+    }, [isAtBottom]);
+
+    const chevronStyle = useAnimatedStyle(() => {
+        return {
+            opacity: withTiming(chevronVisible.value, { duration: 300 }),
+        }
+    });
 
     const onMessage = (e: ServerLogs) => {
         if (e.epoch) {
@@ -73,6 +100,9 @@ export default function ConsoleScreen() {
             {server?.hasScope("server.console") && (
                 <>
                     <FlashList
+                        ref={listRef}
+                        onScroll={handleScroll}
+                        onContentSizeChange={handleContentSizeChange}
                         data={lines}
                         keyExtractor={(_, index) => index.toString()}
                         renderItem={({ item }) => <ConsoleText text={item} />}
@@ -82,6 +112,12 @@ export default function ConsoleScreen() {
                     <TouchableOpacity style={style.clearConsole} onPress={clearConsole}>
                         <MaterialCommunityIcons name="text-box-remove" size={30} color="#fff" />
                     </TouchableOpacity>
+
+                    <Animated.View style={[style.autoScroll, chevronStyle]}>
+                        <TouchableOpacity onPress={goToBottom} disabled={isAtBottom}>
+                            <MaterialCommunityIcons name="chevron-double-down" size={30} color="#fff" />
+                        </TouchableOpacity>
+                    </Animated.View>
                 </>
             )}
 
@@ -114,6 +150,11 @@ function styling(colors: Colors) {
         clearConsole: {
             position: "absolute",
             top: 5,
+            right: 5
+        },
+        autoScroll: {
+            position: "absolute",
+            bottom: 55,
             right: 5
         },
         commandContainer: {
