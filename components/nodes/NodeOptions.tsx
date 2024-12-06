@@ -119,6 +119,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
                 keyboardType="number-pad"
                 editable={props.editable}
                 error={props.errors.sftpPort?.message}
+                numeric={true}
             />
         </>
     );
