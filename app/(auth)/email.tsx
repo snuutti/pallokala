@@ -16,8 +16,8 @@ import { EmailAccount } from "@/types/account";
 import { ErrorHandlerResult } from "pufferpanel";
 
 const schema = z.object({
-    address: z.string().url(),
-    email: z.string(),
+    address: z.string().url({ message: "errors:ErrFieldIsInvalidHost" }),
+    email: z.string().email({ message: "errors:ErrFieldNotEmail" }),
     password: z.string()
 });
 
@@ -93,6 +93,7 @@ export default function EmailLoginScreen() {
                 keyboardType="url"
                 editable={!loading}
                 error={errors.address?.message}
+                errorFields={{ field: "Server address" }}
             />
 
             <FormTextInput
@@ -103,6 +104,7 @@ export default function EmailLoginScreen() {
                 autoComplete="off"
                 editable={!loading}
                 error={errors.email?.message}
+                errorFields={{ field: t("users:Email") }}
             />
 
             <FormTextInput

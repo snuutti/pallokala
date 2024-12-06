@@ -18,8 +18,8 @@ import { Colors } from "@/constants/Colors";
 import { User } from "pufferpanel";
 
 const schema = z.object({
-    username: z.string().min(5),
-    email: z.string().email(),
+    username: z.string().min(5, { message: "errors:ErrFieldLength" }),
+    email: z.string().email({ message: "errors:ErrFieldNotEmail" }),
     password: z.string().optional()
 });
 
@@ -121,6 +121,7 @@ export default function UserDetailsScreen() {
                 autoComplete="username"
                 editable={canEdit}
                 error={errors.username?.message}
+                errorFields={{ field: t("users:Username"), length: 5 }}
             />
 
             <FormTextInput
@@ -132,6 +133,7 @@ export default function UserDetailsScreen() {
                 keyboardType="email-address"
                 editable={canEdit}
                 error={errors.email?.message}
+                errorFields={{ field: t("users:Email") }}
             />
 
             <FormTextInput

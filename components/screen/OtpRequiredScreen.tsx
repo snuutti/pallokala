@@ -12,7 +12,7 @@ import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 
 const schema = z.object({
-    code: z.string().length(6)
+    code: z.string().length(6, { message: "Invalid 2FA code" })
 });
 
 type Schema = z.infer<typeof schema>;

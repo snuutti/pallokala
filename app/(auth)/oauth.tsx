@@ -16,9 +16,9 @@ import { OAuthAccount } from "@/types/account";
 import { ErrorHandlerResult } from "pufferpanel";
 
 const schema = z.object({
-    address: z.string().url(),
-    id: z.string().uuid(),
-    secret: z.string().length(48)
+    address: z.string().url({ message: "errors:ErrFieldIsInvalidHost" }),
+    id: z.string().uuid({ message: "Invalid client ID" }),
+    secret: z.string().length(48, { message: "Invalid client secret" })
 });
 
 type Schema = z.infer<typeof schema>;
@@ -93,6 +93,7 @@ export default function OAuthLoginScreen() {
                 keyboardType="url"
                 editable={!loading}
                 error={errors.address?.message}
+                errorFields={{ field: "Server address" }}
             />
 
             <FormTextInput

@@ -1,13 +1,16 @@
 import { TextInputProps as RNTextInputProps, TextInput as RNTextInput, Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import { useStyle } from "@/hooks/useStyle";
 import { Colors } from "@/constants/Colors";
 
 export type TextInputProps = RNTextInputProps & {
     error?: string;
+    errorFields?: Record<string, unknown>;
     description?: string | JSX.Element | JSX.Element[];
 };
 
 export default function TextInput(props: TextInputProps) {
+    const { t } = useTranslation();
     const { style, colors } = useStyle(styling);
 
     return (
@@ -28,7 +31,7 @@ export default function TextInput(props: TextInputProps) {
             />
 
             {props.error && (
-                <Text style={style.errorText}>{props.error}</Text>
+                <Text style={style.errorText}>{t(props.error, props.errorFields)}</Text>
             )}
 
             {props.description && (

@@ -11,8 +11,8 @@ import { useAccount } from "@/context/AccountProvider";
 import { useToast } from "@/context/ToastProvider";
 
 const schema = z.object({
-    username: z.string().min(5),
-    email: z.string().email(),
+    username: z.string().min(5, { message: "errors:ErrFieldLength" }),
+    email: z.string().email({ message: "errors:ErrFieldNotEmail" }),
     password: z.string()
 });
 
@@ -64,6 +64,7 @@ export default function AccountDetailsScreen() {
                 autoComplete="username"
                 editable={!saving}
                 error={errors.username?.message}
+                errorFields={{ field: t("users:Username"), length: 5 }}
             />
 
             <FormTextInput
@@ -75,6 +76,7 @@ export default function AccountDetailsScreen() {
                 keyboardType="email-address"
                 editable={!saving}
                 error={errors.email?.message}
+                errorFields={{ field: t("users:Email") }}
             />
 
             <FormTextInput

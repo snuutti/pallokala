@@ -10,11 +10,12 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 
 const schema = z.object({
-    old: z.string().min(1),
-    new: z.string().min(8),
+    old: z.string().min(1, { message: "errors:ErrFieldRequired" }),
+    new: z.string().min(8, { message: "errors:ErrFieldLength" }),
     confirm: z.string()
 }).refine(data => data.new === data.confirm, {
-    path: ["confirm"]
+    path: ["confirm"],
+    message: "errors:ErrPasswordsNotIdentical"
 });
 
 type Schema = z.infer<typeof schema>;
@@ -59,6 +60,7 @@ export default function ChangePasswordScreen() {
                 secureTextEntry={true}
                 editable={!saving}
                 error={errors.old?.message}
+                errorFields={{ field: t("users:OldPassword") }}
             />
 
             <FormTextInput
@@ -70,6 +72,7 @@ export default function ChangePasswordScreen() {
                 secureTextEntry={true}
                 editable={!saving}
                 error={errors.new?.message}
+                errorFields={{ field: t("users:NewPassword"), length: 8 }}
             />
 
             <FormTextInput

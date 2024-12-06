@@ -18,7 +18,7 @@ import { Colors } from "@/constants/Colors";
 import { OtpEnrollResponse } from "pufferpanel";
 
 const schema = z.object({
-    code: z.string().length(6)
+    code: z.string().length(6, { message: "Invalid 2FA code" })
 });
 
 type Schema = z.infer<typeof schema>;

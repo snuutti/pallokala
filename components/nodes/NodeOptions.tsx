@@ -5,20 +5,20 @@ import FormTextInput from "@/components/ui/form/FormTextInput";
 import FormSwitch from "@/components/ui/form/FormSwitch";
 
 export const NodeSchema = z.object({
-    name: z.string().min(1),
-    publicHost: z.union([z.string().url(), z.string().ip()]),
-    publicPort: z.number().int().min(1).max(65535),
+    name: z.string().min(1, { message: "errors:ErrFieldRequired" }),
+    publicHost: z.union([z.string().url({ message: "errors:ErrFieldIsInvalidHost" }), z.string().ip({ message: "errors:ErrFieldIsInvalidHost" })]),
+    publicPort: z.number().int().min(1, { message: "errors:ErrFieldNotBetween" }).max(65535, { message: "errors:ErrFieldNotBetween" }),
     private: z.discriminatedUnion("withPrivateHost", [
         z.object({
             withPrivateHost: z.literal(true),
-            privateHost: z.union([z.string().url(), z.string().ip()]),
-            privatePort: z.number().int().min(1).max(65535)
+            privateHost: z.union([z.string().url({ message: "errors:ErrFieldIsInvalidHost" }), z.string().ip({ message: "errors:ErrFieldIsInvalidHost" })]),
+            privatePort: z.number().int().min(1, { message: "errors:ErrFieldNotBetween" }).max(65535, { message: "errors:ErrFieldNotBetween" })
         }),
         z.object({
             withPrivateHost: z.literal(false)
         })
     ]),
-    sftpPort: z.number().int().min(1).max(65535)
+    sftpPort: z.number().int().min(1, { message: "errors:ErrFieldNotBetween" }).max(65535, { message: "errors:ErrFieldNotBetween" })
 });
 
 export type NodeSchemaType = z.infer<typeof NodeSchema>;
@@ -53,6 +53,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
                 placeholder={t("common:Name")}
                 editable={props.editable}
                 error={props.errors.name?.message}
+                errorFields={{ field: t("common:Name") }}
             />
 
             <FormTextInput
@@ -64,6 +65,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
                 keyboardType="url"
                 editable={props.editable}
                 error={props.errors.publicHost?.message}
+                errorFields={{ field: t("nodes:PublicHost") }}
             />
 
             <FormTextInput
@@ -73,6 +75,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
                 keyboardType="number-pad"
                 editable={props.editable}
                 error={props.errors.publicPort?.message}
+                errorFields={{ field: t("nodes:PublicPort"), min: 1, max: 65535 }}
                 numeric={true}
             />
 
@@ -97,6 +100,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
                         // Idk how to fix the type error here
                         // @ts-ignore
                         error={props.errors.private?.privateHost.message}
+                        errorFields={{ field: t("nodes:PrivateHost") }}
                     />
 
                     <FormTextInput
@@ -107,6 +111,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
                         editable={props.editable}
                         // @ts-ignore
                         error={props.errors.private?.privatePort?.message}
+                        errorFields={{ field: t("nodes:PrivatePort"), min: 1, max: 65535 }}
                         numeric={true}
                     />
                 </>
@@ -119,6 +124,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
                 keyboardType="number-pad"
                 editable={props.editable}
                 error={props.errors.sftpPort?.message}
+                errorFields={{ field: t("nodes:SftpPort"), min: 1, max: 65535 }}
                 numeric={true}
             />
         </>

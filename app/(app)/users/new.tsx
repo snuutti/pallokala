@@ -11,9 +11,9 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import { useBoundStore } from "@/stores/useBoundStore";
 
 const schema = z.object({
-    username: z.string().min(5),
-    email: z.string().email(),
-    password: z.string().min(1)
+    username: z.string().min(5, { message: "errors:ErrFieldLength" }),
+    email: z.string().email({ message: "errors:ErrFieldNotEmail" }),
+    password: z.string().min(1, { message: "errors:ErrFieldRequired" })
 });
 
 type Schema = z.infer<typeof schema>;
@@ -59,6 +59,7 @@ export default function NewUserScreen() {
                 autoComplete="username"
                 editable={!loading}
                 error={errors.username?.message}
+                errorFields={{ field: t("users:Username"), length: 5 }}
             />
 
             <FormTextInput
@@ -70,6 +71,7 @@ export default function NewUserScreen() {
                 keyboardType="email-address"
                 editable={!loading}
                 error={errors.email?.message}
+                errorFields={{ field: t("users:Email") }}
             />
 
             <FormTextInput
@@ -81,6 +83,7 @@ export default function NewUserScreen() {
                 secureTextEntry={true}
                 editable={!loading}
                 error={errors.password?.message}
+                errorFields={{ field: t("users:Password") }}
             />
 
             <Button
