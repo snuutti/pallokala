@@ -8,12 +8,14 @@ import NodeOptions, { NodeDefaultValues, NodeSchema, NodeSchemaType } from "@/co
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
+import { useBoundStore } from "@/stores/useBoundStore";
 import { Node } from "pufferpanel";
 
 export default function NewNodeScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
+    const addNode = useBoundStore(state => state.addNode);
     const { control, handleSubmit, watch, reset, formState: { errors, isValid } } = useForm<NodeSchemaType>({
         defaultValues: NodeDefaultValues,
         resolver: zodResolver(NodeSchema),
@@ -41,6 +43,8 @@ export default function NewNodeScreen() {
         try {
             const id = await apiClient?.node.create(node as Node);
             reset();
+
+            addNode({ ...node, id: id! } as Node);
 
             showSuccess(t("nodes:Created"));
             router.push(`./${id}`);

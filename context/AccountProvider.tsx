@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { router } from "expo-router";
 import { useApiClient } from "@/context/ApiClientProvider";
+import { resetAllStores } from "@/stores/useBoundStore";
 import {
     getAccount,
     getAccounts,
@@ -128,6 +129,8 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         setNewAccount(account);
         setUser(null);
         setOtpRequired(false);
+
+        resetAllStores();
 
         const apiClient = changeServer(account.serverAddress);
 

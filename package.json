@@ -63,7 +63,8 @@
         "react-native-webview": "13.8.6",
         "use-debounce": "^10.0.4",
         "zeego": "^2.0.3",
-        "zod": "^3.23.8"
+        "zod": "^3.23.8",
+        "zustand": "^5.0.2"
     },
     "devDependencies": {
         "@babel/core": "^7.20.0",

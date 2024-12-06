@@ -13,6 +13,7 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
+import { useBoundStore } from "@/stores/useBoundStore";
 import { Colors } from "@/constants/Colors";
 import { Node, NodeFeatures } from "pufferpanel";
 
@@ -22,6 +23,7 @@ export default function NodeScreen() {
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
+    const removeNode = useBoundStore(state => state.removeNode);
     const { id } = useLocalSearchParams<{ id: string }>();
     const { control, handleSubmit, setValue, getValues, watch, formState: { errors, isValid } } = useForm<NodeSchemaType>({
         defaultValues: NodeDefaultValues,
@@ -102,6 +104,7 @@ export default function NodeScreen() {
     const deleteNode = async () => {
         setLoading(true);
         await apiClient?.node.delete(Number(id));
+        removeNode(Number(id));
         showSuccess(t("nodes:Deleted"));
         router.back();
     };

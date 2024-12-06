@@ -6,13 +6,14 @@ import NodeListItem from "@/components/nodes/NodeListItem";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useColors } from "@/hooks/useStyle";
-import { Node } from "pufferpanel";
+import { useBoundStore } from "@/stores/useBoundStore";
 
 export default function NodesScreen() {
     const colors = useColors();
     const { apiClient } = useApiClient();
     const { fabVisible, onScroll } = useFabVisible();
-    const [nodes, setNodes] = useState<Node[]>([]);
+    const nodes = useBoundStore(state => state.nodes);
+    const setNodes = useBoundStore(state => state.setNodes);
     const [refreshing, setRefreshing] = useState(true);
 
     const style = styling();
