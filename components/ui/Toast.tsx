@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import Animated, {
     useAnimatedStyle,
@@ -25,19 +25,46 @@ type ToastProps = {
 export default function Toast(props: ToastProps) {
     const { style } = useStyle(styling);
     const translateX = useSharedValue(0);
+    const translateY = useSharedValue(0);
     const opacity = useSharedValue(0);
+    const [dismissTimeout, setDismissTimeout] = useState<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         translateX.value = withSpring(0);
         opacity.value = withTiming(1, { duration: 500 });
+
+        resetTimeout();
     }, []);
 
+    const resetTimeout = useCallback(() => {
+        if (dismissTimeout) {
+            clearTimeout(dismissTimeout);
+        }
+
+        setDismissTimeout(setTimeout(() => {
+            translateY.value = withSpring(-100, {}, () => runOnJS(props.onDismiss)(props.id));
+        }, 3000));
+    }, [dismissTimeout]);
+
     const animatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateX: translateX.value }],
+        transform: [
+            { translateX: translateX.value }, // Swiping
+            { translateY: translateY.value } // Auto-dismiss
+        ],
         opacity: opacity.value * interpolate(translateX.value, [-100, 0, 100], [0, 1, 0])
     }));
 
+    const cancelTimeout = () => {
+        if (dismissTimeout) {
+            clearTimeout(dismissTimeout);
+            setDismissTimeout(null);
+        }
+    };
+
     const swipeGesture = Gesture.Pan()
+        .onBegin(() => {
+            runOnJS(cancelTimeout)();
+        })
         .onUpdate((event) => {
             translateX.value = event.translationX;
         })
@@ -47,6 +74,8 @@ export default function Toast(props: ToastProps) {
             } else {
                 translateX.value = withSpring(0);
             }
+
+            runOnJS(resetTimeout)();
         });
 
     return (
