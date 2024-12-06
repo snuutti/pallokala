@@ -23,6 +23,7 @@ export default function NodeScreen() {
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
+    const modifyNode = useBoundStore(state => state.modifyNode);
     const removeNode = useBoundStore(state => state.removeNode);
     const { id } = useLocalSearchParams<{ id: string }>();
     const { control, handleSubmit, setValue, getValues, watch, formState: { errors, isValid } } = useForm<NodeSchemaType>({
@@ -54,6 +55,15 @@ export default function NodeScreen() {
             setValue("sftpPort", node.sftpPort || NodeDefaultValues.sftpPort);
             setNode(node);
 
+            modifyNode(Number(id), {
+                name: node.name || NodeDefaultValues.name,
+                publicHost: node.publicHost || NodeDefaultValues.publicHost,
+                publicPort: node.publicPort || NodeDefaultValues.publicPort,
+                privateHost: node.privateHost || NodeDefaultValues.private.privateHost,
+                privatePort: node.privatePort || NodeDefaultValues.private.privatePort,
+                sftpPort: node.sftpPort || NodeDefaultValues.sftpPort
+            });
+
             apiClient?.node.features(Number(id))
                 .then(setFeatures)
                 .finally(() => setFeaturesFetched(true));
@@ -79,6 +89,8 @@ export default function NodeScreen() {
 
         try {
             await apiClient?.node.update(Number(id), node as Node);
+            modifyNode(Number(id), node);
+
             showSuccess(t("nodes:Updated"));
         } finally {
             setLoading(false);
