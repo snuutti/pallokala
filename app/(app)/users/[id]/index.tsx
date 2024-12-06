@@ -13,6 +13,7 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
+import { useBoundStore } from "@/stores/useBoundStore";
 import { Colors } from "@/constants/Colors";
 import { User } from "pufferpanel";
 
@@ -36,6 +37,8 @@ export default function UserDetailsScreen() {
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
+    const modifyUser = useBoundStore(state => state.modifyUser);
+    const removeUser = useBoundStore(state => state.removeUser);
     const { id } = useLocalSearchParams<{ id: string }>();
     const { control, handleSubmit, setValue, getValues, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
@@ -56,6 +59,7 @@ export default function UserDetailsScreen() {
             setValue("username", user.username || "");
             setValue("email", user.email || "");
             setUser(user);
+            modifyUser(Number(id), { username: user.username || "", email: user.email || "" });
         });
     }, [id]);
 
@@ -70,6 +74,8 @@ export default function UserDetailsScreen() {
                 email: data.email,
                 password: data.password || undefined
             });
+
+            modifyUser(Number(id), { username: data.username, email: data.email });
 
             showSuccess(t("users:UpdateSuccess"));
         } finally {
@@ -96,6 +102,7 @@ export default function UserDetailsScreen() {
     const deleteUser = async () => {
         setLoading(true);
         await apiClient?.user.delete(Number(id));
+        removeUser(Number(id));
         showSuccess(t("users:DeleteSuccess"));
         router.back();
     };

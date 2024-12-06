@@ -1,5 +1,7 @@
 import { create as actualCreate, StateCreator } from "zustand";
+import { createServerSlice, ServerSlice } from "@/stores/serverSlice";
 import { createNodeSlice, NodeSlice } from "@/stores/nodeSlice";
+import { createUserSlice, UserSlice } from "@/stores/userSlice";
 
 const storeResetFns = new Set<() => void>();
 
@@ -16,6 +18,8 @@ export const resetAllStores = () => {
     storeResetFns.forEach(resetFn => resetFn());
 };
 
-export const useBoundStore = create<NodeSlice>()((...a) => ({
+export const useBoundStore = create<ServerSlice & NodeSlice & UserSlice>()((...a) => ({
+    ...createServerSlice(...a),
     ...createNodeSlice(...a),
+    ...createUserSlice(...a),
 }));

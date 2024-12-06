@@ -8,12 +8,14 @@ import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useServer } from "@/context/ServerProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
+import { useBoundStore } from "@/stores/useBoundStore";
 
 export default function DrawerHeaderButton() {
     const { t } = useTranslation();
     const { style, colors } = useStyle(styling);
     const { server } = useServer();
     const { createPromptModal } = useModal();
+    const modifyServer = useBoundStore(state => state.modifyServer);
     const route = useRoute();
 
     const showMenu = useMemo(() => {
@@ -42,11 +44,16 @@ export default function DrawerHeaderButton() {
                     text: t("common:Save"),
                     icon: "content-save",
                     style: "success",
-                    onPress: async (name) => await server.updateName(name)
+                    onPress: updateServerName
                 },
                 { text: t("common:Cancel") }
             ]
         );
+    };
+
+    const updateServerName = async (name: string) => {
+        await server!.updateName(name);
+        modifyServer(server!.id!, { name });
     };
 
     if (!server || route.name !== "server/[id]") {

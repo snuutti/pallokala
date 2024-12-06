@@ -2,12 +2,15 @@ import { useState, useEffect, useCallback } from "react";
 import { RefreshControl, FlatList, StyleSheet } from "react-native";
 import ServerListItem from "@/components/server/ServerListItem";
 import { useApiClient } from "@/context/ApiClientProvider";
+import { useBoundStore } from "@/stores/useBoundStore";
 import { ExtendedServerStatus, ExtendedServerView } from "@/types/server";
 import { ServerView } from "pufferpanel";
 
 export default function ServersScreen() {
     const { apiClient } = useApiClient();
-    const [servers, setServers] = useState<ExtendedServerView[]>([]);
+    const servers = useBoundStore(state => state.servers);
+    const setServers = useBoundStore(state => state.setServers);
+    const setServerStatus = useBoundStore(state => state.setServerStatus);
     const [refreshing, setRefreshing] = useState(true);
 
     const style = styling();
@@ -69,21 +72,18 @@ export default function ServersScreen() {
             return;
         }
 
-        const updatedServers = await Promise.all(servers.map(async (server) => {
-            let online: ExtendedServerStatus = undefined;
-
-            if (server.canGetStatus) {
-                try {
-                    online = await apiClient!.server.getStatus(server.id!);
-                } catch {
-                    online = undefined;
-                }
+        for (const server of servers) {
+            if (!server.canGetStatus) {
+                continue;
             }
 
-            return { ...server, online };
-        }));
-
-        setServers(updatedServers);
+            try {
+                const online = await apiClient!.server.getStatus(server.id!);
+                setServerStatus(server.id!, online);
+            } catch {
+                setServerStatus(server.id!, undefined);
+            }
+        }
     }, [servers]);
 
     return (

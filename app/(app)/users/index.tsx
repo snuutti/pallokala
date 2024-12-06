@@ -6,13 +6,15 @@ import UsersListItem from "@/components/users/UsersListItem";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useColors } from "@/hooks/useStyle";
+import { useBoundStore } from "@/stores/useBoundStore";
 import { User } from "pufferpanel";
 
 export default function UsersScreen() {
     const colors = useColors();
     const { apiClient } = useApiClient();
     const { fabVisible, onScroll } = useFabVisible();
-    const [users, setUsers] = useState<User[]>([]);
+    const users = useBoundStore(state => state.users);
+    const setUsers = useBoundStore(state => state.setUsers);
     const [refreshing, setRefreshing] = useState(true);
 
     const style = styling();

@@ -8,6 +8,7 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
+import { useBoundStore } from "@/stores/useBoundStore";
 
 const schema = z.object({
     username: z.string().min(5),
@@ -26,6 +27,7 @@ const defaultValues = {
 export default function NewUserScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
+    const addUser = useBoundStore(state => state.addUser);
     const { control, handleSubmit, reset, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
@@ -38,7 +40,9 @@ export default function NewUserScreen() {
 
         try {
             const id = await apiClient!.user.create(data.username, data.email, data.password);
+            addUser({ id, username: data.username, email: data.email });
             reset();
+
             router.push(`./${id}`);
         } finally {
             setLoading(false);
