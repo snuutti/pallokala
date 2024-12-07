@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Text, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
+import Welcome from "@/components/auth/Welcome";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useAccount } from "@/context/AccountProvider";
@@ -81,8 +82,7 @@ export default function OAuthLoginScreen() {
 
     return (
         <ContentWrapper scrollViewStyle={style.scrollView} contentContainerStyle={style.contentContainer}>
-            <Text style={style.header}>Welcome!</Text>
-            <Text style={style.subheader}>Add a new PufferPanel server to get started.</Text>
+            <Welcome />
 
             <FormTextInput
                 control={control}
@@ -133,15 +133,6 @@ function styling(colors: Colors) {
         },
         contentContainer: {
             justifyContent: "center"
-        },
-        header: {
-            color: colors.text,
-            fontSize: 32
-        },
-        subheader: {
-            color: colors.text,
-            fontSize: 16,
-            marginBottom: 5
         }
     });
 }
