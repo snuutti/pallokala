@@ -8,6 +8,7 @@ import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { getType, skipDownload } from "@/utils/files";
+import editorHtml from "@/constants/editorHtml";
 
 export default function EditFileScreen() {
     const { style } = useStyle((colors) =>
@@ -55,7 +56,7 @@ export default function EditFileScreen() {
         <WebView
             style={style.container}
             scrollEnabled={false}
-            source={require("@/assets/editor/editor.html")}
+            source={{ html: editorHtml }}
             injectedJavaScriptObject={{
                 content: fileContent,
                 name: openFile.name,

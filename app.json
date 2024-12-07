@@ -34,7 +34,15 @@
             "expo-router",
             "expo-font",
             "expo-secure-store",
-            "expo-localization"
+            "expo-localization",
+            [
+                "expo-build-properties",
+                {
+                    "android": {
+                        "usesCleartextTraffic": true
+                    }
+                }
+            ]
         ],
         "experiments": {
             "typedRoutes": true
