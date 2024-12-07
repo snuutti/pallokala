@@ -57,6 +57,7 @@ xcuserdata
 
 # Android
 *.apk
+*.aab
 *.hprof
 ReactAndroid-temp.aar
 
