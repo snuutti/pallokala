@@ -11,7 +11,7 @@
         "splash": {
             "image": "./assets/images/splash.png",
             "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
+            "backgroundColor": "#000000"
         },
         "ios": {
             "config": {
@@ -27,8 +27,8 @@
             "package": "io.github.snuutti.pallokala"
         },
         "androidNavigationBar": {
-            "barStyle": "dark-content",
-            "backgroundColor": "#ffffff"
+            "barStyle": "light-content",
+            "backgroundColor": "#000000"
         },
         "plugins": [
             "expo-router",
