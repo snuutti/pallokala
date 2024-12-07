@@ -92,9 +92,11 @@ function styling(colors: Colors) {
         },
         modalWrapper: {
             width: "80%",
-            maxWidth: 400
+            maxWidth: 400,
+            maxHeight: "80%"
         },
         modal: {
+            maxHeight: "100%",
             backgroundColor: colors.backdrop,
             padding: 20,
             borderRadius: 16,

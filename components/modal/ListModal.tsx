@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { ModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
@@ -12,6 +13,7 @@ type ListModalProps = {
 
 export default function ListModal(props: ListModalProps) {
     const { style, colors } = useStyle(styling);
+    const [listHeight, setListHeight] = useState(0);
     const [hasSelected, setHasSelected] = useState(false);
 
     const onSelection = (item: ModalButton) => {
@@ -24,19 +26,35 @@ export default function ListModal(props: ListModalProps) {
         props.handleClose!();
     };
 
-    return props.items.map((item, index) => (
-        <TouchableOpacity key={index} onPress={() => onSelection(item)} style={style.item} disabled={hasSelected}>
-            {item.icon && (
-                <MaterialCommunityIcons name={item.icon} size={30} color={colors.text} style={style.icon} />
-            )}
+    const onContentSizeChange = (_width: number, height: number) => {
+        setListHeight(height);
+    };
 
-            <Text style={style.text}>{item.text}</Text>
-        </TouchableOpacity>
-    ));
+    return (
+        <View style={[style.wrapper, { height: listHeight }]}>
+            <FlashList
+                data={props.items}
+                renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => onSelection(item)} style={style.item} disabled={hasSelected}>
+                        {item.icon && (
+                            <MaterialCommunityIcons name={item.icon} size={30} color={colors.text} style={style.icon} />
+                        )}
+
+                        <Text style={style.text}>{item.text}</Text>
+                    </TouchableOpacity>
+                )}
+                estimatedItemSize={39}
+                onContentSizeChange={onContentSizeChange}
+            />
+        </View>
+    );
 }
 
 function styling(colors: Colors) {
     return StyleSheet.create({
+        wrapper: {
+            maxHeight: "100%"
+        },
         item: {
             flexDirection: "row",
             flexWrap: "nowrap",
