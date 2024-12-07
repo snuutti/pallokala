@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from "react-native";
 import Button from "@/components/ui/Button";
 import { ModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 type AlertModalProps = {
     title?: string;
@@ -13,7 +12,29 @@ type AlertModalProps = {
 };
 
 export default function AlertModal(props: AlertModalProps) {
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            container: {
+                justifyContent: "center",
+                alignItems: "center"
+            },
+            title: {
+                color: colors.text,
+                fontSize: 20,
+                fontWeight: "bold",
+                marginBottom: 10
+            },
+            body: {
+                color: colors.text,
+                fontSize: 16,
+                marginBottom: 20
+            },
+            buttons: {
+                width: "100%",
+                flexDirection: "column"
+            }
+        })
+    );
     const [hasSelected, setHasSelected] = useState(false);
 
     const onButtonPressed = (button: ModalButton) => {
@@ -50,28 +71,4 @@ export default function AlertModal(props: AlertModalProps) {
             </View>
         </View>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        container: {
-            justifyContent: "center",
-            alignItems: "center"
-        },
-        title: {
-            color: colors.text,
-            fontSize: 20,
-            fontWeight: "bold",
-            marginBottom: 10
-        },
-        body: {
-            color: colors.text,
-            fontSize: 16,
-            marginBottom: 20
-        },
-        buttons: {
-            width: "100%",
-            flexDirection: "column"
-        }
-    });
 }

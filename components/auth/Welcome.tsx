@@ -1,9 +1,20 @@
 import { Text, StyleSheet } from "react-native";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 export default function Welcome() {
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            header: {
+                color: colors.text,
+                fontSize: 32
+            },
+            subheader: {
+                color: colors.text,
+                fontSize: 16,
+                marginBottom: 5
+            }
+        })
+    );
 
     return (
         <>
@@ -12,18 +23,4 @@ export default function Welcome() {
             <Text style={style.subheader}>Note: Pallokala only works with version 3.0 and later PufferPanel servers.</Text>
         </>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        header: {
-            color: colors.text,
-            fontSize: 32
-        },
-        subheader: {
-            color: colors.text,
-            fontSize: 16,
-            marginBottom: 5
-        }
-    });
 }

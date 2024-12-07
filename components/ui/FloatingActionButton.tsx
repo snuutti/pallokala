@@ -18,7 +18,30 @@ type FloatingActionButtonProps = {
 };
 
 export default function FloatingActionButton({ visible = true, color, onPress, safeArea, children }: FloatingActionButtonProps) {
-    const { style, colors } = useStyle(styling);
+    const { style, colors } = useStyle(() =>
+        StyleSheet.create({
+            container: {
+                position: "absolute",
+                right: 20,
+                bottom: 20
+            },
+            fab: {
+                width: 60,
+                height: 60,
+                borderRadius: 30,
+                justifyContent: "center",
+                alignItems: "center",
+                shadowColor: "#000",
+                shadowOffset: {
+                    width: 0,
+                    height: 2
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5
+            }
+        })
+    );
     const fabVisible = useSharedValue(1);
     const insets = useSafeAreaInsets();
 
@@ -74,28 +97,3 @@ export const useFabVisible = () => {
 
     return { fabVisible, setFabVisible, onScroll };
 };
-
-function styling() {
-    return StyleSheet.create({
-        container: {
-            position: "absolute",
-            right: 20,
-            bottom: 20
-        },
-        fab: {
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            justifyContent: "center",
-            alignItems: "center",
-            shadowColor: "#000",
-            shadowOffset: {
-                width: 0,
-                height: 2
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5
-        }
-    });
-}

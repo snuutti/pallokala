@@ -6,11 +6,18 @@ import Copyable from "@/components/ui/Copyable";
 import { useServer } from "@/context/ServerProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 export default function SFTPScreen() {
     const { t } = useTranslation();
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            password: {
+                color: colors.text,
+                marginVertical: 5,
+                marginHorizontal: 16
+            }
+        })
+    );
     const { server } = useServer();
     const { user } = useAccount();
 
@@ -33,14 +40,4 @@ export default function SFTPScreen() {
             <Text style={style.password}>{t("users:Password")}: {t("users:AccountPassword")}</Text>
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        password: {
-            color: colors.text,
-            marginVertical: 5,
-            marginHorizontal: 16
-        }
-    });
 }

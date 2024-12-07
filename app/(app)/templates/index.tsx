@@ -4,11 +4,23 @@ import { FlashList } from "@shopify/flash-list";
 import TemplatesListItem from "@/components/templates/TemplatesListItem";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { Template } from "pufferpanel";
 
 export default function TemplatesScreen() {
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            templatesContainer: {
+                paddingTop: 10,
+                paddingBottom: 20
+            },
+            header: {
+                color: colors.text,
+                fontSize: 16,
+                marginHorizontal: 10,
+                marginVertical: 5
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const [data, setData] = useState<(string | Template)[]>([]);
     const [loading, setLoading] = useState(true);
@@ -55,19 +67,4 @@ export default function TemplatesScreen() {
             }
         />
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        templatesContainer: {
-            paddingTop: 10,
-            paddingBottom: 20
-        },
-        header: {
-            color: colors.text,
-            fontSize: 16,
-            marginHorizontal: 10,
-            marginVertical: 5
-        }
-    });
 }

@@ -1,6 +1,5 @@
 import { Switch as RNSwitch, View, Text, StyleSheet } from "react-native";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 export type SwitchProps = {
     label: string;
@@ -11,7 +10,29 @@ export type SwitchProps = {
 };
 
 export default function Switch(props: SwitchProps) {
-    const { style, colors } = useStyle(styling);
+    const { style, colors } = useStyle((colors) =>
+        StyleSheet.create({
+            container: {
+                flexDirection: "row",
+                flexWrap: "nowrap",
+                alignItems: "center",
+                marginVertical: 5
+            },
+            disabled: {
+                opacity: 0.5
+            },
+            textContainer: {
+                flex: 1,
+                marginLeft: 10
+            },
+            name: {
+                color: colors.text
+            },
+            description: {
+                color: colors.textDisabled
+            }
+        })
+    );
 
     return (
         <View style={style.container}>
@@ -33,28 +54,4 @@ export default function Switch(props: SwitchProps) {
             </View>
         </View>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        container: {
-            flexDirection: "row",
-            flexWrap: "nowrap",
-            alignItems: "center",
-            marginVertical: 5
-        },
-        disabled: {
-            opacity: 0.5
-        },
-        textContainer: {
-            flex: 1,
-            marginLeft: 10
-        },
-        name: {
-            color: colors.text
-        },
-        description: {
-            color: colors.textDisabled
-        }
-    });
 }

@@ -13,12 +13,42 @@ import ConsoleText from "@/components/server/console/ConsoleText";
 import { useServer } from "@/context/ServerProvider";
 import { useStyle } from "@/hooks/useStyle";
 import useAutoScroll from "@/hooks/useAutoScroll";
-import { Colors } from "@/constants/Colors";
 import { ServerLogs } from "pufferpanel";
 
 export default function ConsoleScreen() {
     const { t } = useTranslation();
-    const { style, colors } = useStyle(styling);
+    const { style, colors } = useStyle((colors) =>
+        StyleSheet.create({
+            container: {
+                flex: 1,
+                backgroundColor: "#000"
+            },
+            clearConsole: {
+                position: "absolute",
+                top: 5,
+                right: 5
+            },
+            autoScroll: {
+                position: "absolute",
+                bottom: 55,
+                right: 5
+            },
+            commandContainer: {
+                backgroundColor: colors.backdrop,
+                flexDirection: "row",
+                height: 50
+            },
+            commandInput: {
+                flex: 1,
+                color: colors.text,
+                backgroundColor: colors.background
+            },
+            sendButton: {
+                justifyContent: "center",
+                paddingHorizontal: 20
+            }
+        })
+    );
     const { server } = useServer();
     const [lines, setLines] = useState<string[]>([]);
     const { listRef, isAtBottom, listMounted, handleScroll, handleContentSizeChange, goToBottom } = useAutoScroll<string>({ data: lines });
@@ -139,37 +169,4 @@ export default function ConsoleScreen() {
             )}
         </KeyboardAvoidingView>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        container: {
-            flex: 1,
-            backgroundColor: "#000"
-        },
-        clearConsole: {
-            position: "absolute",
-            top: 5,
-            right: 5
-        },
-        autoScroll: {
-            position: "absolute",
-            bottom: 55,
-            right: 5
-        },
-        commandContainer: {
-            backgroundColor: colors.backdrop,
-            flexDirection: "row",
-            height: 50
-        },
-        commandInput: {
-            flex: 1,
-            color: colors.text,
-            backgroundColor: colors.background
-        },
-        sendButton: {
-            justifyContent: "center",
-            paddingHorizontal: 20
-        }
-    });
 }

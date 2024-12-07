@@ -9,11 +9,16 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 export default function TwoFactorAuthScreen() {
     const { t } = useTranslation();
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            text: {
+                color: colors.text
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createPromptModal } = useModal();
@@ -87,12 +92,4 @@ export default function TwoFactorAuthScreen() {
             )}
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        text: {
-            color: colors.text
-        }
-    });
 }

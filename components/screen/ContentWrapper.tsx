@@ -11,7 +11,22 @@ type ContentWrapperProps = {
 };
 
 export default function ContentWrapper(props: ContentWrapperProps) {
-    const { style } = useStyle(styling);
+    const { style } = useStyle(() =>
+        StyleSheet.create({
+            scrollView: {
+                width: "100%"
+            },
+            contentContainer: {
+                flexGrow: 1,
+                alignItems: "center"
+            },
+            content: {
+                width: "100%",
+                maxWidth: 400,
+                padding: 20
+            }
+        })
+    );
 
     return (
         <KeyboardAwareScrollView
@@ -24,21 +39,4 @@ export default function ContentWrapper(props: ContentWrapperProps) {
             </View>
         </KeyboardAwareScrollView>
     );
-}
-
-function styling() {
-    return StyleSheet.create({
-        scrollView: {
-            width: "100%"
-        },
-        contentContainer: {
-            flexGrow: 1,
-            alignItems: "center"
-        },
-        content: {
-            width: "100%",
-            maxWidth: 400,
-            padding: 20
-        }
-    });
 }

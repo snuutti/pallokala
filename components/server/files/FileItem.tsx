@@ -1,7 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { FileDesc } from "pufferpanel";
 
 const archiveExtensions = [
@@ -29,7 +28,40 @@ type FileItemProps = {
 };
 
 export default function FileItem(props: FileItemProps) {
-    const { style, colors } = useStyle(styling);
+    const { style, colors } = useStyle((colors) =>
+        StyleSheet.create({
+            file: {
+                flexDirection: "row",
+                alignItems: "center",
+                paddingVertical: 10
+            },
+            icon: {
+                marginHorizontal: 10
+            },
+            infoView: {
+                flexGrow: 1,
+                flexShrink: 1,
+                flexDirection: "column",
+                justifyContent: "center"
+            },
+            name: {
+                color: colors.text
+            },
+            size: {
+                color: colors.textDisabled
+            },
+            actionsView: {
+                flexDirection: "row",
+                marginHorizontal: 10
+            },
+            extract: {
+                marginRight: 10
+            },
+            delete: {
+                marginLeft: 10
+            }
+        })
+    );
 
     const getIcon = (): any => {
         if (!props.file.isFile) {
@@ -142,39 +174,4 @@ export default function FileItem(props: FileItemProps) {
             )}
         </TouchableOpacity>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        file: {
-            flexDirection: "row",
-            alignItems: "center",
-            paddingVertical: 10
-        },
-        icon: {
-            marginHorizontal: 10
-        },
-        infoView: {
-            flexGrow: 1,
-            flexShrink: 1,
-            flexDirection: "column",
-            justifyContent: "center"
-        },
-        name: {
-            color: colors.text
-        },
-        size: {
-            color: colors.textDisabled
-        },
-        actionsView: {
-            flexDirection: "row",
-            marginHorizontal: 10
-        },
-        extract: {
-            marginRight: 10
-        },
-        delete: {
-            marginLeft: 10
-        }
-    });
 }

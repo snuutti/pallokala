@@ -9,12 +9,19 @@ import Button from "@/components/ui/Button";
 import { useServer } from "@/context/ServerProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { ServerDefinition, ServerSettings, ServerFlags } from "pufferpanel";
 
 export default function SettingsScreen() {
     const { t, i18n } = useTranslation();
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            header: {
+                color: colors.text,
+                fontSize: 16,
+                marginBottom: 5
+            }
+        })
+    );
     const { server } = useServer();
     const { showSuccess } = useToast();
     const [variables, setVariables] = useState<ServerDefinition | ServerSettings | null>(null);
@@ -131,14 +138,4 @@ export default function SettingsScreen() {
             />
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        header: {
-            color: colors.text,
-            fontSize: 16,
-            marginBottom: 5
-        }
-    });
 }

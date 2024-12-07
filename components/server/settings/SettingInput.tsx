@@ -4,7 +4,6 @@ import Switch from "@/components/ui/Switch";
 import Dropdown from "@/components/ui/Dropdown";
 import TextInput from "@/components/ui/TextInput";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { Variable } from "pufferpanel";
 import HTMLReactParser from "html-react-parser";
 import type { DOMNode, Text as TextNode } from "html-dom-parser";
@@ -16,7 +15,13 @@ type SettingInputProps = {
 };
 
 export default function SettingInput(props: SettingInputProps) {
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            link: {
+                color: colors.primary
+            }
+        })
+    );
 
     const openUrl = async (url: string) => {
         await WebBrowser.openBrowserAsync(url);
@@ -78,12 +83,4 @@ export default function SettingInput(props: SettingInputProps) {
             editable={!props.disabled}
         />
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        link: {
-            color: colors.primary
-        }
-    });
 }

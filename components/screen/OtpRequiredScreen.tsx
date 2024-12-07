@@ -9,7 +9,6 @@ import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useAccount } from "@/context/AccountProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 const schema = z.object({
     code: z.string().length(6, { message: "Invalid 2FA code" })
@@ -23,7 +22,18 @@ const defaultValues = {
 
 export default function OtpRequiredScreen() {
     const { t } = useTranslation();
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            contentContainer: {
+                justifyContent: "center"
+            },
+            header: {
+                color: colors.text,
+                fontSize: 32,
+                marginVertical: 5
+            }
+        })
+    );
     const { submitOtp } = useAccount();
     const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
@@ -61,17 +71,4 @@ export default function OtpRequiredScreen() {
             />
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        contentContainer: {
-            justifyContent: "center"
-        },
-        header: {
-            color: colors.text,
-            fontSize: 32,
-            marginVertical: 5
-        }
-    });
 }

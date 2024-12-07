@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from "react-native";
 import ColorPicker, { HueSlider, Panel1 } from "reanimated-color-picker";
 import Button from "@/components/ui/Button";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 type ColorPickerModalProps = {
     title?: string;
@@ -13,7 +12,31 @@ type ColorPickerModalProps = {
 };
 
 export default function ColorPickerModal(props: ColorPickerModalProps) {
-    const { style, colors } = useStyle(styling);
+    const { style, colors } = useStyle((colors) =>
+        StyleSheet.create({
+            container: {
+                justifyContent: "center",
+                alignItems: "center"
+            },
+            title: {
+                color: colors.text,
+                fontSize: 20,
+                fontWeight: "bold",
+                marginBottom: 10
+            },
+            colorPicker: {
+                width: "100%"
+            },
+            panel1: {
+                borderRadius: 16
+            },
+            slider: {
+                borderRadius: 16,
+                marginTop: 20,
+                marginBottom: 15
+            }
+        })
+    );
     const [hasSelected, setHasSelected] = useState(false);
     const [color, setColor] = useState(props.defaultColor || colors.primary);
 
@@ -53,30 +76,4 @@ export default function ColorPickerModal(props: ColorPickerModalProps) {
             />
         </View>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        container: {
-            justifyContent: "center",
-            alignItems: "center"
-        },
-        title: {
-            color: colors.text,
-            fontSize: 20,
-            fontWeight: "bold",
-            marginBottom: 10
-        },
-        colorPicker: {
-            width: "100%"
-        },
-        panel1: {
-            borderRadius: 16
-        },
-        slider: {
-            borderRadius: 16,
-            marginTop: 20,
-            marginBottom: 15
-        }
-    });
 }

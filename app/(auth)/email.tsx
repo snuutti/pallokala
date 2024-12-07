@@ -12,7 +12,6 @@ import Button from "@/components/ui/Button";
 import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { EmailAccount } from "@/types/account";
 import { ErrorHandlerResult } from "pufferpanel";
 
@@ -32,7 +31,16 @@ const defaultValues = {
 
 export default function EmailLoginScreen() {
     const { t } = useTranslation();
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            scrollView: {
+                backgroundColor: colors.background
+            },
+            contentContainer: {
+                justifyContent: "center"
+            }
+        })
+    );
     const { addAccount } = useAccount();
     const { createAlertModal } = useModal();
     const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
@@ -125,15 +133,4 @@ export default function EmailLoginScreen() {
             />
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        scrollView: {
-            backgroundColor: colors.background
-        },
-        contentContainer: {
-            justifyContent: "center"
-        }
-    });
 }

@@ -9,12 +9,23 @@ import { useServer } from "@/context/ServerProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { UserPermissionsView } from "pufferpanel";
 
 export default function UsersScreen() {
     const { t } = useTranslation();
-    const { style, colors } = useStyle(styling);
+    const { style, colors } = useStyle((colors) =>
+        StyleSheet.create({
+            usersContainer: {
+                paddingTop: 10,
+                paddingBottom: 20,
+                gap: 10
+            },
+            emptyText: {
+                color: colors.text,
+                textAlign: "center"
+            }
+        })
+    );
     const { server } = useServer();
     const { fabVisible, onScroll } = useFabVisible();
     const { showSuccess } = useToast();
@@ -90,18 +101,4 @@ export default function UsersScreen() {
             )}
         </>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        usersContainer: {
-            paddingTop: 10,
-            paddingBottom: 20,
-            gap: 10
-        },
-        emptyText: {
-            color: colors.text,
-            textAlign: "center"
-        }
-    });
 }

@@ -10,7 +10,6 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import { useServer } from "@/context/ServerProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { UserPermissionsView } from "pufferpanel";
 
 const perms = [
@@ -44,7 +43,15 @@ const perms = [
 
 export default function EditUserScreen() {
     const { t, i18n } = useTranslation();
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            text: {
+                color: colors.text,
+                fontSize: 20,
+                marginBottom: 5
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const { server } = useServer();
     const { showSuccess } = useToast();
@@ -138,14 +145,4 @@ export default function EditUserScreen() {
             )}
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        text: {
-            color: colors.text,
-            fontSize: 20,
-            marginBottom: 5
-        }
-    });
 }

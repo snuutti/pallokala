@@ -3,7 +3,6 @@ import { router } from "expo-router";
 import { Image } from "expo-image";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { ExtendedServerView } from "@/types/server";
 
 const icons: Record<string, string> = {
@@ -28,7 +27,43 @@ type ServerListItemProps = {
 };
 
 export default function ServerListItem(props: ServerListItemProps) {
-    const { style, colors } = useStyle(styling);
+    const { style, colors } = useStyle((colors) =>
+        StyleSheet.create({
+            server: {
+                height: 70,
+                padding: 15,
+                flexDirection: "row",
+                backgroundColor: colors.background,
+                marginHorizontal: 10,
+                borderRadius: 15
+            },
+            infoView: {
+                flexGrow: 1,
+                flexDirection: "column",
+                justifyContent: "center"
+            },
+            name: {
+                color: colors.text
+            },
+            node: {
+                color: colors.textDisabled
+            },
+            iconView: {
+                minWidth: 20,
+            },
+            iconImage: {
+                height: "100%",
+                width: 40
+            },
+            statusIcon: {
+                position: "absolute",
+                top: 0,
+                right: 0,
+                backgroundColor: colors.background,
+                borderRadius: 12
+            }
+        })
+    );
 
     const getServerAddress = () => {
         let ip = props.server.node?.publicHost;
@@ -95,42 +130,4 @@ export default function ServerListItem(props: ServerListItemProps) {
             </View>
         </TouchableOpacity>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        server: {
-            height: 70,
-            padding: 15,
-            flexDirection: "row",
-            backgroundColor: colors.background,
-            marginHorizontal: 10,
-            borderRadius: 15
-        },
-        infoView: {
-            flexGrow: 1,
-            flexDirection: "column",
-            justifyContent: "center"
-        },
-        name: {
-            color: colors.text
-        },
-        node: {
-            color: colors.textDisabled
-        },
-        iconView: {
-            minWidth: 20,
-        },
-        iconImage: {
-            height: "100%",
-            width: 40
-        },
-        statusIcon: {
-            position: "absolute",
-            top: 0,
-            right: 0,
-            backgroundColor: colors.background,
-            borderRadius: 12
-        }
-    });
 }

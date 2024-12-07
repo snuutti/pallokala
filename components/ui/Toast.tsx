@@ -10,7 +10,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 export type ToastType = "success" | "error";
 
@@ -23,7 +22,28 @@ type ToastProps = {
 };
 
 export default function Toast(props: ToastProps) {
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            container: {
+                backgroundColor: colors.background,
+                padding: 10,
+                borderRadius: 5,
+                borderTopWidth: 5,
+                marginBottom: 10,
+                elevation: 5
+            },
+            success: {
+                borderTopColor: colors.success
+            },
+            error: {
+                borderTopColor: colors.error
+            },
+            message: {
+                color: colors.text,
+                fontSize: 16
+            }
+        })
+    );
     const translateX = useSharedValue(0);
     const translateY = useSharedValue(0);
     const opacity = useSharedValue(0);
@@ -87,27 +107,4 @@ export default function Toast(props: ToastProps) {
             </Animated.View>
         </GestureDetector>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        container: {
-            backgroundColor: colors.background,
-            padding: 10,
-            borderRadius: 5,
-            borderTopWidth: 5,
-            marginBottom: 10,
-            elevation: 5
-        },
-        success: {
-            borderTopColor: colors.success
-        },
-        error: {
-            borderTopColor: colors.error
-        },
-        message: {
-            color: colors.text,
-            fontSize: 16
-        }
-    });
 }

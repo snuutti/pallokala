@@ -7,7 +7,6 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { Account } from "@/types/account";
 
 export type SwitchServerModalRef = {
@@ -15,7 +14,48 @@ export type SwitchServerModalRef = {
 };
 
 export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
-    const { style, colors } = useStyle(styling);
+    const { style, colors } = useStyle((colors) =>
+        StyleSheet.create({
+            background: {
+                backgroundColor: colors.backdrop
+            },
+            handle: {
+                backgroundColor: colors.background
+            },
+            content: {
+                gap: 10
+            },
+            item: {
+                height: 70,
+                padding: 15,
+                flexDirection: "row",
+                backgroundColor: colors.background,
+                marginHorizontal: 10,
+                borderRadius: 15
+            },
+            itemActive: {
+                backgroundColor: colors.primaryHover
+            },
+            itemAdd: {
+                marginBottom: 10
+            },
+            infoView: {
+                flexGrow: 1,
+                flexShrink: 1,
+                flexDirection: "column",
+                justifyContent: "center"
+            },
+            address: {
+                color: colors.text
+            },
+            user: {
+                color: colors.textDisabled
+            },
+            actionsView: {
+                justifyContent: "center"
+            }
+        })
+    );
     const { createAlertModal } = useModal();
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
     const { accounts, activeAccount, changeAccount, deleteAccount } = useAccount();
@@ -110,46 +150,3 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
         </BottomSheetModal>
     );
 });
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        background: {
-            backgroundColor: colors.backdrop
-        },
-        handle: {
-            backgroundColor: colors.background
-        },
-        content: {
-            gap: 10
-        },
-        item: {
-            height: 70,
-            padding: 15,
-            flexDirection: "row",
-            backgroundColor: colors.background,
-            marginHorizontal: 10,
-            borderRadius: 15
-        },
-        itemActive: {
-            backgroundColor: colors.primaryHover
-        },
-        itemAdd: {
-            marginBottom: 10
-        },
-        infoView: {
-            flexGrow: 1,
-            flexShrink: 1,
-            flexDirection: "column",
-            justifyContent: "center"
-        },
-        address: {
-            color: colors.text
-        },
-        user: {
-            color: colors.textDisabled
-        },
-        actionsView: {
-            justifyContent: "center"
-        }
-    });
-}

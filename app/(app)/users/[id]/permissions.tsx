@@ -9,7 +9,6 @@ import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 const scopes = {
     general: [
@@ -47,7 +46,14 @@ const scopes = {
 
 export default function PermissionScreen() {
     const { t, i18n } = useTranslation();
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            header: {
+                color: colors.text,
+                fontSize: 16
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -158,13 +164,4 @@ export default function PermissionScreen() {
             )}
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        header: {
-            color: colors.text,
-            fontSize: 16
-        }
-    });
 }

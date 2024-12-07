@@ -14,12 +14,45 @@ import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
-import { Colors } from "@/constants/Colors";
 import { Node, NodeFeatures } from "pufferpanel";
 
 export default function NodeScreen() {
     const { t } = useTranslation();
-    const { style, colors } = useStyle(styling);
+    const { style, colors } = useStyle((colors) =>
+        StyleSheet.create({
+            header: {
+                marginBottom: 10,
+                color: colors.text,
+                fontSize: 16
+            },
+            text: {
+                flexShrink: 1,
+                color: colors.text
+            },
+            statusLoading: {
+                marginBottom: 10
+            },
+            statusContainer: {
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 10
+            },
+            statusIcon: {
+                marginRight: 5
+            },
+            features: {
+                marginBottom: 10
+            },
+            feature: {
+                flexDirection: "row"
+            },
+            featureName: {
+                flex: 1,
+                color: colors.text,
+                fontWeight: "bold"
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
@@ -219,40 +252,4 @@ export default function NodeScreen() {
             )}
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        header: {
-            marginBottom: 10,
-            color: colors.text,
-            fontSize: 16
-        },
-        text: {
-            flexShrink: 1,
-            color: colors.text
-        },
-        statusLoading: {
-            marginBottom: 10
-        },
-        statusContainer: {
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 10
-        },
-        statusIcon: {
-            marginRight: 5
-        },
-        features: {
-            marginBottom: 10
-        },
-        feature: {
-            flexDirection: "row"
-        },
-        featureName: {
-            flex: 1,
-            color: colors.text,
-            fontWeight: "bold"
-        }
-    });
 }

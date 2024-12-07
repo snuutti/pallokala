@@ -7,12 +7,37 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import TextInput from "@/components/ui/TextInput";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { ServerView, User, Node } from "pufferpanel";
 
 export default function SearchScreen() {
     const { t } = useTranslation();
-    const { style, colors } = useStyle(styling);
+    const { style, colors } = useStyle((colors) =>
+        StyleSheet.create({
+            loading: {
+                marginTop: 5
+            },
+            header: {
+                color: colors.text,
+                fontSize: 20,
+                marginTop: 5
+            },
+            item: {
+                padding: 15,
+                flexGrow: 1,
+                flexDirection: "column",
+                justifyContent: "center",
+                backgroundColor: colors.background,
+                marginVertical: 5,
+                borderRadius: 15
+            },
+            title: {
+                color: colors.text
+            },
+            subline: {
+                color: colors.textDisabled
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const [servers, setServers] = useState<ServerView[]>([]);
     const [users, setUsers] = useState<User[]>([]);
@@ -171,7 +196,33 @@ type SearchItemProps = {
 };
 
 function SearchItem(props: SearchItemProps) {
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            loading: {
+                marginTop: 5
+            },
+            header: {
+                color: colors.text,
+                fontSize: 20,
+                marginTop: 5
+            },
+            item: {
+                padding: 15,
+                flexGrow: 1,
+                flexDirection: "column",
+                justifyContent: "center",
+                backgroundColor: colors.background,
+                marginVertical: 5,
+                borderRadius: 15
+            },
+            title: {
+                color: colors.text
+            },
+            subline: {
+                color: colors.textDisabled
+            }
+        })
+    );
 
     return (
         <TouchableOpacity style={style.item} onPress={props.onPress}>
@@ -179,32 +230,4 @@ function SearchItem(props: SearchItemProps) {
             <Text style={style.subline} numberOfLines={1}>{props.subline}</Text>
         </TouchableOpacity>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        loading: {
-            marginTop: 5
-        },
-        header: {
-            color: colors.text,
-            fontSize: 20,
-            marginTop: 5
-        },
-        item: {
-            padding: 15,
-            flexGrow: 1,
-            flexDirection: "column",
-            justifyContent: "center",
-            backgroundColor: colors.background,
-            marginVertical: 5,
-            borderRadius: 15
-        },
-        title: {
-            color: colors.text
-        },
-        subline: {
-            color: colors.textDisabled
-        }
-    });
 }

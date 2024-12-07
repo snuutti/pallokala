@@ -8,10 +8,16 @@ import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { getType, skipDownload } from "@/utils/files";
-import { Colors } from "@/constants/Colors";
 
 export default function EditFileScreen() {
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            container: {
+                flex: 1,
+                backgroundColor: colors.background
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
     const { server, openFile, fileContent, setFileContent } = useServer();
@@ -60,13 +66,4 @@ export default function EditFileScreen() {
             }}
         />
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        container: {
-            flex: 1,
-            backgroundColor: colors.background
-        }
-    });
 }

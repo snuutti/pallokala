@@ -11,12 +11,24 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { OAuthClient } from "pufferpanel";
 
 export default function OAuthScreen() {
     const { t } = useTranslation();
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            text: {
+                color: colors.text
+            },
+            link: {
+                color: colors.primary
+            },
+            clients: {
+                marginVertical: 20,
+                gap: 5
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
     const { createAlertModal, createPromptModal } = useModal();
@@ -121,19 +133,4 @@ export default function OAuthScreen() {
             />
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        text: {
-            color: colors.text
-        },
-        link: {
-            color: colors.primary
-        },
-        clients: {
-            marginVertical: 20,
-            gap: 5
-        }
-    });
 }

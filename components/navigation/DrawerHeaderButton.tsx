@@ -12,7 +12,13 @@ import { useBoundStore } from "@/stores/useBoundStore";
 
 export default function DrawerHeaderButton() {
     const { t } = useTranslation();
-    const { style, colors } = useStyle(styling);
+    const { style, colors } = useStyle(() =>
+        StyleSheet.create({
+            searchIcon: {
+                marginHorizontal: 11
+            }
+        })
+    );
     const { server } = useServer();
     const { createPromptModal } = useModal();
     const modifyServer = useBoundStore(state => state.modifyServer);
@@ -109,12 +115,4 @@ export default function DrawerHeaderButton() {
             </DropdownMenu.Content>
         </DropdownMenu.Root>
     );
-}
-
-function styling() {
-    return StyleSheet.create({
-        searchIcon: {
-            marginHorizontal: 11
-        }
-    });
 }

@@ -3,7 +3,6 @@ import { Text, StyleSheet } from "react-native";
 import Button from "@/components/ui/Button";
 import { useModal, ModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 export type DropdownItem = {
     value: string;
@@ -20,7 +19,22 @@ export type DropdownProps = {
 };
 
 export default function Dropdown(props: DropdownProps) {
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            label: {
+                color: colors.text,
+                marginHorizontal: 16,
+                marginTop: 5,
+                alignSelf: "flex-start"
+            },
+            description: {
+                color: colors.textDisabled,
+                marginHorizontal: 16,
+                marginBottom: 5,
+                alignSelf: "flex-start"
+            }
+        })
+    );
     const { createListModal } = useModal();
 
     const activeOptions = useMemo(() => {
@@ -59,21 +73,4 @@ export default function Dropdown(props: DropdownProps) {
             )}
         </>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        label: {
-            color: colors.text,
-            marginHorizontal: 16,
-            marginTop: 5,
-            alignSelf: "flex-start"
-        },
-        description: {
-            color: colors.textDisabled,
-            marginHorizontal: 16,
-            marginBottom: 5,
-            alignSelf: "flex-start"
-        }
-    });
 }

@@ -1,6 +1,5 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { Template } from "pufferpanel";
 
 type TemplatesListItemProps = {
@@ -8,7 +7,27 @@ type TemplatesListItemProps = {
 };
 
 export default function TemplatesListItem(props: TemplatesListItemProps) {
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            template: {
+                height: 70,
+                padding: 15,
+                flexGrow: 1,
+                flexDirection: "column",
+                justifyContent: "center",
+                backgroundColor: colors.background,
+                marginHorizontal: 10,
+                marginVertical: 5,
+                borderRadius: 15
+            },
+            display: {
+                color: colors.text
+            },
+            type: {
+                color: colors.textDisabled
+            }
+        })
+    );
 
     const onPress = () => {
         // TODO
@@ -20,26 +39,4 @@ export default function TemplatesListItem(props: TemplatesListItemProps) {
             <Text style={style.type} numberOfLines={1}>{props.template.type}</Text>
         </TouchableOpacity>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        template: {
-            height: 70,
-            padding: 15,
-            flexGrow: 1,
-            flexDirection: "column",
-            justifyContent: "center",
-            backgroundColor: colors.background,
-            marginHorizontal: 10,
-            marginVertical: 5,
-            borderRadius: 15
-        },
-        display: {
-            color: colors.text
-        },
-        type: {
-            color: colors.textDisabled
-        }
-    });
 }

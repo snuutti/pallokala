@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import ProgressBar from "@/components/ui/ProgressBar";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 export type UploadFile = {
     uri: string;
@@ -26,7 +25,26 @@ type UploadProgressModalProps = {
 
 export default function UploadProgressModal(props: UploadProgressModalProps) {
     const { t } = useTranslation();
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            container: {
+                justifyContent: "center",
+                alignItems: "center"
+            },
+            title: {
+                color: colors.text,
+                fontSize: 20,
+                fontWeight: "bold",
+                marginBottom: 10
+            },
+            body: {
+                color: colors.text,
+                fontSize: 16,
+                marginBottom: 20,
+                alignSelf: "flex-start"
+            }
+        })
+    );
     const [state, setState] = useState<UploadState>(props.state);
     const currentRef = useRef(0);
 
@@ -74,25 +92,4 @@ export default function UploadProgressModal(props: UploadProgressModalProps) {
             />
         </View>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        container: {
-            justifyContent: "center",
-            alignItems: "center"
-        },
-        title: {
-            color: colors.text,
-            fontSize: 20,
-            fontWeight: "bold",
-            marginBottom: 10
-        },
-        body: {
-            color: colors.text,
-            fontSize: 16,
-            marginBottom: 20,
-            alignSelf: "flex-start"
-        }
-    });
 }

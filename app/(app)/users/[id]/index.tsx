@@ -14,7 +14,6 @@ import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
-import { Colors } from "@/constants/Colors";
 import { User } from "pufferpanel";
 
 const schema = z.object({
@@ -33,7 +32,14 @@ const defaultValues = {
 
 export default function UserDetailsScreen() {
     const { t } = useTranslation();
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            text: {
+                color: colors.text,
+                marginVertical: 5
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
@@ -173,13 +179,4 @@ export default function UserDetailsScreen() {
             )}
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        text: {
-            color: colors.text,
-            marginVertical: 5
-        }
-    });
 }

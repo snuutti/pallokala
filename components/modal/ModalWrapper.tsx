@@ -4,7 +4,6 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming, withSpring, run
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useStyle } from "@/hooks/useStyle";
 import useBackHandler from "@/hooks/useBackHandler";
-import { Colors } from "@/constants/Colors";
 
 type ModalWrapperProps = {
     id: string;
@@ -14,7 +13,38 @@ type ModalWrapperProps = {
 };
 
 export default function ModalWrapper(props: ModalWrapperProps) {
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            overlay: {
+                flex: 1,
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                justifyContent: "center",
+                alignItems: "center",
+                position: "absolute",
+                width: "100%",
+                height: "100%"
+            },
+            modalWrapper: {
+                width: "80%",
+                maxWidth: 400,
+                maxHeight: "80%"
+            },
+            modal: {
+                maxHeight: "100%",
+                backgroundColor: colors.backdrop,
+                padding: 20,
+                borderRadius: 16,
+                shadowColor: "#000",
+                shadowOffset: {
+                    width: 0,
+                    height: 2
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5
+            }
+        })
+    );
     const opacity = useSharedValue(0);
     const scale = useSharedValue(0);
     const modalOpacity = useSharedValue(0);
@@ -77,37 +107,4 @@ export default function ModalWrapper(props: ModalWrapperProps) {
             </Animated.View>
         </TouchableWithoutFeedback>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        overlay: {
-            flex: 1,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "absolute",
-            width: "100%",
-            height: "100%"
-        },
-        modalWrapper: {
-            width: "80%",
-            maxWidth: 400,
-            maxHeight: "80%"
-        },
-        modal: {
-            maxHeight: "100%",
-            backgroundColor: colors.backdrop,
-            padding: 20,
-            borderRadius: 16,
-            shadowColor: "#000",
-            shadowOffset: {
-                width: 0,
-                height: 2
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5
-        }
-    });
 }

@@ -14,7 +14,6 @@ import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 import { OtpEnrollResponse } from "pufferpanel";
 
 const schema = z.object({
@@ -29,7 +28,20 @@ const defaultValues = {
 
 export default function EnrollTwoFactorScreen() {
     const { t } = useTranslation();
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            qrCode: {
+                width: "100%",
+                aspectRatio: 1
+            },
+            header: {
+                color: colors.text,
+                fontSize: 16,
+                textAlign: "center",
+                marginVertical: 5
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
@@ -90,19 +102,4 @@ export default function EnrollTwoFactorScreen() {
             />
         </ContentWrapper>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        qrCode: {
-            width: "100%",
-            aspectRatio: 1
-        },
-        header: {
-            color: colors.text,
-            fontSize: 16,
-            textAlign: "center",
-            marginVertical: 5
-        }
-    });
 }

@@ -4,7 +4,6 @@ import TextInput from "@/components/ui/TextInput";
 import Button from "@/components/ui/Button";
 import { PromptModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Colors } from "@/constants/Colors";
 
 type PromptModalProps = {
     title?: string;
@@ -15,7 +14,24 @@ type PromptModalProps = {
 };
 
 export default function PromptModal(props: PromptModalProps) {
-    const { style } = useStyle(styling);
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            container: {
+                justifyContent: "center",
+                alignItems: "center"
+            },
+            title: {
+                color: colors.text,
+                fontSize: 20,
+                fontWeight: "bold",
+                marginBottom: 10
+            },
+            buttons: {
+                width: "100%",
+                flexDirection: "column"
+            }
+        })
+    );
     const [hasSelected, setHasSelected] = useState(false);
     const [value, setValue] = useState("");
 
@@ -59,23 +75,4 @@ export default function PromptModal(props: PromptModalProps) {
             </View>
         </View>
     );
-}
-
-function styling(colors: Colors) {
-    return StyleSheet.create({
-        container: {
-            justifyContent: "center",
-            alignItems: "center"
-        },
-        title: {
-            color: colors.text,
-            fontSize: 20,
-            fontWeight: "bold",
-            marginBottom: 10
-        },
-        buttons: {
-            width: "100%",
-            flexDirection: "column"
-        }
-    });
 }
