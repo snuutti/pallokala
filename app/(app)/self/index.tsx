@@ -52,6 +52,11 @@ export default function PreferencesScreen() {
                     text: "Dark",
                     icon: "weather-night",
                     onPress: () => setColorScheme("dark")
+                },
+                {
+                    text: "AMOLED",
+                    icon: "cellphone",
+                    onPress: () => setColorScheme("amoled")
                 }
             ]
         );

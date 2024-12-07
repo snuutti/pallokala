@@ -1,6 +1,6 @@
 import { Theme as NavigationTheme } from "@react-navigation/native";
 
-export type ColorScheme = "device" | "light" | "dark";
+export type ColorScheme = "device" | "light" | "dark" | "amoled";
 
 export type Colors = {
     primary: string;
@@ -41,15 +41,30 @@ export const lightColors: Colors = {
     error: "#dc3131"
 };
 
+export const amoledColors: Colors = {
+    ...darkColors,
+    backdrop: "#000",
+    background: "#0f0f0f"
+};
+
 export function getColors(colorScheme: ColorScheme): Colors {
-    return colorScheme === "dark" ? darkColors : lightColors;
+    switch (colorScheme) {
+        case "light":
+            return lightColors;
+        case "dark":
+            return darkColors;
+        case "amoled":
+            return amoledColors;
+        default:
+            return lightColors;
+    }
 }
 
 export function getNavigationColors(colorScheme: ColorScheme): NavigationTheme {
     const colors = getColors(colorScheme);
 
     return {
-        dark: colorScheme === "dark",
+        dark: colorScheme === "dark" || colorScheme === "amoled",
         colors: {
             primary: colors.primary,
             background: colors.backdrop,
