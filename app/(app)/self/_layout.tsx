@@ -10,6 +10,17 @@ export default function SelfLayout() {
     return (
         <Tabs>
             <Tabs.Screen
+                name="index"
+                options={{
+                    title: "Preferences",
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="cog" color={color} />
+                    )
+                }}
+            />
+
+            <Tabs.Screen
                 name="account"
                 options={{
                     title: t("users:ChangeInfo"),
