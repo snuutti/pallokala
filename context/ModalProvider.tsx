@@ -4,6 +4,7 @@ import ModalWrapper from "@/components/modal/ModalWrapper";
 import AlertModal from "@/components/modal/AlertModal";
 import PromptModal from "@/components/modal/PromptModal";
 import ListModal from "@/components/modal/ListModal";
+import ColorPickerModal from "@/components/modal/ColorPickerModal";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 type ModalContextType = {
@@ -28,6 +29,12 @@ type ModalContextType = {
         closable?: boolean
     ) => string;
     createListModal: (items: ModalButton[]) => string;
+    createColorPickerModal: (
+        title?: string,
+        defaultColor?: string,
+        onColorSelected?: (color: string) => void,
+        onClose?: () => void
+    ) => string;
     closeModal: (id: string) => void;
 };
 
@@ -114,6 +121,22 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
         );
     };
 
+    const createColorPickerModal = (
+        title?: string,
+        defaultColor?: string,
+        onColorSelected?: (color: string) => void,
+        onClose?: () => void
+    ) => {
+        return createModal(
+            <ColorPickerModal
+                title={title}
+                defaultColor={defaultColor}
+                onColorSelected={onColorSelected}
+            />,
+            onClose
+        );
+    }
+
     const closeModal = (id: string) => {
         setModals((prevModals) => {
             const modal = prevModals.find((modal) => modal.id === id);
@@ -128,6 +151,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
             createAlertModal,
             createPromptModal,
             createListModal,
+            createColorPickerModal,
             closeModal
         }}>
             {children}
