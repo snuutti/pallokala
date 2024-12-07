@@ -39,17 +39,17 @@ export default function PreferencesScreen() {
         createListModal(
             [
                 {
-                    text: "System",
+                    text: t("common:theme.mode.Auto"),
                     icon: "cellphone",
                     onPress: () => setColorScheme("device")
                 },
                 {
-                    text: "Light",
+                    text: t("common:theme.mode.Light"),
                     icon: "weather-sunny",
                     onPress: () => setColorScheme("light")
                 },
                 {
-                    text: "Dark",
+                    text: t("common:theme.mode.Dark"),
                     icon: "weather-night",
                     onPress: () => setColorScheme("dark")
                 },
@@ -71,7 +71,7 @@ export default function PreferencesScreen() {
             />
 
             <Button
-                text="Theme"
+                text={t("common:theme.Theme")}
                 icon="theme-light-dark"
                 onPress={pickTheme}
             />
