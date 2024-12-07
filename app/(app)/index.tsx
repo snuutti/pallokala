@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { RefreshControl, FlatList, StyleSheet } from "react-native";
 import ServerListItem from "@/components/server/ServerListItem";
 import { useApiClient } from "@/context/ApiClientProvider";
+import useDisclaimer from "@/hooks/useDisclaimer";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { ExtendedServerStatus, ExtendedServerView } from "@/types/server";
 import { ServerView } from "pufferpanel";
@@ -23,6 +24,8 @@ export default function ServersScreen() {
         const interval = setInterval(updateServerStatuses, 5000);
         return () => clearInterval(interval);
     }, [servers]);
+
+    useDisclaimer();
 
     const loadPage = useCallback(async () => {
         setRefreshing(true);
