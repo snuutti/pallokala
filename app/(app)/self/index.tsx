@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
+import { useApiClient } from "@/context/ApiClientProvider";
+import { useToast } from "@/context/ToastProvider";
 import { useModal, ModalButton } from "@/context/ModalProvider";
 import { useColors } from "@/hooks/useStyle";
 import { useSettingsStore } from "@/stores/useSettingsStore";
@@ -9,8 +12,11 @@ import resources from "@/constants/resources";
 export default function PreferencesScreen() {
     const colors = useColors();
     const { t, i18n } = useTranslation();
-    const { createListModal } = useModal();
-    const { setLanguage, setColorScheme } = useSettingsStore();
+    const { apiClient } = useApiClient();
+    const { showSuccess } = useToast();
+    const { createListModal, createColorPickerModal } = useModal();
+    const { themeSettings, setLanguage, setColorScheme, setThemeSettings } = useSettingsStore();
+    const [baseColor, setBaseColor] = useState(themeSettings.color || colors.primary);
 
     const pickLanguage = () => {
         const items: ModalButton[] = [];
@@ -62,6 +68,19 @@ export default function PreferencesScreen() {
         );
     };
 
+    const savePreferences = async () => {
+        const settings = {
+            ...themeSettings,
+            color: baseColor
+        };
+
+        setThemeSettings(settings);
+
+        await apiClient?.settings.setUserSetting("themeSettings", JSON.stringify(settings));
+
+        showSuccess(t("users:PreferencesUpdated"));
+    };
+
     return (
         <ContentWrapper>
             <Button
@@ -74,6 +93,18 @@ export default function PreferencesScreen() {
                 text={t("common:theme.Theme")}
                 icon="theme-light-dark"
                 onPress={pickTheme}
+            />
+
+            <Button
+                text={t("common:theme.BaseColor")}
+                icon="palette"
+                onPress={() => createColorPickerModal(t("common:theme.BaseColor"), baseColor, setBaseColor)}
+            />
+
+            <Button
+                text={t("users:SavePreferences")}
+                icon="content-save"
+                onPress={savePreferences}
             />
         </ContentWrapper>
     );

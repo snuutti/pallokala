@@ -31,12 +31,14 @@ export function useColorScheme() {
 
 export function useColors() {
     const colorScheme = useColorScheme();
+    const { color } = useSettingsStore(state => state.themeSettings);
 
-    return useMemo(() => getColors(colorScheme), [colorScheme]);
+    return useMemo(() => getColors(colorScheme, color), [colorScheme, color]);
 }
 
 export function useNavigationColors() {
     const colorScheme = useColorScheme();
+    const { color } = useSettingsStore(state => state.themeSettings);
 
-    return useMemo(() => getNavigationColors(colorScheme), [colorScheme]);
+    return useMemo(() => getNavigationColors(colorScheme, color), [colorScheme, color]);
 }

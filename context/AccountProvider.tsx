@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { router } from "expo-router";
 import { useApiClient } from "@/context/ApiClientProvider";
+import { useSettingsStore } from "@/stores/useSettingsStore";
 import { resetAllStores } from "@/stores/useBoundStore";
 import {
     getAccount,
@@ -37,6 +38,7 @@ type AccountProviderProps = {
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
     const { apiClient, config, changeServer } = useApiClient();
+    const setThemeSettings = useSettingsStore(state => state.setThemeSettings);
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [activeAccount, setActiveAccount] = useState<Account | null>(null);
     const [newAccount, setNewAccount] = useState<Account | null>(null);
@@ -175,6 +177,14 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         router.replace("/");
         await setLastAccountId(account.id!);
         setUser(await apiClient.self.get());
+
+        try {
+            const settings = await apiClient.settings.getUserSettings();
+            setThemeSettings(JSON.parse(settings["themeSettings"]));
+        } catch (e) {
+            console.error("Failed to get user settings", e);
+        }
+
         await apiClient.auth.reauth();
         setNewAccount(null);
     };

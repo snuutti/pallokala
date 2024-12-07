@@ -25,6 +25,7 @@
         "@react-navigation/native": "^6.0.2",
         "@shopify/flash-list": "1.6.4",
         "anser": "^2.1.1",
+        "apca-w3": "^0.1.9",
         "expo": "~51.0.38",
         "expo-clipboard": "~6.0.3",
         "expo-constants": "~16.0.2",
@@ -73,6 +74,7 @@
     },
     "devDependencies": {
         "@babel/core": "^7.20.0",
+        "@types/apca-w3": "^0.1.3",
         "@types/jest": "^29.5.12",
         "@types/js-md5": "^0.7.2",
         "@types/react": "~18.2.45",

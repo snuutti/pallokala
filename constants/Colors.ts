@@ -1,4 +1,5 @@
 import { Theme as NavigationTheme } from "@react-navigation/native";
+import { deriveOpacity, deriveContrast } from "@/utils/theme";
 
 export type ColorScheme = "device" | "light" | "dark" | "amoled";
 
@@ -15,7 +16,7 @@ export type Colors = {
 };
 
 const primary = "#07a7e3";
-const primaryHover = "#07a7e326";
+const primaryHover = deriveOpacity(primary, 0.15);
 
 export const darkColors: Colors = {
     primary: primary,
@@ -47,21 +48,34 @@ export const amoledColors: Colors = {
     background: "#0f0f0f"
 };
 
-export function getColors(colorScheme: ColorScheme): Colors {
+export function getColors(colorScheme: ColorScheme, primaryColor?: string): Colors {
+    let colors: Colors;
     switch (colorScheme) {
         case "light":
-            return lightColors;
+            colors = lightColors;
+            break;
         case "dark":
-            return darkColors;
+            colors = darkColors;
+            break;
         case "amoled":
-            return amoledColors;
+            colors = amoledColors;
+            break;
         default:
-            return lightColors;
+            colors = lightColors;
+            break;
     }
+
+    if (primaryColor) {
+        colors.primary = primaryColor;
+        colors.primaryHover = deriveOpacity(primaryColor, 0.15);
+        colors.textPrimary = deriveContrast(primaryColor, ["#eee", "#333"], true);
+    }
+
+    return colors;
 }
 
-export function getNavigationColors(colorScheme: ColorScheme): NavigationTheme {
-    const colors = getColors(colorScheme);
+export function getNavigationColors(colorScheme: ColorScheme, primaryColor?: string): NavigationTheme {
+    const colors = getColors(colorScheme, primaryColor);
 
     return {
         dark: colorScheme === "dark" || colorScheme === "amoled",
