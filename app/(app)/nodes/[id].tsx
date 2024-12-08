@@ -73,6 +73,7 @@ export default function NodeScreen() {
         setNode(null);
         setFeatures(null);
         setFeaturesFetched(false);
+        setLoading(false);
 
         if (id === undefined) {
             return;
