@@ -19,14 +19,15 @@ export default function SFTPScreen() {
         })
     );
     const { server } = useServer();
-    const { user } = useAccount();
+    const { activeAccount, user } = useAccount();
 
     const host = useMemo(() => {
-        let host = server?.node.publicHost !== "127.0.0.1" ? server?.node.publicHost : "window";
+        let host = (server?.node.publicHost !== "127.0.0.1" && server?.node.publicHost !== "localhost")
+            ? server?.node.publicHost : activeAccount!.serverAddress;
         host = host + ":" + server?.node.sftpPort;
 
         return host;
-    }, [server]);
+    }, [server, activeAccount]);
 
     const username = useMemo(() => {
         return `${user?.email}#${server?.id}`;
