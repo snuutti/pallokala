@@ -75,7 +75,7 @@ export default function UsersScreen() {
         await server?.updateUser(newUser);
         router.push(`/(modal)/edituser?email=${email}`);
 
-        showSuccess(t("users.UserInvited"));
+        showSuccess(t("users:UserInvited"));
 
         await loadUsers();
     };
