@@ -47,7 +47,7 @@ export default function NewNodeScreen() {
             addNode({ ...node, id: id! } as Node);
 
             showSuccess(t("nodes:Created"));
-            router.push(`./${id}`);
+            router.push(`./${id}?created=true`);
         } finally {
             setLoading(false);
         }

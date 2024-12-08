@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -56,6 +56,7 @@ export default function NodeScreen() {
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
+    const { created } = useLocalSearchParams<{ created?: string }>();
     const modifyNode = useBoundStore(state => state.modifyNode);
     const removeNode = useBoundStore(state => state.removeNode);
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -70,14 +71,14 @@ export default function NodeScreen() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        if (id === undefined || node?.id === Number(id)) {
+            return;
+        }
+
         setNode(null);
         setFeatures(null);
         setFeaturesFetched(false);
         setLoading(false);
-
-        if (id === undefined) {
-            return;
-        }
 
         apiClient?.node.get(Number(id)).then((node) => {
             setValue("name", node.name || NodeDefaultValues.name);
@@ -98,11 +99,19 @@ export default function NodeScreen() {
                 sftpPort: node.sftpPort || NodeDefaultValues.sftpPort
             });
 
+            if (created) {
+                deployNode();
+            }
+
             apiClient?.node.features(Number(id))
                 .then(setFeatures)
                 .finally(() => setFeaturesFetched(true));
         });
-    }, [id]);
+    }, [id, created]);
+
+    const deployNode = useCallback(() => {
+        router.push(`/(modal)/deploynode?id=${id}&port=${getValues("private.privatePort")}&sftp=${getValues("sftpPort")}`);
+    }, [id, getValues]);
 
     const updateNode = async (data: NodeSchemaType) => {
         setLoading(true);
@@ -153,10 +162,6 @@ export default function NodeScreen() {
         removeNode(Number(id));
         showSuccess(t("nodes:Deleted"));
         router.back();
-    };
-
-    const deployNode = () => {
-        router.push(`/(modal)/deploynode?id=${id}&port=${getValues("private.privatePort")}&sftp=${getValues("sftpPort")}`);
     };
 
     if (!node || node.id !== Number(id)) {
