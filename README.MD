@@ -1,4 +1,7 @@
 # Pallokala
+
+![](banner.png)
+
 Pallokala is a mobile client for [PufferPanel](https://www.pufferpanel.com) made with React Native. 
 The UI attempts to closely mimic the PufferPanel web interface, down to the colors and icons.
 
