@@ -7,6 +7,7 @@ import * as Localization from "expo-localization";
 import Providers from "@/components/Providers";
 import RootNavigation from "@/components/navigation/RootNavigation";
 import { useSettingsStore } from "@/stores/useSettingsStore";
+import { setAppearanceColor } from "@/constants/Colors";
 import "@/constants/i18n";
 
 // Polyfill
@@ -30,7 +31,9 @@ export default function RootLayout() {
         UbuntuMonoBoldItalic: require("../assets/fonts/UbuntuMono-BI.ttf")
     });
     const savedLanguage = useSettingsStore(state => state.language);
+    const colorScheme = useSettingsStore(state => state.colorScheme);
     const [languageLoaded, setLanguageLoaded] = useState(false);
+    const [isAppearanceSet, setIsAppearanceSet] = useState(false);
 
     useEffect(() => {
         if (loaded && languageLoaded) {
@@ -45,9 +48,14 @@ export default function RootLayout() {
 
             i18n.changeLanguage(language).then(() => setLanguageLoaded(true));
         }
-    }, [loaded, languageLoaded]);
 
-    if (!loaded || !languageLoaded) {
+        if (!isAppearanceSet) {
+            setAppearanceColor(colorScheme);
+            setIsAppearanceSet(true);
+        }
+    }, [loaded, languageLoaded, isAppearanceSet]);
+
+    if (!loaded || !languageLoaded || !isAppearanceSet) {
         return null;
     }
 

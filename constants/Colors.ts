@@ -1,3 +1,4 @@
+import { Appearance } from "react-native";
 import { Theme as NavigationTheme } from "@react-navigation/native";
 import { deriveOpacity, deriveContrast } from "@/utils/theme";
 
@@ -88,4 +89,8 @@ export function getNavigationColors(colorScheme: ColorScheme, primaryColor?: str
             notification: colors.error
         }
     };
+}
+
+export function setAppearanceColor(colorScheme: ColorScheme) {
+    Appearance.setColorScheme(colorScheme === "device" ? null : colorScheme === "light" ? "light" : "dark");
 }

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ColorScheme } from "@/constants/Colors";
+import { ColorScheme, setAppearanceColor } from "@/constants/Colors";
 
 export type ThemeSettings = {
     color?: string;
@@ -26,7 +26,10 @@ export const useSettingsStore = create<SettingsStore>()(
             themeSettings: {},
             disclaimerRead: false,
             setLanguage: (language) => set({ language }),
-            setColorScheme: (colorScheme) => set({ colorScheme }),
+            setColorScheme: (colorScheme) => {
+                setAppearanceColor(colorScheme);
+                set({ colorScheme });
+            },
             setThemeSettings: (settings) => set({ themeSettings: settings }),
             setDisclaimerRead: () => set({ disclaimerRead: true })
         }),
