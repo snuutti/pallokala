@@ -5,7 +5,7 @@ import FormTextInput from "@/components/ui/form/FormTextInput";
 import FormSwitch from "@/components/ui/form/FormSwitch";
 
 export const NodeSchema = z.object({
-    name: z.string().min(1, { message: "errors:ErrFieldRequired" }),
+    name: z.string().min(1, { message: "errors:ErrFieldRequired" }).regex(/^[a-zA-Z0-9\-._~]+$/, { message: "errors:ErrFieldHasURICharacters" }),
     publicHost: z.union([z.string().url({ message: "errors:ErrFieldIsInvalidHost" }), z.string().ip({ message: "errors:ErrFieldIsInvalidHost" })]),
     publicPort: z.number().int().min(1, { message: "errors:ErrFieldNotBetween" }).max(65535, { message: "errors:ErrFieldNotBetween" }),
     private: z.discriminatedUnion("withPrivateHost", [
