@@ -15,7 +15,7 @@ export default function ProgressBar(props: ProgressBarProps) {
             container: {
                 width: "100%",
                 height: 40,
-                backgroundColor: "red",
+                backgroundColor: colors.background,
                 borderRadius: 16,
                 marginVertical: 5,
                 alignItems: "center",
