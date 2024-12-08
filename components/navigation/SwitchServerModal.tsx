@@ -45,11 +45,19 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
                 flexDirection: "column",
                 justifyContent: "center"
             },
+            userView: {
+                flexDirection: "row",
+                alignItems: "center"
+            },
             address: {
                 color: colors.text
             },
             user: {
+                flex: 1,
                 color: colors.textDisabled
+            },
+            loginMethod: {
+                marginRight: 5
             },
             actionsView: {
                 justifyContent: "center"
@@ -107,7 +115,17 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
             <TouchableOpacity style={[style.item, isActive && style.itemActive]} onPress={switchAccount} disabled={isActive}>
                 <View style={style.infoView}>
                     <Text style={style.address} numberOfLines={1}>{item.serverAddress}</Text>
-                    <Text style={style.user} numberOfLines={1}>{item.nickname}</Text>
+
+                    <View style={style.userView}>
+                        <MaterialCommunityIcons
+                            name={item.type === "oauth" ? "xml" : "email"}
+                            size={15}
+                            color={colors.textDisabled}
+                            style={style.loginMethod}
+                        />
+
+                        <Text style={style.user} numberOfLines={1}>{item.nickname}</Text>
+                    </View>
                 </View>
 
                 <TouchableOpacity style={style.actionsView} onPress={deleteAlert}>
