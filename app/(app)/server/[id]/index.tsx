@@ -157,6 +157,8 @@ export default function ConsoleScreen() {
                         style={style.commandInput}
                         placeholder={t("servers:Command")}
                         placeholderTextColor={colors.textDisabled}
+                        autoCapitalize="none"
+                        autoCorrect={false}
                         value={command}
                         onChangeText={setCommand}
                         onSubmitEditing={sendCommand}
