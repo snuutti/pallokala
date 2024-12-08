@@ -7,6 +7,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
+import useBottomSheetBackHandler from "@/hooks/useBottomSheetBackHandler";
 import { Account } from "@/types/account";
 
 export type SwitchServerModalRef = {
@@ -66,6 +67,7 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
     );
     const { createAlertModal } = useModal();
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+    const { handleSheetPositionChange } = useBottomSheetBackHandler(bottomSheetModalRef);
     const { accounts, activeAccount, changeAccount, deleteAccount } = useAccount();
 
     const snapPoints = useMemo(() => ["40%", "60%"], []);
@@ -147,6 +149,7 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
     return (
         <BottomSheetModal
             ref={bottomSheetModalRef}
+            onChange={handleSheetPositionChange}
             index={1}
             snapPoints={snapPoints}
             backdropComponent={renderBackdrop}
