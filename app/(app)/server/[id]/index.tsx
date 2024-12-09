@@ -41,7 +41,8 @@ export default function ConsoleScreen() {
             commandInput: {
                 flex: 1,
                 color: colors.text,
-                backgroundColor: colors.background
+                backgroundColor: colors.background,
+                paddingHorizontal: 5
             },
             sendButton: {
                 justifyContent: "center",
