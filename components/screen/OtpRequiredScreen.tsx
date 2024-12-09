@@ -8,6 +8,7 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useAccount } from "@/context/AccountProvider";
+import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 
 const schema = z.object({
@@ -35,6 +36,7 @@ export default function OtpRequiredScreen() {
         })
     );
     const { submitOtp } = useAccount();
+    const { present } = useSwitchServerModal();
     const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
@@ -68,6 +70,12 @@ export default function OtpRequiredScreen() {
                 text={t("users:Login")}
                 onPress={handleSubmit(onSubmit)}
                 disabled={!isValid || loading}
+            />
+
+            <Button
+                text={"Select Server"}
+                onPress={present}
+                disabled={loading}
             />
         </ContentWrapper>
     );
