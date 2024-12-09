@@ -89,6 +89,16 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
     const renderItem = useCallback(({ item }: { item: Account }) => {
         const isActive = activeAccount?.id === item.id;
 
+        const getIcon = () => {
+            if (item.serverAddress === "http://pallokala.test") {
+                return "test-tube";
+            } else if (item.type === "oauth") {
+                return "xml";
+            } else {
+                return "email";
+            }
+        };
+
         const switchAccount = async () => {
             bottomSheetModalRef.current?.dismiss();
             await changeAccount(item);
@@ -120,7 +130,7 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
 
                     <View style={style.userView}>
                         <MaterialCommunityIcons
-                            name={item.type === "oauth" ? "xml" : "email"}
+                            name={getIcon()}
                             size={15}
                             color={colors.textDisabled}
                             style={style.loginMethod}

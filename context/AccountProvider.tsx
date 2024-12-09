@@ -13,6 +13,7 @@ import {
     updateAccount
 } from "@/utils/accountStorage";
 import UnifiedSessionStore from "@/utils/sessionStore";
+import MockApiClient from "@/utils/mockApiClient";
 import { Account, OAuthAccount, EmailAccount } from "@/types/account";
 import { User, ApiClient } from "pufferpanel";
 
@@ -203,7 +204,13 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     };
 
     const addAccount = async (account: Account): Promise<[success: boolean, error?: string]> => {
-        const apiClient = new ApiClient(account.serverAddress, new UnifiedSessionStore());
+        let apiClient: ApiClient;
+        if (account.serverAddress === "http://pallokala.test") {
+            apiClient = new MockApiClient(account.serverAddress, new UnifiedSessionStore());
+        } else {
+            apiClient = new ApiClient(account.serverAddress, new UnifiedSessionStore());
+        }
+
         let success = false;
         let tryVersion = true;
 

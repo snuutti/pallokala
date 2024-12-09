@@ -58,7 +58,7 @@ declare module "pufferpanel" {
         settings: Record<string, any>;
     };
 
-    export class AuthApi {
+    export abstract class AuthApi {
         constructor(
             api: ApiClient,
             sessionStore: SessionStore
@@ -83,7 +83,7 @@ declare module "pufferpanel" {
         async logout(): Promise<void>;
     }
 
-    export class SelfApi {
+    export abstract class SelfApi {
         constructor(api: ApiClient);
 
         async get(): Promise<User>;
@@ -132,7 +132,7 @@ declare module "pufferpanel" {
         description: string;
     };
 
-    export class UserApi {
+    export abstract class UserApi {
         constructor(api: ApiClient);
 
         async list(page: number = 1): Promise<UserSearchResponse>;
@@ -173,7 +173,7 @@ declare module "pufferpanel" {
         total: number;
     };
 
-    export class NodeApi {
+    export abstract class NodeApi {
         constructor(api: ApiClient);
 
         fixNode(node: Node): Node;
@@ -217,7 +217,7 @@ declare module "pufferpanel" {
         arch: string;
     };
 
-    export class ServerApi {
+    export abstract class ServerApi {
         constructor(api: ApiClient);
 
         async create(data: ServerCreation): Promise<string>;
@@ -428,7 +428,7 @@ declare module "pufferpanel" {
         extension?: string;
     };
 
-    export class Server {
+    export abstract class Server {
         public readyState: WebSocket.CONNECTING | WebSocket.OPEN | WebSocket.CLOSING | WebSocket.CLOSED;
 
         public id: string;
@@ -543,7 +543,7 @@ declare module "pufferpanel" {
         scopes: string[];
     };
 
-    export class TemplateApi {
+    export abstract class TemplateApi {
         constructor(api: ApiClient);
 
         async listRepos(): Promise<TemplateRepo[]>;
@@ -586,7 +586,7 @@ declare module "pufferpanel" {
         templates: Template[];
     };
 
-    export class SettingsApi {
+    export abstract class SettingsApi {
         constructor(api: ApiClient);
 
         async get(key: string): Promise<string>;

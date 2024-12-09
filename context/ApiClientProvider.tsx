@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import UnifiedSessionStore from "@/utils/sessionStore";
+import MockApiClient from "@/utils/mockApiClient";
 import { ApiClient, EditableConfigSettings, ErrorHandlerResult } from "pufferpanel";
 
 type ApiClientContextType = {
@@ -51,7 +52,12 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
     }, [apiClient]);
 
     const changeServer = (url: string): ApiClient => {
-        const newApiClient = new ApiClient(url, new UnifiedSessionStore(), handleError);
+        let newApiClient: ApiClient;
+        if (url === "http://pallokala.test") {
+            newApiClient = new MockApiClient(url, new UnifiedSessionStore());
+        } else {
+            newApiClient = new ApiClient(url, new UnifiedSessionStore(), handleError);
+        }
 
         setConfig(undefined);
         setApiClient(newApiClient);
