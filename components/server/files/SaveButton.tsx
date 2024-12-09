@@ -14,7 +14,7 @@ export default function SaveButton() {
         showSuccess("File saved");
     };
 
-    if (fileContent === null) {
+    if (fileContent === null || !server?.hasScope("server.files.edit")) {
         return null;
     }
 
