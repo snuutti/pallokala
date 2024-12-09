@@ -86,6 +86,13 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
             </DrawerContentScrollView>
 
             <View style={style.actionsContainer}>
+                <TouchableOpacity style={style.action} onPress={() => router.push("/(modal)/about")}>
+                    <MaterialCommunityIcons name="information" size={22} color={colors.text} />
+                    <Text style={style.actionTextHeader}>
+                        About Pallokala
+                    </Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity style={style.action} onPress={present}>
                     <MaterialCommunityIcons name="swap-horizontal" size={22} color={colors.text} />
                     <View style={style.actionTextContainer}>
