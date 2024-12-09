@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useStyle } from "@/hooks/useStyle";
 
 export type TextInputProps = RNTextInputProps & {
+    hideLabel?: boolean; // TODO: I need to make an actual label prop instead
     error?: string;
     errorFields?: Record<string, unknown>;
     description?: string | JSX.Element | JSX.Element[];
@@ -51,7 +52,7 @@ export default function TextInput(props: TextInputProps) {
 
     return (
         <>
-            {props.placeholder && (
+            {(props.placeholder && !props.hideLabel) && (
                 <Text style={style.label}>{props.placeholder}</Text>
             )}
 

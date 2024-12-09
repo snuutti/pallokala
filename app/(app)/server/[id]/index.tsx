@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, StyleSheet } from "react-native";
+import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet } from "react-native";
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { FlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ConsoleText from "@/components/server/console/ConsoleText";
+import TextInput from "@/components/ui/TextInput";
 import { useServer } from "@/context/ServerProvider";
 import { useStyle } from "@/hooks/useStyle";
 import useAutoScroll from "@/hooks/useAutoScroll";
@@ -17,7 +18,7 @@ import { ServerLogs } from "pufferpanel";
 
 export default function ConsoleScreen() {
     const { t } = useTranslation();
-    const { style, colors } = useStyle((colors) =>
+    const { style } = useStyle(() =>
         StyleSheet.create({
             container: {
                 flex: 1,
@@ -34,19 +35,19 @@ export default function ConsoleScreen() {
                 right: 5
             },
             commandContainer: {
-                backgroundColor: colors.backdrop,
+                backgroundColor: "#000",
                 flexDirection: "row",
                 height: 50
             },
             commandInput: {
                 flex: 1,
-                color: colors.text,
-                backgroundColor: colors.background,
-                paddingHorizontal: 5
+                marginVertical: 4,
+                marginHorizontal: 4,
+                paddingVertical: 0
             },
             sendButton: {
                 justifyContent: "center",
-                paddingHorizontal: 20
+                paddingHorizontal: 10
             }
         })
     );
@@ -157,7 +158,7 @@ export default function ConsoleScreen() {
                     <TextInput
                         style={style.commandInput}
                         placeholder={t("servers:Command")}
-                        placeholderTextColor={colors.textDisabled}
+                        hideLabel={true}
                         autoCapitalize="none"
                         autoCorrect={false}
                         value={command}
@@ -166,7 +167,7 @@ export default function ConsoleScreen() {
                     />
 
                     <TouchableOpacity style={style.sendButton} onPress={sendCommand}>
-                        <MaterialCommunityIcons name="send" size={30} color={colors.text} />
+                        <MaterialCommunityIcons name="send" size={30} color="#fff" />
                     </TouchableOpacity>
                 </View>
             )}
