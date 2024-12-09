@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
+import { ErrorBoundaryProps } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import * as NavigationBar from "expo-navigation-bar";
 import * as Localization from "expo-localization";
 import Providers from "@/components/Providers";
 import RootNavigation from "@/components/navigation/RootNavigation";
+import ErrorBoundaryScreen from "@/components/screen/ErrorBoundaryScreen";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { setAppearanceColor } from "@/constants/Colors";
 import "@/constants/i18n";
@@ -64,4 +66,8 @@ export default function RootLayout() {
             <RootNavigation />
         </Providers>
     );
+}
+
+export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
+    return <ErrorBoundaryScreen error={error} retry={retry} />;
 }
