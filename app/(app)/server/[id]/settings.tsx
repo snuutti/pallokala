@@ -26,6 +26,7 @@ export default function SettingsScreen() {
     const { showSuccess } = useToast();
     const [variables, setVariables] = useState<ServerDefinition | ServerSettings | null>(null);
     const [flags, setFlags] = useState<ServerFlags | null>(null);
+    const [canGetVariables, setCanGetVariables] = useState(false);
 
     useEffect(() => {
         if (!server) {
@@ -34,8 +35,13 @@ export default function SettingsScreen() {
 
         if (server.hasScope("server.definition.view")) {
             server.getDefinition().then(setVariables);
+            setCanGetVariables(true);
         } else if (server.hasScope("server.data.view")) {
             server.getData().then(setVariables);
+            setCanGetVariables(true);
+        } else {
+            setVariables(null);
+            setCanGetVariables(false);
         }
 
         server.getFlags().then(setFlags);
@@ -98,7 +104,7 @@ export default function SettingsScreen() {
         showSuccess(t("servers:SettingsSaved"));
     };
 
-    if (!variables || !flags) {
+    if ((canGetVariables && !variables) || !flags) {
         return <LoadingScreen />;
     }
 
@@ -112,11 +118,13 @@ export default function SettingsScreen() {
 
     return (
         <ContentWrapper>
-            <Variables
-                variables={variables}
-                setVariable={setVariable}
-                disabled={!server?.hasScope("server.data.edit")}
-            />
+            {variables && (
+                <Variables
+                    variables={variables}
+                    setVariable={setVariable}
+                    disabled={!server?.hasScope("server.data.edit")}
+                />
+            )}
 
             <Text style={style.header}>{t("servers:FlagsHeader")}</Text>
 
@@ -135,6 +143,7 @@ export default function SettingsScreen() {
                 text={t("servers:SaveSettings")}
                 icon="content-save"
                 onPress={save}
+                disabled={!server?.hasScope("server.data.edit") && !server?.hasScope("server.flags.edit")}
             />
         </ContentWrapper>
     );
