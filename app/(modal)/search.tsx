@@ -20,21 +20,6 @@ export default function SearchScreen() {
                 color: colors.text,
                 fontSize: 20,
                 marginTop: 5
-            },
-            item: {
-                padding: 15,
-                flexGrow: 1,
-                flexDirection: "column",
-                justifyContent: "center",
-                backgroundColor: colors.background,
-                marginVertical: 5,
-                borderRadius: 15
-            },
-            title: {
-                color: colors.text
-            },
-            subline: {
-                color: colors.textDisabled
             }
         })
     );
@@ -198,14 +183,6 @@ type SearchItemProps = {
 function SearchItem(props: SearchItemProps) {
     const { style } = useStyle((colors) =>
         StyleSheet.create({
-            loading: {
-                marginTop: 5
-            },
-            header: {
-                color: colors.text,
-                fontSize: 20,
-                marginTop: 5
-            },
             item: {
                 padding: 15,
                 flexGrow: 1,
