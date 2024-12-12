@@ -28,7 +28,11 @@ export default function LoginErrorScreen() {
             <Text style={style.header}>Error</Text>
             <Text style={style.subheader}>Failed to login to the server.</Text>
 
-            <Button text="Select Server" onPress={present} />
+            <Button
+                text="Select Server"
+                icon="swap-horizontal"
+                onPress={present}
+            />
         </ContentWrapper>
     );
 }

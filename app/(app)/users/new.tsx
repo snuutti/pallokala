@@ -88,6 +88,7 @@ export default function NewUserScreen() {
 
             <Button
                 text={t("users:Create")}
+                icon="content-save"
                 onPress={handleSubmit(createUser)}
                 disabled={loading || !isValid}
             />

@@ -248,6 +248,7 @@ export default function NodeScreen() {
                         <Button
                             text={t("nodes:Deploy")}
                             style="neutral"
+                            icon="rocket-launch"
                             onPress={deployNode}
                             disabled={loading}
                         />

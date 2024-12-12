@@ -73,6 +73,7 @@ export default function DeployNodeScreen() {
                 <Button
                     text={t("common:Copy")}
                     style="neutral"
+                    icon="content-copy"
                     onPress={copyConfig}
                 />
             )}

@@ -128,6 +128,7 @@ export default function EmailLoginScreen() {
 
             <Button
                 text="Add Account"
+                icon="account-plus"
                 onPress={handleSubmit(logIn)}
                 disabled={!isValid || loading}
             />

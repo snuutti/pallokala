@@ -68,12 +68,14 @@ export default function OtpRequiredScreen() {
 
             <Button
                 text={t("users:Login")}
+                icon="login"
                 onPress={handleSubmit(onSubmit)}
                 disabled={!isValid || loading}
             />
 
             <Button
-                text={"Select Server"}
+                text="Select Server"
+                icon="swap-horizontal"
                 onPress={present}
                 disabled={loading}
             />
