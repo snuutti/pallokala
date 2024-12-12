@@ -45,9 +45,16 @@ export default function AboutScreen() {
 
                 <LinkItem
                     title="Report an issue"
-                    subline="https://github.com/snuutti/pallokala/issues/new"
+                    subline="(or request a feature)"
                     icon="bug"
-                    onPress={() => openLink("https://github.com/snuutti/pallokala/issues/new")}
+                    onPress={() => openLink("https://github.com/snuutti/pallokala/issues/new/choose")}
+                />
+
+                <LinkItem
+                    title="Rate on Google Play"
+                    subline="Thank you! ❤️️"
+                    icon="star"
+                    onPress={() => openLink("https://play.google.com/store/apps/details?id=io.github.snuutti.pallokala")}
                 />
             </View>
 
