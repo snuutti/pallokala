@@ -25,6 +25,9 @@ export default function Toast(props: ToastProps) {
     const { style } = useStyle((colors) =>
         StyleSheet.create({
             container: {
+                width: "100%",
+                maxWidth: 400,
+                alignSelf: "center",
                 backgroundColor: colors.background,
                 padding: 10,
                 borderRadius: 5,
