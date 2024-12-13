@@ -1,8 +1,8 @@
 import { Drawer } from "expo-router/drawer";
 import { useTranslation } from "react-i18next";
-import LoginErrorScreen from "@/components/screen/LoginErrorScreen";
+import LoginErrorScreen from "@/components/auth/LoginErrorScreen";
 import LoadingScreen from "@/components/screen/LoadingScreen";
-import OtpRequiredScreen from "@/components/screen/OtpRequiredScreen";
+import OtpRequiredScreen from "@/components/auth/OtpRequiredScreen";
 import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
 import DrawerHeaderButton from "@/components/navigation/DrawerHeaderButton";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
