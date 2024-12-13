@@ -25,7 +25,10 @@ export default function AdminScreen() {
                     style: "danger",
                     onPress: deleteServer
                 },
-                { text: t("common:Cancel") },
+                {
+                    text: t("common:Cancel"),
+                    icon: "close"
+                },
             ]
         );
     };

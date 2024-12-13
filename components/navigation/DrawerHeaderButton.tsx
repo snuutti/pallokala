@@ -52,7 +52,11 @@ export default function DrawerHeaderButton() {
                     style: "success",
                     onPress: updateServerName
                 },
-                { text: t("common:Cancel") }
+                {
+                    text: t("common:Cancel"),
+                    icon: "close",
+                    style: "danger"
+                }
             ]
         );
     };

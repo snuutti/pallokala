@@ -59,7 +59,10 @@ export default function UsersScreen() {
                     style: "success",
                     onPress: inviteUser
                 },
-                { text: t("common:Cancel") }
+                {
+                    text: t("common:Cancel"),
+                    icon: "close"
+                }
             ]
         );
     };

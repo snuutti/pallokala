@@ -100,7 +100,10 @@ export default function UserDetailsScreen() {
                     style: "danger",
                     onPress: deleteUser
                 },
-                { text: t("common:Cancel") }
+                {
+                    text: t("common:Cancel"),
+                    icon: "close"
+                }
             ]
         );
     };

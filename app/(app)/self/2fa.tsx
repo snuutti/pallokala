@@ -62,7 +62,8 @@ export default function TwoFactorAuthScreen() {
                     }
                 },
                 {
-                    text: t("common:Cancel")
+                    text: t("common:Cancel"),
+                    icon: "close"
                 }
             ]
         );

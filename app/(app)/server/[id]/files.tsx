@@ -160,7 +160,10 @@ export default function FilesScreen() {
                     style: "danger",
                     onPress: () => deleteConfirm(file)
                 },
-                { text: t("common:Cancel") }
+                {
+                    text: t("common:Cancel"),
+                    icon: "close"
+                }
             ]
         );
     };
@@ -291,7 +294,10 @@ export default function FilesScreen() {
                                     style: "success",
                                     onPress: createFile
                                 },
-                                { text: t("common:Cancel") }
+                                {
+                                    text: t("common:Cancel"),
+                                    icon: "close"
+                                }
                             ]
                         );
                     }
@@ -311,7 +317,10 @@ export default function FilesScreen() {
                                     style: "success",
                                     onPress: createFolder
                                 },
-                                { text: t("common:Cancel") }
+                                {
+                                    text: t("common:Cancel"),
+                                    icon: "close"
+                                }
                             ]
                         );
                     }

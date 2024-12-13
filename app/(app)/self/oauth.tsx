@@ -60,7 +60,10 @@ export default function OAuthScreen() {
                     style: "danger",
                     onPress: () => deleteClient(client)
                 },
-                { text: t("common:Cancel") }
+                {
+                    text: t("common:Cancel"),
+                    icon: "close"
+                }
             ]
         );
     };
@@ -79,6 +82,7 @@ export default function OAuthScreen() {
             [
                 {
                     text: t("common:Next"),
+                    icon: "check",
                     onPress: (name) => {
                         createPromptModal(
                             t("oauth:Create"),
@@ -90,12 +94,18 @@ export default function OAuthScreen() {
                                     icon: "content-save",
                                     onPress: (description) => createClient(name, description)
                                 },
-                                { text: t("common:Cancel") }
+                                {
+                                    text: t("common:Cancel"),
+                                    icon: "close"
+                                }
                             ]
                         );
                     }
                 },
-                { text: t("common:Cancel") }
+                {
+                    text: t("common:Cancel"),
+                    icon: "close"
+                }
             ]
         );
     };
