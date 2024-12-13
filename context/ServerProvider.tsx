@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useApiClient } from "@/context/ApiClientProvider";
+import { useToast } from "@/context/ToastProvider";
 import { Server } from "pufferpanel";
 import { ExtendedFileDesc } from "@/types/server";
 
@@ -11,6 +12,9 @@ type ServerContextType = {
     setOpenFile: (file: ExtendedFileDesc) => void;
     fileContent: string | null;
     setFileContent: (content: string | null) => void;
+    isOriginalFileContent: boolean;
+    setFileContentInitial: (content: string | null) => void;
+    saveFile: () => void;
     switchServer: (id: string) => void;
 };
 
@@ -22,11 +26,13 @@ type ServerProviderProps = {
 
 export const ServerProvider = ({ children }: ServerProviderProps) => {
     const { apiClient } = useApiClient();
+    const { showSuccess } = useToast();
     const [server, setServer] = useState<Server | undefined>(undefined);
     const [id, setId] = useState<string | undefined>(undefined);
     const [error, setError] = useState(false);
     const [openFile, setOpenFile] = useState<ExtendedFileDesc | undefined>(undefined);
     const [fileContent, setFileContent] = useState<string | null>(null);
+    const [originalFileContent, setOriginalFileContent] = useState<string | null>(null);
 
     useEffect(() => {
         return () => {
@@ -36,6 +42,19 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
             setServer(undefined);
         };
     }, []);
+
+    const isOriginalFileContent = fileContent === originalFileContent;
+
+    const setFileContentInitial = (content: string | null) => {
+        setFileContent(content);
+        setOriginalFileContent(content);
+    };
+
+    const saveFile = async () => {
+        await server?.uploadFile(openFile!.path, fileContent!);
+        setOriginalFileContent(fileContent);
+        showSuccess("File saved");
+    };
 
     const switchServer = (id: string) => {
         setError(false);
@@ -56,7 +75,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     };
 
     return (
-        <ServerContext.Provider value={{ server, id, error, openFile, setOpenFile, fileContent, setFileContent, switchServer }}>
+        <ServerContext.Provider value={{ server, id, error, openFile, setOpenFile, fileContent, setFileContent, isOriginalFileContent, setFileContentInitial, saveFile, switchServer }}>
             {children}
         </ServerContext.Provider>
     );
