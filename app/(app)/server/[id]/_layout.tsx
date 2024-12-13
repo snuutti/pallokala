@@ -2,17 +2,22 @@ import { useEffect } from "react";
 import { Tabs, useLocalSearchParams } from "expo-router";
 import { useTranslation } from "react-i18next";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
+import ServerErrorScreen from "@/components/server/ServerErrorScreen";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import { useServer } from "@/context/ServerProvider";
 
 export default function TabsLayout() {
     const { t } = useTranslation();
-    const { server, switchServer } = useServer();
+    const { server, error, switchServer } = useServer();
     const { id } = useLocalSearchParams<{ id: string }>();
 
     useEffect(() => {
         switchServer(id);
     }, [id]);
+
+    if (error) {
+        return <ServerErrorScreen />;
+    }
 
     if (!server || server.id !== id) {
         return <LoadingScreen />;

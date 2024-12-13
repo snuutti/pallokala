@@ -6,6 +6,7 @@ import { ExtendedFileDesc } from "@/types/server";
 type ServerContextType = {
     server?: Server;
     id?: string;
+    error: boolean;
     openFile?: ExtendedFileDesc;
     setOpenFile: (file: ExtendedFileDesc) => void;
     fileContent: string | null;
@@ -23,6 +24,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     const { apiClient } = useApiClient();
     const [server, setServer] = useState<Server | undefined>(undefined);
     const [id, setId] = useState<string | undefined>(undefined);
+    const [error, setError] = useState(false);
     const [openFile, setOpenFile] = useState<ExtendedFileDesc | undefined>(undefined);
     const [fileContent, setFileContent] = useState<string | null>(null);
 
@@ -36,6 +38,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     }, []);
 
     const switchServer = (id: string) => {
+        setError(false);
         setId(id);
 
         if (server) {
@@ -46,11 +49,14 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
         console.log("Switching to server", id);
         apiClient!.server.get(id)
             .then((server) => setServer(server as Server))
-            .catch(console.error); // TODO: proper error handling
+            .catch((e) => {
+                console.error("Error switching server", e);
+                setError(true);
+            });
     };
 
     return (
-        <ServerContext.Provider value={{ server, id, openFile, setOpenFile, fileContent, setFileContent, switchServer }}>
+        <ServerContext.Provider value={{ server, id, error, openFile, setOpenFile, fileContent, setFileContent, switchServer }}>
             {children}
         </ServerContext.Provider>
     );
