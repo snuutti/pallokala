@@ -38,6 +38,7 @@ export default function ServerListItem(props: ServerListItemProps) {
                 borderRadius: 15
             },
             infoView: {
+                flex: 1,
                 flexGrow: 1,
                 flexDirection: "column",
                 justifyContent: "center"
