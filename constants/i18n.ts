@@ -6,7 +6,6 @@ i18n
     .use(initReactI18next)
     .init({
         fallbackLng: "en_US",
-        compatibilityJSON: "v3",
         resources,
         ns: ["common", "env", "errors", "files", "hotkeys", "nodes", "oauth", "operators", "scopes", "servers", "settings", "templates", "users"],
         defaultNS: "common",
