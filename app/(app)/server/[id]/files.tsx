@@ -83,15 +83,31 @@ export default function FilesScreen() {
         setRefreshing(true);
 
         if (file.isFile) {
-            // TODO: file size warn
             const openFile: ExtendedFileDesc = {
                 ...file,
                 path: getCurrentPath() + "/" + file.name
             };
 
-            setOpenFile(openFile);
-            setFileContent(null);
-            router.push(`/(modal)/editfile`);
+            if (file.size! >= 30 * Math.pow(2, 20)) {
+                createAlertModal(
+                    t("files:OpenLargeFile"),
+                    "",
+                    [
+                        {
+                            text: t("files:OpenAnyways"),
+                            icon: "check",
+                            onPress: () => editFile(openFile)
+                        },
+                        {
+                            text: t("common:Cancel"),
+                            icon: "close",
+                            style: "danger"
+                        }
+                    ]
+                );
+            } else {
+                editFile(openFile);
+            }
         } else {
             let pathString: string;
             if (file.name === "..") {
@@ -111,6 +127,12 @@ export default function FilesScreen() {
 
         setRefreshing(false);
     }, [server, getCurrentPath, currentPath]);
+
+    const editFile = (file: ExtendedFileDesc) => {
+        setOpenFile(file);
+        setFileContent(null);
+        router.push("/(modal)/editfile");
+    };
 
     const onDownload = async (file: FileDesc) => {
         const filePath = server!.getFileUrl(getCurrentPath() + "/" + file.name);
