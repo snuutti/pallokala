@@ -46,7 +46,7 @@ export default function TabsLayout() {
                         <NavigationIcon name="chart-line" color={color} />
                     )
                 }}
-                redirect={true || !server.hasScope("server.stats")} // TODO: hidden while WIP
+                redirect={!server.hasScope("server.stats")}
             />
 
             <Tabs.Screen
