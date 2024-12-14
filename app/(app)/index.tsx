@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { RefreshControl, FlatList, StyleSheet } from "react-native";
+import { RefreshControl, StyleSheet } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import ServerListItem from "@/components/server/ServerListItem";
 import { useApiClient } from "@/context/ApiClientProvider";
 import useDisclaimer from "@/hooks/useDisclaimer";
@@ -90,12 +91,13 @@ export default function ServersScreen() {
     }, [servers]);
 
     return (
-        <FlatList
+        <FlashList
             data={servers}
             keyExtractor={(item) => item.id!}
             renderItem={({ item }) => (
                 <ServerListItem server={item} />
             )}
+            estimatedItemSize={77}
             contentContainerStyle={style.serversContainer}
             refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={loadPage} />
