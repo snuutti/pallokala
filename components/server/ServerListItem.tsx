@@ -35,6 +35,7 @@ export default function ServerListItem(props: ServerListItemProps) {
                 flexDirection: "row",
                 backgroundColor: colors.background,
                 marginHorizontal: 10,
+                marginVertical: 5,
                 borderRadius: 15
             },
             infoView: {

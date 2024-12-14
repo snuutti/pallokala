@@ -97,7 +97,7 @@ export default function ServersScreen() {
             renderItem={({ item }) => (
                 <ServerListItem server={item} />
             )}
-            estimatedItemSize={77}
+            estimatedItemSize={85}
             contentContainerStyle={style.serversContainer}
             refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={loadPage} />
@@ -109,9 +109,8 @@ export default function ServersScreen() {
 function styling() {
     return StyleSheet.create({
         serversContainer: {
-            paddingTop: 10,
-            paddingBottom: 20,
-            gap: 10
+            paddingTop: 5,
+            paddingBottom: 20
         }
     });
 }
