@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UploadProgressModal, { UploadFile, UploadState } from "@/components/server/files/UploadProgressModal";
 import FileItem from "@/components/server/files/FileItem";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useModal } from "@/context/ModalProvider";
 import { useApiClient } from "@/context/ApiClientProvider";
@@ -127,6 +128,19 @@ export default function FilesScreen() {
 
         setRefreshing(false);
     }, [server, getCurrentPath, currentPath]);
+
+    const navigateTo = useCallback(async (index: number) => {
+        setRefreshing(true);
+
+        const newPath = currentPath.slice(0, index + 1);
+        setCurrentPath(newPath);
+
+        const pathString = newPath.map(e => e.name).join("/");
+        const res = await server!.getFile(pathString) as FileDesc[];
+        setFiles(res.sort(sortFiles));
+        setFabVisible(true);
+        setRefreshing(false);
+    }, [server, currentPath]);
 
     const editFile = (file: ExtendedFileDesc) => {
         setOpenFile(file);
@@ -350,6 +364,12 @@ export default function FilesScreen() {
                     <RefreshControl refreshing={refreshing} onRefresh={refresh} />
                 }
                 onScroll={onScroll}
+                ListHeaderComponent={
+                    <Breadcrumb
+                        path={currentPath.map(e => e.name)}
+                        onNavigate={navigateTo}
+                    />
+                }
             />
 
             {canEdit && (
