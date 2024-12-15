@@ -1,14 +1,27 @@
 import { useState } from "react";
+import { Text, StyleSheet } from "react-native";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import StepProgress from "@/components/ui/StepProgress";
 import Environment from "@/components/server/creation/Environment";
 import SelectTemplate from "@/components/server/creation/SelectTemplate";
 import Settings from "@/components/server/creation/Settings";
 import { useApiClient } from "@/context/ApiClientProvider";
+import { useStyle } from "@/hooks/useStyle";
 import { Template, ServerSettings, MetadataType, ServerCreation } from "pufferpanel";
 
 export default function CreateServerScreen() {
+    const { t } = useTranslation();
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            missingPermissions: {
+                color: colors.text,
+                fontSize: 16,
+                textAlign: "center"
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const [step, setStep] = useState<"environment" | "template" | "settings">("environment");
     const [name, setName] = useState("");
@@ -60,6 +73,14 @@ export default function CreateServerScreen() {
         router.navigate(`/server/${id}`);
         // TODO: add to store
     };
+
+    if (!apiClient?.auth.hasScope("nodes.view") || !apiClient?.auth.hasScope("templates.view")) {
+        return (
+            <ContentWrapper>
+                <Text style={style.missingPermissions}>{t("servers:CreateMissingPermissions")}</Text>
+            </ContentWrapper>
+        );
+    }
 
     return (
         <ContentWrapper>
