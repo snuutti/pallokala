@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { RefreshControl, FlatList, StyleSheet } from "react-native";
+import { RefreshControl, StyleSheet } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import NodeListItem from "@/components/nodes/NodeListItem";
@@ -30,10 +31,11 @@ export default function NodesScreen() {
 
     return (
         <>
-            <FlatList
+            <FlashList
                 data={nodes}
                 keyExtractor={node => String(node.id)}
                 renderItem={({ item }) => <NodeListItem node={item} />}
+                estimatedItemSize={85}
                 contentContainerStyle={style.nodesContainer}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={loadNodes} />
@@ -53,9 +55,8 @@ export default function NodesScreen() {
 function styling() {
     return StyleSheet.create({
         nodesContainer: {
-            paddingTop: 10,
-            paddingBottom: 20,
-            gap: 10
+            paddingTop: 5,
+            paddingBottom: 20
         }
     });
 }

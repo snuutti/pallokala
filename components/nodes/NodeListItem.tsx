@@ -18,6 +18,7 @@ export default function NodeListItem(props: NodeListItemProps) {
                 justifyContent: "center",
                 backgroundColor: colors.background,
                 marginHorizontal: 10,
+                marginVertical: 5,
                 borderRadius: 15
             },
             name: {

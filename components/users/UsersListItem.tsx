@@ -19,6 +19,7 @@ export default function UsersListItem(props: UsersListItemProps) {
                 flexDirection: "row",
                 backgroundColor: colors.background,
                 marginHorizontal: 10,
+                marginVertical: 5,
                 borderRadius: 15
             },
             avatarView: {

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { RefreshControl, FlatList, Text, StyleSheet } from "react-native";
+import { RefreshControl, Text, StyleSheet } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -16,9 +17,8 @@ export default function UsersScreen() {
     const { style, colors } = useStyle((colors) =>
         StyleSheet.create({
             usersContainer: {
-                paddingTop: 10,
-                paddingBottom: 20,
-                gap: 10
+                paddingTop: 5,
+                paddingBottom: 20
             },
             emptyText: {
                 color: colors.text,
@@ -85,10 +85,11 @@ export default function UsersScreen() {
 
     return (
         <>
-            <FlatList
+            <FlashList
                 data={users}
                 keyExtractor={user => user.email}
                 renderItem={({ item }) => <UsersListItem user={item} />}
+                estimatedItemSize={90}
                 contentContainerStyle={style.usersContainer}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={loadUsers} />
