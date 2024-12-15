@@ -4,6 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 import FormTextInput from "@/components/ui/form/FormTextInput";
+import FormMultiSelect from "@/components/ui/form/FormMultiSelect";
 import FormDropdown from "@/components/ui/form/FormDropdown";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
@@ -107,6 +108,11 @@ export default function Environment(props: EnvironmentProps) {
         }
     }, []);
 
+    const fetchUsers = async (query: string) => {
+        const res = await apiClient?.user.search(query);
+        return res?.map(user => user.username!) ?? [];
+    };
+
     const saveEnvironment = (data: Schema) => {
         props.next(data.name, data.node, nodeFeatures!.os, nodeFeatures!.arch, data.environment, data.users);
     };
@@ -120,12 +126,11 @@ export default function Environment(props: EnvironmentProps) {
                 error={errors.name?.message}
             />
 
-            {/* TODO: Need a multiselect component */}
-            <FormTextInput
+            <FormMultiSelect
                 control={control}
                 name="users"
-                placeholder={t("users:Users")}
-                editable={false}
+                label={t("users:Users")}
+                options={fetchUsers}
                 error={errors.users?.message}
             />
 
