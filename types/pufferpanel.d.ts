@@ -293,6 +293,12 @@ declare module "pufferpanel" {
         async delete(id: string): Promise<boolean>;
     }
 
+    export type ServerCreation = ServerDefinition & {
+        node: number;
+        users: string[];
+        name: string;
+    };
+
     export type ServerSearchResponse = Metadata & {
         servers: ServerView[];
     };

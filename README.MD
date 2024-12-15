@@ -18,7 +18,6 @@ The code is messy in some places. I'm doing this as a hobby for fun, and writing
 
 ## Missing features
 
-- Server creation
 - Template management
 - I'm sure there are some other small features that I've missed (Let me know!)
 

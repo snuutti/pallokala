@@ -1,15 +1,21 @@
 import { useState, useEffect, useCallback } from "react";
 import { RefreshControl, StyleSheet } from "react-native";
 import { FlashList } from "@shopify/flash-list";
+import { router } from "expo-router";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ServerListItem from "@/components/server/ServerListItem";
+import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useApiClient } from "@/context/ApiClientProvider";
 import useDisclaimer from "@/hooks/useDisclaimer";
+import { useColors } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { ExtendedServerStatus, ExtendedServerView } from "@/types/server";
 import { ServerView } from "pufferpanel";
 
 export default function ServersScreen() {
+    const colors = useColors();
     const { apiClient } = useApiClient();
+    const { fabVisible, onScroll } = useFabVisible();
     const servers = useBoundStore(state => state.servers);
     const setServers = useBoundStore(state => state.setServers);
     const setServerStatus = useBoundStore(state => state.setServerStatus);
@@ -91,18 +97,27 @@ export default function ServersScreen() {
     }, [servers]);
 
     return (
-        <FlashList
-            data={servers}
-            keyExtractor={(item) => item.id!}
-            renderItem={({ item }) => (
-                <ServerListItem server={item} />
+        <>
+            <FlashList
+                data={servers}
+                keyExtractor={(item) => item.id!}
+                renderItem={({ item }) => (
+                    <ServerListItem server={item} />
+                )}
+                estimatedItemSize={85}
+                contentContainerStyle={style.serversContainer}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={loadPage} />
+                }
+                onScroll={onScroll}
+            />
+
+            {apiClient?.auth.hasScope("server.create") && (
+                <FloatingActionButton visible={fabVisible} onPress={() => router.push("/(modal)/createserver")} safeArea={true}>
+                    <MaterialCommunityIcons name="plus" size={30} color={colors.textPrimary} />
+                </FloatingActionButton>
             )}
-            estimatedItemSize={85}
-            contentContainerStyle={style.serversContainer}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={loadPage} />
-            }
-        />
+        </>
     );
 }
 

@@ -118,6 +118,16 @@ function patchServersJs() {
         return;
     }
 
+    const expoCryptoIndex = lines.findIndex(line => line.startsWith("import * as Crypto from 'expo-crypto'"));
+    if (expoCryptoIndex === -1) {
+        lines.unshift("import * as Crypto from 'expo-crypto'");
+    }
+
+    const cryptoIndex = lines.findIndex(line => line.startsWith("    const c = (crypto || {}).getRandomValues ? crypto : ((crypto || {}).webcrypto || {}).getRandomValues ? crypto.webcrypto.getRandomValues : undefined"));
+    if (cryptoIndex !== -1) {
+        lines[cryptoIndex] = "    const c = Crypto";
+    }
+
     const socketIndex = lines.findIndex(line => line.startsWith("    this._socket = new WebSocket"));
     if (socketIndex !== -1) {
         lines[socketIndex] = "    this._socket = new WebSocket(`${protocol}://${host}/api/servers/${this.id}/socket`, null, { headers: this._api._enhanceHeaders({}) })";

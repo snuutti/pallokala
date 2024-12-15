@@ -45,6 +45,15 @@ export default function RootNavigation() {
             />
 
             <Stack.Screen
+                name="(modal)/createserver"
+                options={{
+                    title: t("servers:Create"),
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
                 name="(modal)/editfile"
                 options={{
                     title: openFile?.name || "Edit File",
