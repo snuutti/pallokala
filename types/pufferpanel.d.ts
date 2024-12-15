@@ -368,7 +368,7 @@ declare module "pufferpanel" {
     };
 
     export type MetadataType = {
-        [key: string]: boolean;
+        [key: string]: unknown;
         type?: string;
     };
 
