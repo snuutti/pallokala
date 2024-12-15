@@ -137,9 +137,9 @@ declare module "pufferpanel" {
 
         async list(page: number = 1): Promise<UserSearchResponse>;
 
-        async search(name: string, limit: number): Promise<User[]>;
+        async search(name: string, limit?: number): Promise<User[]>;
 
-        async searchEmail(email: string, limit: number): Promise<User[]>;
+        async searchEmail(email: string, limit?: number): Promise<User[]>;
 
         async create(username: string, email: string, password: string): Promise<number>;
 
