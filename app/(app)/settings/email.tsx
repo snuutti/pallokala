@@ -107,7 +107,7 @@ export default function EmailSettingScreen() {
             <Dropdown
                 options={emailProviders}
                 value={emailProvider}
-                onChange={setEmailProvider}
+                onChange={(value) => setEmailProvider(value as string)}
                 label={t("settings:EmailProvider")}
             />
 
