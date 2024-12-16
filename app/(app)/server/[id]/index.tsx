@@ -56,6 +56,7 @@ export default function ConsoleScreen() {
     const { listRef, isAtBottom, listMounted, handleScroll, handleContentSizeChange, goToBottom } = useAutoScroll<string>({ data: lines });
     const chevronVisible = useSharedValue(0);
     const [initialScroll, setInitialScroll] = useState(true);
+    const [hasGotItems, setHasGotItems] = useState(false);
     const [unbindEvent, setUnbindEvent] = useState<(() => void) | undefined>(undefined);
     const [task, setTask] = useState<NodeJS.Timeout | undefined>(undefined);
     const [lastMessageTime, setLastMessageTime] = useState(0);
@@ -85,11 +86,11 @@ export default function ConsoleScreen() {
     }, [server]);
 
     useEffect(() => {
-        if (initialScroll && listMounted) {
+        if (initialScroll && listMounted && hasGotItems) {
             goToBottom();
             setInitialScroll(false);
         }
-    }, [initialScroll, listMounted]);
+    }, [initialScroll, listMounted, hasGotItems]);
 
     useDerivedValue(() => {
         chevronVisible.value = isAtBottom ? 0 : 1;
@@ -116,6 +117,7 @@ export default function ConsoleScreen() {
         }
 
         setLines((lines) => [...lines, ...newLines]);
+        setHasGotItems(true);
     };
 
     const clearConsole = () => {
