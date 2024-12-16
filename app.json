@@ -2,7 +2,7 @@
     "expo": {
         "name": "Pallokala for PufferPanel",
         "slug": "pallokala",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "orientation": "portrait",
         "icon": "./assets/images/icon.png",
         "scheme": "pallokala",
@@ -24,7 +24,8 @@
                 "foregroundImage": "./assets/images/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
             },
-            "package": "io.github.snuutti.pallokala"
+            "package": "io.github.snuutti.pallokala",
+            "versionCode": 2
         },
         "androidNavigationBar": {
             "barStyle": "light-content",
