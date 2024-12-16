@@ -153,9 +153,7 @@ export default function FilesScreen() {
         const url = activeAccount!.serverAddress + filePath;
 
         const { uri } = await FileSystem.downloadAsync(url, FileSystem.cacheDirectory + file.name, {
-            headers: {
-                "Authorization": `Bearer ${apiClient!.auth.getToken()}`
-            }
+            headers: apiClient!._enhanceHeaders()
         });
 
         await Sharing.shareAsync(uri, {

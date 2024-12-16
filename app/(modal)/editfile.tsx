@@ -69,9 +69,7 @@ export default function EditFileScreen() {
             <Image
                 source={{
                     uri: `${activeAccount!.serverAddress}${server?.getFileUrl(openFile?.path)}`,
-                    headers: {
-                        "Authorization": `Bearer ${apiClient!.auth.getToken()}`
-                    }
+                    headers: apiClient!._enhanceHeaders()
                 }}
                 style={style.container}
                 contentFit="contain"

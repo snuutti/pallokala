@@ -18,6 +18,8 @@ declare module "pufferpanel" {
             axios?: AxiosInstance = ax.create()
         );
 
+        _enhanceHeaders(headers?: Record<string, string>): Record<string, string>;
+
         async head(url: string, params?: any, headers?: any, options?: any): Promise<any>;
 
         async get(url: string, params?: any, headers?: any, options?: any): Promise<any>;
