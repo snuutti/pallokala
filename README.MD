@@ -19,6 +19,7 @@ The code is messy in some places. I'm doing this as a hobby for fun, and writing
 ## Missing features
 
 - Template management
+- Themes (Ability to modify the stylesheets, won't be added anytime soon if ever)
 - I'm sure there are some other small features that I've missed (Let me know!)
 
 Yes, that's really it. Everything else is implemented.
