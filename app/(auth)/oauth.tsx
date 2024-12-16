@@ -16,7 +16,8 @@ import { OAuthAccount } from "@/types/account";
 import { ErrorHandlerResult } from "pufferpanel";
 
 const schema = z.object({
-    address: z.string().url({ message: "errors:ErrFieldIsInvalidHost" }),
+    address: z.string().url({ message: "errors:ErrFieldIsInvalidHost" })
+        .refine(val => !val.endsWith("/") && !val.includes(" "), { message: "errors:ErrFieldIsInvalidHost" }),
     id: z.string().uuid({ message: "Invalid client ID" }),
     secret: z.string().length(48, { message: "Invalid client secret" })
 });
