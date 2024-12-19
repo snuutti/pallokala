@@ -57,6 +57,7 @@ export default function Environment(props: EnvironmentProps) {
 
             if (nodes.length === 1) {
                 setValue("node", nodes[0].id, { shouldValidate: true });
+                nodeChanged(nodes[0].id);
             }
         });
     }, []);
