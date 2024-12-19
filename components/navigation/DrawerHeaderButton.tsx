@@ -43,8 +43,11 @@ export default function DrawerHeaderButton() {
 
         createPromptModal(
             t("servers:EditName"),
-            t("servers:Name"),
-            "default",
+            {
+                defaultValue: server.name,
+                placeholder: t("servers:Name"),
+                inputType: "default"
+            },
             [
                 {
                     text: t("common:Save"),

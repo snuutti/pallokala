@@ -77,8 +77,10 @@ export default function OAuthScreen() {
     const createAlert = () => {
         createPromptModal(
             t("oauth:Create"),
-            t("common:Name"),
-            "default",
+            {
+                placeholder: t("oauth:Name"),
+                inputType: "default"
+            },
             [
                 {
                     text: t("common:Next"),
@@ -86,8 +88,10 @@ export default function OAuthScreen() {
                     onPress: (name) => {
                         createPromptModal(
                             t("oauth:Create"),
-                            t("common:Description"),
-                            "default",
+                            {
+                                placeholder: t("common:Description"),
+                                inputType: "default"
+                            },
                             [
                                 {
                                     text: t("oauth:Create"),

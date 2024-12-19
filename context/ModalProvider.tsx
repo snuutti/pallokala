@@ -1,8 +1,7 @@
 import { createContext, useContext, useState, ReactNode, ComponentProps } from "react";
-import { KeyboardTypeOptions } from "react-native";
 import ModalWrapper from "@/components/modal/ModalWrapper";
 import AlertModal from "@/components/modal/AlertModal";
-import PromptModal from "@/components/modal/PromptModal";
+import PromptModal, { PromptModalOptions } from "@/components/modal/PromptModal";
 import ListModal from "@/components/modal/ListModal";
 import ColorPickerModal from "@/components/modal/ColorPickerModal";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -22,8 +21,7 @@ type ModalContextType = {
     ) => string;
     createPromptModal: (
         title?: string,
-        placeholder?: string,
-        inputType?: KeyboardTypeOptions,
+        options?: PromptModalOptions,
         buttons?: PromptModalButton[],
         onClose?: () => void,
         closable?: boolean
@@ -95,8 +93,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
 
     const createPromptModal = (
         title?: string,
-        placeholder?: string,
-        inputType?: KeyboardTypeOptions,
+        options?: PromptModalOptions,
         buttons?: PromptModalButton[],
         onClose?: () => void,
         closable?: boolean
@@ -104,8 +101,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
         return createModal(
             <PromptModal
                 title={title}
-                placeholder={placeholder}
-                inputType={inputType}
+                options={options}
                 buttons={buttons}
             />,
             onClose,

@@ -50,8 +50,10 @@ export default function UsersScreen() {
     const createAlert = () => {
         createPromptModal(
             t("servers:InviteUser"),
-            t("users:Email"),
-            "email-address",
+            {
+                placeholder: t("users:Email"),
+                inputType: "email-address"
+            },
             [
                 {
                     text: t("servers:InviteUser"),

@@ -5,10 +5,15 @@ import Button from "@/components/ui/Button";
 import { PromptModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 
-type PromptModalProps = {
-    title?: string;
+export type PromptModalOptions = {
+    defaultValue?: string;
     placeholder?: string;
     inputType?: KeyboardTypeOptions;
+};
+
+type PromptModalProps = {
+    title?: string;
+    options?: PromptModalOptions;
     buttons?: PromptModalButton[];
     handleClose?: () => void;
 };
@@ -33,7 +38,7 @@ export default function PromptModal(props: PromptModalProps) {
         })
     );
     const [hasSelected, setHasSelected] = useState(false);
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState(props.options?.defaultValue || "");
 
     const onButtonPressed = (button: PromptModalButton) => {
         if (hasSelected) {
@@ -54,9 +59,9 @@ export default function PromptModal(props: PromptModalProps) {
             <TextInput
                 defaultValue={value}
                 onChangeText={setValue}
-                placeholder={props.placeholder}
+                placeholder={props.options?.placeholder}
                 autoCapitalize="none"
-                keyboardType={props.inputType}
+                keyboardType={props.options?.inputType}
                 editable={!hasSelected}
                 autoFocus={true}
             />

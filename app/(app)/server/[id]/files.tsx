@@ -297,8 +297,10 @@ export default function FilesScreen() {
                     onPress: () => {
                         createPromptModal(
                             t("files:CreateFile"),
-                            t("common:Name"),
-                            "default",
+                            {
+                                placeholder: t("common:Name"),
+                                inputType: "default"
+                            },
                             [
                                 {
                                     text: t("files:CreateFile"),
@@ -320,8 +322,10 @@ export default function FilesScreen() {
                     onPress: () => {
                         createPromptModal(
                             t("files:CreateFolder"),
-                            t("common:Name"),
-                            "default",
+                            {
+                                placeholder: t("common:Name"),
+                                inputType: "default"
+                            },
                             [
                                 {
                                     text: t("files:CreateFolder"),

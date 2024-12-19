@@ -43,8 +43,10 @@ export default function TwoFactorAuthScreen() {
     const confirmDisableOtp = () => {
         createPromptModal(
             t("users:OtpDisable"),
-            t("users:OtpConfirm"),
-            "number-pad",
+            {
+                placeholder: t("users:OtpConfirm"),
+                inputType: "number-pad"
+            },
             [
                 {
                     text: t("users:OtpDisable"),
