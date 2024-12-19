@@ -1,16 +1,24 @@
 import { useState } from "react";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useModal, ModalButton } from "@/context/ModalProvider";
-import { useColors } from "@/hooks/useStyle";
+import { useStyle } from "@/hooks/useStyle";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import resources from "@/constants/resources";
 
 export default function PreferencesScreen() {
-    const colors = useColors();
+    const { style, colors } = useStyle((colors) =>
+        StyleSheet.create({
+            link: {
+                color: colors.primary
+            }
+        })
+    );
     const { t, i18n } = useTranslation();
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
@@ -39,6 +47,10 @@ export default function PreferencesScreen() {
         }
 
         createListModal(items);
+    };
+
+    const openCrowdin = async () => {
+        await WebBrowser.openBrowserAsync("https://translate.pufferpanel.com");
     };
 
     const pickTheme = () => {
@@ -88,6 +100,10 @@ export default function PreferencesScreen() {
                 icon="translate"
                 onPress={pickLanguage}
             />
+
+            <TouchableOpacity onPress={openCrowdin}>
+                <Text style={style.link}>{t("common:HelpTranslate")}</Text>
+            </TouchableOpacity>
 
             <Button
                 text={t("common:theme.Theme")}
