@@ -37,6 +37,10 @@ export default function Settings(props: SettingsProps) {
         setEnvironment(props.template.supportedEnvironments!.filter(env => env.type === props.environment)[0]);
     }, [props.template]);
 
+    const anySettings = useMemo(() => {
+        return Object.keys(variables?.data || {}).length > 0;
+    }, [variables]);
+
     const canSubmit = useMemo(() => {
         if (!variables) {
             return false;
@@ -87,7 +91,7 @@ export default function Settings(props: SettingsProps) {
                 />
             )}
 
-            {variables && (
+            {(variables && anySettings) && (
                 <Variables
                     variables={variables}
                     setVariable={setVariable}
@@ -95,7 +99,7 @@ export default function Settings(props: SettingsProps) {
                 />
             )}
 
-            {Object.keys(variables?.data || {}).length === 0 && (
+            {!anySettings && (
                 <Text style={style.noSettingsText}>{t("servers:NoSettings")}</Text>
             )}
 
