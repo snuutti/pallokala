@@ -102,7 +102,9 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
 
         let body = error.request.data;
         if (body) {
-            body = JSON.stringify(JSON.parse(body), getPrivateInfoReplacer(), 2);
+            try {
+                body = JSON.stringify(JSON.parse(body), getPrivateInfoReplacer(), 2);
+            } catch (e) { }
         }
 
         const details = `${statusMessage}\n\nEndpoint: ${error.request.method} ${error.request.url}\n\n${body ? "Request Body: " + body : ""}`;
