@@ -35,6 +35,7 @@ export default function AdminScreen() {
 
     const deleteServer = async () => {
         await server?.delete();
+        server?.closeSocket();
         removeServer(server!.id);
         showSuccess(t("servers:Deleted"));
 
