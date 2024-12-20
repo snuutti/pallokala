@@ -14,6 +14,7 @@ import {
 } from "@/utils/accountStorage";
 import UnifiedSessionStore from "@/utils/sessionStore";
 import MockApiClient from "@/utils/mockApiClient";
+import { getPrivateInfoReplacer } from "@/utils/json";
 import { Account, OAuthAccount, EmailAccount } from "@/types/account";
 import { User, ApiClient } from "pufferpanel";
 
@@ -100,7 +101,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
         if (lastAccountId !== null) {
             account = await getAccount(lastAccountId);
-            console.log("Last account found", account);
+            console.log("Last account found", JSON.stringify(account, getPrivateInfoReplacer()));
         }
 
         if (account === null) {
@@ -112,7 +113,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
             }
 
             account = accounts[0];
-            console.log("Using first account", account);
+            console.log("Using first account", JSON.stringify(account, getPrivateInfoReplacer()));
         }
 
         if (account === null) {
@@ -125,7 +126,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     };
 
     const changeAccount = async (account: Account) => {
-        console.log("Switching to account", account);
+        console.log("Switching to account", JSON.stringify(account, getPrivateInfoReplacer()));
         setLoading(true);
         setError(false);
         setActiveAccount(null);

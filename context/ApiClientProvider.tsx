@@ -4,6 +4,7 @@ import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import UnifiedSessionStore from "@/utils/sessionStore";
 import MockApiClient from "@/utils/mockApiClient";
+import { getPrivateInfoReplacer } from "@/utils/json";
 import { ApiClient, EditableConfigSettings, ErrorHandlerResult } from "pufferpanel";
 
 type ApiClientContextType = {
@@ -80,42 +81,6 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
     }, [apiClient]);
 
     const showErrorDetails = (error: ErrorHandlerResult) => {
-        const getCircularReplacer = () => {
-            const seen = new WeakSet();
-            return (key: string, value: any) => {
-                if (key === "password") {
-                    return "[password]";
-                }
-
-                if (typeof value === "string") {
-                    try {
-                        const json = JSON.parse(value);
-                        if (typeof json === "object" && json !== null) {
-                            if (Object.keys(json).indexOf("password") !== -1) {
-                                json.password = "[password]";
-                            }
-
-                            return JSON.stringify(json);
-                        } else {
-                            return value;
-                        }
-                    } catch {
-                        return value;
-                    }
-                }
-
-                if (typeof value === "object" && value !== null) {
-                    if (seen.has(value)) {
-                        return;
-                    }
-
-                    seen.add(value);
-                }
-
-                return value;
-            };
-        };
-
         let statusMessage = `${error.status} ${error.statusText}`;
         switch (error.status) {
             case 401:
@@ -137,7 +102,7 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
 
         let body = error.request.data;
         if (body) {
-            body = JSON.stringify(JSON.parse(body), getCircularReplacer(), 2);
+            body = JSON.stringify(JSON.parse(body), getPrivateInfoReplacer(), 2);
         }
 
         const details = `${statusMessage}\n\nEndpoint: ${error.request.method} ${error.request.url}\n\n${body ? "Request Body: " + body : ""}`;
