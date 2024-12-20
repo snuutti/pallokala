@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useApiClient } from "@/context/ApiClientProvider";
+import { useAccount } from "@/context/AccountProvider";
 import { useToast } from "@/context/ToastProvider";
 import { Server } from "pufferpanel";
 import { ExtendedFileDesc } from "@/types/server";
@@ -26,6 +27,7 @@ type ServerProviderProps = {
 
 export const ServerProvider = ({ children }: ServerProviderProps) => {
     const { apiClient } = useApiClient();
+    const { activeAccount } = useAccount();
     const { showSuccess } = useToast();
     const [server, setServer] = useState<Server | undefined>(undefined);
     const [id, setId] = useState<string | undefined>(undefined);
@@ -36,12 +38,20 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
 
     useEffect(() => {
         return () => {
-            // TODO: make this happen when switching account
             console.log("ServerProvider unmounting, closing socket");
             server?.closeSocket();
             setServer(undefined);
         };
     }, []);
+
+    useEffect(() => {
+        console.log("Account changed, closing socket");
+
+        server?.closeSocket();
+
+        setId(undefined);
+        setServer(undefined);
+    }, [activeAccount]);
 
     const isOriginalFileContent = fileContent === originalFileContent;
 
