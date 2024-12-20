@@ -9,7 +9,8 @@ import SelectTemplate from "@/components/server/creation/SelectTemplate";
 import Settings from "@/components/server/creation/Settings";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { Template, ServerSettings, MetadataType, ServerCreation } from "pufferpanel";
+import { useBoundStore } from "@/stores/useBoundStore";
+import { Template, ServerSettings, MetadataType, ServerCreation, ServerData } from "pufferpanel";
 
 export default function CreateServerScreen() {
     const { t } = useTranslation();
@@ -23,6 +24,7 @@ export default function CreateServerScreen() {
         })
     );
     const { apiClient } = useApiClient();
+    const addServer = useBoundStore(state => state.addServer);
     const [step, setStep] = useState<"environment" | "template" | "settings">("environment");
     const [name, setName] = useState("");
     const [node, setNode] = useState(0);
@@ -70,8 +72,11 @@ export default function CreateServerScreen() {
         }
 
         const id = await apiClient?.server.create(request);
+
+        const data = await apiClient?.server.get(id!, false) as ServerData;
+        addServer({ ...data.server, online: "offline" });
+
         router.navigate(`/server/${id}`);
-        // TODO: add to store
     };
 
     if (!apiClient?.auth.hasScope("nodes.view") || !apiClient?.auth.hasScope("templates.view")) {
