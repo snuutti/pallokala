@@ -44,7 +44,7 @@ export default function SelectTemplate(props: SelectTemplateProps) {
         })
     );
     const { apiClient } = useApiClient();
-    const { createAlertModal } = useModal();
+    const { createMarkdownAlertModal } = useModal();
     const [data, setData] = useState<(string | ExtendedTemplate)[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -113,9 +113,9 @@ export default function SelectTemplate(props: SelectTemplateProps) {
         }
 
         if (templateData.readme) {
-            createAlertModal(
-                "",
-                templateData.readme, // TODO: markdown modal
+            createMarkdownAlertModal(
+                templateData.display,
+                templateData.readme,
                 [
                     {
                         text: t("servers:SelectThisTemplate"),
