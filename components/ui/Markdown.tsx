@@ -9,10 +9,28 @@ export type MarkdownProps = {
 export default function Markdown(props: MarkdownProps) {
     const { style } = useStyle((colors) =>
         StyleSheet.create({
+            heading1: {
+                color: colors.text
+            },
             heading2: {
                 color: colors.text
             },
             heading3: {
+                color: colors.text
+            },
+            heading4: {
+                color: colors.text
+            },
+            heading5: {
+                color: colors.text
+            },
+            heading6: {
+                color: colors.text
+            },
+            bullet_list: {
+                color: colors.text
+            },
+            ordered_list: {
                 color: colors.text
             },
             paragraph: {
