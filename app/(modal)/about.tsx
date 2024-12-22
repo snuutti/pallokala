@@ -1,6 +1,7 @@
 import { ComponentProps } from "react";
-import { Image } from "expo-image";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
+import { Image } from "expo-image";
 import * as Linking from "expo-linking";
 import * as Application from "expo-application";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -55,6 +56,13 @@ export default function AboutScreen() {
                     subline="Thank you! ❤️️"
                     icon="star"
                     onPress={() => openLink("https://play.google.com/store/apps/details?id=io.github.snuutti.pallokala")}
+                />
+
+                <LinkItem
+                    title="Changelog"
+                    subline={`What's new in ${Application.nativeApplicationVersion}?`}
+                    icon="history"
+                    onPress={() => router.push("/(modal)/changelog")}
                 />
             </View>
 

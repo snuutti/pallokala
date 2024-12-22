@@ -36,6 +36,15 @@ export default function RootNavigation() {
             />
 
             <Stack.Screen
+                name="(modal)/changelog"
+                options={{
+                    title: "Changelog",
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
                 name="(modal)/search"
                 options={{
                     title: "Search",
