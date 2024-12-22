@@ -9,29 +9,25 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 type ModalContextType = {
     createModal: (
         content: ReactNode,
-        onClose?: () => void,
-        closable?: boolean
+        options?: ModalOptions
     ) => string;
     createAlertModal: (
         title?: string,
         message?: string,
         buttons?: ModalButton[],
-        onClose?: () => void,
-        closable?: boolean
+        options?: ModalOptions
     ) => string;
     createPromptModal: (
         title?: string,
-        options?: PromptModalOptions,
-        buttons?: PromptModalButton[],
-        onClose?: () => void,
-        closable?: boolean
+        options?: PromptModalOptions & ModalOptions,
+        buttons?: PromptModalButton[]
     ) => string;
     createListModal: (items: ModalButton[]) => string;
     createColorPickerModal: (
         title?: string,
         defaultColor?: string,
         onColorSelected?: (color: string) => void,
-        onClose?: () => void
+        options?: ModalOptions
     ) => string;
     closeModal: (id: string) => void;
 };
@@ -44,9 +40,13 @@ type ModalProviderProps = {
 
 type ModalItem = {
     id: string;
-    closable?: boolean;
     content: ReactNode;
+    options: ModalOptions;
+};
+
+export type ModalOptions = {
     onClose?: () => void;
+    closable?: boolean;
 };
 
 export type ModalButton = {
@@ -65,11 +65,10 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
 
     const createModal = (
         content: ReactNode,
-        onClose?: () => void,
-        closable = true
+        options: ModalOptions = {}
     ) => {
         const id = Math.random().toString(36);
-        setModals((prevModals) => [...prevModals, { id, closable, content, onClose }]);
+        setModals((prevModals) => [...prevModals, { id, content, options }]);
         return id;
     };
 
@@ -77,8 +76,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
         title?: string,
         message?: string,
         buttons?: ModalButton[],
-        onClose?: () => void,
-        closable?: boolean
+        options?: ModalOptions
     ) => {
         return createModal(
             <AlertModal
@@ -86,17 +84,14 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
                 message={message}
                 buttons={buttons}
             />,
-            onClose,
-            closable
+            options
         );
     };
 
     const createPromptModal = (
         title?: string,
-        options?: PromptModalOptions,
-        buttons?: PromptModalButton[],
-        onClose?: () => void,
-        closable?: boolean
+        options?: PromptModalOptions & ModalOptions,
+        buttons?: PromptModalButton[]
     ) => {
         return createModal(
             <PromptModal
@@ -104,8 +99,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
                 options={options}
                 buttons={buttons}
             />,
-            onClose,
-            closable
+            options
         );
     };
 
@@ -121,7 +115,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
         title?: string,
         defaultColor?: string,
         onColorSelected?: (color: string) => void,
-        onClose?: () => void
+        options?: ModalOptions
     ) => {
         return createModal(
             <ColorPickerModal
@@ -129,14 +123,14 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
                 defaultColor={defaultColor}
                 onColorSelected={onColorSelected}
             />,
-            onClose
+            options
         );
     }
 
     const closeModal = (id: string) => {
         setModals((prevModals) => {
             const modal = prevModals.find((modal) => modal.id === id);
-            modal?.onClose?.();
+            modal?.options.onClose?.();
             return prevModals.filter((modal) => modal.id !== id);
         });
     };
@@ -155,7 +149,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
                 <ModalWrapper
                     key={modal.id}
                     id={modal.id}
-                    closable={modal.closable}
+                    closable={modal?.options.closable}
                     content={modal.content}
                     closeModal={closeModal}
                 />

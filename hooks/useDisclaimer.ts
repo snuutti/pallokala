@@ -21,8 +21,9 @@ export default function useDisclaimer() {
                     onPress: () => setDisclaimerRead()
                 }
             ],
-            () => {},
-            false
+            {
+                closable: false
+            }
         );
 
     }, [disclaimerRead]);

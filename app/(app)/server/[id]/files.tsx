@@ -254,8 +254,10 @@ export default function FilesScreen() {
                 state={newUploadState}
                 uploadFile={onUploadFile}
             />,
-            async () => await refresh(),
-            false
+            {
+                onClose: async () => await refresh(),
+                closable: false
+            }
         );
     };
 
