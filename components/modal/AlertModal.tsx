@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
+import Markdown from "@/components/ui/Markdown";
 import Button from "@/components/ui/Button";
 import { ModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
@@ -7,6 +8,7 @@ import { useStyle } from "@/hooks/useStyle";
 type AlertModalProps = {
     title?: string;
     message?: string;
+    markdown?: string;
     buttons?: ModalButton[];
     handleClose?: () => void;
 };
@@ -15,6 +17,7 @@ export default function AlertModal(props: AlertModalProps) {
     const { style } = useStyle((colors) =>
         StyleSheet.create({
             container: {
+                flexShrink: 1,
                 justifyContent: "center",
                 alignItems: "center"
             },
@@ -28,6 +31,9 @@ export default function AlertModal(props: AlertModalProps) {
                 color: colors.text,
                 fontSize: 16,
                 marginBottom: 20
+            },
+            scrollView: {
+                width: "100%"
             },
             buttons: {
                 width: "100%",
@@ -55,6 +61,14 @@ export default function AlertModal(props: AlertModalProps) {
 
             {props.message && (
                 <Text style={style.body}>{props.message}</Text>
+            )}
+
+            {props.markdown && (
+                <ScrollView style={style.scrollView}>
+                    <View onStartShouldSetResponder={() => true}>
+                        <Markdown text={props.markdown} />
+                    </View>
+                </ScrollView>
             )}
 
             <View style={style.buttons}>

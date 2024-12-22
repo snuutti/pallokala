@@ -17,6 +17,12 @@ type ModalContextType = {
         buttons?: ModalButton[],
         options?: ModalOptions
     ) => string;
+    createMarkdownAlertModal: (
+        title?: string,
+        markdown?: string,
+        buttons?: ModalButton[],
+        options?: ModalOptions
+    ) => string;
     createPromptModal: (
         title?: string,
         options?: PromptModalOptions & ModalOptions,
@@ -88,6 +94,22 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
         );
     };
 
+    const createMarkdownAlertModal = (
+        title?: string,
+        markdown?: string,
+        buttons?: ModalButton[],
+        options?: ModalOptions
+    ) => {
+        return createModal(
+            <AlertModal
+                title={title}
+                markdown={markdown}
+                buttons={buttons}
+            />,
+            options
+        );
+    };
+
     const createPromptModal = (
         title?: string,
         options?: PromptModalOptions & ModalOptions,
@@ -139,6 +161,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
         <ModalContext.Provider value={{
             createModal,
             createAlertModal,
+            createMarkdownAlertModal,
             createPromptModal,
             createListModal,
             createColorPickerModal,
