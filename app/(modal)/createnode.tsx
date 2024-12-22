@@ -11,12 +11,12 @@ import { useToast } from "@/context/ToastProvider";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { Node } from "pufferpanel";
 
-export default function NewNodeScreen() {
+export default function CreateNodeScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const addNode = useBoundStore(state => state.addNode);
-    const { control, handleSubmit, watch, reset, formState: { errors, isValid } } = useForm<NodeSchemaType>({
+    const { control, handleSubmit, watch, formState: { errors, isValid } } = useForm<NodeSchemaType>({
         defaultValues: NodeDefaultValues,
         resolver: zodResolver(NodeSchema),
         mode: "onBlur"
@@ -42,12 +42,10 @@ export default function NewNodeScreen() {
 
         try {
             const id = await apiClient?.node.create(node as Node);
-            reset();
-
             addNode({ ...node, id: id! } as Node);
 
             showSuccess(t("nodes:Created"));
-            router.push(`./${id}?created=true`);
+            router.navigate(`/nodes/${id!}?created=true`);
         } finally {
             setLoading(false);
         }

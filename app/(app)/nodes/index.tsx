@@ -44,7 +44,7 @@ export default function NodesScreen() {
             />
 
             {apiClient?.auth.hasScope("nodes.create") && (
-                <FloatingActionButton visible={fabVisible} onPress={() => router.push("./new")} safeArea={true}>
+                <FloatingActionButton visible={fabVisible} onPress={() => router.push("/(modal)/createnode")} safeArea={true}>
                     <MaterialCommunityIcons name="plus" size={30} color={colors.textPrimary} />
                 </FloatingActionButton>
             )}
