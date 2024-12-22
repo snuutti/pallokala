@@ -67,6 +67,7 @@ export default function NodeScreen() {
     });
     const [node, setNode] = useState<Node | null>(null);
     const [features, setFeatures] = useState<NodeFeatures | null>(null);
+    const [environmentNames, setEnvironmentNames] = useState<string[]>([]);
     const [featuresFetched, setFeaturesFetched] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -77,6 +78,7 @@ export default function NodeScreen() {
 
         setNode(null);
         setFeatures(null);
+        setEnvironmentNames([]);
         setFeaturesFetched(false);
         setLoading(false);
 
@@ -104,7 +106,12 @@ export default function NodeScreen() {
             }
 
             apiClient?.node.features(Number(id))
-                .then(setFeatures)
+                .then((features) => {
+                    setFeatures(features);
+                    setEnvironmentNames([...new Set(features.environments
+                        .map(env => env === "standard" || env === "tty" ? "host" : env))]
+                        .map(env => t(`env:${env}.name`)));
+                })
                 .finally(() => setFeaturesFetched(true));
         });
     }, [id, created]);
@@ -203,7 +210,7 @@ export default function NodeScreen() {
 
                         <View style={style.feature}>
                             <Text style={style.featureName}>{t("nodes:features.envs")}</Text>
-                            <Text style={style.text}>{features.environments.join(", ")}</Text>
+                            <Text style={style.text}>{environmentNames.join(", ")}</Text>
                         </View>
 
                         <View style={style.feature}>
