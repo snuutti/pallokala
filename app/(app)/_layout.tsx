@@ -159,16 +159,6 @@ export default function AppLayout() {
                     unmountOnBlur: true
                 }}
             />
-
-            <Drawer.Screen
-                name="users/new"
-                options={{
-                    drawerItemStyle: {
-                        display: "none"
-                    },
-                    title: t("users:Create")
-                }}
-            />
         </Drawer>
     );
 }

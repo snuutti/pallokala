@@ -61,7 +61,7 @@ export default function UsersScreen() {
             />
 
             {apiClient?.auth.hasScope("users.info.edit") && (
-                <FloatingActionButton visible={fabVisible} onPress={() => router.push("./new")} safeArea={true}>
+                <FloatingActionButton visible={fabVisible} onPress={() => router.push("/(modal)/createuser")} safeArea={true}>
                     <MaterialCommunityIcons name="plus" size={30} color={colors.textPrimary} />
                 </FloatingActionButton>
             )}

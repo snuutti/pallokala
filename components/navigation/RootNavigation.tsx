@@ -63,6 +63,15 @@ export default function RootNavigation() {
             />
 
             <Stack.Screen
+                name="(modal)/createuser"
+                options={{
+                    title: t("users:Create"),
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
                 name="(modal)/editfile"
                 options={{
                     title: openFile?.name || "Edit File",

@@ -24,11 +24,11 @@ const defaultValues = {
     password: ""
 };
 
-export default function NewUserScreen() {
+export default function CreateUserScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const addUser = useBoundStore(state => state.addUser);
-    const { control, handleSubmit, reset, formState: { errors, isValid } } = useForm<Schema>({
+    const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
@@ -41,9 +41,8 @@ export default function NewUserScreen() {
         try {
             const id = await apiClient!.user.create(data.username, data.email, data.password);
             addUser({ id, username: data.username, email: data.email });
-            reset();
 
-            router.push(`./${id}`);
+            router.navigate(`/users/${id}`);
         } finally {
             setLoading(false);
         }
