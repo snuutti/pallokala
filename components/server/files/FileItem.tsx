@@ -17,6 +17,16 @@ const archiveExtensions = [
     ".zipx"
 ];
 
+// TODO: have all time formats use the user's locale
+// for now the bri'ish format will suffice
+const formatDate = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric"
+});
+
 type FileItemProps = {
     file: FileDesc;
     canEdit: boolean;
@@ -124,6 +134,14 @@ export default function FileItem(props: FileItemProps) {
         return numFormat.format(props.file.size / Math.pow(2, 40)) + " TiB";
     };
 
+    const formatModifiedDate = () => {
+        if (!props.file.modifyTime) {
+            return null;
+        }
+
+        return " • " + formatDate.format(new Date(props.file.modifyTime * 1000));
+    };
+
     const isArchive = (): boolean => {
         const filename = props.file.name.toLowerCase();
         for (let i = 0; i < archiveExtensions.length; i++) {
@@ -143,7 +161,7 @@ export default function FileItem(props: FileItemProps) {
                 <Text style={style.name} numberOfLines={1}>{props.file.name}</Text>
 
                 {props.file.isFile && (
-                    <Text style={style.size} numberOfLines={1}>{formatFileSize()}</Text>
+                    <Text style={style.size} numberOfLines={1}>{formatFileSize()}{formatModifiedDate()}</Text>
                 )}
             </View>
 
