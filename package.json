@@ -52,6 +52,7 @@
         "html-react-parser": "^5.2.0",
         "i18next": "^24.1.0",
         "js-md5": "^0.8.3",
+        "otpauth": "^9.3.6",
         "pufferpanel": "https://gitpkg.vercel.app/pufferpanel/pufferpanel/client/api?v3",
         "react": "18.2.0",
         "react-dom": "18.2.0",

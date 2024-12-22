@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { useApiClient } from "@/context/ApiClientProvider";
+import { useModal } from "@/context/ModalProvider";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { resetAllStores } from "@/stores/useBoundStore";
 import {
@@ -15,6 +17,7 @@ import {
 import UnifiedSessionStore from "@/utils/sessionStore";
 import MockApiClient from "@/utils/mockApiClient";
 import { getPrivateInfoReplacer } from "@/utils/json";
+import * as OTPAuth from "otpauth";
 import { Account, OAuthAccount, EmailAccount } from "@/types/account";
 import { User, ApiClient } from "pufferpanel";
 
@@ -39,7 +42,9 @@ type AccountProviderProps = {
 };
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
+    const { t } = useTranslation();
     const { apiClient, config, sessionTimedOut, changeServer } = useApiClient();
+    const { createAlertModal } = useModal();
     const setThemeSettings = useSettingsStore(state => state.setThemeSettings);
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [activeAccount, setActiveAccount] = useState<Account | null>(null);
@@ -166,7 +171,33 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
                 if (result === true) {
                     success = true;
                 } else if (result === "otp") {
-                    setOtpRequired(true);
+                    if (emailAccount.otpSecret) {
+                        try {
+                            const totp = new OTPAuth.TOTP({
+                                secret: emailAccount.otpSecret
+                            });
+
+                            await apiClient.auth.loginOtp(totp.generate());
+                            success = true;
+                        } catch (e) {
+                            console.error("OTP login failed", e);
+
+                            setOtpRequired(true);
+
+                            createAlertModal(
+                                t("users:OtpNeeded"),
+                                "The OTP secret stored for this account didn't work. You will need to enter the OTP code from your authenticator app manually.",
+                                [
+                                    {
+                                        text: t("common:Close"),
+                                        icon: "close"
+                                    }
+                                ]
+                            );
+                        }
+                    } else {
+                        setOtpRequired(true);
+                    }
                 } else {
                     console.error("Login failed");
                 }

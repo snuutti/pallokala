@@ -15,6 +15,7 @@ export type EmailAccount = BaseAccount & {
     type: "email";
     email: string;
     password: string;
+    otpSecret?: string;
 };
 
 export type Account = OAuthAccount | EmailAccount;

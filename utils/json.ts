@@ -9,6 +9,10 @@ export const getPrivateInfoReplacer = () => {
             return "[clientSecret]";
         }
 
+        if (key === "otpSecret") {
+            return "[otpSecret]";
+        }
+
         if (typeof value === "string") {
             try {
                 const json = JSON.parse(value);
@@ -20,6 +24,10 @@ export const getPrivateInfoReplacer = () => {
 
                     if (keys.indexOf("clientSecret") !== -1) {
                         json.clientSecret = "[clientSecret]";
+                    }
+
+                    if (keys.indexOf("otpSecret") !== -1) {
+                        json.otpSecret = "[otpSecret]";
                     }
 
                     return JSON.stringify(json);

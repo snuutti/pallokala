@@ -6,9 +6,12 @@ import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
+import { useAccount } from "@/context/AccountProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
+import { updateAccount } from "@/utils/accountStorage";
+import { EmailAccount } from "@/types/account";
 
 export default function TwoFactorAuthScreen() {
     const { t } = useTranslation();
@@ -20,6 +23,7 @@ export default function TwoFactorAuthScreen() {
         })
     );
     const { apiClient } = useApiClient();
+    const { activeAccount } = useAccount();
     const { showSuccess } = useToast();
     const { createPromptModal } = useModal();
     const { refresh } = useLocalSearchParams<{ refresh?: string }>();
@@ -56,11 +60,48 @@ export default function TwoFactorAuthScreen() {
 
                         try {
                             await apiClient?.self.disableOtp(code);
+                            await setOtpSecret(undefined);
                             await refreshOtpStatus();
                             showSuccess(t("users:UpdateSuccess"));
                         } finally {
                             setLoading(false);
                         }
+                    }
+                },
+                {
+                    text: t("common:Cancel"),
+                    icon: "close"
+                }
+            ]
+        );
+    };
+
+    const setOtpSecret = async (secret?: string) => {
+        const account = activeAccount as EmailAccount;
+        account.otpSecret = secret;
+
+        await updateAccount(account);
+    };
+
+    const removeOtpSecret = async () => {
+        await setOtpSecret(undefined);
+        showSuccess("2FA secret removed");
+    };
+
+    const enterOtpSecret = () => {
+        createPromptModal(
+            "Enter 2FA secret",
+            {
+                placeholder: t("users:OtpSecret"),
+                inputType: "default"
+            },
+            [
+                {
+                    text: t("common:Save"),
+                    icon: "content-save",
+                    onPress: async (secret: string) => {
+                        await setOtpSecret(secret);
+                        showSuccess("2FA secret saved");
                     }
                 },
                 {
@@ -92,6 +133,27 @@ export default function TwoFactorAuthScreen() {
                     icon="lock"
                     onPress={() => router.push("/(modal)/enroll2fa")}
                 />
+            )}
+
+            {(activeAccount!.type === "email" && enabled) && (
+                <>
+                    <Text style={style.text}>If you provide your 2FA secret Pallokala can use it to bypass the need to use an authenticator app every time you open the app.</Text>
+
+                    {(activeAccount as EmailAccount).otpSecret ? (
+                        <Button
+                            text="Remove 2FA secret"
+                            icon="key"
+                            style="danger"
+                            onPress={removeOtpSecret}
+                        />
+                    ) : (
+                        <Button
+                            text="Enter 2FA secret"
+                            icon="key"
+                            onPress={enterOtpSecret}
+                        />
+                    )}
+                </>
             )}
         </ContentWrapper>
     );
