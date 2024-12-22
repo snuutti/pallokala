@@ -12,10 +12,12 @@ export interface SettingsStore {
     colorScheme: ColorScheme;
     themeSettings: ThemeSettings;
     disclaimerRead: boolean;
+    previousVersion?: string;
     setLanguage: (language: string) => void;
     setColorScheme: (colorScheme: ColorScheme) => void;
     setThemeSettings: (settings: ThemeSettings) => void;
     setDisclaimerRead: () => void;
+    setPreviousVersion: (version: string) => void;
 }
 
 export const useSettingsStore = create<SettingsStore>()(
@@ -25,13 +27,15 @@ export const useSettingsStore = create<SettingsStore>()(
             colorScheme: "device",
             themeSettings: {},
             disclaimerRead: false,
+            previousVersion: undefined,
             setLanguage: (language) => set({ language }),
             setColorScheme: (colorScheme) => {
                 setAppearanceColor(colorScheme);
                 set({ colorScheme });
             },
             setThemeSettings: (settings) => set({ themeSettings: settings }),
-            setDisclaimerRead: () => set({ disclaimerRead: true })
+            setDisclaimerRead: () => set({ disclaimerRead: true }),
+            setPreviousVersion: (version) => set({ previousVersion: version })
         }),
         {
             name: "settings-storage",

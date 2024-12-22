@@ -7,6 +7,7 @@ import ServerListItem from "@/components/server/ServerListItem";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useApiClient } from "@/context/ApiClientProvider";
 import useDisclaimer from "@/hooks/useDisclaimer";
+import useAppUpdated from "@/hooks/useAppUpdated";
 import { useColors } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { ExtendedServerStatus, ExtendedServerView } from "@/types/server";
@@ -33,6 +34,7 @@ export default function ServersScreen() {
     }, [servers]);
 
     useDisclaimer();
+    useAppUpdated();
 
     const loadPage = useCallback(async () => {
         setRefreshing(true);
