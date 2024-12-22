@@ -103,6 +103,14 @@ function patchAuthJs() {
             "    this._sessionStore.setAuthCookie(pufferAuth)";
     }
 
+    const reauthIndex = lines.findIndex(line => line.startsWith("    if (is2xx(res.status)) {"));
+    if (reauthIndex !== -1) {
+        lines[reauthIndex] = "    if (is2xx(res.status)) {\n" +
+            "      const cookies = res.headers['set-cookie'][0]\n" +
+            "      const pufferAuth = cookies.split('puffer_auth=')[1].split(';')[0]\n" +
+            "      this._sessionStore.setAuthCookie(pufferAuth)";
+    }
+
     lines.unshift("//patched");
     fs.writeFileSync(authPath, lines.join("\n"), "utf8");
 
