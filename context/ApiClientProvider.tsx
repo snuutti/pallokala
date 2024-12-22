@@ -10,6 +10,7 @@ import { ApiClient, EditableConfigSettings, ErrorHandlerResult } from "pufferpan
 type ApiClientContextType = {
     apiClient?: ApiClient;
     config?: EditableConfigSettings;
+    sessionTimedOut: boolean;
     changeServer: (url: string) => ApiClient;
 };
 
@@ -25,6 +26,7 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
     const { createAlertModal } = useModal();
     const [apiClient, setApiClient] = useState<ApiClient | undefined>(undefined);
     const [config, setConfig] = useState<EditableConfigSettings | undefined>(undefined);
+    const [sessionTimedOut, setSessionTimedOut] = useState(false);
 
     useEffect(() => {
         if (apiClient === undefined) {
@@ -62,14 +64,14 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
 
         setConfig(undefined);
         setApiClient(newApiClient);
+        setSessionTimedOut(false);
 
         return newApiClient;
     };
 
     const handleError = useCallback(async (error: ErrorHandlerResult) => {
         if (error.status === 401) {
-            // TODO: this probably doesn't work but i'm too lazy to test right now
-            await apiClient?.auth.logout();
+            setSessionTimedOut(true);
             showError(t("errors:ErrSessionTimedOut"));
         } else if (error.code === "ErrGeneric" && error.msg) {
             showError(t(error.msg));
@@ -119,7 +121,7 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
     };
 
     return (
-        <ApiClientContext.Provider value={{ apiClient, config, changeServer }}>
+        <ApiClientContext.Provider value={{ apiClient, config, sessionTimedOut, changeServer }}>
             {children}
         </ApiClientContext.Provider>
     );

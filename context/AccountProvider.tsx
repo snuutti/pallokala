@@ -39,7 +39,7 @@ type AccountProviderProps = {
 };
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
-    const { apiClient, config, changeServer } = useApiClient();
+    const { apiClient, config, sessionTimedOut, changeServer } = useApiClient();
     const setThemeSettings = useSettingsStore(state => state.setThemeSettings);
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [activeAccount, setActiveAccount] = useState<Account | null>(null);
@@ -60,6 +60,15 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
         initialLogin();
     }, [apiClient]);
+
+    useEffect(() => {
+        if (!sessionTimedOut) {
+            return;
+        }
+
+        console.log("Session timed out, reauthenticating");
+        initialLogin();
+    }, [sessionTimedOut]);
 
     useEffect(() => {
         const interval = setInterval(() => {
