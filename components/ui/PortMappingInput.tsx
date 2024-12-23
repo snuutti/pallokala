@@ -7,8 +7,8 @@ import { useStyle } from "@/hooks/useStyle";
 
 type PortMappingField = {
     host: string;
-    outsidePort: number;
-    insidePort: number;
+    outsidePort: string;
+    insidePort: string;
     protocol: "tcp" | "udp";
 };
 
@@ -62,8 +62,8 @@ export default function PortMappingInput(props: PortMappingInputProps) {
             const [host, outsidePort, insidePort] = head.split(":");
             newEntries.push({
                 host,
-                outsidePort: parseInt(outsidePort),
-                insidePort: parseInt(insidePort),
+                outsidePort,
+                insidePort,
                 protocol: protocol as "tcp" | "udp"
             });
         }
@@ -75,8 +75,8 @@ export default function PortMappingInput(props: PortMappingInputProps) {
         const newEntries = [...entries];
         newEntries.push({
             host: "0.0.0.0",
-            outsidePort: 0,
-            insidePort: 0,
+            outsidePort: "",
+            insidePort: "",
             protocol: "tcp"
         });
 
@@ -135,16 +135,14 @@ export default function PortMappingInput(props: PortMappingInputProps) {
 
                     <TextInput
                         placeholder={t("env:docker.OutsidePort")}
-                        value={entry.outsidePort.toString()}
-                        onChangeText={(value) => onInput(index, "outsidePort", Number(value))}
-                        keyboardType="number-pad"
+                        value={entry.outsidePort}
+                        onChangeText={(value) => onInput(index, "outsidePort", value)}
                     />
 
                     <TextInput
                         placeholder={t("env:docker.InsidePort")}
-                        value={entry.insidePort.toString()}
-                        onChangeText={(value) => onInput(index, "insidePort", Number(value))}
-                        keyboardType="number-pad"
+                        value={entry.insidePort}
+                        onChangeText={(value) => onInput(index, "insidePort", value)}
                     />
 
                     <TextInput
