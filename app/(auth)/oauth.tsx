@@ -12,6 +12,7 @@ import Button from "@/components/ui/Button";
 import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
+import { isUnsupportedVersion } from "@/utils/version";
 import { OAuthAccount } from "@/types/account";
 import { ErrorHandlerResult } from "pufferpanel";
 
@@ -61,6 +62,19 @@ export default function OAuthLoginScreen() {
             clientId: data.id,
             clientSecret: data.secret
         };
+
+        if (await isUnsupportedVersion(data.address)) {
+            createAlertModal(
+                "Unsupported PufferPanel version",
+                "2.x versions of PufferPanel are not supported. Please upgrade to 3.x.",
+                [
+                    { text: t("common:Close") }
+                ]
+            );
+
+            setLoading(false);
+            return;
+        }
 
         try {
             const [success, error] = await addAccount(account);
