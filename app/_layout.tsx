@@ -22,7 +22,7 @@ SplashScreen.preventAutoHideAsync();
 
 NavigationBar.setPositionAsync("absolute");
 NavigationBar.setBackgroundColorAsync("#ffffff01");
-NavigationBar.setButtonStyleAsync("dark");
+NavigationBar.setButtonStyleAsync("light");
 
 export default function RootLayout() {
     const { i18n } = useTranslation();
