@@ -1,8 +1,9 @@
-import { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from "react";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { router } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/src/components/bottomSheetBackdrop/types";
+import { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
@@ -15,6 +16,7 @@ export type SwitchServerModalRef = {
 };
 
 export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
+    const insets = useSafeAreaInsets();
     const { style, colors } = useStyle((colors) =>
         StyleSheet.create({
             background: {
@@ -24,7 +26,8 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
                 backgroundColor: colors.background
             },
             content: {
-                gap: 10
+                gap: 10,
+                paddingBottom: insets.bottom
             },
             item: {
                 height: 70,

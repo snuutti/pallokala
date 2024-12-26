@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import { View, StyleProp, ViewStyle, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import useIsInsideTabsNavigator from "@/hooks/useIsInsideTabsNavigator";
 import { useStyle } from "@/hooks/useStyle";
 
 type ContentWrapperProps = {
@@ -11,6 +13,8 @@ type ContentWrapperProps = {
 };
 
 export default function ContentWrapper(props: ContentWrapperProps) {
+    const isInsideTabsNavigator = useIsInsideTabsNavigator();
+    const insets = useSafeAreaInsets();
     const { style } = useStyle(() =>
         StyleSheet.create({
             scrollView: {
@@ -23,7 +27,8 @@ export default function ContentWrapper(props: ContentWrapperProps) {
             content: {
                 width: "100%",
                 maxWidth: 400,
-                padding: 20
+                padding: 20,
+                paddingBottom: isInsideTabsNavigator ? 20 : insets.bottom
             }
         })
     );

@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import { router } from "expo-router";
 import { Image } from "expo-image";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
@@ -10,10 +11,12 @@ import { useStyle } from "@/hooks/useStyle";
 import { md5 } from "js-md5";
 
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
+    const insets = useSafeAreaInsets();
     const { style, colors } = useStyle((colors) =>
         StyleSheet.create({
             drawerContainer: {
-                flex: 1
+                flex: 1,
+                paddingBottom: insets.bottom
             },
             userContainer: {
                 padding: 20
@@ -39,7 +42,8 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                 paddingTop: 10
             },
             actionsContainer: {
-                padding: 20
+                padding: 20,
+                paddingBottom: 0
             },
             action: {
                 paddingVertical: 15,
