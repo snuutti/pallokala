@@ -4,15 +4,16 @@ import { FlashList } from "@shopify/flash-list";
 
 type AutoScrollHookProps<T> = {
     data: T[];
+    inverted?: boolean;
 };
 
-export default function useAutoScroll<T>({ data }: AutoScrollHookProps<T>) {
+export default function useAutoScroll<T>({ data, inverted }: AutoScrollHookProps<T>) {
     const listRef = useRef<FlashList<T>>(null);
     const [isAtBottom, setIsAtBottom] = useState(true);
     const [listMounted, setListMounted] = useState(false);
 
     useEffect(() => {
-        if (listMounted && isAtBottom && data.length > 0) {
+        if (listMounted && isAtBottom && data.length > 0 && !inverted) {
             listRef.current?.scrollToEnd({ animated: false });
         }
     }, [data, listMounted, isAtBottom]);
@@ -20,7 +21,12 @@ export default function useAutoScroll<T>({ data }: AutoScrollHookProps<T>) {
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
         const paddingToBottom = 20;
-        setIsAtBottom(layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom);
+
+        if (inverted) {
+            setIsAtBottom(contentOffset.y <= paddingToBottom);
+        } else {
+            setIsAtBottom(layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom);
+        }
     };
 
     const handleContentSizeChange = () => {
@@ -28,7 +34,11 @@ export default function useAutoScroll<T>({ data }: AutoScrollHookProps<T>) {
     };
 
     const goToBottom = () => {
-        listRef.current?.scrollToEnd({ animated: true });
+        if (inverted) {
+            listRef.current?.scrollToIndex({ index: 0, animated: true });
+        } else {
+            listRef.current?.scrollToEnd({ animated: true });
+        }
     };
 
     return { listRef, isAtBottom, listMounted, handleScroll, handleContentSizeChange, goToBottom };

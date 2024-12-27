@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
     withTiming,
     useDerivedValue,
 } from "react-native-reanimated";
+import { useKeyboardHandler } from "react-native-keyboard-controller";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
 import { FlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -15,6 +17,26 @@ import { useServer } from "@/context/ServerProvider";
 import { useStyle } from "@/hooks/useStyle";
 import useAutoScroll from "@/hooks/useAutoScroll";
 import { ServerLogs } from "pufferpanel";
+
+const useGradualAnimation = () => {
+    const height = useSharedValue(0);
+
+    useKeyboardHandler(
+        {
+            onMove: (e) => {
+                "worklet";
+                height.value = e.height;
+            },
+            onEnd: (e) => {
+                "worklet";
+                height.value = e.height;
+            }
+        },
+        []
+    );
+
+    return { height };
+};
 
 export default function ConsoleScreen() {
     const { t } = useTranslation();
@@ -53,7 +75,7 @@ export default function ConsoleScreen() {
     );
     const { server } = useServer();
     const [lines, setLines] = useState<string[]>([]);
-    const { listRef, isAtBottom, listMounted, handleScroll, handleContentSizeChange, goToBottom } = useAutoScroll<string>({ data: lines });
+    const { listRef, isAtBottom, listMounted, handleScroll, handleContentSizeChange, goToBottom } = useAutoScroll<string>({ data: lines, inverted: true });
     const chevronVisible = useSharedValue(0);
     const [initialScroll, setInitialScroll] = useState(true);
     const [hasGotItems, setHasGotItems] = useState(false);
@@ -61,6 +83,15 @@ export default function ConsoleScreen() {
     const [task, setTask] = useState<NodeJS.Timeout | undefined>(undefined);
     const [lastMessageTime, setLastMessageTime] = useState(0);
     const [command, setCommand] = useState("");
+    const { height } = useGradualAnimation();
+    const tabBarHeight = useBottomTabBarHeight();
+
+    const fakeView = useAnimatedStyle(
+        () => ({
+            height: height.value - tabBarHeight || 0
+        }),
+        []
+    );
 
     useEffect(() => {
         if (server === undefined) {
@@ -116,7 +147,7 @@ export default function ConsoleScreen() {
             newLines.pop();
         }
 
-        setLines((lines) => [...lines, ...newLines]);
+        setLines((lines) => [...newLines.reverse(), ...lines]);
         setHasGotItems(true);
     };
 
@@ -130,7 +161,7 @@ export default function ConsoleScreen() {
     };
 
     return (
-        <KeyboardAvoidingView style={style.container} behavior="height" keyboardVerticalOffset={100}>
+        <View style={style.container}>
             {server?.hasScope("server.console") && (
                 <>
                     <FlashList
@@ -141,6 +172,7 @@ export default function ConsoleScreen() {
                         keyExtractor={(_, index) => index.toString()}
                         renderItem={({ item }) => <ConsoleText text={item} />}
                         estimatedItemSize={30}
+                        inverted={true}
                     />
 
                     <TouchableOpacity style={style.clearConsole} onPress={clearConsole}>
@@ -156,23 +188,27 @@ export default function ConsoleScreen() {
             )}
 
             {server?.hasScope("server.console.send") && (
-                <View style={style.commandContainer}>
-                    <TextInput
-                        style={style.commandInput}
-                        placeholder={t("servers:Command")}
-                        hideLabel={true}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        value={command}
-                        onChangeText={setCommand}
-                        onSubmitEditing={sendCommand}
-                    />
+                <>
+                    <View style={style.commandContainer}>
+                        <TextInput
+                            style={style.commandInput}
+                            placeholder={t("servers:Command")}
+                            hideLabel={true}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            value={command}
+                            onChangeText={setCommand}
+                            onSubmitEditing={sendCommand}
+                        />
 
-                    <TouchableOpacity style={style.sendButton} onPress={sendCommand}>
-                        <MaterialCommunityIcons name="send" size={30} color="#fff" />
-                    </TouchableOpacity>
-                </View>
+                        <TouchableOpacity style={style.sendButton} onPress={sendCommand}>
+                            <MaterialCommunityIcons name="send" size={30} color="#fff" />
+                        </TouchableOpacity>
+                    </View>
+
+                    <Animated.View style={fakeView} />
+                </>
             )}
-        </KeyboardAvoidingView>
+        </View>
     );
 }
