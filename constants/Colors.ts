@@ -1,5 +1,6 @@
 import { Appearance } from "react-native";
 import { Theme as NavigationTheme } from "@react-navigation/native";
+import * as SystemUI from "expo-system-ui";
 import { deriveOpacity, deriveContrast } from "@/utils/theme";
 
 export type ColorScheme = "device" | "light" | "dark" | "amoled";
@@ -93,4 +94,5 @@ export function getNavigationColors(colorScheme: ColorScheme, primaryColor?: str
 
 export function setAppearanceColor(colorScheme: ColorScheme) {
     Appearance.setColorScheme(colorScheme === "device" ? null : colorScheme === "light" ? "light" : "dark");
+    SystemUI.setBackgroundColorAsync(getColors(colorScheme).backdrop);
 }
