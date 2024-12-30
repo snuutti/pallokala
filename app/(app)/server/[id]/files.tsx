@@ -5,6 +5,7 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import * as DocumentPicker from "expo-document-picker";
 import { router } from "expo-router";
+import { useIsFocused } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UploadProgressModal, { UploadFile, UploadState } from "@/components/server/files/UploadProgressModal";
@@ -47,6 +48,7 @@ export default function FilesScreen() {
     const [files, setFiles] = useState<FileDesc[]>([]);
     const [currentPath, setCurrentPath] = useState<FileDesc[]>([]);
     const [refreshing, setRefreshing] = useState(false);
+    const isFocused = useIsFocused();
 
     const canEdit = server?.hasScope("server.files.edit") || false;
 
@@ -59,6 +61,10 @@ export default function FilesScreen() {
     }, [server]);
 
     useBackHandler(() => {
+        if (!isFocused) {
+            return false;
+        }
+
         if (currentPath.length > 0) {
             openFile({ name: "..", isFile: false });
             return true;
