@@ -10,7 +10,7 @@ import { useServer } from "@/context/ServerProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { UserPermissionsView } from "pufferpanel";
+import { useBoundStore } from "@/stores/useBoundStore";
 
 export default function UsersScreen() {
     const { t } = useTranslation();
@@ -30,7 +30,8 @@ export default function UsersScreen() {
     const { fabVisible, onScroll } = useFabVisible();
     const { showSuccess } = useToast();
     const { createPromptModal } = useModal();
-    const [users, setUsers] = useState<UserPermissionsView[]>([]);
+    const users = useBoundStore(state => state.serverUsers[server!.id]);
+    const setUsers = useBoundStore(state => state.setServerUsers);
     const [refreshing, setRefreshing] = useState(true);
 
     useEffect(() => {
@@ -42,7 +43,7 @@ export default function UsersScreen() {
 
         const users = await server!.getUsers();
         users.sort((a, b) => a.email.localeCompare(b.email));
-        setUsers(users);
+        setUsers(server!.id, users);
 
         setRefreshing(false);
     }, []);

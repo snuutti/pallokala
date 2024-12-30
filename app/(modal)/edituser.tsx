@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { StyleSheet, Text } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useTranslation } from "react-i18next";
@@ -6,11 +5,10 @@ import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Switch from "@/components/ui/Switch";
 import Button from "@/components/ui/Button";
-import { useApiClient } from "@/context/ApiClientProvider";
 import { useServer } from "@/context/ServerProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useStyle } from "@/hooks/useStyle";
-import { UserPermissionsView } from "pufferpanel";
+import { useBoundStore } from "@/stores/useBoundStore";
 
 const perms = [
     "server.view",
@@ -52,17 +50,12 @@ export default function EditUserScreen() {
             }
         })
     );
-    const { apiClient } = useApiClient();
     const { server } = useServer();
     const { showSuccess } = useToast();
     const { email } = useLocalSearchParams<{ email: string }>();
-    const [user, setUser] = useState<UserPermissionsView | null>(null);
-
-    useEffect(() => {
-        apiClient!.server.getUser(server!.id, email).then((user) => {
-            setUser(user[0]);
-        });
-    }, [email]);
+    const user = useBoundStore(state => state.serverUsers[server!.id]).find((u) => u.email === email);
+    const modifyServerUser = useBoundStore(state => state.modifyServerUser);
+    const removeServerUser = useBoundStore(state => state.removeServerUser);
 
     const scopeLabel = (scope: string) => {
         return t(`scopes:name.${scope.replace(/\./g, "-")}`);
@@ -91,7 +84,7 @@ export default function EditUserScreen() {
             scopes: newPerms
         };
 
-        setUser(updatedUser);
+        modifyServerUser(server!.id, user.email, updatedUser);
         await server?.updateUser(updatedUser);
 
         showSuccess(t("users:UpdateSuccess"));
@@ -111,6 +104,7 @@ export default function EditUserScreen() {
         }
 
         await server?.deleteUser(user.email);
+        removeServerUser(server!.id, user.email);
         router.back();
 
         showSuccess(t("users:DeleteSuccess"));
