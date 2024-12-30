@@ -9,6 +9,8 @@ import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useToast } from "@/context/ToastProvider";
+import { updateAccount } from "@/utils/accountStorage";
+import { EmailAccount } from "@/types/account";
 
 const schema = z.object({
     username: z.string().min(5, { message: "errors:ErrFieldLength" }),
@@ -27,7 +29,7 @@ const defaultValues = {
 export default function AccountDetailsScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
-    const { user, refreshSelf } = useAccount();
+    const { activeAccount, user, refreshSelf } = useAccount();
     const { showSuccess } = useToast();
     const { control, handleSubmit, setValue, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
@@ -47,6 +49,12 @@ export default function AccountDetailsScreen() {
         try {
             await apiClient?.self.updateDetails(data.username, data.email, data.password);
             await refreshSelf();
+
+            if (activeAccount!.type === "email") {
+                const account = activeAccount as EmailAccount;
+                account.email = data.email;
+                await updateAccount(account);
+            }
 
             showSuccess(t("users:InfoChanged"));
         } finally {

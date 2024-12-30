@@ -7,7 +7,10 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
+import { useAccount } from "@/context/AccountProvider";
 import { useToast } from "@/context/ToastProvider";
+import { updateAccount } from "@/utils/accountStorage";
+import { EmailAccount } from "@/types/account";
 
 const schema = z.object({
     old: z.string().min(1, { message: "errors:ErrFieldRequired" }),
@@ -29,6 +32,7 @@ const defaultValues = {
 export default function ChangePasswordScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
+    const { activeAccount } = useAccount();
     const { showSuccess } = useToast();
     const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
@@ -42,6 +46,12 @@ export default function ChangePasswordScreen() {
 
         try {
             await apiClient?.self.changePassword(data.old, data.new);
+
+            if (activeAccount!.type === "email") {
+                const account = activeAccount as EmailAccount;
+                account.password = data.new;
+                await updateAccount(account);
+            }
 
             showSuccess(t("users:PasswordChanged"));
         } finally {
