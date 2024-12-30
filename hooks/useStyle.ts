@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useColorScheme as useColorSchemeRN } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import { useSettingsStore } from "@/stores/useSettingsStore";
-import { ColorScheme, Colors, getColors, getNavigationColors } from "@/constants/Colors";
+import { ColorScheme, Colors, getColors, getNavigationColors } from "@/constants/colors";
 
 type StylingFunctionWithColors = (colors: Colors) => { [key: string]: any };
 type StylingFunctionWithoutColors = () => { [key: string]: any };

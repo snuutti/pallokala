@@ -9,7 +9,7 @@ import Providers from "@/components/Providers";
 import RootNavigation from "@/components/navigation/RootNavigation";
 import ErrorBoundaryScreen from "@/components/screen/ErrorBoundaryScreen";
 import { useSettingsStore } from "@/stores/useSettingsStore";
-import { setAppearanceColor } from "@/constants/Colors";
+import { setAppearanceColor } from "@/constants/colors";
 import "@/constants/i18n";
 
 // Polyfill
