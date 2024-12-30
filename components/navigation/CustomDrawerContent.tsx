@@ -8,6 +8,7 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
 import { useStyle } from "@/hooks/useStyle";
+import { avatarPlaceholder } from "@/constants/placeholder";
 import { md5 } from "js-md5";
 
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
@@ -76,6 +77,9 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                     <TouchableOpacity onPress={() => router.push("/self")}>
                         <Image
                             source={`https://www.gravatar.com/avatar/${md5(user?.email?.trim().toLowerCase() || "")}?d=mp`}
+                            contentFit="contain"
+                            placeholder={{ blurhash: avatarPlaceholder }}
+                            placeholderContentFit="contain"
                             style={style.avatar}
                         />
                     </TouchableOpacity>

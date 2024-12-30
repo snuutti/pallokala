@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { Image } from "expo-image";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useStyle } from "@/hooks/useStyle";
+import { avatarPlaceholder } from "@/constants/placeholder";
 import { md5 } from "js-md5";
 import { User, UserPermissionsView } from "pufferpanel";
 
@@ -67,6 +68,8 @@ export default function UsersListItem(props: UsersListItemProps) {
                 <Image
                     source={`https://www.gravatar.com/avatar/${md5(props.user.email?.trim().toLowerCase() || "")}?d=mp`}
                     contentFit="contain"
+                    placeholder={{ blurhash: avatarPlaceholder }}
+                    placeholderContentFit="contain"
                     style={style.avatar}
                 />
             </View>
