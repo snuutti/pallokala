@@ -19,6 +19,9 @@ export default function SettingInput(props: SettingInputProps) {
         StyleSheet.create({
             link: {
                 color: colors.primary
+            },
+            strong: {
+                fontWeight: "bold"
             }
         })
     );
@@ -31,6 +34,14 @@ export default function SettingInput(props: SettingInputProps) {
         if (node.type === "tag" && node.name === "a") {
             return (
                 <Text style={style.link} onPress={() => openUrl(node.attribs.href)}>
+                    {(node.children[0] as TextNode).data}
+                </Text>
+            );
+        }
+
+        if (node.type === "tag" && node.name === "strong") {
+            return (
+                <Text style={style.strong}>
                     {(node.children[0] as TextNode).data}
                 </Text>
             );
