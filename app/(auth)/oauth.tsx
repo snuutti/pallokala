@@ -63,17 +63,30 @@ export default function OAuthLoginScreen() {
             clientSecret: data.secret
         };
 
-        if (await isUnsupportedVersion(data.address)) {
+        try {
+            if (await isUnsupportedVersion(data.address)) {
+                createAlertModal(
+                    "Unsupported PufferPanel version",
+                    "2.x versions of PufferPanel are not supported. Please upgrade to 3.x.",
+                    [
+                        { text: t("common:Close") }
+                    ]
+                );
+
+                return;
+            }
+        } catch {
             createAlertModal(
-                "Unsupported PufferPanel version",
-                "2.x versions of PufferPanel are not supported. Please upgrade to 3.x.",
+                "Error",
+                "Failed to check server version. Please check the server address and try again.",
                 [
                     { text: t("common:Close") }
                 ]
             );
 
-            setLoading(false);
             return;
+        } finally {
+            setLoading(false);
         }
 
         try {
@@ -91,13 +104,23 @@ export default function OAuthLoginScreen() {
                 );
             }
         } catch (e) {
-            createAlertModal(
-                t("errors:" + (e as ErrorHandlerResult).code),
-                (e as ErrorHandlerResult).msg,
-                [
-                    { text: t("common:Close") }
-                ]
-            );
+            if ("code" in (e as ErrorHandlerResult)) {
+                createAlertModal(
+                    t("errors:" + (e as ErrorHandlerResult).code),
+                    (e as ErrorHandlerResult).msg,
+                    [
+                        { text: t("common:Close") }
+                    ]
+                );
+            } else {
+                createAlertModal(
+                    "Error",
+                    "Unable to add account. Please check the server address and try again.",
+                    [
+                        { text: t("common:Close") }
+                    ]
+                );
+            }
         }
 
         setLoading(false);

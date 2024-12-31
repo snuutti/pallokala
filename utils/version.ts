@@ -4,6 +4,10 @@ export async function getPanelVersion(baseUrl: string): Promise<string | null> {
 }
 
 export async function isUnsupportedVersion(baseUrl: string): Promise<boolean> {
+    if (baseUrl === "http://pallokala.test") {
+        return false;
+    }
+
     const version = await getPanelVersion(baseUrl);
     return version === null;
 }

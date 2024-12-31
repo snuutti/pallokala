@@ -114,8 +114,8 @@ class MockAuthApi implements AuthApi {
     hasScope(scope: string): boolean {
         // "To review your app, Google Play must be able to access all parts of it."
         // I'll add these if they ask for them, but from experience I doubt they'll even launch the app once.
-        return scope !== "nodes.create" && scope !== "users.info.edit" && scope !== "templates.view"
-            && scope !== "self.edit" && scope !== "self.clients";
+        return scope !== "server.create" && scope !== "nodes.create" && scope !== "users.info.edit"
+            && scope !== "templates.view" && scope !== "self.edit" && scope !== "self.clients";
     }
 
     logout(): Promise<void> {
@@ -407,7 +407,10 @@ class MockServer implements Server {
     }
 
     getStats(): Promise<ServerStats> {
-        throw new Error("Method not implemented.");
+        return Promise.resolve({
+            cpu: 50,
+            memory: 1024
+        });
     }
 
     getQuery(): Promise<Record<string, any>> {
