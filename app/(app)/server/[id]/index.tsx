@@ -173,6 +173,7 @@ export default function ConsoleScreen() {
                         renderItem={({ item }) => <ConsoleText text={item} />}
                         estimatedItemSize={30}
                         inverted={true}
+                        showsVerticalScrollIndicator={false}
                     />
 
                     <TouchableOpacity style={style.clearConsole} onPress={clearConsole}>
