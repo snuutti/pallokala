@@ -52,6 +52,10 @@ export default function SettingsScreen() {
             || Object.keys(flags || {}).length > 0;
     }, [variables, flags]);
 
+    const anySettings = useMemo(() => {
+        return Object.keys(variables?.data || {}).length > 0;
+    }, [variables]);
+
     const setVariable = (key: string, value: unknown) => {
         if (!variables) {
             return;
@@ -86,15 +90,17 @@ export default function SettingsScreen() {
             return;
         }
 
-        const data: Record<string, unknown> = {};
-        Object.entries(variables.data!).forEach(([key, value]) => {
-            data[key] = value.value;
-        });
+        if (anySettings) {
+            const data: Record<string, unknown> = {};
+            Object.entries(variables.data!).forEach(([key, value]) => {
+                data[key] = value.value;
+            });
 
-        if (server.hasScope("server.data.edit.admin")) {
-            await server.adminUpdateData(data);
-        } else if (server.hasScope("server.data.edit")) {
-            await server.updateData(data);
+            if (server.hasScope("server.data.edit.admin")) {
+                await server.adminUpdateData(data);
+            } else if (server.hasScope("server.data.edit")) {
+                await server.updateData(data);
+            }
         }
 
         if (server.hasScope("server.flags.edit")) {
@@ -118,7 +124,7 @@ export default function SettingsScreen() {
 
     return (
         <ContentWrapper>
-            {variables && (
+            {(variables && anySettings) && (
                 <Variables
                     variables={variables}
                     setVariable={setVariable}
