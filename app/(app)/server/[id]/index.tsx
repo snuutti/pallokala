@@ -17,6 +17,9 @@ import { useServer } from "@/context/ServerProvider";
 import { useStyle } from "@/hooks/useStyle";
 import useAutoScroll from "@/hooks/useAutoScroll";
 import { ServerLogs } from "pufferpanel";
+import "fast-text-encoding"; // TODO: looks like they added this in expo 52
+
+const decoder = new TextDecoder("utf-8");
 
 const useGradualAnimation = () => {
     const height = useSharedValue(0);
@@ -140,7 +143,13 @@ export default function ConsoleScreen() {
             setLastMessageTime(Date.now());
         }
 
-        const decoded = atob(e.logs).replaceAll("\r\n", "\n");
+        const bin = atob(e.logs);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = bin.charCodeAt(i);
+        }
+
+        const decoded = decoder.decode(bytes).replaceAll("\r\n", "\n");
         const newLines = decoded.split("\n");
         // TODO: handle incomplete lines
         if (decoded.endsWith("\n")) {
