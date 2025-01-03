@@ -2,27 +2,34 @@ import { useState, useEffect, useCallback } from "react";
 import { RefreshControl, StyleSheet } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ServerListItem from "@/components/server/ServerListItem";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useApiClient } from "@/context/ApiClientProvider";
 import useDisclaimer from "@/hooks/useDisclaimer";
 import useAppUpdated from "@/hooks/useAppUpdated";
-import { useColors } from "@/hooks/useStyle";
+import { useStyle } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { ExtendedServerStatus, ExtendedServerView } from "@/types/server";
 import { ServerView } from "pufferpanel";
 
 export default function ServersScreen() {
-    const colors = useColors();
+    const insets = useSafeAreaInsets();
+    const { style, colors } = useStyle(() =>
+        StyleSheet.create({
+            serversContainer: {
+                paddingTop: 5,
+                paddingBottom: insets.bottom
+            }
+        })
+    );
     const { apiClient } = useApiClient();
     const { fabVisible, onScroll } = useFabVisible();
     const servers = useBoundStore(state => state.servers);
     const setServers = useBoundStore(state => state.setServers);
     const setServerStatus = useBoundStore(state => state.setServerStatus);
     const [refreshing, setRefreshing] = useState(true);
-
-    const style = styling();
 
     useEffect(() => {
         loadPage();
@@ -121,13 +128,4 @@ export default function ServersScreen() {
             )}
         </>
     );
-}
-
-function styling() {
-    return StyleSheet.create({
-        serversContainer: {
-            paddingTop: 5,
-            paddingBottom: 20
-        }
-    });
 }
