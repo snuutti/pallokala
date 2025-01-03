@@ -34,6 +34,7 @@ function styling() {
             alignItems: "center"
         },
         textContainer: {
+            flex: 1,
             flexDirection: "row"
         },
         text: {
