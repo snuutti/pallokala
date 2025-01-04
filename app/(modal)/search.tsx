@@ -135,7 +135,7 @@ export default function SearchScreen() {
                                     key={s.id}
                                     title={s.name!}
                                     subline={`${getServerAddress(s)} @ ${s.node?.name}`}
-                                    onPress={() => router.navigate(`/server/${s.id}`)}
+                                    onPress={() => router.dismissTo(`/server/${s.id}`)}
                                 />
                             ))}
                         </>
@@ -149,7 +149,7 @@ export default function SearchScreen() {
                                     key={u.id}
                                     title={u.username!}
                                     subline={u.email!}
-                                    onPress={() => router.navigate(`/users/${u.id}`)}
+                                    onPress={() => router.dismissTo(`/users/${u.id}`)}
                                 />
                             ))}
                         </>
@@ -163,7 +163,7 @@ export default function SearchScreen() {
                                     key={n.id}
                                     title={n.name!}
                                     subline={`${n.publicHost}:${n.publicPort}`}
-                                    onPress={() => router.navigate(`/nodes/${n.id}`)}
+                                    onPress={() => router.dismissTo(`/nodes/${n.id}`)}
                                 />
                             ))}
                         </>
