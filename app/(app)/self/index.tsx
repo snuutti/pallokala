@@ -4,6 +4,7 @@ import * as WebBrowser from "expo-web-browser";
 import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
+import Slider from "@/components/ui/Slider";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useModal, ModalButton } from "@/context/ModalProvider";
@@ -15,7 +16,8 @@ export default function PreferencesScreen() {
     const { style, colors } = useStyle((colors) =>
         StyleSheet.create({
             link: {
-                color: colors.primary
+                color: colors.primary,
+                marginHorizontal: 16
             }
         })
     );
@@ -23,8 +25,9 @@ export default function PreferencesScreen() {
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createListModal, createColorPickerModal } = useModal();
-    const { themeSettings, setLanguage, setColorScheme, setThemeSettings } = useSettingsStore();
+    const { themeSettings, consoleFontSize, setLanguage, setColorScheme, setThemeSettings, setConsoleFontSize } = useSettingsStore();
     const [baseColor, setBaseColor] = useState(themeSettings.color || colors.primary);
+    const [newConsoleFontSize, setNewConsoleFontSize] = useState(consoleFontSize);
 
     const pickLanguage = () => {
         const items: ModalButton[] = [];
@@ -87,6 +90,7 @@ export default function PreferencesScreen() {
         };
 
         setThemeSettings(settings);
+        setConsoleFontSize(newConsoleFontSize);
 
         await apiClient?.settings.setUserSetting("themeSettings", JSON.stringify(settings));
 
@@ -115,6 +119,18 @@ export default function PreferencesScreen() {
                 text={t("common:theme.BaseColor")}
                 icon="palette"
                 onPress={() => createColorPickerModal(t("common:theme.BaseColor"), baseColor, setBaseColor)}
+            />
+
+            <Slider
+                label="Console Font Size (default 14)"
+                description={`Current: ${newConsoleFontSize}`}
+                value={newConsoleFontSize}
+                onValueChange={setNewConsoleFontSize}
+                lowerLimit={10}
+                upperLimit={30}
+                minimumValue={10}
+                maximumValue={30}
+                step={1}
             />
 
             <Button
