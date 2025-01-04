@@ -12,6 +12,13 @@ import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { getType, skipDownload } from "@/utils/files";
 import editorHtml from "@/constants/editorHtml";
+import * as pako from "pako";
+import { ApiClient } from "pufferpanel";
+
+async function getFile(client: ApiClient, url: string): Promise<ArrayBuffer> {
+    const res = await client.get(url, undefined, undefined, { responseType: "arraybuffer" });
+    return res.data;
+}
 
 export default function EditFileScreen() {
     const { t } = useTranslation();
@@ -25,18 +32,33 @@ export default function EditFileScreen() {
     );
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
-    const { server, openFile, fileContent, setFileContent, isOriginalFileContent, setFileContentInitial } = useServer();
+    const { server, openFile, fileContent, setFileContent, isOriginalFileContent, setFileContentInitial, forceReadOnly } = useServer();
     const { createAlertModal } = useModal();
     const navigation = useNavigation();
 
     useEffect(() => {
-        setFileContentInitial(null);
+        setFileContentInitial(null, false);
 
         if (skipDownload(openFile!)) {
             return;
         }
 
-        server?.getFile(openFile?.path, true).then(res => setFileContentInitial(res as string));
+        getFile(apiClient!, server!.getFileUrl(openFile!.path)).then(res => {
+            const data = new Uint8Array(res);
+            let content = new TextDecoder("utf-8").decode(data);
+            let readOnly = false;
+
+            if (openFile?.name.endsWith(".log.gz")) {
+                try {
+                    content = pako.ungzip(data, { to: "string" });
+                    readOnly = true;
+                } catch (e) {
+                    console.error("Failed to ungzip log file", e);
+                }
+            }
+
+            setFileContentInitial(content, readOnly);
+        });
     }, [openFile]);
 
     usePreventRemove(!isOriginalFileContent, ({ data }) => {
@@ -85,7 +107,7 @@ export default function EditFileScreen() {
             injectedJavaScriptObject={{
                 content: fileContent,
                 name: openFile.name,
-                readOnly: !server?.hasScope("server.files.edit")
+                readOnly: forceReadOnly || !server?.hasScope("server.files.edit")
             }}
             onMessage={(event) => {
                 setFileContent(event.nativeEvent.data);

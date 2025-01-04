@@ -14,7 +14,8 @@ type ServerContextType = {
     fileContent: string | null;
     setFileContent: (content: string | null) => void;
     isOriginalFileContent: boolean;
-    setFileContentInitial: (content: string | null) => void;
+    setFileContentInitial: (content: string | null, forceReadOnly: boolean) => void;
+    forceReadOnly: boolean;
     saveFile: () => void;
     switchServer: (id: string) => void;
 };
@@ -35,6 +36,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     const [openFile, setOpenFile] = useState<ExtendedFileDesc | undefined>(undefined);
     const [fileContent, setFileContent] = useState<string | null>(null);
     const [originalFileContent, setOriginalFileContent] = useState<string | null>(null);
+    const [forceReadOnly, setForceReadOnly] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -55,7 +57,8 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
 
     const isOriginalFileContent = fileContent === originalFileContent;
 
-    const setFileContentInitial = (content: string | null) => {
+    const setFileContentInitial = (content: string | null, forceReadOnly: boolean) => {
+        setForceReadOnly(forceReadOnly);
         setFileContent(content);
         setOriginalFileContent(content);
     };
@@ -85,7 +88,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     };
 
     return (
-        <ServerContext.Provider value={{ server, id, error, openFile, setOpenFile, fileContent, setFileContent, isOriginalFileContent, setFileContentInitial, saveFile, switchServer }}>
+        <ServerContext.Provider value={{ server, id, error, openFile, setOpenFile, fileContent, setFileContent, isOriginalFileContent, setFileContentInitial, forceReadOnly, saveFile, switchServer }}>
             {children}
         </ServerContext.Provider>
     );

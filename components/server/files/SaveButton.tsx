@@ -5,9 +5,9 @@ import { useColors } from "@/hooks/useStyle";
 
 export default function SaveButton() {
     const colors = useColors();
-    const { server, fileContent, saveFile } = useServer();
+    const { server, fileContent, forceReadOnly, saveFile } = useServer();
 
-    if (fileContent === null || !server?.hasScope("server.files.edit")) {
+    if (fileContent === null || forceReadOnly || !server?.hasScope("server.files.edit")) {
         return null;
     }
 
