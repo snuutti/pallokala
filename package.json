@@ -20,6 +20,7 @@
         "@gorhom/bottom-sheet": "^5.0.6",
         "@hookform/resolvers": "^3.9.1",
         "@react-native-async-storage/async-storage": "1.23.1",
+        "@react-native-community/slider": "4.5.5",
         "@react-native-menu/menu": "^1.2.0",
         "@react-navigation/drawer": "^7.1.1",
         "@shopify/flash-list": "1.7.1",
