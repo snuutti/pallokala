@@ -10,11 +10,14 @@ The UI attempts to closely mimic the PufferPanel web interface, down to the colo
 
 The code is messy in some places. I'm doing this as a hobby for fun, and writing clean code is not fun. I'll clean it up later™️.
 
-## Features
+## Notable features
 
-- Multi-server support
-  - Email and OAuth 
+- Multi-account support
+  - Email and OAuth login
+  - Ability to save 2FA secret for easier login
 - AMOLED dark mode
+- Decompress .log.gz files in memory to view old logs easily
+- Customizable console font size
 
 ## Missing features
 
