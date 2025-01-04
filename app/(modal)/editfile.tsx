@@ -8,6 +8,7 @@ import LoadingScreen from "@/components/screen/LoadingScreen";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
+import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { getType, skipDownload } from "@/utils/files";
@@ -33,6 +34,7 @@ export default function EditFileScreen() {
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
     const { server, openFile, fileContent, setFileContent, isOriginalFileContent, setFileContentInitial, forceReadOnly } = useServer();
+    const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
     const navigation = useNavigation();
 
@@ -52,6 +54,8 @@ export default function EditFileScreen() {
                 try {
                     content = pako.ungzip(data, { to: "string" });
                     readOnly = true;
+
+                    showSuccess("Log file decompressed in memory. Editing not available.");
                 } catch (e) {
                     console.error("Failed to ungzip log file", e);
                 }
