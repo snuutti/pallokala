@@ -1,5 +1,5 @@
 import { Appearance } from "react-native";
-import { Theme as NavigationTheme } from "@react-navigation/native";
+import { Theme as NavigationTheme, DefaultTheme } from "@react-navigation/native";
 import * as SystemUI from "expo-system-ui";
 import { deriveOpacity, deriveContrast } from "@/utils/theme";
 
@@ -88,7 +88,8 @@ export function getNavigationColors(colorScheme: ColorScheme, primaryColor?: str
             text: colors.text,
             border: colors.textDisabled,
             notification: colors.error
-        }
+        },
+        fonts: DefaultTheme.fonts
     };
 }
 

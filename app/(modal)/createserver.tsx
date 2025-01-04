@@ -76,7 +76,7 @@ export default function CreateServerScreen() {
         const data = await apiClient?.server.get(id!, false) as ServerData;
         addServer({ ...data.server, online: "offline" });
 
-        router.navigate(`/server/${id}`);
+        router.dismissTo(`/(app)/server/${id}`);
     };
 
     if (!apiClient?.auth.hasScope("nodes.view") || !apiClient?.auth.hasScope("templates.view")) {

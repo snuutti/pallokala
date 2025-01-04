@@ -3,8 +3,8 @@ import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
 import { ErrorBoundaryProps } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import * as NavigationBar from "expo-navigation-bar";
 import * as Localization from "expo-localization";
+import { SystemBars } from "react-native-edge-to-edge";
 import Providers from "@/components/Providers";
 import RootNavigation from "@/components/navigation/RootNavigation";
 import ErrorBoundaryScreen from "@/components/screen/ErrorBoundaryScreen";
@@ -13,16 +13,16 @@ import { setAppearanceColor } from "@/constants/colors";
 import "@/constants/i18n";
 
 // Polyfill
-import "fast-text-encoding";
 import "@formatjs/intl-locale/polyfill";
 import "@formatjs/intl-displaynames/polyfill";
 import "@formatjs/intl-displaynames/locale-data/en";
 
 SplashScreen.preventAutoHideAsync();
 
-NavigationBar.setPositionAsync("absolute");
-NavigationBar.setBackgroundColorAsync("#ffffff01");
-NavigationBar.setButtonStyleAsync("light");
+SplashScreen.setOptions({
+    duration: 1000,
+    fade: true
+});
 
 export default function RootLayout() {
     const { i18n } = useTranslation();
@@ -39,7 +39,7 @@ export default function RootLayout() {
 
     useEffect(() => {
         if (loaded && languageLoaded) {
-            SplashScreen.hideAsync();
+            SplashScreen.hide();
         }
 
         if (!languageLoaded) {
@@ -63,6 +63,7 @@ export default function RootLayout() {
 
     return (
         <Providers>
+            <SystemBars style="auto" />
             <RootNavigation />
         </Providers>
     );

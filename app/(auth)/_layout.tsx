@@ -6,7 +6,11 @@ export default function AuthLayout() {
     const { t } = useTranslation();
 
     return (
-        <Tabs>
+        <Tabs
+            screenOptions={{
+                animation: "shift"
+            }}
+        >
             <Tabs.Screen
                 name="email"
                 options={{

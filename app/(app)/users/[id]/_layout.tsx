@@ -9,7 +9,11 @@ export default function UserViewLayout() {
     const { id } = useLocalSearchParams<{ id: string }>();
 
     return (
-        <Tabs>
+        <Tabs
+            screenOptions={{
+                animation: "shift"
+            }}
+        >
             <Tabs.Screen
                 name="index"
                 options={{

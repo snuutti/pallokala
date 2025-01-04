@@ -17,7 +17,6 @@ import { useServer } from "@/context/ServerProvider";
 import { useStyle } from "@/hooks/useStyle";
 import useAutoScroll from "@/hooks/useAutoScroll";
 import { ServerLogs } from "pufferpanel";
-import "fast-text-encoding"; // TODO: looks like they added this in expo 52
 
 const decoder = new TextDecoder("utf-8");
 

@@ -24,7 +24,11 @@ export default function TabsLayout() {
     }
 
     return (
-        <Tabs>
+        <Tabs
+            screenOptions={{
+                animation: "shift"
+            }}
+        >
             <Tabs.Screen
                 name="index"
                 options={{

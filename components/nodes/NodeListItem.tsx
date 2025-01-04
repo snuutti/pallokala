@@ -31,7 +31,7 @@ export default function NodeListItem(props: NodeListItemProps) {
     );
 
     const onPress = () => {
-        router.push(`./${props.node.id}`);
+        router.push(`/(app)/nodes/${props.node.id}`);
     };
 
     return (

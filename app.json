@@ -27,10 +27,6 @@
             "package": "io.github.snuutti.pallokala",
             "versionCode": 5
         },
-        "androidNavigationBar": {
-            "barStyle": "light-content",
-            "backgroundColor": "#000000"
-        },
         "plugins": [
             "expo-router",
             "expo-font",
@@ -43,7 +39,8 @@
                         "usesCleartextTraffic": true
                     }
                 }
-            ]
+            ],
+            "react-native-edge-to-edge"
         ],
         "experiments": {
             "typedRoutes": true

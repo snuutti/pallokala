@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { StyleSheet } from "react-native";
-import { useNavigation, UNSTABLE_usePreventRemove as usePreventRemove } from "@react-navigation/core";
+import { useNavigation, usePreventRemove } from "@react-navigation/core";
 import { Image } from "expo-image";
 import { WebView } from "react-native-webview";
 import { useTranslation } from "react-i18next";

@@ -42,7 +42,7 @@ export default function CreateUserScreen() {
             const id = await apiClient!.user.create(data.username, data.email, data.password);
             addUser({ id, username: data.username, email: data.email });
 
-            router.navigate(`/users/${id}`);
+            router.dismissTo(`/(app)/users/${id}`);
         } finally {
             setLoading(false);
         }

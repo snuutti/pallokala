@@ -1,6 +1,5 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useColorScheme as useColorSchemeRN } from "react-native";
-import * as NavigationBar from "expo-navigation-bar";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { ColorScheme, Colors, getColors, getNavigationColors } from "@/constants/colors";
 
@@ -40,10 +39,6 @@ export function useColors() {
 export function useNavigationColors() {
     const colorScheme = useColorScheme();
     const { color } = useSettingsStore(state => state.themeSettings);
-
-    useEffect(() => {
-        NavigationBar.setButtonStyleAsync(colorScheme === "dark" || colorScheme === "amoled" ? "light" : "dark");
-    }, [colorScheme]);
 
     return useMemo(() => getNavigationColors(colorScheme, color), [colorScheme, color]);
 }

@@ -6,7 +6,11 @@ export default function SettingsLayout() {
     const { t } = useTranslation();
 
     return (
-        <Tabs>
+        <Tabs
+            screenOptions={{
+                animation: "shift"
+            }}
+        >
             <Tabs.Screen
                 name="index"
                 options={{

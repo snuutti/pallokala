@@ -21,7 +21,7 @@ export default function Providers(props: ProvidersProps) {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemeProvider value={theme}>
-                <KeyboardProvider statusBarTranslucent={true} navigationBarTranslucent={true}>
+                <KeyboardProvider>
                     <ToastProvider>
                         <ModalProvider>
                             <BottomSheetModalProvider>

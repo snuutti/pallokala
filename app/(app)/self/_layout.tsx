@@ -8,7 +8,11 @@ export default function SelfLayout() {
     const { apiClient } = useApiClient();
 
     return (
-        <Tabs>
+        <Tabs
+            screenOptions={{
+                animation: "shift"
+            }}
+        >
             <Tabs.Screen
                 name="index"
                 options={{
