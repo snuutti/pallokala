@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import Button from "@/components/ui/Button";
-import { useModal, ModalButton } from "@/context/ModalProvider";
+import { useModal, ListModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 
 export type DropdownItem = {
@@ -52,14 +52,15 @@ export default function Dropdown(props: DropdownProps) {
     }, [props.options, props.value]);
 
     const openPicker = () => {
-        const items: ModalButton[] = [];
+        const items: ListModalButton[] = [];
 
         for (const option of props.options) {
             items.push({
                 text: option.display,
                 onPress: () => {
                     props.onChange(option.value);
-                }
+                },
+                selected: option.value === props.value
             });
         }
 

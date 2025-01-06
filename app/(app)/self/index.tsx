@@ -7,7 +7,7 @@ import Button from "@/components/ui/Button";
 import Slider from "@/components/ui/Slider";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
-import { useModal, ModalButton } from "@/context/ModalProvider";
+import { useModal, ListModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import resources from "@/constants/resources";
@@ -25,12 +25,22 @@ export default function PreferencesScreen() {
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createListModal, createColorPickerModal } = useModal();
-    const { themeSettings, consoleFontSize, setLanguage, setColorScheme, setThemeSettings, setConsoleFontSize, setTimeFormat } = useSettingsStore();
+    const {
+        colorScheme,
+        themeSettings,
+        consoleFontSize,
+        timeFormat,
+        setLanguage,
+        setColorScheme,
+        setThemeSettings,
+        setConsoleFontSize,
+        setTimeFormat
+    } = useSettingsStore();
     const [baseColor, setBaseColor] = useState(themeSettings.color || colors.primary);
     const [newConsoleFontSize, setNewConsoleFontSize] = useState(consoleFontSize);
 
     const pickLanguage = () => {
-        const items: ModalButton[] = [];
+        const items: ListModalButton[] = [];
 
         for (const locale in resources) {
             let [lang, region] = locale.split("_");
@@ -45,7 +55,8 @@ export default function PreferencesScreen() {
                 onPress: async () => {
                     setLanguage(locale);
                     await i18n.changeLanguage(locale);
-                }
+                },
+                selected: locale === i18n.language
             });
         }
 
@@ -62,22 +73,26 @@ export default function PreferencesScreen() {
                 {
                     text: t("common:theme.mode.Auto"),
                     icon: "cellphone",
-                    onPress: () => setColorScheme("device")
+                    onPress: () => setColorScheme("device"),
+                    selected: colorScheme === "device"
                 },
                 {
                     text: t("common:theme.mode.Light"),
                     icon: "weather-sunny",
-                    onPress: () => setColorScheme("light")
+                    onPress: () => setColorScheme("light"),
+                    selected: colorScheme === "light"
                 },
                 {
                     text: t("common:theme.mode.Dark"),
                     icon: "weather-night",
-                    onPress: () => setColorScheme("dark")
+                    onPress: () => setColorScheme("dark"),
+                    selected: colorScheme === "dark"
                 },
                 {
                     text: "AMOLED",
                     icon: "cellphone",
-                    onPress: () => setColorScheme("amoled")
+                    onPress: () => setColorScheme("amoled"),
+                    selected: colorScheme === "amoled"
                 }
             ]
         );
@@ -89,17 +104,20 @@ export default function PreferencesScreen() {
                 {
                     text: "Use Locale",
                     icon: "translate",
-                    onPress: () => setTimeFormat("locale")
+                    onPress: () => setTimeFormat("locale"),
+                    selected: timeFormat === "locale"
                 },
                 {
                     text: "12-hour",
                     icon: "biohazard",
-                    onPress: () => setTimeFormat("12h")
+                    onPress: () => setTimeFormat("12h"),
+                    selected: timeFormat === "12h"
                 },
                 {
                     text: "24-hour",
                     icon: "hand-okay",
-                    onPress: () => setTimeFormat("24h")
+                    onPress: () => setTimeFormat("24h"),
+                    selected: timeFormat === "24h"
                 }
             ]
         );

@@ -2,11 +2,11 @@ import { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { ModalButton } from "@/context/ModalProvider";
+import { ListModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 
 type ListModalProps = {
-    items: ModalButton[];
+    items: ListModalButton[];
     handleClose?: () => void;
 };
 
@@ -22,18 +22,25 @@ export default function ListModal(props: ListModalProps) {
                 alignItems: "center",
                 padding: 10
             },
+            selected: {
+                backgroundColor: colors.primary,
+                borderRadius: 5
+            },
             icon: {
                 marginRight: 10
             },
             text: {
                 color: colors.text
+            },
+            textSelected: {
+                color: colors.textPrimary
             }
         })
     );
     const [listHeight, setListHeight] = useState(0);
     const [hasSelected, setHasSelected] = useState(false);
 
-    const onSelection = (item: ModalButton) => {
+    const onSelection = (item: ListModalButton) => {
         if (hasSelected) {
             return;
         }
@@ -52,12 +59,21 @@ export default function ListModal(props: ListModalProps) {
             <FlashList
                 data={props.items}
                 renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => onSelection(item)} style={style.item} disabled={hasSelected}>
+                    <TouchableOpacity
+                        onPress={() => onSelection(item)}
+                        style={[style.item, item.selected && style.selected]}
+                        disabled={hasSelected}
+                    >
                         {item.icon && (
-                            <MaterialCommunityIcons name={item.icon} size={30} color={colors.text} style={style.icon} />
+                            <MaterialCommunityIcons
+                                name={item.icon}
+                                size={30}
+                                color={item.selected ? colors.textPrimary : colors.text}
+                                style={style.icon}
+                            />
                         )}
 
-                        <Text style={style.text}>{item.text}</Text>
+                        <Text style={item.selected ? style.textSelected : style.text}>{item.text}</Text>
                     </TouchableOpacity>
                 )}
                 estimatedItemSize={39}

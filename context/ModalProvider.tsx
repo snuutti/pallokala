@@ -28,7 +28,7 @@ type ModalContextType = {
         options?: PromptModalOptions & ModalOptions,
         buttons?: PromptModalButton[]
     ) => string;
-    createListModal: (items: ModalButton[]) => string;
+    createListModal: (items: ListModalButton[]) => string;
     createColorPickerModal: (
         title?: string,
         defaultColor?: string,
@@ -64,6 +64,10 @@ export type ModalButton = {
 
 export type PromptModalButton = Omit<ModalButton, "onPress"> & {
     onPress?: (value: string) => void;
+};
+
+export type ListModalButton = ModalButton & {
+    selected?: boolean;
 };
 
 export const ModalProvider = ({ children }: ModalProviderProps) => {
@@ -125,7 +129,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
         );
     };
 
-    const createListModal = (items: ModalButton[]) => {
+    const createListModal = (items: ListModalButton[]) => {
         return createModal(
             <ListModal
                 items={items}
