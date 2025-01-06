@@ -135,6 +135,20 @@ export default function FilesScreen() {
         setRefreshing(false);
     }, [server, getCurrentPath, currentPath]);
 
+    const openFileDetails = useCallback((file: FileDesc) => {
+        if (!file.isFile) {
+            return;
+        }
+
+        const openFile: ExtendedFileDesc = {
+            ...file,
+            path: getCurrentPath() + "/" + file.name
+        };
+
+        setOpenFile(openFile);
+        router.push("/(modal)/filedetails");
+    }, [server, getCurrentPath, currentPath]);
+
     const navigateTo = useCallback(async (index: number) => {
         setRefreshing(true);
 
@@ -363,6 +377,7 @@ export default function FilesScreen() {
                         file={item}
                         canEdit={canEdit}
                         onOpen={openFile}
+                        openFileDetails={openFileDetails}
                         onDownload={onDownload}
                         onDelete={deleteAlert}
                         onArchive={onArchive}

@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
 import { useStyle } from "@/hooks/useStyle";
+import { getIcon } from "@/utils/files";
 import { FileDesc } from "pufferpanel";
 
 const archiveExtensions = [
@@ -22,6 +23,7 @@ type FileItemProps = {
     file: FileDesc;
     canEdit: boolean;
     onOpen: (file: FileDesc) => void;
+    openFileDetails: (file: FileDesc) => void;
     onDownload: (file: FileDesc) => void;
     onDelete: (file: FileDesc) => void;
     onArchive: (file: FileDesc) => void;
@@ -65,41 +67,6 @@ export default function FileItem(props: FileItemProps) {
     );
     const { formatFileSize, formatDateTime } = useLocalizedFormatter();
 
-    const getIcon = (): any => {
-        if (!props.file.isFile) {
-            return "folder";
-        }
-
-        if (!props.file.extension) {
-            return "file";
-        }
-
-        const map: { [key: string]: string } = {
-            ".txt": "file-document",
-            ".json": "code-braces",
-            ".log": "math-log",
-            ".jar": "language-java",
-            ".java": "language-java",
-            ".js": "language-javascript",
-            ".jsx": "language-javascript",
-            ".ts": "language-typescript",
-            ".tsx": "language-typescript",
-            ".properties": "file-cog",
-            ".lock": "file-lock",
-            ".toml": "file-toml",
-            ".zip": "zip-box",
-            ".gz": "zip-box",
-            ".csv": "file-table",
-            ".yml": "file-cog",
-            ".yaml": "file-cog",
-            ".png": "file-image",
-            ".jpg": "file-image",
-            ".jpeg": "file-image"
-        };
-
-        return map[props.file.extension] || "file";
-    };
-
     const formatModifiedDate = () => {
         if (!props.file.modifyTime) {
             return null;
@@ -120,8 +87,12 @@ export default function FileItem(props: FileItemProps) {
     };
 
     return (
-        <TouchableOpacity style={style.file} onPress={() => props.onOpen(props.file)}>
-            <MaterialCommunityIcons name={getIcon()} size={30} color={colors.text} style={style.icon} />
+        <TouchableOpacity
+            style={style.file}
+            onPress={() => props.onOpen(props.file)}
+            onLongPress={() => props.openFileDetails(props.file)}
+        >
+            <MaterialCommunityIcons name={getIcon(props.file)} size={30} color={colors.text} style={style.icon} />
 
             <View style={style.infoView}>
                 <Text style={style.name} numberOfLines={1}>{props.file.name}</Text>

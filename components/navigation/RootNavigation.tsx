@@ -91,6 +91,15 @@ export default function RootNavigation() {
             />
 
             <Stack.Screen
+                name="(modal)/filedetails"
+                options={{
+                    title: "File Details",
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
                 name="(modal)/deploynode"
                 options={{
                     title: t("nodes:Deploy"),

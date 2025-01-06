@@ -1,3 +1,5 @@
+import { ComponentProps } from "react";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { FileDesc } from "pufferpanel";
 
 type Extension = {
@@ -38,4 +40,39 @@ export function skipDownload(file: FileDesc) {
     }
 
     return ["image", "audio", "video"].includes(type);
+}
+
+export function getIcon(file: FileDesc): ComponentProps<typeof MaterialCommunityIcons>["name"] {
+    if (!file.isFile) {
+        return "folder";
+    }
+
+    if (!file.extension) {
+        return "file";
+    }
+
+    const map: { [key: string]: ComponentProps<typeof MaterialCommunityIcons>["name"] } = {
+        ".txt": "file-document",
+        ".json": "code-braces",
+        ".log": "math-log",
+        ".jar": "language-java",
+        ".java": "language-java",
+        ".js": "language-javascript",
+        ".jsx": "language-javascript",
+        ".ts": "language-typescript",
+        ".tsx": "language-typescript",
+        ".properties": "file-cog",
+        ".lock": "file-lock",
+        ".toml": "file-cog",
+        ".zip": "zip-box",
+        ".gz": "zip-box",
+        ".csv": "file-table",
+        ".yml": "file-cog",
+        ".yaml": "file-cog",
+        ".png": "file-image",
+        ".jpg": "file-image",
+        ".jpeg": "file-image"
+    };
+
+    return map[file.extension] || "file";
 }
