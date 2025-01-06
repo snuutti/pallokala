@@ -43,6 +43,14 @@ export default function ChangelogScreen() {
         return <LoadingScreen />;
     }
 
+    if (!changelog.length) {
+        return (
+            <ContentWrapper>
+                <Text style={style.body}>Failed to load changelog from GitHub! Are we rate limited?</Text>
+            </ContentWrapper>
+        );
+    }
+
     return (
         <ContentWrapper>
             {changelog
