@@ -52,7 +52,7 @@ export default function StepProgress(props: StepProgressProps) {
                     key={index}
                     name={props.current > index ? "check" : step}
                     size={24}
-                    color={colors.text}
+                    color={props.current > index ? colors.textPrimary : colors.text}
                     style={[style.icon, props.current > index && style.completed]}
                 />
             ))}
