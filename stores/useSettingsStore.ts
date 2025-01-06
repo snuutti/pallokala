@@ -7,17 +7,21 @@ export type ThemeSettings = {
     color?: string;
 };
 
+export type TimeFormat = "locale" | "24h" | "12h";
+
 export interface SettingsStore {
     language: string;
     colorScheme: ColorScheme;
     themeSettings: ThemeSettings;
     consoleFontSize: number;
+    timeFormat: TimeFormat;
     disclaimerRead: boolean;
     previousVersion?: string;
     setLanguage: (language: string) => void;
     setColorScheme: (colorScheme: ColorScheme) => void;
     setThemeSettings: (settings: ThemeSettings) => void;
     setConsoleFontSize: (fontSize: number) => void;
+    setTimeFormat: (timeFormat: TimeFormat) => void;
     setDisclaimerRead: () => void;
     setPreviousVersion: (version: string) => void;
 }
@@ -29,6 +33,7 @@ export const useSettingsStore = create<SettingsStore>()(
             colorScheme: "device",
             themeSettings: {},
             consoleFontSize: 14,
+            timeFormat: "24h",
             disclaimerRead: false,
             previousVersion: undefined,
             setLanguage: (language) => set({ language }),
@@ -38,6 +43,7 @@ export const useSettingsStore = create<SettingsStore>()(
             },
             setThemeSettings: (settings) => set({ themeSettings: settings }),
             setConsoleFontSize: (fontSize) => set({ consoleFontSize: fontSize }),
+            setTimeFormat: (timeFormat) => set({ timeFormat }),
             setDisclaimerRead: () => set({ disclaimerRead: true }),
             setPreviousVersion: (version) => set({ previousVersion: version })
         }),

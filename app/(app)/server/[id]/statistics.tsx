@@ -5,6 +5,7 @@ import { CartesianChart, Line } from "victory-native";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import { useFont } from "@shopify/react-native-skia";
 import { useServer } from "@/context/ServerProvider";
+import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
 import { useStyle } from "@/hooks/useStyle";
 import { ServerStats, JvmStats } from "pufferpanel";
 import ubuntu from "@/assets/fonts/UbuntuMono-R.ttf";
@@ -12,30 +13,6 @@ import ubuntu from "@/assets/fonts/UbuntuMono-R.ttf";
 const numFormat = new Intl.NumberFormat("en-US", {
     maximumFractionDigits: 2
 });
-
-const memoryFormat = (value?: number) => {
-    if (!value) {
-        return numFormat.format(0) + " B";
-    }
-
-    if (value < Math.pow(2, 10)) {
-        return numFormat.format(value) + " B";
-    }
-
-    if (value < Math.pow(2, 20)) {
-        return numFormat.format(value / Math.pow(2, 10)) + " KiB";
-    }
-
-    if (value < Math.pow(2, 30)) {
-        return numFormat.format(value / Math.pow(2, 20)) + " MiB";
-    }
-
-    if (value < Math.pow(2, 40)) {
-        return numFormat.format(value / Math.pow(2, 30)) + " GiB";
-    }
-
-    return numFormat.format(value / Math.pow(2, 40)) + " TiB";
-};
 
 const cpuFormat = (value: number) => {
     return numFormat.format(value) + " %";
@@ -71,6 +48,7 @@ export default function StatisticsScreen() {
         })
     );
     const { server } = useServer();
+    const { formatFileSize } = useLocalizedFormatter();
     const font = useFont(ubuntu, 12);
     const [unbindEvent, setUnbindEvent] = useState<(() => void) | undefined>(undefined);
     const [task, setTask] = useState<NodeJS.Timeout | undefined>(undefined);
@@ -150,7 +128,7 @@ export default function StatisticsScreen() {
                             lineColor: colors.textDisabled,
                             labelColor: colors.text,
                             axisSide: "right",
-                            formatYLabel: memoryFormat
+                            formatYLabel: formatFileSize
                         }
                     ]}
                     frame={{

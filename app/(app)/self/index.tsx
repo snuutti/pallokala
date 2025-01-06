@@ -25,7 +25,7 @@ export default function PreferencesScreen() {
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
     const { createListModal, createColorPickerModal } = useModal();
-    const { themeSettings, consoleFontSize, setLanguage, setColorScheme, setThemeSettings, setConsoleFontSize } = useSettingsStore();
+    const { themeSettings, consoleFontSize, setLanguage, setColorScheme, setThemeSettings, setConsoleFontSize, setTimeFormat } = useSettingsStore();
     const [baseColor, setBaseColor] = useState(themeSettings.color || colors.primary);
     const [newConsoleFontSize, setNewConsoleFontSize] = useState(consoleFontSize);
 
@@ -83,6 +83,28 @@ export default function PreferencesScreen() {
         );
     };
 
+    const pickTimeFormat = () => {
+        createListModal(
+            [
+                {
+                    text: "Use Locale",
+                    icon: "translate",
+                    onPress: () => setTimeFormat("locale")
+                },
+                {
+                    text: "12-hour",
+                    icon: "biohazard",
+                    onPress: () => setTimeFormat("12h")
+                },
+                {
+                    text: "24-hour",
+                    icon: "hand-okay",
+                    onPress: () => setTimeFormat("24h")
+                }
+            ]
+        );
+    };
+
     const savePreferences = async () => {
         const settings = {
             ...themeSettings,
@@ -131,6 +153,12 @@ export default function PreferencesScreen() {
                 minimumValue={10}
                 maximumValue={30}
                 step={1}
+            />
+
+            <Button
+                text="Time Format"
+                icon="clock-outline"
+                onPress={pickTimeFormat}
             />
 
             <Button

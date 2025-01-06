@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
 import { useStyle } from "@/hooks/useStyle";
 import { FileDesc } from "pufferpanel";
 
@@ -16,16 +17,6 @@ const archiveExtensions = [
     ".zip",
     ".zipx"
 ];
-
-// TODO: have all time formats use the user's locale
-// for now the bri'ish format will suffice
-const formatDate = new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric"
-});
 
 type FileItemProps = {
     file: FileDesc;
@@ -72,6 +63,7 @@ export default function FileItem(props: FileItemProps) {
             }
         })
     );
+    const { formatFileSize, formatDateTime } = useLocalizedFormatter();
 
     const getIcon = (): any => {
         if (!props.file.isFile) {
@@ -108,38 +100,12 @@ export default function FileItem(props: FileItemProps) {
         return map[props.file.extension] || "file";
     };
 
-    const formatFileSize = () => {
-        const numFormat = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
-
-        if (!props.file.size) {
-            return "0 B";
-        }
-
-        if (props.file.size < Math.pow(2, 10)) {
-            return numFormat.format(props.file.size) + " B";
-        }
-
-        if (props.file.size < Math.pow(2, 20)) {
-            return numFormat.format(props.file.size / Math.pow(2, 10)) + " KiB";
-        }
-
-        if (props.file.size < Math.pow(2, 30)) {
-            return numFormat.format(props.file.size / Math.pow(2, 20)) + " MiB";
-        }
-
-        if (props.file.size < Math.pow(2, 40)) {
-            return numFormat.format(props.file.size / Math.pow(2, 30)) + " GiB";
-        }
-
-        return numFormat.format(props.file.size / Math.pow(2, 40)) + " TiB";
-    };
-
     const formatModifiedDate = () => {
         if (!props.file.modifyTime) {
             return null;
         }
 
-        return " • " + formatDate.format(new Date(props.file.modifyTime * 1000));
+        return " • " + formatDateTime(props.file.modifyTime);
     };
 
     const isArchive = (): boolean => {
@@ -161,7 +127,7 @@ export default function FileItem(props: FileItemProps) {
                 <Text style={style.name} numberOfLines={1}>{props.file.name}</Text>
 
                 {props.file.isFile && (
-                    <Text style={style.size} numberOfLines={1}>{formatFileSize()}{formatModifiedDate()}</Text>
+                    <Text style={style.size} numberOfLines={1}>{formatFileSize(props.file.size)}{formatModifiedDate()}</Text>
                 )}
             </View>
 

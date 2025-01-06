@@ -2,14 +2,9 @@ import { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
+import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
 import { useStyle } from "@/hooks/useStyle";
 import { getReleaseHistory, Release } from "@/utils/github";
-
-const formatDate = new Intl.DateTimeFormat("en-US", {
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-});
 
 export default function ChangelogScreen() {
     const { style } = useStyle((colors) =>
@@ -29,6 +24,7 @@ export default function ChangelogScreen() {
             }
         })
     );
+    const { formatDate } = useLocalizedFormatter();
     const [changelog, setChangelog] = useState<Release[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -58,7 +54,7 @@ export default function ChangelogScreen() {
                 .map((release) => (
                 <View key={release.tag_name}>
                     <Text style={style.tag}>{release.tag_name}</Text>
-                    <Text style={style.published}>{formatDate.format(new Date(release.published_at))}</Text>
+                    <Text style={style.published}>{formatDate(new Date(release.published_at))}</Text>
                     <Text style={style.body}>{release.body}</Text>
                 </View>
             ))}
