@@ -505,7 +505,7 @@ class MockServer implements Server {
     }
 
     getFileUrl(path: string): string {
-        throw new Error("Method not implemented.");
+        return path;
     }
 
     getFile(path?: string | undefined, raw?: boolean | undefined): Promise<string | FileDesc[]> {

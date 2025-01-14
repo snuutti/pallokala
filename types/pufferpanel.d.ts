@@ -3,6 +3,7 @@ declare module "pufferpanel" {
     import { WebSocket } from "node:http";
 
     export class ApiClient {
+        public _host: string;
         public auth: AuthApi;
         public self: SelfApi;
         public server: ServerApi;

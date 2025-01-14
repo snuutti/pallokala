@@ -17,6 +17,12 @@ import * as pako from "pako";
 import { ApiClient } from "pufferpanel";
 
 async function getFile(client: ApiClient, url: string): Promise<ArrayBuffer> {
+    if (client._host === "http://pallokala.test") {
+        return new TextEncoder().encode(`#Minecraft server properties
+#Fri Dec 06 16:04:34 UTC 2024
+hello=world`).buffer;
+    }
+
     const res = await client.get(url, undefined, undefined, { responseType: "arraybuffer" });
     return res.data;
 }
