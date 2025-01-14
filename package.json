@@ -5,8 +5,8 @@
     "scripts": {
         "postinstall": "bun ./scripts/patchPackages.cjs",
         "start": "expo start",
-        "android": "expo run:android",
-        "ios": "expo run:ios",
+        "android": "APP_VARIANT=development expo run:android",
+        "ios": "APP_VARIANT=development expo run:ios",
         "test": "jest --watchAll",
         "lint": "expo lint"
     },
