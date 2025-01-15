@@ -6,6 +6,7 @@ import * as Linking from "expo-linking";
 import * as Application from "expo-application";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ContentWrapper from "@/components/screen/ContentWrapper";
+import { useApiClient } from "@/context/ApiClientProvider";
 import { useStyle } from "@/hooks/useStyle";
 
 export default function AboutScreen() {
@@ -23,6 +24,7 @@ export default function AboutScreen() {
             }
         })
     );
+    const { version } = useApiClient();
 
     const openLink = async (url: string) => {
         await Linking.openURL(url);
@@ -68,6 +70,10 @@ export default function AboutScreen() {
 
             <Text style={style.text}>
                 Pallokala version {Application.nativeApplicationVersion} ({Application.nativeBuildVersion})
+            </Text>
+
+            <Text style={style.text}>
+                PufferPanel version {version}
             </Text>
         </ContentWrapper>
     );
