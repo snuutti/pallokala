@@ -4,6 +4,7 @@ import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import UnifiedSessionStore from "@/utils/sessionStore";
 import MockApiClient from "@/utils/mockApiClient";
+import { getPanelVersion } from "@/utils/version";
 import { getPrivateInfoReplacer } from "@/utils/json";
 import { ApiClient, EditableConfigSettings, ErrorHandlerResult } from "pufferpanel";
 
@@ -11,6 +12,7 @@ type ApiClientContextType = {
     apiClient?: ApiClient;
     config?: EditableConfigSettings;
     sessionTimedOut: boolean;
+    version: string | null;
     changeServer: (url: string) => ApiClient;
 };
 
@@ -27,6 +29,7 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
     const [apiClient, setApiClient] = useState<ApiClient | undefined>(undefined);
     const [config, setConfig] = useState<EditableConfigSettings | undefined>(undefined);
     const [sessionTimedOut, setSessionTimedOut] = useState(false);
+    const [version, setVersion] = useState<string | null>(null);
 
     useEffect(() => {
         if (apiClient === undefined) {
@@ -58,8 +61,20 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
         let newApiClient: ApiClient;
         if (url === "http://pallokala.test") {
             newApiClient = new MockApiClient(url, new UnifiedSessionStore());
+            setVersion("100.0.0");
         } else {
             newApiClient = new ApiClient(url, new UnifiedSessionStore(), handleError);
+
+            setVersion(null);
+            getPanelVersion(url)
+                .then(version => {
+                    setVersion(version);
+                })
+                .catch(error => {
+                    console.log("Failed to get panel version", error);
+                    setVersion("unknown");
+                    showError("Failed to get panel version. Some features may be unavailable.");
+                });
         }
 
         setConfig(undefined);
@@ -121,7 +136,7 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
     };
 
     return (
-        <ApiClientContext.Provider value={{ apiClient, config, sessionTimedOut, changeServer }}>
+        <ApiClientContext.Provider value={{ apiClient, config, sessionTimedOut, version, changeServer }}>
             {children}
         </ApiClientContext.Provider>
     );
