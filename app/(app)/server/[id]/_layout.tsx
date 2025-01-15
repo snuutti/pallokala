@@ -5,11 +5,13 @@ import NavigationIcon from "@/components/navigation/NavigationIcon";
 import ServerErrorScreen from "@/components/server/ServerErrorScreen";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import { useServer } from "@/context/ServerProvider";
+import useVersionCheck from "@/hooks/useVersionCheck";
 
 export default function TabsLayout() {
     const { t } = useTranslation();
     const { server, error, switchServer } = useServer();
     const { id } = useLocalSearchParams<{ id: string }>();
+    const hasBackups = useVersionCheck("3.0.0-rc.7");
 
     useEffect(() => {
         switchServer(id);
@@ -99,6 +101,18 @@ export default function TabsLayout() {
                     )
                 }}
                 redirect={!server.hasScope("server.sftp")}
+            />
+
+            <Tabs.Screen
+                name="backups"
+                options={{
+                    title: t("backup:Backup"),
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="backup-restore" color={color} />
+                    )
+                }}
+                redirect={!hasBackups || !server.hasScope("server.backup.view")}
             />
 
             <Tabs.Screen

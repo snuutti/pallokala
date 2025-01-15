@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { createFileSizeFormatter, createDateTimeFormatter, createDateFormatter } from "@/utils/formatters";
+import { createFileSizeFormatter, createDateTimeFormatter, createBackupDateTimeFormatter, createDateFormatter } from "@/utils/formatters";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 
 export default function useLocalizedFormatter() {
@@ -15,6 +15,10 @@ export default function useLocalizedFormatter() {
         return createDateTimeFormatter(i18n.language, timeFormat);
     }, [i18n.language, timeFormat]);
 
+    const formatBackupDateTime = useMemo(() => {
+        return createBackupDateTimeFormatter(i18n.language, timeFormat);
+    }, [i18n.language]);
+
     const formatDate = useMemo(() => {
         return createDateFormatter(i18n.language);
     }, [i18n.language]);
@@ -22,6 +26,7 @@ export default function useLocalizedFormatter() {
     return {
         formatFileSize,
         formatDateTime,
+        formatBackupDateTime,
         formatDate
     };
 };

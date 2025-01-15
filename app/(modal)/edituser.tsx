@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { StyleSheet, Text } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useTranslation } from "react-i18next";
@@ -7,10 +8,11 @@ import Switch from "@/components/ui/Switch";
 import Button from "@/components/ui/Button";
 import { useServer } from "@/context/ServerProvider";
 import { useToast } from "@/context/ToastProvider";
+import useVersionCheck from "@/hooks/useVersionCheck";
 import { useStyle } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
 
-const perms = [
+const basePerms = [
     "server.view",
     "server.admin",
     "server.delete",
@@ -53,9 +55,25 @@ export default function EditUserScreen() {
     const { server } = useServer();
     const { showSuccess } = useToast();
     const { email } = useLocalSearchParams<{ email: string }>();
+    const hasBackups = useVersionCheck("3.0.0-rc.7");
     const user = useBoundStore(state => state.serverUsers[server!.id]).find((u) => u.email === email);
     const modifyServerUser = useBoundStore(state => state.modifyServerUser);
     const removeServerUser = useBoundStore(state => state.removeServerUser);
+    const [perms, setPerms] = useState<string[]>([]);
+
+    useEffect(() => {
+        const perms = [...basePerms];
+        if (hasBackups) {
+            perms.push(
+                "server.backup.view",
+                "server.backup.create",
+                "server.backup.restore",
+                "server.backup.delete"
+            );
+        }
+
+        setPerms(perms);
+    }, [hasBackups, email]);
 
     const scopeLabel = (scope: string) => {
         return t(`scopes:name.${scope.replace(/\./g, "-")}`);

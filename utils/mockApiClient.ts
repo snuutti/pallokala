@@ -12,6 +12,7 @@ import {
     OtpEnrollResponse,
     User,
     FileDesc,
+    Backup,
     Server,
     ServerAction,
     ServerData,
@@ -342,6 +343,26 @@ class MockServerApi implements ServerApi {
         throw new Error("Method not implemented.");
     }
 
+    async getBackups(id: string): Promise<Backup[]> {
+        throw new Error("Method not implemented.");
+    }
+
+    async createBackup(id: string, name: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    async deleteBackup(id: string, backupId: number): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    async restoreBackup(id: string, backupId: number): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    getBackupUrl(id: string, backupId: number): string {
+        throw new Error("Method not implemented.");
+    }
+
     deleteFile(id: string, path: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
@@ -378,8 +399,8 @@ class MockServer implements Server {
 
     hasScope(scope: string): boolean {
         return scope !== "server.files.edit" && scope !== "server.data.view" && scope !== "server.users.create"
-            && scope !== "server.data.edit" && scope !== "server.flags.edit" && scope !== "server.definition.view"
-            && scope !== "server.delete";
+            && scope !== "server.data.edit" && scope !== "server.flags.edit" && scope !== "server.backup.view"
+            && scope !== "server.definition.view" && scope !== "server.delete";
     }
 
     on(event: string, cb: (data: any) => void): () => void {
@@ -544,6 +565,26 @@ hello=world`);
     }
 
     extractFile(path: string, destination: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    async getBackups(): Promise<Backup[]> {
+        throw new Error("Method not implemented.");
+    }
+
+    async createBackup(name: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    async deleteBackup(backupId: number): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    async restoreBackup(backupId: number): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    getBackupUrl(backupId: number): string {
         throw new Error("Method not implemented.");
     }
 

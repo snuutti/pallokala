@@ -7,7 +7,7 @@ i18n
     .init({
         fallbackLng: "en_US",
         resources,
-        ns: ["common", "env", "errors", "files", "hotkeys", "nodes", "oauth", "operators", "scopes", "servers", "settings", "templates", "users"],
+        ns: ["common", "env", "errors", "files", "hotkeys", "nodes", "oauth", "operators", "scopes", "servers", "settings", "templates", "users", "backup"],
         defaultNS: "common",
         interpolation: {
             escapeValue: false,

@@ -15,6 +15,10 @@ export async function isUnsupportedVersion(baseUrl: string): Promise<boolean> {
 }
 
 export function isVersionSatisfied(version: string, requiredVersion: string): boolean {
+    if (version === "unknown") {
+        return false;
+    }
+
     try {
         const [major] = version.split(".");
         if (parseInt(major, 10) === 0) {

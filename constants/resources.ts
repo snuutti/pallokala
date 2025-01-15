@@ -12,7 +12,8 @@ const resources = {
         servers: require("@/lang/ar_SA/servers.json"),
         settings: require("@/lang/ar_SA/settings.json"),
         templates: require("@/lang/ar_SA/templates.json"),
-        users: require("@/lang/ar_SA/users.json")
+        users: require("@/lang/ar_SA/users.json"),
+        backup: require("@/lang/ar_SA/backup.json")
     },
     "cs_CZ": {
         common: require("@/lang/cs_CZ/common.json"),
@@ -27,7 +28,8 @@ const resources = {
         servers: require("@/lang/cs_CZ/servers.json"),
         settings: require("@/lang/cs_CZ/settings.json"),
         templates: require("@/lang/cs_CZ/templates.json"),
-        users: require("@/lang/cs_CZ/users.json")
+        users: require("@/lang/cs_CZ/users.json"),
+        backup: require("@/lang/cs_CZ/backup.json")
     },
     "da_DK": {
         common: require("@/lang/da_DK/common.json"),
@@ -42,7 +44,8 @@ const resources = {
         servers: require("@/lang/da_DK/servers.json"),
         settings: require("@/lang/da_DK/settings.json"),
         templates: require("@/lang/da_DK/templates.json"),
-        users: require("@/lang/da_DK/users.json")
+        users: require("@/lang/da_DK/users.json"),
+        backup: require("@/lang/da_DK/backup.json")
     },
     "de_DE": {
         common: require("@/lang/de_DE/common.json"),
@@ -57,7 +60,8 @@ const resources = {
         servers: require("@/lang/de_DE/servers.json"),
         settings: require("@/lang/de_DE/settings.json"),
         templates: require("@/lang/de_DE/templates.json"),
-        users: require("@/lang/de_DE/users.json")
+        users: require("@/lang/de_DE/users.json"),
+        backup: require("@/lang/de_DE/backup.json")
     },
     "el_GR": {
         common: require("@/lang/el_GR/common.json"),
@@ -72,7 +76,8 @@ const resources = {
         servers: require("@/lang/el_GR/servers.json"),
         settings: require("@/lang/el_GR/settings.json"),
         templates: require("@/lang/el_GR/templates.json"),
-        users: require("@/lang/el_GR/users.json")
+        users: require("@/lang/el_GR/users.json"),
+        backup: require("@/lang/el_GR/backup.json")
     },
     "en_US": {
         common: require("@/lang/en_US/common.json"),
@@ -87,7 +92,8 @@ const resources = {
         servers: require("@/lang/en_US/servers.json"),
         settings: require("@/lang/en_US/settings.json"),
         templates: require("@/lang/en_US/templates.json"),
-        users: require("@/lang/en_US/users.json")
+        users: require("@/lang/en_US/users.json"),
+        backup: require("@/lang/en_US/backup.json")
     },
     "es_419": {
         common: require("@/lang/es_419/common.json"),
@@ -102,7 +108,8 @@ const resources = {
         servers: require("@/lang/es_419/servers.json"),
         settings: require("@/lang/es_419/settings.json"),
         templates: require("@/lang/es_419/templates.json"),
-        users: require("@/lang/es_419/users.json")
+        users: require("@/lang/es_419/users.json"),
+        backup: require("@/lang/es_419/backup.json")
     },
     "es_ES": {
         common: require("@/lang/es_ES/common.json"),
@@ -117,7 +124,8 @@ const resources = {
         servers: require("@/lang/es_ES/servers.json"),
         settings: require("@/lang/es_ES/settings.json"),
         templates: require("@/lang/es_ES/templates.json"),
-        users: require("@/lang/es_ES/users.json")
+        users: require("@/lang/es_ES/users.json"),
+        backup: require("@/lang/es_ES/backup.json")
     },
     "et_EE": {
         common: require("@/lang/et_EE/common.json"),
@@ -132,7 +140,8 @@ const resources = {
         servers: require("@/lang/et_EE/servers.json"),
         settings: require("@/lang/et_EE/settings.json"),
         templates: require("@/lang/et_EE/templates.json"),
-        users: require("@/lang/et_EE/users.json")
+        users: require("@/lang/et_EE/users.json"),
+        backup: require("@/lang/et_EE/backup.json")
     },
     "fi_FI": {
         common: require("@/lang/fi_FI/common.json"),
@@ -147,7 +156,8 @@ const resources = {
         servers: require("@/lang/fi_FI/servers.json"),
         settings: require("@/lang/fi_FI/settings.json"),
         templates: require("@/lang/fi_FI/templates.json"),
-        users: require("@/lang/fi_FI/users.json")
+        users: require("@/lang/fi_FI/users.json"),
+        backup: require("@/lang/fi_FI/backup.json")
     },
     "fr_FR": {
         common: require("@/lang/fr_FR/common.json"),
@@ -162,7 +172,8 @@ const resources = {
         servers: require("@/lang/fr_FR/servers.json"),
         settings: require("@/lang/fr_FR/settings.json"),
         templates: require("@/lang/fr_FR/templates.json"),
-        users: require("@/lang/fr_FR/users.json")
+        users: require("@/lang/fr_FR/users.json"),
+        backup: require("@/lang/fr_FR/backup.json")
     },
     "he_IL": {
         common: require("@/lang/he_IL/common.json"),
@@ -177,7 +188,8 @@ const resources = {
         servers: require("@/lang/he_IL/servers.json"),
         settings: require("@/lang/he_IL/settings.json"),
         templates: require("@/lang/he_IL/templates.json"),
-        users: require("@/lang/he_IL/users.json")
+        users: require("@/lang/he_IL/users.json"),
+        backup: require("@/lang/he_IL/backup.json")
     },
     "hu_HU": {
         common: require("@/lang/hu_HU/common.json"),
@@ -192,7 +204,8 @@ const resources = {
         servers: require("@/lang/hu_HU/servers.json"),
         settings: require("@/lang/hu_HU/settings.json"),
         templates: require("@/lang/hu_HU/templates.json"),
-        users: require("@/lang/hu_HU/users.json")
+        users: require("@/lang/hu_HU/users.json"),
+        backup: require("@/lang/hu_HU/backup.json")
     },
     "id_ID": {
         common: require("@/lang/id_ID/common.json"),
@@ -207,7 +220,8 @@ const resources = {
         servers: require("@/lang/id_ID/servers.json"),
         settings: require("@/lang/id_ID/settings.json"),
         templates: require("@/lang/id_ID/templates.json"),
-        users: require("@/lang/id_ID/users.json")
+        users: require("@/lang/id_ID/users.json"),
+        backup: require("@/lang/id_ID/backup.json")
     },
     "it_IT": {
         common: require("@/lang/it_IT/common.json"),
@@ -222,7 +236,8 @@ const resources = {
         servers: require("@/lang/it_IT/servers.json"),
         settings: require("@/lang/it_IT/settings.json"),
         templates: require("@/lang/it_IT/templates.json"),
-        users: require("@/lang/it_IT/users.json")
+        users: require("@/lang/it_IT/users.json"),
+        backup: require("@/lang/it_IT/backup.json")
     },
     "ja_JP": {
         common: require("@/lang/ja_JP/common.json"),
@@ -237,7 +252,8 @@ const resources = {
         servers: require("@/lang/ja_JP/servers.json"),
         settings: require("@/lang/ja_JP/settings.json"),
         templates: require("@/lang/ja_JP/templates.json"),
-        users: require("@/lang/ja_JP/users.json")
+        users: require("@/lang/ja_JP/users.json"),
+        backup: require("@/lang/ja_JP/backup.json")
     },
     "ko_KR": {
         common: require("@/lang/ko_KR/common.json"),
@@ -252,7 +268,8 @@ const resources = {
         servers: require("@/lang/ko_KR/servers.json"),
         settings: require("@/lang/ko_KR/settings.json"),
         templates: require("@/lang/ko_KR/templates.json"),
-        users: require("@/lang/ko_KR/users.json")
+        users: require("@/lang/ko_KR/users.json"),
+        backup: require("@/lang/ko_KR/backup.json")
     },
     "lt_LT": {
         common: require("@/lang/lt_LT/common.json"),
@@ -267,7 +284,8 @@ const resources = {
         servers: require("@/lang/lt_LT/servers.json"),
         settings: require("@/lang/lt_LT/settings.json"),
         templates: require("@/lang/lt_LT/templates.json"),
-        users: require("@/lang/lt_LT/users.json")
+        users: require("@/lang/lt_LT/users.json"),
+        backup: require("@/lang/lt_LT/backup.json")
     },
     "nl_NL": {
         common: require("@/lang/nl_NL/common.json"),
@@ -282,7 +300,8 @@ const resources = {
         servers: require("@/lang/nl_NL/servers.json"),
         settings: require("@/lang/nl_NL/settings.json"),
         templates: require("@/lang/nl_NL/templates.json"),
-        users: require("@/lang/nl_NL/users.json")
+        users: require("@/lang/nl_NL/users.json"),
+        backup: require("@/lang/nl_NL/backup.json")
     },
     "no_NO": {
         common: require("@/lang/no_NO/common.json"),
@@ -297,7 +316,8 @@ const resources = {
         servers: require("@/lang/no_NO/servers.json"),
         settings: require("@/lang/no_NO/settings.json"),
         templates: require("@/lang/no_NO/templates.json"),
-        users: require("@/lang/no_NO/users.json")
+        users: require("@/lang/no_NO/users.json"),
+        backup: require("@/lang/no_NO/backup.json")
     },
     "pl_PL": {
         common: require("@/lang/pl_PL/common.json"),
@@ -312,7 +332,8 @@ const resources = {
         servers: require("@/lang/pl_PL/servers.json"),
         settings: require("@/lang/pl_PL/settings.json"),
         templates: require("@/lang/pl_PL/templates.json"),
-        users: require("@/lang/pl_PL/users.json")
+        users: require("@/lang/pl_PL/users.json"),
+        backup: require("@/lang/pl_PL/backup.json")
     },
     "pt_BR": {
         common: require("@/lang/pt_BR/common.json"),
@@ -327,7 +348,8 @@ const resources = {
         servers: require("@/lang/pt_BR/servers.json"),
         settings: require("@/lang/pt_BR/settings.json"),
         templates: require("@/lang/pt_BR/templates.json"),
-        users: require("@/lang/pt_BR/users.json")
+        users: require("@/lang/pt_BR/users.json"),
+        backup: require("@/lang/pt_BR/backup.json")
     },
     "pt_PT": {
         common: require("@/lang/pt_PT/common.json"),
@@ -342,7 +364,8 @@ const resources = {
         servers: require("@/lang/pt_PT/servers.json"),
         settings: require("@/lang/pt_PT/settings.json"),
         templates: require("@/lang/pt_PT/templates.json"),
-        users: require("@/lang/pt_PT/users.json")
+        users: require("@/lang/pt_PT/users.json"),
+        backup: require("@/lang/pt_PT/backup.json")
     },
     "ro_RO": {
         common: require("@/lang/ro_RO/common.json"),
@@ -357,7 +380,8 @@ const resources = {
         servers: require("@/lang/ro_RO/servers.json"),
         settings: require("@/lang/ro_RO/settings.json"),
         templates: require("@/lang/ro_RO/templates.json"),
-        users: require("@/lang/ro_RO/users.json")
+        users: require("@/lang/ro_RO/users.json"),
+        backup: require("@/lang/ro_RO/backup.json")
     },
     "ru_RU": {
         common: require("@/lang/ru_RU/common.json"),
@@ -372,7 +396,8 @@ const resources = {
         servers: require("@/lang/ru_RU/servers.json"),
         settings: require("@/lang/ru_RU/settings.json"),
         templates: require("@/lang/ru_RU/templates.json"),
-        users: require("@/lang/ru_RU/users.json")
+        users: require("@/lang/ru_RU/users.json"),
+        backup: require("@/lang/ru_RU/backup.json")
     },
     "sk_SK": {
         common: require("@/lang/sk_SK/common.json"),
@@ -387,7 +412,8 @@ const resources = {
         servers: require("@/lang/sk_SK/servers.json"),
         settings: require("@/lang/sk_SK/settings.json"),
         templates: require("@/lang/sk_SK/templates.json"),
-        users: require("@/lang/sk_SK/users.json")
+        users: require("@/lang/sk_SK/users.json"),
+        backup: require("@/lang/sk_SK/backup.json")
     },
     "sr_SP": {
         common: require("@/lang/sr_SP/common.json"),
@@ -402,7 +428,8 @@ const resources = {
         servers: require("@/lang/sr_SP/servers.json"),
         settings: require("@/lang/sr_SP/settings.json"),
         templates: require("@/lang/sr_SP/templates.json"),
-        users: require("@/lang/sr_SP/users.json")
+        users: require("@/lang/sr_SP/users.json"),
+        backup: require("@/lang/sr_SP/backup.json")
     },
     "sv_SE": {
         common: require("@/lang/sv_SE/common.json"),
@@ -417,7 +444,8 @@ const resources = {
         servers: require("@/lang/sv_SE/servers.json"),
         settings: require("@/lang/sv_SE/settings.json"),
         templates: require("@/lang/sv_SE/templates.json"),
-        users: require("@/lang/sv_SE/users.json")
+        users: require("@/lang/sv_SE/users.json"),
+        backup: require("@/lang/sv_SE/backup.json")
     },
     "tr_TR": {
         common: require("@/lang/tr_TR/common.json"),
@@ -432,7 +460,8 @@ const resources = {
         servers: require("@/lang/tr_TR/servers.json"),
         settings: require("@/lang/tr_TR/settings.json"),
         templates: require("@/lang/tr_TR/templates.json"),
-        users: require("@/lang/tr_TR/users.json")
+        users: require("@/lang/tr_TR/users.json"),
+        backup: require("@/lang/tr_TR/backup.json")
     },
     "uk_UA": {
         common: require("@/lang/uk_UA/common.json"),
@@ -447,7 +476,8 @@ const resources = {
         servers: require("@/lang/uk_UA/servers.json"),
         settings: require("@/lang/uk_UA/settings.json"),
         templates: require("@/lang/uk_UA/templates.json"),
-        users: require("@/lang/uk_UA/users.json")
+        users: require("@/lang/uk_UA/users.json"),
+        backup: require("@/lang/uk_UA/backup.json")
     },
     "vi_VN": {
         common: require("@/lang/vi_VN/common.json"),
@@ -462,7 +492,8 @@ const resources = {
         servers: require("@/lang/vi_VN/servers.json"),
         settings: require("@/lang/vi_VN/settings.json"),
         templates: require("@/lang/vi_VN/templates.json"),
-        users: require("@/lang/vi_VN/users.json")
+        users: require("@/lang/vi_VN/users.json"),
+        backup: require("@/lang/vi_VN/backup.json")
     },
     "zh_CN": {
         common: require("@/lang/zh_CN/common.json"),
@@ -477,7 +508,8 @@ const resources = {
         servers: require("@/lang/zh_CN/servers.json"),
         settings: require("@/lang/zh_CN/settings.json"),
         templates: require("@/lang/zh_CN/templates.json"),
-        users: require("@/lang/zh_CN/users.json")
+        users: require("@/lang/zh_CN/users.json"),
+        backup: require("@/lang/zh_CN/backup.json")
     },
     "zh_HK": {
         common: require("@/lang/zh_HK/common.json"),
@@ -492,7 +524,8 @@ const resources = {
         servers: require("@/lang/zh_HK/servers.json"),
         settings: require("@/lang/zh_HK/settings.json"),
         templates: require("@/lang/zh_HK/templates.json"),
-        users: require("@/lang/zh_HK/users.json")
+        users: require("@/lang/zh_HK/users.json"),
+        backup: require("@/lang/zh_HK/backup.json")
     },
     "zh_TW": {
         common: require("@/lang/zh_TW/common.json"),
@@ -507,7 +540,8 @@ const resources = {
         servers: require("@/lang/zh_TW/servers.json"),
         settings: require("@/lang/zh_TW/settings.json"),
         templates: require("@/lang/zh_TW/templates.json"),
-        users: require("@/lang/zh_TW/users.json")
+        users: require("@/lang/zh_TW/users.json"),
+        backup: require("@/lang/zh_TW/backup.json")
     }
 };
 

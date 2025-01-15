@@ -62,6 +62,30 @@ export const createDateTimeFormatter = (locale: string, format: TimeFormat) => {
     };
 };
 
+export const createBackupDateTimeFormatter = (locale: string, format: TimeFormat) => {
+    let dateTimeFormat: Intl.DateTimeFormat;
+
+    const options: Intl.DateTimeFormatOptions = {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: format === "locale" ? undefined : format === "12h"
+    };
+
+    try {
+        dateTimeFormat = new Intl.DateTimeFormat([locale.replaceAll("_", "-"), "en-GB"], options);
+    } catch {
+        dateTimeFormat = new Intl.DateTimeFormat("en-GB", options);
+    }
+
+    return (date: Date): string => {
+        return dateTimeFormat.format(date);
+    };
+};
+
 export const createDateFormatter = (locale: string) => {
     let dateFormat: Intl.DateTimeFormat;
 

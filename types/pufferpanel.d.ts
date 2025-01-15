@@ -291,6 +291,16 @@ declare module "pufferpanel" {
 
         async extractFile(id: string, path: string, destination: string): Promise<boolean>;
 
+        async getBackups(id: string): Promise<Backup[]>;
+
+        async createBackup(id: string, name: string): Promise<boolean>;
+
+        async deleteBackup(id: string, backupId: number): Promise<boolean>;
+
+        async restoreBackup(id: string, backupId: number): Promise<boolean>;
+
+        getBackupUrl(id: string, backupId: number): string;
+
         async deleteFile(id: string, path: string): Promise<boolean>;
 
         async delete(id: string): Promise<boolean>;
@@ -437,6 +447,13 @@ declare module "pufferpanel" {
         extension?: string;
     };
 
+    export type Backup = {
+        id: number;
+        name: string;
+        fileName: string;
+        createdAt: string;
+    };
+
     export abstract class Server {
         public readyState: WebSocket.CONNECTING | WebSocket.OPEN | WebSocket.CLOSING | WebSocket.CLOSED;
 
@@ -520,6 +537,16 @@ declare module "pufferpanel" {
         async archiveFile(destination: string, files: string | string[]): Promise<boolean>;
 
         async extractFile(path: string, destination: string): Promise<boolean>;
+
+        async getBackups(): Promise<Backup[]>;
+
+        async createBackup(name: string): Promise<boolean>;
+
+        async deleteBackup(backupId: number): Promise<boolean>;
+
+        async restoreBackup(backupId: number): Promise<boolean>;
+
+        getBackupUrl(backupId: number): string;
 
         async deleteFile(path: string): Promise<boolean>;
 
