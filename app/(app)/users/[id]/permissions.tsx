@@ -1,6 +1,5 @@
 import { useState, useEffect, Fragment } from "react";
 import { Text, StyleSheet } from "react-native";
-import { useLocalSearchParams } from "expo-router";
 import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
@@ -9,6 +8,7 @@ import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useStyle } from "@/hooks/useStyle";
+import { useBoundStore } from "@/stores/useBoundStore";
 
 const scopes = {
     general: [
@@ -56,13 +56,13 @@ export default function PermissionScreen() {
     );
     const { apiClient } = useApiClient();
     const { showSuccess } = useToast();
-    const { id } = useLocalSearchParams<{ id: string }>();
+    const id = useBoundStore(state => state.currentUser);
     const [permissions, setPermissions] = useState<string[] | null>(null);
 
     useEffect(() => {
         setPermissions(null);
 
-        if (id === undefined) {
+        if (id === -1) {
             return;
         }
 

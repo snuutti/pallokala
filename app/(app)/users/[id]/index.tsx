@@ -3,7 +3,7 @@ import { Text, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
@@ -45,7 +45,7 @@ export default function UserDetailsScreen() {
     const { createAlertModal } = useModal();
     const modifyUser = useBoundStore(state => state.modifyUser);
     const removeUser = useBoundStore(state => state.removeUser);
-    const { id } = useLocalSearchParams<{ id: string }>();
+    const id = useBoundStore(state => state.currentUser);
     const { control, handleSubmit, setValue, getValues, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
@@ -57,7 +57,7 @@ export default function UserDetailsScreen() {
     useEffect(() => {
         setUser(null);
 
-        if (id === undefined) {
+        if (id === -1) {
             return;
         }
 
@@ -116,7 +116,7 @@ export default function UserDetailsScreen() {
         router.back();
     };
 
-    if (!user) {
+    if (!user || user.id !== Number(id)) {
         return <LoadingScreen />;
     }
 
