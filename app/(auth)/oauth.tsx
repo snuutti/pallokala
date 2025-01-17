@@ -33,11 +33,8 @@ const defaultValues = {
 
 export default function OAuthLoginScreen() {
     const { t } = useTranslation();
-    const { style } = useStyle((colors) =>
+    const { style } = useStyle(() =>
         StyleSheet.create({
-            scrollView: {
-                backgroundColor: colors.background
-            },
             contentContainer: {
                 justifyContent: "center"
             }
@@ -127,7 +124,7 @@ export default function OAuthLoginScreen() {
     };
 
     return (
-        <ContentWrapper scrollViewStyle={style.scrollView} contentContainerStyle={style.contentContainer}>
+        <ContentWrapper contentContainerStyle={style.contentContainer}>
             <Welcome />
 
             <FormTextInput
