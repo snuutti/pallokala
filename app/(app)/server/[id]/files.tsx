@@ -16,6 +16,7 @@ import { useModal } from "@/context/ModalProvider";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
+import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
 import { useColors } from "@/hooks/useStyle";
 import useBackHandler from "@/hooks/useBackHandler";
 import { ExtendedFileDesc } from "@/types/server";
@@ -45,6 +46,7 @@ export default function FilesScreen() {
     const { server, setOpenFile, setFileContent } = useServer();
     const { fabVisible, setFabVisible, onScroll } = useFabVisible();
     const { createAlertModal, createPromptModal, createListModal, createModal } = useModal();
+    const { formatFileSize } = useLocalizedFormatter();
     const [files, setFiles] = useState<FileDesc[]>([]);
     const [currentPath, setCurrentPath] = useState<FileDesc[]>([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -300,6 +302,24 @@ export default function FilesScreen() {
         await openFile({ name, isFile: false });
     };
 
+    const viewFolderDetails = () => {
+        const folderCount = files.filter(f => !f.isFile && f.name !== "..").length;
+        const fileCount = files.filter(f => f.isFile).length;
+        const totalSize = files.filter(f => f.isFile)
+            .reduce((acc, f) => acc + (f.size || 0), 0);
+
+        createAlertModal(
+            "Folder details",
+            `Path: /${getCurrentPath()}\nFiles: ${fileCount}\nFolders: ${folderCount}\nTotal size: ${formatFileSize(totalSize)}`,
+            [
+                {
+                    text: t("common:Close"),
+                    icon: "close"
+                }
+            ]
+        );
+    };
+
     const openMenu = () => {
         createListModal(
             [
@@ -362,6 +382,11 @@ export default function FilesScreen() {
                             ]
                         );
                     }
+                },
+                {
+                    text: "View folder details",
+                    icon: "folder-information",
+                    onPress: viewFolderDetails
                 }
             ]
         );
