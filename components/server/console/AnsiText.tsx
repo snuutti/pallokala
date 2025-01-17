@@ -54,7 +54,7 @@ export default function AnsiText(props: AnsiTextProps) {
     };
 
     return (
-        <Text textBreakStrategy="simple">
+        <Text selectable={true} textBreakStrategy="simple">
             {parsedAnsi.map((item: Anser.AnserJsonEntry, index) => (
                 <Text key={index} style={applyStyle(item)}>{item.content}</Text>
             ))}
