@@ -26,6 +26,8 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                 height: 67.5,
                 width: 67.5,
                 borderRadius: 40,
+                borderColor: colors.textPrimary,
+                borderWidth: 2,
                 marginBottom: 10,
                 marginTop: 30
             },
