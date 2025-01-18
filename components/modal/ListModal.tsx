@@ -33,6 +33,7 @@ export default function ListModal(props: ListModalProps) {
                 color: colors.text
             },
             textSelected: {
+                flex: 1,
                 color: colors.textPrimary
             }
         })
@@ -74,6 +75,14 @@ export default function ListModal(props: ListModalProps) {
                         )}
 
                         <Text style={item.selected ? style.textSelected : style.text}>{item.text}</Text>
+
+                        {item.selected && (
+                            <MaterialCommunityIcons
+                                name="check"
+                                size={20}
+                                color={colors.textPrimary}
+                            />
+                        )}
                     </TouchableOpacity>
                 )}
                 estimatedItemSize={39}
