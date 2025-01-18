@@ -23,10 +23,12 @@ export default function FileDetailsScreen() {
             },
             propertyName: {
                 flex: 1,
+                flexGrow: 1,
                 color: colors.text,
                 fontWeight: "bold"
             },
             propertyText: {
+                flex: 1,
                 flexShrink: 1,
                 color: colors.text
             }
@@ -56,6 +58,13 @@ export default function FileDetailsScreen() {
                 <Text style={style.propertyName}>Last Modified</Text>
                 <Text selectable={true} style={style.propertyText}>
                     {formatDateTime(openFile.modifyTime!)}
+                </Text>
+            </View>
+
+            <View style={style.property}>
+                <Text style={style.propertyName}>Path</Text>
+                <Text selectable={true} style={style.propertyText}>
+                    {openFile.path.startsWith("/") ? "" : "/"}{openFile.path}
                 </Text>
             </View>
         </ContentWrapper>
