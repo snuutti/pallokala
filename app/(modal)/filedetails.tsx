@@ -43,16 +43,20 @@ export default function FileDetailsScreen() {
         <ContentWrapper>
             <MaterialCommunityIcons name={getIcon(openFile)} size={30} color={colors.text} style={style.icon} />
 
-            <Text style={style.name}>{openFile.name}</Text>
+            <Text selectable={true} style={style.name}>{openFile.name}</Text>
 
             <View style={style.property}>
                 <Text style={style.propertyName}>Size</Text>
-                <Text style={style.propertyText}>{formatFileSize(openFile.size)}</Text>
+                <Text selectable={true} style={style.propertyText}>
+                    {formatFileSize(openFile.size)}
+                </Text>
             </View>
 
             <View style={style.property}>
                 <Text style={style.propertyName}>Last Modified</Text>
-                <Text style={style.propertyText}>{formatDateTime(openFile.modifyTime!)}</Text>
+                <Text selectable={true} style={style.propertyText}>
+                    {formatDateTime(openFile.modifyTime!)}
+                </Text>
             </View>
         </ContentWrapper>
     );
