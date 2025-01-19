@@ -13,11 +13,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     scheme: "pallokala",
     userInterfaceStyle: "automatic",
     jsEngine: "hermes",
-    splash: {
-        image: "./assets/images/splash.png",
-        resizeMode: "contain",
-        backgroundColor: "#000000"
-    },
     ios: {
         bundleIdentifier: packageIdentifier,
         config: {
@@ -50,6 +45,18 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
             "expo-dev-client",
             {
                 addGeneratedScheme: IS_DEV
+            }
+        ],
+        [
+            "expo-splash-screen",
+            {
+                backgroundColor: "#000000",
+                mdpi: "./assets/images/splash/mdpi.png",
+                hdpi: "./assets/images/splash/hdpi.png",
+                xhdpi: "./assets/images/splash/xhdpi.png",
+                xxhdpi: "./assets/images/splash/xxhdpi.png",
+                xxxhdpi: "./assets/images/splash/xxxhdpi.png",
+                imageWidth: 288
             }
         ],
         "react-native-edge-to-edge"
