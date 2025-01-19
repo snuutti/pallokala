@@ -54,16 +54,16 @@ export function getColors(colorScheme: ColorScheme, primaryColor?: string): Colo
     let colors: Colors;
     switch (colorScheme) {
         case "light":
-            colors = lightColors;
+            colors = { ...lightColors };
             break;
         case "dark":
-            colors = darkColors;
+            colors = { ...darkColors };
             break;
         case "amoled":
-            colors = amoledColors;
+            colors = { ...amoledColors };
             break;
         default:
-            colors = lightColors;
+            colors = { ...lightColors };
             break;
     }
 
