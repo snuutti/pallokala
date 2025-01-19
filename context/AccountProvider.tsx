@@ -222,8 +222,13 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
         try {
             const settings = await apiClient.settings.getUserSettings();
-            setThemeSettings(JSON.parse(settings["themeSettings"]));
+            if (settings["themeSettings"]) {
+                setThemeSettings(JSON.parse(settings["themeSettings"]));
+            } else {
+                setThemeSettings({});
+            }
         } catch (e) {
+            setThemeSettings({});
             console.error("Failed to get user settings", e);
         }
 
