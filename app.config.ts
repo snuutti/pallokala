@@ -59,7 +59,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
                 imageWidth: 288
             }
         ],
-        "react-native-edge-to-edge"
+        "react-native-edge-to-edge",
+        "./app.plugin.js"
     ],
     experiments: {
         typedRoutes: true

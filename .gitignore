@@ -4,6 +4,7 @@ __generated__
 web-build
 bare-apps
 expo-env.d.ts
+build/
 
 # macOS
 .DS_Store
