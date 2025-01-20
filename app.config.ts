@@ -7,7 +7,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config,
     name: "Pallokala" + (IS_DEV ? " (Development)" : ""),
     slug: "pallokala",
-    version: "1.3.1",
+    version: "1.4.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
     scheme: "pallokala",
@@ -26,7 +26,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
             backgroundColor: "#ffffff"
         },
         package: packageIdentifier,
-        versionCode: 5
+        versionCode: 6
     },
     plugins: [
         "expo-router",
