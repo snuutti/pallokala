@@ -23,7 +23,7 @@ export default function SFTPScreen() {
 
     const host = useMemo(() => {
         let host = (server?.node.publicHost !== "127.0.0.1" && server?.node.publicHost !== "localhost")
-            ? server?.node.publicHost : activeAccount!.serverAddress;
+            ? server?.node.publicHost : activeAccount!.serverAddress.replace(/^(https?:\/\/)?(www\.)?|(:\d+)?(\/.*)?$/g, "");
         host = host + ":" + server?.node.sftpPort;
 
         return host;
