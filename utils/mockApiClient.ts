@@ -540,6 +540,7 @@ hello=world`);
             [
                 {
                     name: "server.properties",
+                    modifyTime: 1737401211,
                     size: 1024,
                     isFile: true,
                     extension: ".properties"
