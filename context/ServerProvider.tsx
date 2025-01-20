@@ -79,6 +79,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
         }
 
         console.log("Switching to server", id);
+        setServer(undefined);
         apiClient!.server.get(id)
             .then((server) => setServer(server as Server))
             .catch((e) => {

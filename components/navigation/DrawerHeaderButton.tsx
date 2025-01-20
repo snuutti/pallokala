@@ -19,13 +19,13 @@ export default function DrawerHeaderButton() {
             }
         })
     );
-    const { server } = useServer();
+    const { server, error } = useServer();
     const { createPromptModal } = useModal();
     const modifyServer = useBoundStore(state => state.modifyServer);
     const route = useRoute();
 
     const showMenu = useMemo(() => {
-        if (!server) {
+        if (!server || error) {
             return false;
         }
 
@@ -34,7 +34,7 @@ export default function DrawerHeaderButton() {
             || server.hasScope("server.kill")
             || server.hasScope("server.install")
             || server.hasScope("server.name.edit");
-    }, [server]);
+    }, [server, error]);
 
     const editServerName = () => {
         if (!server) {
