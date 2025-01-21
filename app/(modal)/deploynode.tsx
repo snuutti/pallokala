@@ -91,11 +91,13 @@ export default function DeployNodeScreen() {
             {step < 5 ? (
                 <Button
                     text={t("common:Next")}
+                    icon="chevron-right"
                     onPress={() => setStep(step + 1)}
                 />
             ) : (
                 <Button
                     text={t("common:Close")}
+                    icon="close"
                     onPress={() => router.back()}
                 />
             )}
