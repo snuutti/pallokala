@@ -8,6 +8,7 @@ import Markdown from "@/components/ui/Markdown";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
+import useBackHandler from "@/hooks/useBackHandler";
 import { NodeDeployment } from "pufferpanel";
 
 export default function DeployNodeScreen() {
@@ -25,6 +26,15 @@ export default function DeployNodeScreen() {
             setLoading(false);
         });
     }, []);
+
+    useBackHandler(() => {
+        if (step > 1) {
+            setStep(step - 1);
+            return true;
+        }
+
+        return false;
+    });
 
     const getDeployConfig = () => {
         const config = {

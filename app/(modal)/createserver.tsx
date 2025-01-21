@@ -9,6 +9,7 @@ import SelectTemplate from "@/components/server/creation/SelectTemplate";
 import Settings from "@/components/server/creation/Settings";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useStyle } from "@/hooks/useStyle";
+import useBackHandler from "@/hooks/useBackHandler";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { Template, ServerSettings, MetadataType, ServerCreation, ServerData } from "pufferpanel";
 
@@ -33,6 +34,20 @@ export default function CreateServerScreen() {
     const [environment, setEnvironment] = useState("");
     const [users, setUsers] = useState<string[]>([]);
     const [template, setTemplate] = useState<Template | null>(null);
+
+    useBackHandler(() => {
+        if (step === "template") {
+            setStep("environment");
+            return true;
+        }
+
+        if (step === "settings") {
+            setStep("template");
+            return true;
+        }
+
+        return false;
+    });
 
     const environmentNext = (name: string, node: number, os: string, arch: string, environment: string, users: string[]) => {
         setName(name);
