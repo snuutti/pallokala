@@ -92,30 +92,35 @@ export default function DrawerHeaderButton() {
             <DropdownMenu.Content>
                 {server.hasScope("server.start") && (
                     <DropdownMenu.Item key="start" onSelect={() => server?.start()}>
+                        <DropdownMenu.ItemIcon androidIconName="pk_play_circle" />
                         <DropdownMenu.ItemTitle>{t("servers:Start")}</DropdownMenu.ItemTitle>
                     </DropdownMenu.Item>
                 )}
 
                 {server.hasScope("server.stop") && (
                     <DropdownMenu.Item key="stop" onSelect={() => server?.stop()}>
+                        <DropdownMenu.ItemIcon androidIconName="pk_stop_circle" />
                         <DropdownMenu.ItemTitle>{t("servers:Stop")}</DropdownMenu.ItemTitle>
                     </DropdownMenu.Item>
                 )}
 
                 {server.hasScope("server.kill") && (
                     <DropdownMenu.Item key="kill" onSelect={() => server?.kill()}>
+                        <DropdownMenu.ItemIcon androidIconName="pk_skull" />
                         <DropdownMenu.ItemTitle>{t("servers:Kill")}</DropdownMenu.ItemTitle>
                     </DropdownMenu.Item>
                 )}
 
                 {server.hasScope("server.install") && (
                     <DropdownMenu.Item key="install" onSelect={() => server?.install()}>
+                        <DropdownMenu.ItemIcon androidIconName="pk_package_down" />
                         <DropdownMenu.ItemTitle>{t("servers:Install")}</DropdownMenu.ItemTitle>
                     </DropdownMenu.Item>
                 )}
 
                 {server.hasScope("server.name.edit") && (
                     <DropdownMenu.Item key="name" onSelect={editServerName}>
+                        <DropdownMenu.ItemIcon androidIconName="pk_edit" />
                         <DropdownMenu.ItemTitle>{t("servers:EditName")}</DropdownMenu.ItemTitle>
                     </DropdownMenu.Item>
                 )}
