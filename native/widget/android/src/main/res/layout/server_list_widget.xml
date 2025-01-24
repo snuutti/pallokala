@@ -1,0 +1,73 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/pk_backdrop_color">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pk_background_color"
+        android:elevation="4dp"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/company_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/refresh_icon"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/server_list_company_name_placeholder"
+            android:textColor="@color/pk_text_color"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:singleLine="true" />
+
+        <ImageButton
+            android:id="@+id/refresh_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/pk_refresh"
+            android:background="@drawable/rounded_selector"
+            android:contentDescription="@string/server_list_refresh_text" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/no_servers_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/server_list_empty_text"
+        android:textColor="@color/pk_text_disabled_color"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="16dp" />
+
+    <TextView
+        android:id="@+id/error_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/server_list_load_error_text"
+        android:textColor="@color/pk_error_color"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="16dp" />
+
+    <ListView
+        android:id="@+id/server_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="8dp"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:drawSelectorOnTop="true"
+        android:listSelector="@drawable/rounded_selector" />
+</LinearLayout>

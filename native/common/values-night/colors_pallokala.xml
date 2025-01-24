@@ -1,0 +1,10 @@
+<resources>
+    <color name="pk_backdrop_color">#292929</color>
+    <color name="pk_background_color">#333</color>
+    <color name="pk_text_color">#def0f0f0</color>
+    <color name="pk_text_disabled_color">#80f0f0f0</color>
+    <color name="pk_primary_color">#07a7e3</color>
+    <color name="pk_success_color">#4caf50</color>
+    <color name="pk_warning_color">#fbac00</color>
+    <color name="pk_error_color">#fe4242</color>
+</resources>

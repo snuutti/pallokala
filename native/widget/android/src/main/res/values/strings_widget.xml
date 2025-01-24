@@ -1,0 +1,10 @@
+<resources>
+    <string name="server_list_widget_description">Server list widget</string>
+    <string name="server_list_company_name_placeholder">Company Name</string>
+    <string name="server_list_refresh_text">Refresh</string>
+    <string name="server_list_empty_text">No servers available</string>
+    <string name="server_list_load_error_text">Failed to load servers</string>
+    <string name="server_list_server_name_placeholder">Server Name</string>
+    <string name="server_list_server_status_placeholder">100% CPU, 50% RAM</string>
+    <string name="server_list_server_status">Server Status</string>
+</resources>
