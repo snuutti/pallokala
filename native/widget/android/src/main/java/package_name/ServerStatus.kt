@@ -1,4 +1,4 @@
-package io.github.snuutti.pallokala.dev
+package package_name
 
 enum class ServerStatus {
     INSTALLING, ONLINE, OFFLINE

@@ -1,4 +1,4 @@
-package io.github.snuutti.pallokala.dev
+package package_name
 
 import android.content.Intent
 import android.widget.RemoteViewsService
