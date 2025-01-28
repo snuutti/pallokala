@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import kotlinx.coroutines.runBlocking
+import java.util.Locale
 
 class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsService.RemoteViewsFactory {
 
@@ -36,14 +37,15 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
                 }
 
                 val stats = apiClient.getServerStats(server.id)//TODO: check perms
+                val formattedMemory = formatMemory(stats?.memory ?: 0.0f)
 
                 serverList.add(
                     Server(
                         server.id,
                         server.name,
                         status,
-                        stats?.cpu ?: 0.0f,
-                        stats?.memory ?: 0.0f
+                        (stats?.cpu ?: 0.0f).toInt(),
+                        formattedMemory
                     )
                 )
             }
@@ -62,7 +64,7 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
 
         val views = RemoteViews(context.packageName, R.layout.server_entry)
         views.setTextViewText(R.id.server_name, server.name)
-        views.setTextViewText(R.id.server_details, "CPU: ${server.cpu}% | RAM: ${server.memory}%")
+        views.setTextViewText(R.id.server_details, "CPU: ${server.cpu}% | RAM: ${server.memory}")
         views.setImageViewResource(R.id.server_status,
             when (server.status) {
                 ServerStatus.INSTALLING -> R.drawable.pk_package_down
@@ -88,6 +90,19 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
 
     override fun hasStableIds(): Boolean {
         return true
+    }
+
+    private fun formatMemory(bytes: Float): String {
+        val units = arrayOf("B", "KiB", "MiB", "GiB", "TiB")
+        var value = bytes
+        var unitIndex = 0
+
+        while (value >= 1024 && unitIndex < units.lastIndex) {
+            value /= 1024
+            unitIndex++
+        }
+
+        return String.format(Locale.ROOT, "%.1f %s", value, units[unitIndex])
     }
 
 }
