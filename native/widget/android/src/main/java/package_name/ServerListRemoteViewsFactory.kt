@@ -3,20 +3,51 @@ package package_name
 import android.content.Context
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import kotlinx.coroutines.runBlocking
 
 class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsService.RemoteViewsFactory {
 
-    private val serverList = mutableListOf<Server>();
+    private val serverList = mutableListOf<Server>()
+    private val apiClient = PufferPanelApiClient("https://xxx")
 
     override fun onCreate() {
-        serverList.add(Server("1", "Server 1", ServerStatus.INSTALLING, 10.0f, 0.0f))
-        serverList.add(Server("2", "Server 2", ServerStatus.ONLINE, 100.0f, 69.0f))
-        serverList.add(Server("3", "Server 3", ServerStatus.OFFLINE, 0.0f, 0.0f))
-        serverList.add(Server("4", "Server 4", ServerStatus.OFFLINE, 0.0f, 0.0f))
-        serverList.add(Server("5", "Server 5", ServerStatus.ONLINE, 100.0f, 420.0f))
     }
 
     override fun onDataSetChanged() {
+        serverList.clear()
+
+        runBlocking {
+            val loginSuccess = apiClient.login("testacc@company.com", "testing")
+            if (!loginSuccess) {
+                return@runBlocking
+            }
+
+            val servers = apiClient.getServers() ?: return@runBlocking
+            servers.forEach { server ->
+                var status = ServerStatus.OFFLINE
+                if (server.canGetStatus) {
+                    status = apiClient.getServerStatus(server.id)?.let {
+                        when {
+                            it.installing -> ServerStatus.INSTALLING
+                            it.running -> ServerStatus.ONLINE
+                            else -> ServerStatus.OFFLINE
+                        }
+                    } ?: ServerStatus.OFFLINE
+                }
+
+                val stats = apiClient.getServerStats(server.id)//TODO: check perms
+
+                serverList.add(
+                    Server(
+                        server.id,
+                        server.name,
+                        status,
+                        stats?.cpu ?: 0.0f,
+                        stats?.memory ?: 0.0f
+                    )
+                )
+            }
+        }
     }
 
     override fun onDestroy() {

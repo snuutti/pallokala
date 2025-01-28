@@ -34,10 +34,21 @@ async function copySourceCode(widgetSourceDir: string, platformRoot: string, pac
     const dest = path.join(platformRoot, "app/src/main/java", packageDirPath);
     fs.copySync(source, dest);
 
-    const files = glob.sync(`${dest}/*.kt`);
+    const files = glob.sync(`${dest}/**/*.kt`);
     for (const file of files) {
+        const relativePath = path.relative(dest, path.dirname(file));
+
+        const subPackage = relativePath.replace(/\//g, ".");
+        const fullPackageName = subPackage ? `${packageName}.${subPackage}` : packageName;
+
         const content = fs.readFileSync(file, "utf8");
-        const newContent = content.replace(/^package .*\s/, `package ${packageName}\n`);
+
+        const newContent = content
+            .replace(/^package\s+.*$/m, `package ${fullPackageName}`)
+            .replace(/import\s+package_name(\.[^;\s]*)?/g, (_match, subPackage) => {
+                return `import ${packageName}${subPackage || ""}`;
+            });
+
         fs.writeFileSync(file, newContent);
     }
 }
