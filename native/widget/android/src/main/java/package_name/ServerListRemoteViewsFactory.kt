@@ -1,6 +1,7 @@
 package package_name
 
 import android.content.Context
+import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import kotlinx.coroutines.runBlocking
@@ -25,7 +26,7 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
 
             val servers = apiClient.getServers() ?: return@runBlocking
             servers.forEach { server ->
-                var status = ServerStatus.OFFLINE
+                var status: ServerStatus? = null
                 if (server.canGetStatus) {
                     status = apiClient.getServerStatus(server.id)?.let {
                         when {
@@ -33,19 +34,18 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
                             it.running -> ServerStatus.ONLINE
                             else -> ServerStatus.OFFLINE
                         }
-                    } ?: ServerStatus.OFFLINE
+                    }
                 }
 
                 val stats = apiClient.getServerStats(server.id)//TODO: check perms
-                val formattedMemory = formatMemory(stats?.memory ?: 0.0f)
 
                 serverList.add(
                     Server(
                         server.id,
                         server.name,
                         status,
-                        (stats?.cpu ?: 0.0f).toInt(),
-                        formattedMemory
+                        stats?.cpu?.toInt(),
+                        stats?.memory?.let { formatMemory(it) }
                     )
                 )
             }
@@ -64,14 +64,26 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
 
         val views = RemoteViews(context.packageName, R.layout.server_entry)
         views.setTextViewText(R.id.server_name, server.name)
-        views.setTextViewText(R.id.server_details, "CPU: ${server.cpu}% | RAM: ${server.memory}")
-        views.setImageViewResource(R.id.server_status,
-            when (server.status) {
-                ServerStatus.INSTALLING -> R.drawable.pk_package_down
-                ServerStatus.ONLINE -> R.drawable.pk_play_circle
-                ServerStatus.OFFLINE -> R.drawable.pk_stop_circle
-            }
-        )
+
+        if (server.cpu != null && server.memory != null) {
+            views.setTextViewText(R.id.server_details, "CPU: ${server.cpu}% | RAM: ${server.memory}")
+        } else {
+            views.setTextViewText(R.id.server_details, "")
+        }
+
+        if (server.status != null) {
+            views.setViewVisibility(R.id.server_status, View.VISIBLE)
+            views.setImageViewResource(
+                R.id.server_status,
+                when (server.status) {
+                    ServerStatus.INSTALLING -> R.drawable.pk_package_down
+                    ServerStatus.ONLINE -> R.drawable.pk_play_circle
+                    ServerStatus.OFFLINE -> R.drawable.pk_stop_circle
+                }
+            )
+        } else {
+            views.setViewVisibility(R.id.server_status, View.GONE)
+        }
 
         return views
     }
