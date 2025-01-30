@@ -25,7 +25,7 @@
             android:id="@+id/server_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/server_list_server_status_placeholder"
+            android:text="@string/server_list_server_status"
             android:textColor="@color/pk_text_disabled_color"
             android:textSize="14sp" />
     </LinearLayout>
@@ -36,5 +36,5 @@
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/pk_refresh"
-        android:contentDescription="@string/server_list_server_status" />
+        android:contentDescription="@string/server_list_server_status_icon" />
 </LinearLayout>

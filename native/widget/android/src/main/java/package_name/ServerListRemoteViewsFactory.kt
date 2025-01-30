@@ -66,7 +66,8 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
         views.setTextViewText(R.id.server_name, server.name)
 
         if (server.cpu != null && server.memory != null) {
-            views.setTextViewText(R.id.server_details, "CPU: ${server.cpu}% | RAM: ${server.memory}")
+            views.setTextViewText(R.id.server_details,
+                context.getString(R.string.server_list_server_status, server.cpu, server.memory))
         } else {
             views.setTextViewText(R.id.server_details, "")
         }

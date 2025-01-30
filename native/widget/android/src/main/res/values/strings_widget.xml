@@ -5,7 +5,7 @@
     <string name="server_list_empty_text">No servers available</string>
     <string name="server_list_load_error_text">Failed to load servers</string>
     <string name="server_list_server_name_placeholder">Server Name</string>
-    <string name="server_list_server_status_placeholder">CPU: 100% | RAM: 50MiB</string>
-    <string name="server_list_server_status">Server Status</string>
+    <string name="server_list_server_status">CPU: %1$d\%% | RAM: %2$s</string>
+    <string name="server_list_server_status_icon">Server Status</string>
     <string name="server_list_refreshing_text">Refreshing server list...</string>
 </resources>
