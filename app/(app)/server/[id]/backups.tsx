@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { RefreshControl, Text, StyleSheet } from "react-native";
 import { FlashList } from "@shopify/flash-list";
-import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
+import ReactNativeBlobUtil from "react-native-blob-util";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import BackupListItem from "@/components/server/backups/BackupListItem";
@@ -122,13 +121,18 @@ export default function BackupsScreen() {
         const filePath = server!.getBackupUrl(backup.id);
         const url = activeAccount!.serverAddress + filePath;
 
-        const { uri } = await FileSystem.downloadAsync(url, FileSystem.cacheDirectory + backup.fileName, {
-            headers: apiClient!._enhanceHeaders()
-        });
-
-        await Sharing.shareAsync(uri, {
-            dialogTitle: "Select where to save the file"
-        });
+        showSuccess("Check notifications for download progress");
+        await ReactNativeBlobUtil
+            .config({
+                addAndroidDownloads: {
+                    useDownloadManager: true,
+                    title: backup.name,
+                    mediaScannable: true,
+                    storeInDownloads: true,
+                    notification: true
+                }
+            })
+            .fetch("GET", url, apiClient!._enhanceHeaders());
     };
 
     const createAlert = () => {

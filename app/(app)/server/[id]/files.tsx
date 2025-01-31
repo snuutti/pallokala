@@ -1,8 +1,7 @@
 import { useCallback, useState, useEffect } from "react";
 import { RefreshControl } from "react-native";
 import { FlashList } from "@shopify/flash-list";
-import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
+import ReactNativeBlobUtil from "react-native-blob-util";
 import * as DocumentPicker from "expo-document-picker";
 import { router } from "expo-router";
 import { useIsFocused } from "@react-navigation/native";
@@ -12,6 +11,7 @@ import UploadProgressModal, { UploadFile, UploadState } from "@/components/serve
 import FileItem from "@/components/server/files/FileItem";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
+import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
@@ -45,6 +45,7 @@ export default function FilesScreen() {
     const { activeAccount } = useAccount();
     const { server, setOpenFile, setFileContent } = useServer();
     const { fabVisible, setFabVisible, onScroll } = useFabVisible();
+    const { showSuccess } = useToast();
     const { createAlertModal, createPromptModal, createListModal, createModal } = useModal();
     const { formatFileSize } = useLocalizedFormatter();
     const [files, setFiles] = useState<FileDesc[]>([]);
@@ -174,13 +175,18 @@ export default function FilesScreen() {
         const filePath = server!.getFileUrl(getCurrentPath() + "/" + file.name);
         const url = activeAccount!.serverAddress + filePath;
 
-        const { uri } = await FileSystem.downloadAsync(url, FileSystem.cacheDirectory + file.name, {
-            headers: apiClient!._enhanceHeaders()
-        });
-
-        await Sharing.shareAsync(uri, {
-            dialogTitle: "Select where to save the file"
-        });
+        showSuccess("Check notifications for download progress");
+        await ReactNativeBlobUtil
+            .config({
+                addAndroidDownloads: {
+                    useDownloadManager: true,
+                    title: file.name,
+                    mediaScannable: true,
+                    storeInDownloads: true,
+                    notification: true
+                }
+            })
+            .fetch("GET", url, apiClient!._enhanceHeaders());
     };
 
     const deleteAlert = (file: FileDesc) => {
@@ -246,12 +252,17 @@ export default function FilesScreen() {
         await refresh();
     };
 
-    const onUploadFile = async (file: UploadFile, onUploadProgress: (event: ProgressEvent) => void) => {
-        const blob = await FileSystem.readAsStringAsync(file.uri, {
-            encoding: FileSystem.EncodingType.Base64
-        });
+    const onUploadFile = async (file: UploadFile, onUploadProgress: (sent: number, total: number) => void) => {
+        let path = file.path;
+        if (path.indexOf("/") === 0) {
+            path = path.substring(1);
+        }
 
-        await server?.uploadFile(file.path, blob, onUploadProgress);
+        const url = activeAccount!.serverAddress + server!.getFileUrl(path);
+
+        await ReactNativeBlobUtil
+            .fetch("PUT", url, apiClient!._enhanceHeaders(), ReactNativeBlobUtil.wrap(file.uri))
+            .uploadProgress(onUploadProgress)
     };
 
     const uploadFile = async () => {

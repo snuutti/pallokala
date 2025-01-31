@@ -19,7 +19,7 @@ export type UploadState = {
 
 type UploadProgressModalProps = {
     state: UploadState;
-    uploadFile: (file: UploadFile, onUploadProgress: (event: ProgressEvent) => void) => Promise<void>;
+    uploadFile: (file: UploadFile, onUploadProgress: (sent: number, total: number) => void) => Promise<void>;
     handleClose?: () => void;
 };
 
@@ -63,11 +63,11 @@ export default function UploadProgressModal(props: UploadProgressModalProps) {
         }
     };
 
-    const onUploadProgress = useCallback((event: ProgressEvent) => {
+    const onUploadProgress = useCallback((sent: number) => {
         setState((state) => {
             const newState = { ...state };
             const current = currentRef.current;
-            newState.files[current].progress = Math.min(event.loaded, state.files[current].size);
+            newState.files[current].progress = Math.min(sent, state.files[current].size);
             return newState;
         });
     }, []);
