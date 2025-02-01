@@ -13,7 +13,7 @@ import java.util.Locale
 class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsService.RemoteViewsFactory {
 
     private val serverList = mutableListOf<Server>()
-    private val apiClient = PufferPanelApiClient("https://xxx")
+    private val accountStore = AccountStore()
 
     override fun onCreate() {
     }
@@ -23,7 +23,16 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
         var loadSuccess = false
 
         runBlocking {
-            val loginSuccess = apiClient.login("testacc@company.com", "testing")
+            val account = accountStore.getAccount(context, 1)
+            if (account == null) {
+                Log.e("ServerListWidget", "Failed to get account")
+                return@runBlocking
+            }
+
+            val apiClient = PufferPanelApiClient(account.serverAddress)
+            val emailAccount = account as EmailAccount// TODO: support oauth accounts, otp
+
+            val loginSuccess = apiClient.login(emailAccount.email, emailAccount.password)
             if (!loginSuccess) {
                 Log.e("ServerListWidget", "Failed to login")
                 return@runBlocking
