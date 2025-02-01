@@ -12,13 +12,16 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 
 class PufferPanelApiClient(private val baseUrl: String) {
 
     private val client = HttpClient(OkHttp) {
         install(HttpCookies)
         install(ContentNegotiation) {
-            json()
+            json(Json {
+                ignoreUnknownKeys = true
+            })
         }
     }
 
