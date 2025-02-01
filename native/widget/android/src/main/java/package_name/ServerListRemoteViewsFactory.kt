@@ -27,7 +27,7 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
             val servers = apiClient.getServers() ?: return@runBlocking
             servers.forEach { server ->
                 var status: ServerStatus? = null
-                if (server.canGetStatus) {
+                if (server.canGetStatus == true) {
                     status = apiClient.getServerStatus(server.id)?.let {
                         when {
                             it.installing -> ServerStatus.INSTALLING
