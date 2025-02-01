@@ -1,6 +1,9 @@
 package package_name
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
@@ -17,10 +20,12 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
 
     override fun onDataSetChanged() {
         serverList.clear()
+        var loadSuccess = false
 
         runBlocking {
             val loginSuccess = apiClient.login("testacc@company.com", "testing")
             if (!loginSuccess) {
+                Log.e("ServerListWidget", "Failed to login")
                 return@runBlocking
             }
 
@@ -49,7 +54,23 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
                     )
                 )
             }
+
+            loadSuccess = true
         }
+
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        val componentName = ComponentName(context, ServerListWidget::class.java)
+        val views = RemoteViews(context.packageName, R.layout.server_list_widget)
+
+        if (loadSuccess) {
+            views.setViewVisibility(R.id.server_list, View.VISIBLE)
+            views.setViewVisibility(R.id.error_message, View.GONE)
+        } else {
+            views.setViewVisibility(R.id.server_list, View.GONE)
+            views.setViewVisibility(R.id.error_message, View.VISIBLE)
+        }
+
+        appWidgetManager.updateAppWidget(componentName, views)
     }
 
     override fun onDestroy() {
