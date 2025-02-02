@@ -11,7 +11,14 @@ import android.widget.Toast
 class ServerListWidget : AppWidgetProvider() {
 
     companion object {
+
         const val ACTION_REFRESH = "${BuildConfig.APPLICATION_ID}.ACTION_WIDGET_REFRESH"
+
+        internal fun refreshWidget(context: Context, appWidgetId: Int) {
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.server_list)
+        }
+
     }
 
     override fun onUpdate(
@@ -55,10 +62,15 @@ class ServerListWidget : AppWidgetProvider() {
             val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
 
             if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-                val appWidgetManager = AppWidgetManager.getInstance(context)
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.server_list)
+                refreshWidget(context, appWidgetId)
                 Toast.makeText(context, R.string.server_list_refreshing_text, Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        appWidgetIds.forEach { appWidgetId ->
+            WidgetSharedPrefsUtil.deleteWidgetPrefs(context, appWidgetId)
         }
     }
 

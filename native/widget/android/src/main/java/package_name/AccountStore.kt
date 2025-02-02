@@ -19,20 +19,32 @@ class AccountStore {
 
     private val keyStore = KeyStore.getInstance("AndroidKeyStore")
 
+    private val json = Json {
+        ignoreUnknownKeys = true
+        classDiscriminator = "type"
+        serializersModule = SerializersModule {
+            polymorphic(BaseAccount::class) {
+                subclass(OAuthAccount::class, OAuthAccount.serializer())
+                subclass(EmailAccount::class, EmailAccount.serializer())
+            }
+        }
+    }
+
+    private suspend fun getAccountKeys(context: Context): List<Int> {
+        val key = "user_account_ids"
+        val item = getItem(context, key) ?: return emptyList()
+
+        return json.decodeFromString<List<Int>>(item)
+    }
+
+    suspend fun getAccounts(context: Context): List<BaseAccount> {
+        val keys = getAccountKeys(context)
+        return keys.mapNotNull { getAccount(context, it) }
+    }
+
     suspend fun getAccount(context: Context, id: Int): BaseAccount? {
         val key = "user_account_$id"
         val item = getItem(context, key) ?: return null
-
-        val json = Json {
-            ignoreUnknownKeys = true
-            classDiscriminator = "type"
-            serializersModule = SerializersModule {
-                polymorphic(BaseAccount::class) {
-                    subclass(OAuthAccount::class, OAuthAccount.serializer())
-                    subclass(EmailAccount::class, EmailAccount.serializer())
-                }
-            }
-        }
 
         return json.decodeFromString<BaseAccount>(item)
     }

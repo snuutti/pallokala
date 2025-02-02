@@ -3,6 +3,7 @@ package package_name
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
@@ -10,12 +11,17 @@ import android.widget.RemoteViewsService
 import kotlinx.coroutines.runBlocking
 import java.util.Locale
 
-class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsService.RemoteViewsFactory {
+class ServerListRemoteViewsFactory(private val context: Context, private val intent: Intent): RemoteViewsService.RemoteViewsFactory {
 
+    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private val serverList = mutableListOf<Server>()
     private val accountStore = AccountStore()
 
     override fun onCreate() {
+        appWidgetId = intent.extras?.getInt(
+            AppWidgetManager.EXTRA_APPWIDGET_ID,
+            AppWidgetManager.INVALID_APPWIDGET_ID
+        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
     }
 
     override fun onDataSetChanged() {
@@ -23,7 +29,8 @@ class ServerListRemoteViewsFactory(private val context: Context): RemoteViewsSer
         var loadSuccess = false
 
         runBlocking {
-            val account = accountStore.getAccount(context, 1)
+            val accountId = WidgetSharedPrefsUtil.loadWidgetPrefs(context, appWidgetId)
+            val account = accountStore.getAccount(context, accountId)
             if (account == null) {
                 Log.e("ServerListWidget", "Failed to get account")
                 return@runBlocking

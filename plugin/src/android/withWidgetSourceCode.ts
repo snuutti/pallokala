@@ -10,31 +10,36 @@ export const withWidgetSourceCode: ConfigPlugin = (config) => {
             const projectRoot = newConfig.modRequest.projectRoot;
             const platformRoot = newConfig.modRequest.platformProjectRoot;
             const widgetDir = path.join(projectRoot, "native/widget");
-            copyResourceFiles(widgetDir, platformRoot);
 
             const packageName = config.android?.package;
-            await copySourceCode(widgetDir, platformRoot, packageName!);
+            copyResourceFiles(widgetDir, platformRoot, packageName!);
+            copySourceCode(widgetDir, platformRoot, packageName!);
 
             return newConfig;
         }
     ]);
 };
 
-function copyResourceFiles(widgetSourceDir: string, platformRoot: string) {
+function copyResourceFiles(widgetSourceDir: string, platformRoot: string, packageName: string) {
     const source = path.join(widgetSourceDir, "android/src/main/res");
-    const resDest = path.join(platformRoot, "app/src/main/res");
+    const dest = path.join(platformRoot, "app/src/main/res");
+    fs.copySync(source, dest);
 
-    fs.copySync(source, resDest);
+    replacePackageNames(dest, packageName);
 }
 
-async function copySourceCode(widgetSourceDir: string, platformRoot: string, packageName: string) {
+function copySourceCode(widgetSourceDir: string, platformRoot: string, packageName: string) {
     const packageDirPath = packageName.replace(/\./g, "/");
 
     const source = path.join(widgetSourceDir, "android/src/main/java/package_name");
     const dest = path.join(platformRoot, "app/src/main/java", packageDirPath);
     fs.copySync(source, dest);
 
-    const files = glob.sync(`${dest}/**/*.kt`);
+    replacePackageNames(dest, packageName);
+}
+
+function replacePackageNames(dest: string, packageName: string) {
+    const files = glob.sync(`${dest}/**/*.{kt,xml}`);
     for (const file of files) {
         const relativePath = path.relative(dest, path.dirname(file));
 
@@ -42,12 +47,9 @@ async function copySourceCode(widgetSourceDir: string, platformRoot: string, pac
         const fullPackageName = subPackage ? `${packageName}.${subPackage}` : packageName;
 
         const content = fs.readFileSync(file, "utf8");
-
         const newContent = content
             .replace(/^package\s+.*$/m, `package ${fullPackageName}`)
-            .replace(/import\s+package_name(\.[^;\s]*)?/g, (_match, subPackage) => {
-                return `import ${packageName}${subPackage || ""}`;
-            });
+            .replace(/package_name/g, packageName);
 
         fs.writeFileSync(file, newContent);
     }
