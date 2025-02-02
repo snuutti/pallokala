@@ -38,9 +38,18 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
             }
 
             val apiClient = PufferPanelApiClient(account.serverAddress)
-            val emailAccount = account as EmailAccount// TODO: support oauth accounts, otp
+            var loginSuccess = false
 
-            val loginSuccess = apiClient.login(emailAccount.email, emailAccount.password)
+            when (account) {
+                is EmailAccount -> {
+                    loginSuccess = apiClient.login(account.email, account.password)
+                    // TODO: otp
+                }
+                is OAuthAccount -> {
+                    loginSuccess = apiClient.oauth(account.clientId, account.clientSecret)
+                }
+            }
+
             if (!loginSuccess) {
                 Log.e("ServerListWidget", "Failed to login")
                 return@runBlocking
