@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import package_name.dto.ServerStatsResponse
 import kotlinx.coroutines.runBlocking
 import java.util.Locale
 
@@ -58,7 +59,10 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
                     }
                 }
 
-                val stats = apiClient.getServerStats(server.id)//TODO: check perms
+                var stats: ServerStatsResponse? = null
+                if (status == ServerStatus.ONLINE) {
+                    stats = apiClient.getServerStats(server.id)//TODO: check perms
+                }
 
                 serverList.add(
                     Server(
@@ -116,7 +120,7 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
                 when (server.status) {
                     ServerStatus.INSTALLING -> R.drawable.pk_package_down
                     ServerStatus.ONLINE -> R.drawable.pk_play_circle
-                    ServerStatus.OFFLINE -> R.drawable.pk_stop_circle
+                    ServerStatus.OFFLINE -> R.drawable.pk_stop_circle_widget
                 }
             )
         } else {
