@@ -1,7 +1,6 @@
 package package_name
 
 import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -111,7 +110,6 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
         }
 
         val appWidgetManager = AppWidgetManager.getInstance(context)
-        val componentName = ComponentName(context, ServerListWidget::class.java)
         val views = RemoteViews(context.packageName, R.layout.server_list_widget)
 
         if (loadSuccess) {
@@ -129,7 +127,7 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
                 context.getString(R.string.server_list_company_name_placeholder))
         }
 
-        appWidgetManager.updateAppWidget(componentName, views)
+        appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 
     override fun onDestroy() {
