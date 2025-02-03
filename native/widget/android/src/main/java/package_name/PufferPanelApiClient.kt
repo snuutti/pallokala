@@ -36,10 +36,31 @@ class PufferPanelApiClient(private val baseUrl: String) {
         }
     }
 
-    suspend fun login(email: String, password: String): Boolean = try {
+    suspend fun login(email: String, password: String): LoginResult = try {
         val response = client.post("$baseUrl/auth/login") {
             contentType(ContentType.Application.Json)
             setBody(mapOf("email" to email, "password" to password))
+        }
+
+        if (response.headers["Set-Cookie"]?.contains("puffer_auth") == true) {
+            LoginResult.SUCCESS
+        } else {
+            val json = response.body<LoginResponse>()
+            if (json.otpNeeded == true) {
+                LoginResult.OTP_REQUIRED
+            } else {
+                LoginResult.FAILED
+            }
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        LoginResult.FAILED
+    }
+
+    suspend fun loginOtp(token: String): Boolean = try {
+        val response = client.post("$baseUrl/auth/otp") {
+            contentType(ContentType.Application.Json)
+            setBody(mapOf("token" to token))
         }
 
         response.headers["Set-Cookie"]?.contains("puffer_auth") ?: false
@@ -117,6 +138,12 @@ class PufferPanelApiClient(private val baseUrl: String) {
             override fun prepare(block: Configuration.() -> Unit) = OAuthTokenInjection(Configuration().apply(block))
         }
 
+    }
+
+    enum class LoginResult {
+        SUCCESS,
+        FAILED,
+        OTP_REQUIRED
     }
 
 }

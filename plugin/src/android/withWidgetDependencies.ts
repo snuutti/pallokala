@@ -32,8 +32,9 @@ export const withWidgetDependencies: ConfigPlugin = (config) => {
     implementation("io.ktor:ktor-client-core:2.3.12")
     implementation("io.ktor:ktor-client-okhttp:2.3.12")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.12")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.12")`,
-            tag: "ktor",
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.12")
+    implementation("com.github.bastiaanjansen:otp-java:2.1.0")`,
+            tag: "widget dependencies",
             anchor: /dependencies {/,
             offset: 1,
             comment: "//"

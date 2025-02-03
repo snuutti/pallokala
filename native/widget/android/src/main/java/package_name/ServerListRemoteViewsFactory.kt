@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import com.bastiaanjansen.otp.TOTPGenerator
 import package_name.dto.ServerStatsResponse
 import kotlinx.coroutines.runBlocking
 import java.util.Locale
@@ -42,8 +43,28 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
 
             when (account) {
                 is EmailAccount -> {
-                    loginSuccess = apiClient.login(account.email, account.password)
-                    // TODO: otp
+                    val result = apiClient.login(account.email, account.password)
+                    when (result) {
+                        PufferPanelApiClient.LoginResult.SUCCESS -> {
+                            loginSuccess = true
+                        }
+                        PufferPanelApiClient.LoginResult.FAILED -> {
+                            loginSuccess = false
+                        }
+                        PufferPanelApiClient.LoginResult.OTP_REQUIRED -> {
+                            if (account.otpSecret == null) {
+                                Log.e("ServerListWidget", "OTP required but no secret")
+                                return@runBlocking
+                            }
+
+                            try {
+                                val code = TOTPGenerator.Builder(account.otpSecret).build().now()
+                                loginSuccess = apiClient.loginOtp(code)
+                            } catch (e: Exception) {
+                                Log.e("ServerListWidget", "Failed to generate OTP")
+                            }
+                        }
+                    }
                 }
                 is OAuthAccount -> {
                     loginSuccess = apiClient.oauth(account.clientId, account.clientSecret)
