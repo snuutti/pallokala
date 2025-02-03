@@ -29,10 +29,12 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
     override fun onDataSetChanged() {
         serverList.clear()
         var loadSuccess = false
+        var widgetAccount: BaseAccount?
 
         runBlocking {
             val accountId = WidgetSharedPrefsUtil.loadWidgetPrefs(context, appWidgetId)
             val account = accountStore.getAccount(context, accountId)
+            widgetAccount = account
             if (account == null) {
                 Log.e("ServerListWidget", "Failed to get account")
                 return@runBlocking
@@ -118,6 +120,13 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
         } else {
             views.setViewVisibility(R.id.server_list, View.GONE)
             views.setViewVisibility(R.id.error_message, View.VISIBLE)
+        }
+
+        if (widgetAccount != null) {
+            views.setTextViewText(R.id.company_name, widgetAccount!!.nickname)
+        } else {
+            views.setTextViewText(R.id.company_name,
+                context.getString(R.string.server_list_company_name_placeholder))
         }
 
         appWidgetManager.updateAppWidget(componentName, views)
