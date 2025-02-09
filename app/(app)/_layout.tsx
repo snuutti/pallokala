@@ -45,7 +45,7 @@ export default function AppLayout() {
                 options={{
                     drawerLabel: t("servers:Servers"),
                     drawerIcon: ({ color }) => (
-                        <NavigationIcon name="server" color={color} />
+                        <NavigationIcon name="console" color={color} />
                     ),
                     title: t("servers:Servers")
                 }}
@@ -56,7 +56,7 @@ export default function AppLayout() {
                 options={{
                     drawerLabel: t("nodes:Nodes"),
                     drawerIcon: ({ color }) => (
-                        <NavigationIcon name="server-network" color={color} />
+                        <NavigationIcon name="server" color={color} />
                     ),
                     drawerItemStyle: {
                         display: apiClient.auth.hasScope("nodes.view") ? undefined : "none"
