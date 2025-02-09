@@ -31,15 +31,6 @@ function buildWidgetReceivers() {
                             }
                         }
                     ]
-                },
-                {
-                    action: [
-                        {
-                            $: {
-                                "android:name": "android.appwidget.action.ACTION_BACKGROUND_REFRESH"
-                            }
-                        }
-                    ]
                 }
             ],
             "meta-data": [
