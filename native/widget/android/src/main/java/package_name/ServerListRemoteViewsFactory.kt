@@ -10,7 +10,6 @@ import android.widget.RemoteViewsService
 import com.bastiaanjansen.otp.TOTPGenerator
 import package_name.dto.ServerStatsResponse
 import kotlinx.coroutines.runBlocking
-import java.util.Locale
 
 class ServerListRemoteViewsFactory(private val context: Context, private val intent: Intent): RemoteViewsService.RemoteViewsFactory {
 
@@ -119,7 +118,7 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
                     server.name,
                     status,
                     stats?.cpu?.toInt(),
-                    stats?.memory?.let { formatMemory(it) }
+                    stats?.memory?.let { WidgetUtils.formatMemory(it) }
                 )
             )
         }
@@ -201,19 +200,6 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
 
     override fun hasStableIds(): Boolean {
         return true
-    }
-
-    private fun formatMemory(bytes: Float): String {
-        val units = arrayOf("B", "KiB", "MiB", "GiB", "TiB")
-        var value = bytes
-        var unitIndex = 0
-
-        while (value >= 1024 && unitIndex < units.lastIndex) {
-            value /= 1024
-            unitIndex++
-        }
-
-        return String.format(Locale.ROOT, "%.1f %s", value, units[unitIndex])
     }
 
 }
