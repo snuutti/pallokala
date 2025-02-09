@@ -8,7 +8,7 @@
     android:minResizeHeight="110dp"
     android:previewImage="@drawable/server_list_widget_preview"
     android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="86400000"
+    android:updatePeriodMillis="0"
     android:widgetCategory="home_screen"
     android:configure="package_name.ServerListWidgetConfigurationActivity"
     android:widgetFeatures="reconfigurable" />

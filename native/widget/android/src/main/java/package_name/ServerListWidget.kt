@@ -3,10 +3,14 @@ package package_name
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import android.widget.RemoteViews
 import android.widget.Toast
+import kotlinx.coroutines.runBlocking
 
 class ServerListWidget : AppWidgetProvider() {
 
@@ -14,9 +18,32 @@ class ServerListWidget : AppWidgetProvider() {
 
         const val ACTION_REFRESH = "${BuildConfig.APPLICATION_ID}.ACTION_WIDGET_REFRESH"
 
+        const val ACTION_BACKGROUND_REFRESH = "${BuildConfig.APPLICATION_ID}.ACTION_BACKGROUND_REFRESH"
+
         internal fun refreshWidget(context: Context, appWidgetId: Int) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.server_list)
+
+            runBlocking {
+                updateWidgetFields(context, appWidgetId)
+            }
+        }
+
+        private suspend fun updateWidgetFields(context: Context, appWidgetId: Int) {
+            val views = RemoteViews(context.packageName, R.layout.server_list_widget)
+
+            val accountStore = AccountStore()
+            val accountId = WidgetSharedPrefsUtil.loadWidgetPrefs(context, appWidgetId)
+            val account = accountStore.getAccount(context, accountId)
+            if (account != null) {
+                views.setTextViewText(R.id.company_name, account.nickname)
+            } else {
+                views.setTextViewText(R.id.company_name,
+                    context.getString(R.string.server_list_company_name_placeholder))
+            }
+
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            appWidgetManager.partiallyUpdateAppWidget(appWidgetId, views)
         }
 
     }
@@ -31,7 +58,7 @@ class ServerListWidget : AppWidgetProvider() {
 
             val intent = Intent(context, ServerListService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                data = android.net.Uri.parse(this.toUri(Intent.URI_INTENT_SCHEME))
+                data = Uri.parse(this.toUri(Intent.URI_INTENT_SCHEME))
             }
 
             views.setRemoteAdapter(R.id.server_list, intent)
@@ -53,6 +80,18 @@ class ServerListWidget : AppWidgetProvider() {
 
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
+
+        scheduleWidgetUpdate(context)
+    }
+
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+        scheduleWidgetUpdate(context)
+    }
+
+    override fun onDisabled(context: Context) {
+        super.onDisabled(context)
+        cancelWidgetUpdate(context)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -60,10 +99,29 @@ class ServerListWidget : AppWidgetProvider() {
 
         if (intent.action == ACTION_REFRESH) {
             val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+                return
+            }
 
-            if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+            Log.d("ServerListWidget", "Manual refresh widget $appWidgetId")
+
+            refreshWidget(context, appWidgetId)
+
+            Toast.makeText(
+                context,
+                R.string.server_list_refreshing_text,
+                Toast.LENGTH_SHORT
+            ).show()
+        } else if (intent.action == ACTION_BACKGROUND_REFRESH) {
+            Log.d("ServerListWidget", "Background refresh")
+
+            scheduleWidgetUpdate(context)
+
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context, ServerListWidget::class.java))
+
+            appWidgetIds.forEach { appWidgetId ->
                 refreshWidget(context, appWidgetId)
-                Toast.makeText(context, R.string.server_list_refreshing_text, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -72,6 +130,32 @@ class ServerListWidget : AppWidgetProvider() {
         appWidgetIds.forEach { appWidgetId ->
             WidgetSharedPrefsUtil.deleteWidgetPrefs(context, appWidgetId)
         }
+    }
+
+    private fun scheduleWidgetUpdate(context: Context) {
+        Log.d("ServerListWidget", "Scheduling widget update")
+
+        val alarm = AppWidgetAlarm(
+            context,
+            ServerListWidget::class.java,
+            ACTION_BACKGROUND_REFRESH,
+            1000 * 60 * 5
+        )
+
+        alarm.startAlarm()
+    }
+
+    private fun cancelWidgetUpdate(context: Context) {
+        Log.d("ServerListWidget", "Cancelling widget update")
+
+        val alarm = AppWidgetAlarm(
+            context,
+            ServerListWidget::class.java,
+            ACTION_BACKGROUND_REFRESH,
+            1000 * 60 * 5
+        )
+
+        alarm.stopAlarm()
     }
 
 }

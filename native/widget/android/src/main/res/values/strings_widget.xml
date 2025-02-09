@@ -4,6 +4,10 @@
     <string name="server_list_refresh_text">Refresh</string>
     <string name="server_list_empty_text">No servers available</string>
     <string name="server_list_load_error_text">Failed to load servers</string>
+    <string name="server_list_account_null">Selected account no longer exists! Please reconfigure the widget.</string>
+    <string name="server_list_account_otp">Selected account requires a 2FA code to login. Please open the app and save your 2FA secret.</string>
+    <string name="server_list_account_otp_error">Failed to generate 2FA code. Please open the app and check your 2FA secret.</string>
+    <string name="server_list_account_invalid_credentials">Failed to login. Have you changed your credentials?</string>
     <string name="server_list_server_name_placeholder">Server Name</string>
     <string name="server_list_server_status">CPU: %1$d\%% | RAM: %2$s</string>
     <string name="server_list_server_status_icon">Server Status</string>

@@ -15,8 +15,18 @@ import java.util.Locale
 class ServerListRemoteViewsFactory(private val context: Context, private val intent: Intent): RemoteViewsService.RemoteViewsFactory {
 
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private val serverList = mutableListOf<Server>()
     private val accountStore = AccountStore()
+    private var loadState: LoadState = LoadState.Loading
+
+    sealed class LoadState {
+
+        data object Loading : LoadState()
+
+        data class Loaded(val servers: List<Server>) : LoadState()
+
+        data class Error(val message: String) : LoadState()
+
+    }
 
     override fun onCreate() {
         appWidgetId = intent.extras?.getInt(
@@ -26,120 +36,124 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
     }
 
     override fun onDataSetChanged() {
-        serverList.clear()
-        var loadSuccess = false
-        var widgetAccount: BaseAccount?
-
         runBlocking {
-            val accountId = WidgetSharedPrefsUtil.loadWidgetPrefs(context, appWidgetId)
-            val account = accountStore.getAccount(context, accountId)
-            widgetAccount = account
-            if (account == null) {
-                Log.e("ServerListWidget", "Failed to get account")
-                return@runBlocking
-            }
+            fetchData()
+        }
+    }
 
-            val apiClient = PufferPanelApiClient(account.serverAddress)
-            var loginSuccess = false
+    private suspend fun fetchData() {
+        loadState = LoadState.Loading
 
-            when (account) {
-                is EmailAccount -> {
-                    val result = apiClient.login(account.email, account.password)
-                    when (result) {
-                        PufferPanelApiClient.LoginResult.SUCCESS -> {
-                            loginSuccess = true
+        val accountId = WidgetSharedPrefsUtil.loadWidgetPrefs(context, appWidgetId)
+        val account = accountStore.getAccount(context, accountId)
+        if (account == null) {
+            Log.w("ServerListWidget", "Account was null")
+            loadState = LoadState.Error(context.getString(R.string.server_list_account_null))
+            return
+        }
+
+        val apiClient = PufferPanelApiClient(account.serverAddress)
+        var loginSuccess = false
+
+        when (account) {
+            is EmailAccount -> {
+                val result = apiClient.login(account.email, account.password)
+                when (result) {
+                    PufferPanelApiClient.LoginResult.SUCCESS -> {
+                        loginSuccess = true
+                    }
+                    PufferPanelApiClient.LoginResult.FAILED -> {
+                        loginSuccess = false
+                    }
+                    PufferPanelApiClient.LoginResult.OTP_REQUIRED -> {
+                        if (account.otpSecret == null) {
+                            Log.w("ServerListWidget", "OTP required but no secret saved")
+                            loadState = LoadState.Error(context.getString(R.string.server_list_account_otp))
+                            return
                         }
-                        PufferPanelApiClient.LoginResult.FAILED -> {
-                            loginSuccess = false
-                        }
-                        PufferPanelApiClient.LoginResult.OTP_REQUIRED -> {
-                            if (account.otpSecret == null) {
-                                Log.e("ServerListWidget", "OTP required but no secret")
-                                return@runBlocking
-                            }
 
-                            try {
-                                val code = TOTPGenerator.Builder(account.otpSecret).build().now()
-                                loginSuccess = apiClient.loginOtp(code)
-                            } catch (e: Exception) {
-                                Log.e("ServerListWidget", "Failed to generate OTP")
-                            }
+                        try {
+                            val code = TOTPGenerator.Builder(account.otpSecret).build().now()
+                            loginSuccess = apiClient.loginOtp(code)
+                        } catch (e: Exception) {
+                            Log.e("ServerListWidget", "Failed to generate OTP", e)
+                            loadState = LoadState.Error(context.getString(R.string.server_list_account_otp_error))
+                            return
                         }
                     }
                 }
-                is OAuthAccount -> {
-                    loginSuccess = apiClient.oauth(account.clientId, account.clientSecret)
-                }
             }
-
-            if (!loginSuccess) {
-                Log.e("ServerListWidget", "Failed to login")
-                return@runBlocking
+            is OAuthAccount -> {
+                loginSuccess = apiClient.oauth(account.clientId, account.clientSecret)
             }
+        }
 
-            val servers = apiClient.getServers() ?: return@runBlocking
-            servers.forEach { server ->
-                var status: ServerStatus? = null
-                if (server.canGetStatus == true) {
-                    status = apiClient.getServerStatus(server.id)?.let {
-                        when {
-                            it.installing -> ServerStatus.INSTALLING
-                            it.running -> ServerStatus.ONLINE
-                            else -> ServerStatus.OFFLINE
-                        }
+        if (!loginSuccess) {
+            Log.w("ServerListWidget", "Failed to login")
+            loadState = LoadState.Error(context.getString(R.string.server_list_account_invalid_credentials))
+            return
+        }
+
+        val servers = apiClient.getServers() ?: return
+        val serverList = mutableListOf<Server>()
+        servers.forEach { server ->
+            var status: ServerStatus? = null
+            if (server.canGetStatus == true) {
+                status = apiClient.getServerStatus(server.id)?.let {
+                    when {
+                        it.installing -> ServerStatus.INSTALLING
+                        it.running -> ServerStatus.ONLINE
+                        else -> ServerStatus.OFFLINE
                     }
                 }
+            }
 
-                var stats: ServerStatsResponse? = null
-                if (status == ServerStatus.ONLINE) {
-                    stats = apiClient.getServerStats(server.id)//TODO: check perms
-                }
+            var stats: ServerStatsResponse? = null
+            if (status == ServerStatus.ONLINE) {
+                stats = apiClient.getServerStats(server.id)//TODO: check perms
+            }
 
-                serverList.add(
-                    Server(
-                        server.id,
-                        server.name,
-                        status,
-                        stats?.cpu?.toInt(),
-                        stats?.memory?.let { formatMemory(it) }
-                    )
+            serverList.add(
+                Server(
+                    server.id,
+                    server.name,
+                    status,
+                    stats?.cpu?.toInt(),
+                    stats?.memory?.let { formatMemory(it) }
                 )
-            }
-
-            loadSuccess = true
+            )
         }
 
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        val views = RemoteViews(context.packageName, R.layout.server_list_widget)
-
-        if (loadSuccess) {
-            views.setViewVisibility(R.id.server_list, View.VISIBLE)
-            views.setViewVisibility(R.id.error_message, View.GONE)
-        } else {
-            views.setViewVisibility(R.id.server_list, View.GONE)
-            views.setViewVisibility(R.id.error_message, View.VISIBLE)
-        }
-
-        if (widgetAccount != null) {
-            views.setTextViewText(R.id.company_name, widgetAccount!!.nickname)
-        } else {
-            views.setTextViewText(R.id.company_name,
-                context.getString(R.string.server_list_company_name_placeholder))
-        }
-
-        appWidgetManager.updateAppWidget(appWidgetId, views)
+        loadState = LoadState.Loaded(serverList)
+        Log.d("ServerListWidget", "Loaded ${serverList.size} servers")
     }
 
     override fun onDestroy() {
     }
 
     override fun getCount(): Int {
-        return serverList.size
+        return when (loadState) {
+            is LoadState.Loading -> 1
+            is LoadState.Loaded -> (loadState as LoadState.Loaded).servers.size
+            is LoadState.Error -> 1
+        }
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        val server = serverList[position]
+        return when (loadState) {
+            is LoadState.Loading -> {
+                loadingView
+            }
+            is LoadState.Loaded -> {
+                getServerView((loadState as LoadState.Loaded).servers[position])
+            }
+            is LoadState.Error -> {
+                getErrorView(loadState as LoadState.Error)
+            }
+        }
+    }
 
+    private fun getServerView(server: Server): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.server_entry)
         views.setTextViewText(R.id.server_name, server.name)
 
@@ -167,12 +181,18 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
         return views
     }
 
-    override fun getLoadingView(): RemoteViews? {
-        return null
+    private fun getErrorView(loadState: LoadState.Error): RemoteViews {
+        val views = RemoteViews(context.packageName, R.layout.server_list_widget_error)
+        views.setTextViewText(R.id.error_message, loadState.message)
+        return views
+    }
+
+    override fun getLoadingView(): RemoteViews {
+        return RemoteViews(context.packageName, R.layout.server_list_widget_loading)
     }
 
     override fun getViewTypeCount(): Int {
-        return 1
+        return 3
     }
 
     override fun getItemId(position: Int): Long {
