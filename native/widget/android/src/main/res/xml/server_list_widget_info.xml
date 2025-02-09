@@ -1,0 +1,13 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/server_list_widget_description"
+    android:initialKeyguardLayout="@layout/server_list_widget"
+    android:initialLayout="@layout/server_list_widget"
+    android:minWidth="180dp"
+    android:minHeight="110dp"
+    android:minResizeWidth="180dp"
+    android:minResizeHeight="110dp"
+    android:previewImage="@drawable/server_list_widget_preview"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen"
+    android:configure="package_name.ServerListWidgetConfigurationActivity" />

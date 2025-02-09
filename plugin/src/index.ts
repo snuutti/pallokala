@@ -1,10 +1,13 @@
 import { ConfigPlugin } from "@expo/config-plugins";
+import { withCommonResources } from "./android/withCommonResources";
 import { withColorFix } from "./android/withColorFix";
-import { withMenuDrawables } from "./android/withMenuDrawables";
+import { withWidgetAndroid } from "./android/withWidgetAndroid";
 
 const withAppConfigs: ConfigPlugin = (config) => {
+    config = withCommonResources(config);
     config = withColorFix(config);
-    config = withMenuDrawables(config);
+    config = withWidgetAndroid(config);
+
     return config;
 };
 
