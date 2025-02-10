@@ -9,6 +9,7 @@ import { ApiClientProvider } from "@/context/ApiClientProvider";
 import { AccountProvider } from "@/context/AccountProvider";
 import { ServerProvider } from "@/context/ServerProvider";
 import { FileManagerProvider } from "@/context/FileManagerProvider";
+import { TemplateEditorProvider } from "@/context/TemplateEditorProvider";
 import { SheetProvider } from "react-native-actions-sheet";
 import Sheets from "@/components/Sheets";
 import { useNavigationColors } from "@/hooks/useStyle";
@@ -37,10 +38,12 @@ export default function Providers(props: ProvidersProps) {
                                 <AccountProvider>
                                     <ServerProvider>
                                         <FileManagerProvider>
-                                            <SheetProvider>
-                                                <Sheets />
-                                                {props.children}
-                                            </SheetProvider>
+                                            <TemplateEditorProvider>
+                                                <SheetProvider>
+                                                    <Sheets />
+                                                    {props.children}
+                                                </SheetProvider>
+                                            </TemplateEditorProvider>
                                         </FileManagerProvider>
                                     </ServerProvider>
                                 </AccountProvider>
