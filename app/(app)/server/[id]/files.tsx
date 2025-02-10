@@ -43,7 +43,7 @@ export default function FilesScreen() {
     const colors = useColors();
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
-    const { server, setOpenFile, setFileContent } = useServer();
+    const { server, fileManager, setOpenFile, setFileContent } = useServer();
     const { fabVisible, setFabVisible, onScroll } = useFabVisible();
     const { showSuccess } = useToast();
     const { createAlertModal, createPromptModal, createListModal, createModal } = useModal();
@@ -61,7 +61,7 @@ export default function FilesScreen() {
         }
 
         refresh();
-    }, [server]);
+    }, [server, fileManager]);
 
     useBackHandler(() => {
         if (!isFocused) {
@@ -83,11 +83,11 @@ export default function FilesScreen() {
     const refresh = useCallback(async () => {
         setRefreshing(true);
 
-        const res = await server?.getFile(getCurrentPath()) as FileDesc[];
+        const res = await fileManager!.ls(getCurrentPath());
         setFiles(res.sort(sortFiles));
 
         setRefreshing(false);
-    }, [server, getCurrentPath]);
+    }, [fileManager, getCurrentPath]);
 
     const openFile = useCallback(async (file: FileDesc) => {
         setRefreshing(true);
@@ -130,13 +130,13 @@ export default function FilesScreen() {
                 pathString = getCurrentPath() + "/" + file.name;
             }
 
-            const res = await server?.getFile(pathString) as FileDesc[];
+            const res = await fileManager!.ls(pathString);
             setFiles(res.sort(sortFiles));
             setFabVisible(true);
         }
 
         setRefreshing(false);
-    }, [server, getCurrentPath, currentPath]);
+    }, [fileManager, getCurrentPath, currentPath]);
 
     const openFileDetails = useCallback((file: FileDesc) => {
         if (!file.isFile) {
@@ -159,11 +159,11 @@ export default function FilesScreen() {
         setCurrentPath(newPath);
 
         const pathString = newPath.map(e => e.name).join("/");
-        const res = await server!.getFile(pathString) as FileDesc[];
+        const res = await fileManager!.ls(pathString);
         setFiles(res.sort(sortFiles));
         setFabVisible(true);
         setRefreshing(false);
-    }, [server, currentPath]);
+    }, [fileManager, currentPath]);
 
     const editFile = (file: ExtendedFileDesc) => {
         setOpenFile(file);

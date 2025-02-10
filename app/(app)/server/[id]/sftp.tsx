@@ -6,6 +6,7 @@ import Copyable from "@/components/ui/Copyable";
 import { useServer } from "@/context/ServerProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useStyle } from "@/hooks/useStyle";
+import { getSftpHost } from "@/utils/files";
 
 export default function SFTPScreen() {
     const { t } = useTranslation();
@@ -22,8 +23,7 @@ export default function SFTPScreen() {
     const { activeAccount, user } = useAccount();
 
     const host = useMemo(() => {
-        let host = (server?.node.publicHost !== "127.0.0.1" && server?.node.publicHost !== "localhost")
-            ? server?.node.publicHost : activeAccount!.serverAddress.replace(/^(https?:\/\/)?(www\.)?|(:\d+)?(\/.*)?$/g, "");
+        let host = getSftpHost(server, activeAccount!);
         host = host + ":" + server?.node.sftpPort;
 
         return host;

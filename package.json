@@ -15,6 +15,7 @@
         "preset": "jest-expo"
     },
     "dependencies": {
+        "@dylankenneally/react-native-ssh-sftp": "^1.5.20",
         "@expo/vector-icons": "^14.0.2",
         "@formatjs/intl-displaynames": "^6.8.10",
         "@formatjs/intl-locale": "^4.2.10",

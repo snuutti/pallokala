@@ -1,10 +1,12 @@
 import { Text, View, StyleSheet } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ContentWrapper from "@/components/screen/ContentWrapper";
+import SftpFileDetails from "@/components/server/files/SftpFileDetails";
 import { useServer } from "@/context/ServerProvider";
 import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
 import { useStyle } from "@/hooks/useStyle";
 import { getIcon } from "@/utils/files";
+import { SftpFileManager, SftpFileDesc } from "@/utils/fileManager";
 
 export default function FileDetailsScreen() {
     const { style, colors } = useStyle((colors) =>
@@ -34,7 +36,7 @@ export default function FileDetailsScreen() {
             }
         })
     );
-    const { openFile } = useServer();
+    const { fileManager, openFile } = useServer();
     const { formatFileSize, formatDateTime } = useLocalizedFormatter();
 
     if (!openFile) {
@@ -55,18 +57,25 @@ export default function FileDetailsScreen() {
             </View>
 
             <View style={style.property}>
+                <Text style={style.propertyName}>Path</Text>
+                <Text selectable={true} style={style.propertyText}>
+                    {openFile.path.startsWith("/") ? "" : "/"}{openFile.path}
+                </Text>
+            </View>
+
+            <View style={style.property}>
                 <Text style={style.propertyName}>Last Modified</Text>
                 <Text selectable={true} style={style.propertyText}>
                     {formatDateTime(openFile.modifyTime!)}
                 </Text>
             </View>
 
-            <View style={style.property}>
-                <Text style={style.propertyName}>Path</Text>
-                <Text selectable={true} style={style.propertyText}>
-                    {openFile.path.startsWith("/") ? "" : "/"}{openFile.path}
-                </Text>
-            </View>
+            {fileManager instanceof SftpFileManager && (
+                <SftpFileDetails
+                    openFile={openFile! as SftpFileDesc}
+                    fileManager={fileManager!}
+                />
+            )}
         </ContentWrapper>
     );
 }

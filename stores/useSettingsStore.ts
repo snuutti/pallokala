@@ -15,6 +15,7 @@ export interface SettingsStore {
     themeSettings: ThemeSettings;
     consoleFontSize: number;
     timeFormat: TimeFormat;
+    sftpFileManager: boolean;
     disclaimerRead: boolean;
     previousVersion?: string;
     setLanguage: (language: string) => void;
@@ -22,6 +23,7 @@ export interface SettingsStore {
     setThemeSettings: (settings: ThemeSettings) => void;
     setConsoleFontSize: (fontSize: number) => void;
     setTimeFormat: (timeFormat: TimeFormat) => void;
+    setIsSFTPFileManager: (isSFTPFileManager: boolean) => void;
     setDisclaimerRead: () => void;
     setPreviousVersion: (version: string) => void;
 }
@@ -34,6 +36,7 @@ export const useSettingsStore = create<SettingsStore>()(
             themeSettings: {},
             consoleFontSize: 14,
             timeFormat: "24h",
+            sftpFileManager: true,
             disclaimerRead: false,
             previousVersion: undefined,
             setLanguage: (language) => set({ language }),
@@ -44,6 +47,7 @@ export const useSettingsStore = create<SettingsStore>()(
             setThemeSettings: (settings) => set({ themeSettings: settings }),
             setConsoleFontSize: (fontSize) => set({ consoleFontSize: fontSize }),
             setTimeFormat: (timeFormat) => set({ timeFormat }),
+            setIsSFTPFileManager: (isSFTPFileManager) => set({ sftpFileManager: isSFTPFileManager }),
             setDisclaimerRead: () => set({ disclaimerRead: true }),
             setPreviousVersion: (version) => set({ previousVersion: version })
         }),

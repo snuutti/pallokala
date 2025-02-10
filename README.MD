@@ -19,6 +19,17 @@ The code is messy in some places. I'm doing this as a hobby for fun, and writing
 - Decompress .log.gz files in memory to view old logs easily
 - Customizable console font size
 - Server list widget
+- SFTP file manager
+  - See file permissions
+  - File renaming
+
+## Work in progress
+
+Either locally or on another branch, I'm currently working on the following features:
+
+- Template management
+- Server info widget
+- File moving
 
 ## Missing features
 

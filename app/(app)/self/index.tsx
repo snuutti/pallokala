@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
 import Slider from "@/components/ui/Slider";
+import Switch from "@/components/ui/Switch";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useToast } from "@/context/ToastProvider";
 import { useModal, ListModalButton } from "@/context/ModalProvider";
@@ -30,14 +31,17 @@ export default function PreferencesScreen() {
         themeSettings,
         consoleFontSize,
         timeFormat,
+        sftpFileManager,
         setLanguage,
         setColorScheme,
         setThemeSettings,
         setConsoleFontSize,
-        setTimeFormat
+        setTimeFormat,
+        setIsSFTPFileManager
     } = useSettingsStore();
     const [baseColor, setBaseColor] = useState(themeSettings.color || colors.primary);
     const [newConsoleFontSize, setNewConsoleFontSize] = useState(consoleFontSize);
+    const [newSFTPFileManager, setNewSFTPFileManager] = useState(sftpFileManager);
 
     const pickLanguage = () => {
         const items: ListModalButton[] = [];
@@ -131,6 +135,7 @@ export default function PreferencesScreen() {
 
         setThemeSettings(settings);
         setConsoleFontSize(newConsoleFontSize);
+        setIsSFTPFileManager(newSFTPFileManager);
 
         await apiClient?.settings.setUserSetting("themeSettings", JSON.stringify(settings));
 
@@ -177,6 +182,13 @@ export default function PreferencesScreen() {
                 text="Time Format"
                 icon="clock-outline"
                 onPress={pickTimeFormat}
+            />
+
+            <Switch
+                label="Enable Additional SFTP Based Features"
+                description="The SFTP based file manager is experimental, however contains features not available in the HTTP based one. The app will fallback to the HTTP based one if the connection fails. SFTP cannot be used with OAuth2 accounts."
+                value={newSFTPFileManager}
+                onValueChange={setNewSFTPFileManager}
             />
 
             <Button

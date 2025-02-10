@@ -1,6 +1,7 @@
 import { ComponentProps } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { FileDesc } from "pufferpanel";
+import { Account } from "@/types/account";
+import { FileDesc, Server } from "pufferpanel";
 
 type Extension = {
     type: "image" | "audio" | "video" | null;
@@ -75,4 +76,9 @@ export function getIcon(file: FileDesc): ComponentProps<typeof MaterialCommunity
     };
 
     return map[file.extension] || "file";
+}
+
+export function getSftpHost(server: Server | undefined, account: Account) {
+    return (server?.node.publicHost !== "127.0.0.1" && server?.node.publicHost !== "localhost")
+        ? server?.node.publicHost : account.serverAddress.replace(/^(https?:\/\/)?(www\.)?|(:\d+)?(\/.*)?$/g, "");
 }
