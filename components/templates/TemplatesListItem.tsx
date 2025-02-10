@@ -1,9 +1,10 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { router } from "expo-router";
 import { useStyle } from "@/hooks/useStyle";
-import { Template } from "pufferpanel";
+import { ExtendedTemplate } from "@/types/template";
 
 type TemplatesListItemProps = {
-    template: Template;
+    template: ExtendedTemplate;
 };
 
 export default function TemplatesListItem(props: TemplatesListItemProps) {
@@ -30,7 +31,7 @@ export default function TemplatesListItem(props: TemplatesListItemProps) {
     );
 
     const onPress = () => {
-        // TODO
+        router.push(`/(modal)/template/${props.template.name}?repo=${props.template.repository}`);
     };
 
     return (
