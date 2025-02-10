@@ -27,7 +27,7 @@ If applicable, add screenshots to help explain your problem.
  - Model: [e.g. Pixel 9 Pro]
  - OS: [e.g. Android 15]
  - App Version [e.g. 1.0.0 (Check at the bottom of the "About Pallokala" page!)]
- - PufferPanel Version [e.g. 3.0.0-rc.6 (Run `pufferpanel version` on your server)]
+ - PufferPanel Version [e.g. 3.0.0-rc.6 (Run `pufferpanel version` on your server or check in app at the bottom of the "About Pallokala" screen)]
 
 **Additional context**
 Add any other context about the problem here.
