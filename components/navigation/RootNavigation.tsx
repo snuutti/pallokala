@@ -152,6 +152,15 @@ export default function RootNavigation() {
                     animation: "fade_from_bottom"
                 }}
             />
+
+            <Stack.Screen
+                name="(modal)/template/[id]"
+                options={{
+                    title: "Template",
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
         </Stack>
     );
 }
