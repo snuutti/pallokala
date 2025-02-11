@@ -78,6 +78,22 @@ export function getIcon(file: FileDesc): ComponentProps<typeof MaterialCommunity
     return map[file.extension] || "file";
 }
 
+export function sortFiles(a: FileDesc, b: FileDesc) {
+    if (a.isFile && !b.isFile) {
+        return 1;
+    }
+
+    if (!a.isFile && b.isFile) {
+        return -1;
+    }
+
+    if (a.name.toLowerCase() < b.name.toLowerCase()) {
+        return -1;
+    }
+
+    return 1;
+}
+
 export function getSftpHost(server: Server | undefined, account: Account) {
     return (server?.node.publicHost !== "127.0.0.1" && server?.node.publicHost !== "localhost")
         ? server?.node.publicHost : account.serverAddress.replace(/^(https?:\/\/)?(www\.)?|(:\d+)?(\/.*)?$/g, "");

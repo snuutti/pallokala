@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useFileManager } from "@/context/FileManagerProvider";
 import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
 import { useStyle } from "@/hooks/useStyle";
 import { getIcon } from "@/utils/files";
@@ -65,6 +66,7 @@ export default function FileItem(props: FileItemProps) {
             }
         })
     );
+    const { isMovingFile } = useFileManager();
     const { formatFileSize, formatDateTime } = useLocalizedFormatter();
 
     const formatModifiedDate = () => {
@@ -91,6 +93,7 @@ export default function FileItem(props: FileItemProps) {
             style={style.file}
             onPress={() => props.onOpen(props.file)}
             onLongPress={() => props.openFileDetails(props.file)}
+            disabled={isMovingFile && props.file.isFile}
         >
             <MaterialCommunityIcons name={getIcon(props.file)} size={30} color={colors.text} style={style.icon} />
 
@@ -102,7 +105,7 @@ export default function FileItem(props: FileItemProps) {
                 )}
             </View>
 
-            {props.file.name !== ".." && (
+            {(props.file.name !== ".." && !isMovingFile) && (
                 <View style={style.actionsView}>
                     {(props.file.isFile && isArchive() && props.canEdit) && (
                         <TouchableOpacity onPress={() => props.onExtract(props.file)}>

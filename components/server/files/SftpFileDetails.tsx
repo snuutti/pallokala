@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import Button from "@/components/ui/Button";
+import { useFileManager } from "@/context/FileManagerProvider";
 import { useModal } from "@/context/ModalProvider";
 import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
 import useFilePermissions from "@/hooks/useFilePermissions";
@@ -35,6 +37,8 @@ export default function SftpFileDetails(props: SftpFileDetailsProps) {
             }
         })
     );
+    const { t } = useTranslation();
+    const { refresh, startMove } = useFileManager();
     const { createPromptModal } = useModal();
     const { formatDateTime } = useLocalizedFormatter();
     const permissions = useFilePermissions(props.openFile.permissions);
@@ -49,7 +53,7 @@ export default function SftpFileDetails(props: SftpFileDetailsProps) {
             },
             [
                 {
-                    text: "Save",
+                    text: t("common:Save"),
                     icon: "content-save",
                     style: "success",
                     onPress: async (newName: string) => {
@@ -58,16 +62,21 @@ export default function SftpFileDetails(props: SftpFileDetailsProps) {
 
                         await props.fileManager.rename(oldPath, newPath);
                         router.back();
-                        // TODO: refresh file list
+                        await refresh();
                     }
                 },
                 {
-                    text: "Cancel",
+                    text: t("common:Cancel"),
                     icon: "close",
                     style: "danger"
                 }
             ]
         );
+    };
+
+    const moveFile = () => {
+        startMove(props.openFile as ExtendedFileDesc);
+        router.back();
     };
 
     return (
@@ -90,6 +99,12 @@ export default function SftpFileDetails(props: SftpFileDetailsProps) {
                 text="Rename"
                 icon="pencil"
                 onPress={renameFile}
+            />
+
+            <Button
+                text="Move"
+                icon="file-move"
+                onPress={moveFile}
             />
         </>
     );

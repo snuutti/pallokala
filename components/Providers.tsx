@@ -9,6 +9,7 @@ import { ApiClientProvider } from "@/context/ApiClientProvider";
 import { AccountProvider } from "@/context/AccountProvider";
 import { SwitchServerModalProvider } from "@/context/SwitchServerModalProvider";
 import { ServerProvider } from "@/context/ServerProvider";
+import { FileManagerProvider } from "@/context/FileManagerProvider";
 import { useNavigationColors } from "@/hooks/useStyle";
 
 type ProvidersProps = {
@@ -29,7 +30,9 @@ export default function Providers(props: ProvidersProps) {
                                     <AccountProvider>
                                         <SwitchServerModalProvider>
                                             <ServerProvider>
-                                                {props.children}
+                                                <FileManagerProvider>
+                                                    {props.children}
+                                                </FileManagerProvider>
                                             </ServerProvider>
                                         </SwitchServerModalProvider>
                                     </AccountProvider>

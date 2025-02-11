@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { RefreshControl } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import ReactNativeBlobUtil from "react-native-blob-util";
@@ -16,27 +16,12 @@ import { useModal } from "@/context/ModalProvider";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
+import { useFileManager } from "@/context/FileManagerProvider";
 import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
 import { useColors } from "@/hooks/useStyle";
 import useBackHandler from "@/hooks/useBackHandler";
 import { ExtendedFileDesc } from "@/types/server";
 import { FileDesc } from "pufferpanel";
-
-function sortFiles(a: FileDesc, b: FileDesc) {
-    if (a.isFile && !b.isFile) {
-        return 1;
-    }
-
-    if (!a.isFile && b.isFile) {
-        return -1;
-    }
-
-    if (a.name.toLowerCase() < b.name.toLowerCase()) {
-        return -1;
-    }
-
-    return 1;
-}
 
 export default function FilesScreen() {
     const { t } = useTranslation();
@@ -44,13 +29,12 @@ export default function FilesScreen() {
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
     const { server, fileManager, setOpenFile, setFileContent } = useServer();
+    const { refreshing, setRefreshing, files, currentPath, getCurrentPath, setCurrentPath,
+        refresh, navigateTo, navigateToPath, isMovingFile, cancelMove, moveFile } = useFileManager();
     const { fabVisible, setFabVisible, onScroll } = useFabVisible();
     const { showSuccess } = useToast();
     const { createAlertModal, createPromptModal, createListModal, createModal } = useModal();
     const { formatFileSize } = useLocalizedFormatter();
-    const [files, setFiles] = useState<FileDesc[]>([]);
-    const [currentPath, setCurrentPath] = useState<FileDesc[]>([]);
-    const [refreshing, setRefreshing] = useState(false);
     const isFocused = useIsFocused();
 
     const canEdit = server?.hasScope("server.files.edit") || false;
@@ -63,6 +47,12 @@ export default function FilesScreen() {
         refresh();
     }, [server, fileManager]);
 
+    useEffect(() => {
+        if (!isFocused) {
+            cancelMove();
+        }
+    }, [isFocused]);
+
     useBackHandler(() => {
         if (!isFocused) {
             return false;
@@ -73,21 +63,9 @@ export default function FilesScreen() {
             return true;
         }
 
+        cancelMove();
         return false;
     });
-
-    const getCurrentPath = useCallback(() => {
-        return currentPath.map(e => e.name).join("/");
-    }, [currentPath]);
-
-    const refresh = useCallback(async () => {
-        setRefreshing(true);
-
-        const res = await fileManager!.ls(getCurrentPath());
-        setFiles(res.sort(sortFiles));
-
-        setRefreshing(false);
-    }, [fileManager, getCurrentPath]);
 
     const openFile = useCallback(async (file: FileDesc) => {
         setRefreshing(true);
@@ -130,13 +108,12 @@ export default function FilesScreen() {
                 pathString = getCurrentPath() + "/" + file.name;
             }
 
-            const res = await fileManager!.ls(pathString);
-            setFiles(res.sort(sortFiles));
+            await navigateToPath(pathString);
             setFabVisible(true);
         }
 
         setRefreshing(false);
-    }, [fileManager, getCurrentPath, currentPath]);
+    }, [fileManager, getCurrentPath, currentPath, navigateToPath]);
 
     const openFileDetails = useCallback((file: FileDesc) => {
         if (!file.isFile) {
@@ -152,18 +129,10 @@ export default function FilesScreen() {
         router.push("/(modal)/filedetails");
     }, [server, getCurrentPath, currentPath]);
 
-    const navigateTo = useCallback(async (index: number) => {
-        setRefreshing(true);
-
-        const newPath = currentPath.slice(0, index + 1);
-        setCurrentPath(newPath);
-
-        const pathString = newPath.map(e => e.name).join("/");
-        const res = await fileManager!.ls(pathString);
-        setFiles(res.sort(sortFiles));
+    const navigateBreadcrumb = async (index: number) => {
+        await navigateTo(index);
         setFabVisible(true);
-        setRefreshing(false);
-    }, [fileManager, currentPath]);
+    };
 
     const editFile = (file: ExtendedFileDesc) => {
         setOpenFile(file);
@@ -428,12 +397,16 @@ export default function FilesScreen() {
                 ListHeaderComponent={
                     <Breadcrumb
                         path={currentPath.map(e => e.name)}
-                        onNavigate={navigateTo}
+                        onNavigate={navigateBreadcrumb}
                     />
                 }
             />
 
-            {canEdit && (
+            {isMovingFile ? (
+                <FloatingActionButton onPress={moveFile}>
+                    <MaterialCommunityIcons name="file-check" size={30} color={colors.textPrimary} />
+                </FloatingActionButton>
+            ) : canEdit && (
                 <FloatingActionButton visible={fabVisible} onPress={openMenu}>
                     <MaterialCommunityIcons name="dots-vertical" size={30} color={colors.textPrimary} />
                 </FloatingActionButton>
