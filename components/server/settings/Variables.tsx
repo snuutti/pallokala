@@ -2,7 +2,7 @@ import { useMemo, useCallback } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import SettingInput from "@/components/server/settings/SettingInput";
 import { useStyle } from "@/hooks/useStyle";
-import { resolve_if } from "@/utils/conditions";
+import { resolve } from "conditions";
 import { ServerDefinition, ServerSettings, Variable, Group } from "pufferpanel";
 
 type VariablesProps = {
@@ -39,7 +39,7 @@ export default function Variables(props: VariablesProps) {
 
         return props.variables.groups!.filter(group => {
             if (group.if) {
-                return resolve_if(group.if, data);
+                return resolve(group.if, data);
             }
 
             return true;
