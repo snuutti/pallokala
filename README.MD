@@ -20,8 +20,9 @@ The code is messy in some places. I'm doing this as a hobby for fun, and writing
 - Customizable console font size
 - Server list widget
 - SFTP file manager
-  - See file permissions
-  - File renaming
+  - View file permissions
+  - Rename files
+  - Move files
 
 ## Work in progress
 
@@ -29,7 +30,6 @@ Either locally or on another branch, I'm currently working on the following feat
 
 - Template management
 - Server info widget
-- File moving
 
 ## Missing features
 
