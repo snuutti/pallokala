@@ -3,15 +3,15 @@ import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
 import { useServer } from "@/context/ServerProvider";
-import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
+import useToast from "@/hooks/useToast";
 import { useBoundStore } from "@/stores/useBoundStore";
 
 export default function AdminScreen() {
     const { t } = useTranslation();
     const { server } = useServer();
-    const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
+    const { showSuccessAlert } = useToast();
     const removeServer = useBoundStore(state => state.removeServer);
 
     const deleteAlert = () => {
@@ -37,7 +37,7 @@ export default function AdminScreen() {
         await server?.delete();
         server?.closeSocket();
         removeServer(server!.id);
-        showSuccess(t("servers:Deleted"));
+        showSuccessAlert(t("servers:Deleted"));
 
         // Expo Router sucks
         while (router.canGoBack()) {

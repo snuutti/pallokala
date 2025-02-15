@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
+import useToast from "@/hooks/useToast";
 import UnifiedSessionStore from "@/utils/sessionStore";
 import MockApiClient from "@/utils/mockApiClient";
 import { getPanelVersion } from "@/utils/version";
@@ -24,8 +24,8 @@ type ApiClientProviderProps = {
 
 export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
     const { t } = useTranslation();
-    const { showError } = useToast();
     const { createAlertModal } = useModal();
+    const { showErrorAlert } = useToast();
     const [apiClient, setApiClient] = useState<ApiClient | undefined>(undefined);
     const [config, setConfig] = useState<EditableConfigSettings | undefined>(undefined);
     const [sessionTimedOut, setSessionTimedOut] = useState(false);
@@ -73,7 +73,7 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
                 .catch(error => {
                     console.log("Failed to get panel version", error);
                     setVersion("unknown");
-                    showError("Failed to get panel version. Some features may be unavailable.");
+                    showErrorAlert("Failed to get panel version. Some features may be unavailable.");
                 });
         }
 
@@ -87,13 +87,15 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
     const handleError = useCallback(async (error: ErrorHandlerResult) => {
         if (error.status === 401) {
             setSessionTimedOut(true);
-            showError(t("errors:ErrSessionTimedOut"));
+            showErrorAlert(t("errors:ErrSessionTimedOut"));
         } else if (error.code === "ErrGeneric" && error.msg) {
-            showError(t(error.msg));
+            showErrorAlert(t(error.msg));
         } else if (error.code === "ErrUnknownError") {
-            showError(t("errors:ErrUnknownError"), () => showErrorDetails(error));
+            showErrorAlert(t("errors:ErrUnknownError"), undefined, {
+                onPress: () => showErrorDetails(error)
+            });
         } else {
-            showError(t("errors:" + error.code));
+            showErrorAlert(t("errors:" + error.code));
         }
     }, [apiClient]);
 

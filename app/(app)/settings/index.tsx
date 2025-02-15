@@ -6,12 +6,12 @@ import TextInput from "@/components/ui/TextInput";
 import Switch from "@/components/ui/Switch";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
-import { useToast } from "@/context/ToastProvider";
+import useToast from "@/hooks/useToast";
 
 export default function PanelSettingsScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
-    const { showSuccess } = useToast();
+    const { showSuccessAlert } = useToast();
     const [masterUrl, setMasterUrl] = useState("");
     const [companyName, setCompanyName] = useState("");
     const [registrationEnabled, setRegistrationEnabled] = useState(false);
@@ -35,7 +35,7 @@ export default function PanelSettingsScreen() {
             "panel.registrationEnabled": registrationEnabled.toString()
         });
 
-        showSuccess(t("settings:Saved"));
+        showSuccessAlert(t("settings:Saved"));
     };
 
     if (loading) {

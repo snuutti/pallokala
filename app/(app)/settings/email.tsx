@@ -6,7 +6,7 @@ import Dropdown from "@/components/ui/Dropdown";
 import TextInput from "@/components/ui/TextInput";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
-import { useToast } from "@/context/ToastProvider";
+import useToast from "@/hooks/useToast";
 
 const emailProviderConfigs: Record<string, { key: string; type: string }[]> = {
     none: [],
@@ -50,7 +50,7 @@ const defaultEmailSettings: EmailSettings = {
 export default function EmailSettingScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
-    const { showSuccess } = useToast();
+    const { showSuccessAlert } = useToast();
     const [emailProvider, setEmailProvider] = useState("");
     const [emailSettings, setEmailSettings] = useState<EmailSettings>(defaultEmailSettings);
     const [loading, setLoading] = useState(true);
@@ -95,7 +95,7 @@ export default function EmailSettingScreen() {
 
         await apiClient?.settings.set(data);
 
-        showSuccess(t("settings:Saved"));
+        showSuccessAlert(t("settings:Saved"));
     };
 
     if (loading) {

@@ -10,8 +10,8 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
-import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
+import useToast from "@/hooks/useToast";
 import { useStyle } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { User } from "pufferpanel";
@@ -41,7 +41,7 @@ export default function UserDetailsScreen() {
         })
     );
     const { apiClient } = useApiClient();
-    const { showSuccess } = useToast();
+    const { showSuccessAlert } = useToast();
     const { createAlertModal } = useModal();
     const modifyUser = useBoundStore(state => state.modifyUser);
     const removeUser = useBoundStore(state => state.removeUser);
@@ -83,7 +83,7 @@ export default function UserDetailsScreen() {
 
             modifyUser(Number(id), { username: data.username, email: data.email });
 
-            showSuccess(t("users:UpdateSuccess"));
+            showSuccessAlert(t("users:UpdateSuccess"));
         } finally {
             setLoading(false);
         }
@@ -112,7 +112,7 @@ export default function UserDetailsScreen() {
         setLoading(true);
         await apiClient?.user.delete(Number(id));
         removeUser(Number(id));
-        showSuccess(t("users:DeleteSuccess"));
+        showSuccessAlert(t("users:DeleteSuccess"));
         router.back();
     };
 

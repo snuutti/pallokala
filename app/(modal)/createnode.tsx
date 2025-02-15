@@ -7,14 +7,14 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import NodeOptions, { NodeDefaultValues, NodeSchema, NodeSchemaType } from "@/components/nodes/NodeOptions";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
-import { useToast } from "@/context/ToastProvider";
+import useToast from "@/hooks/useToast";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { Node } from "pufferpanel";
 
 export default function CreateNodeScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
-    const { showSuccess } = useToast();
+    const { showSuccessAlert } = useToast();
     const addNode = useBoundStore(state => state.addNode);
     const { control, handleSubmit, watch, formState: { errors, isValid } } = useForm<NodeSchemaType>({
         defaultValues: NodeDefaultValues,
@@ -44,7 +44,7 @@ export default function CreateNodeScreen() {
             const id = await apiClient?.node.create(node as Node);
             addNode({ ...node, id: id! } as Node);
 
-            showSuccess(t("nodes:Created"));
+            showSuccessAlert(t("nodes:Created"));
             router.dismissTo(`/(app)/nodes/${id!}?created=true`);
         } finally {
             setLoading(false);

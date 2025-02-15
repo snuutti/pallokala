@@ -10,8 +10,8 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import NodeOptions, { NodeDefaultValues, NodeSchema, NodeSchemaType } from "@/components/nodes/NodeOptions";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
-import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
+import useToast from "@/hooks/useToast";
 import { useStyle } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { Node, NodeFeatures } from "pufferpanel";
@@ -54,8 +54,8 @@ export default function NodeScreen() {
         })
     );
     const { apiClient } = useApiClient();
-    const { showSuccess } = useToast();
     const { createAlertModal } = useModal();
+    const { showSuccessAlert } = useToast();
     const { created } = useLocalSearchParams<{ created?: string }>();
     const modifyNode = useBoundStore(state => state.modifyNode);
     const removeNode = useBoundStore(state => state.removeNode);
@@ -141,7 +141,7 @@ export default function NodeScreen() {
             await apiClient?.node.update(Number(id), node as Node);
             modifyNode(Number(id), node);
 
-            showSuccess(t("nodes:Updated"));
+            showSuccessAlert(t("nodes:Updated"));
         } finally {
             setLoading(false);
         }
@@ -167,7 +167,7 @@ export default function NodeScreen() {
         setLoading(true);
         await apiClient?.node.delete(Number(id));
         removeNode(Number(id));
-        showSuccess(t("nodes:Deleted"));
+        showSuccessAlert(t("nodes:Deleted"));
         router.back();
     };
 

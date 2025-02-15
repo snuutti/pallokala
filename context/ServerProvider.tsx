@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
-import { useToast } from "@/context/ToastProvider";
+import useToast from "@/hooks/useToast";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { FileManager, HttpFileManager, SftpFileManager } from "@/utils/fileManager";
 import { getSftpHost } from "@/utils/files";
@@ -34,7 +34,7 @@ type ServerProviderProps = {
 export const ServerProvider = ({ children }: ServerProviderProps) => {
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
-    const { showSuccess, showError } = useToast();
+    const { showSuccessAlert, showErrorAlert } = useToast();
     const sftpFileManager = useSettingsStore(state => state.sftpFileManager);
     const [server, setServer] = useState<Server | undefined>(undefined);
     const [fileManager, setFileManager] = useState<FileManager | undefined>(undefined);
@@ -76,7 +76,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     const saveFile = async () => {
         await server?.uploadFile(openFile!.path, fileContent!);
         setOriginalFileContent(fileContent);
-        showSuccess("File saved");
+        showSuccessAlert("File saved");
     };
 
     const switchServer = (id: string) => {
@@ -125,7 +125,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
                 });
             } catch (e) {
                 console.error("Failed to connect to SFTP", e);
-                showError("Failed to connect to SFTP. Falling back to HTTP");
+                showErrorAlert("Failed to connect to SFTP. Falling back to HTTP");
                 fileManager = new HttpFileManager(server);
             }
         } else {

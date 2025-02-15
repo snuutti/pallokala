@@ -10,7 +10,7 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import { useServer } from "@/context/ServerProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
-import { useToast } from "@/context/ToastProvider";
+import useToast from "@/hooks/useToast";
 import { useStyle } from "@/hooks/useStyle";
 import { Backup } from "pufferpanel";
 
@@ -32,7 +32,7 @@ export default function BackupsScreen() {
     const { activeAccount } = useAccount();
     const { server } = useServer();
     const { fabVisible, onScroll } = useFabVisible();
-    const { showSuccess } = useToast();
+    const { showSuccessAlert } = useToast();
     const { createAlertModal, createPromptModal } = useModal();
     const [backups, setBackups] = useState<Backup[]>([]);
     const [isBackingUp, setIsBackingUp] = useState(false);
@@ -79,7 +79,7 @@ export default function BackupsScreen() {
 
         try {
             await server?.restoreBackup(backup.id);
-            showSuccess(t("backup:RestoreStarted"));
+            showSuccessAlert(t("backup:RestoreStarted"));
             await loadBackups();
         } finally {
             setRefreshing(false);
@@ -110,7 +110,7 @@ export default function BackupsScreen() {
 
         try {
             await server?.deleteBackup(backup.id);
-            showSuccess(t("backup:Deleted"));
+            showSuccessAlert(t("backup:Deleted"));
             await loadBackups();
         } finally {
             setRefreshing(false);
@@ -121,7 +121,7 @@ export default function BackupsScreen() {
         const filePath = server!.getBackupUrl(backup.id);
         const url = activeAccount!.serverAddress + filePath;
 
-        showSuccess("Check notifications for download progress");
+        showSuccessAlert("Check notifications for download progress");
         await ReactNativeBlobUtil
             .config({
                 addAndroidDownloads: {
@@ -163,7 +163,7 @@ export default function BackupsScreen() {
 
         try {
             await server!.createBackup(name);
-            showSuccess(t("backup:BackupStarted"));
+            showSuccessAlert(t("backup:BackupStarted"));
 
             await loadBackups();
         } finally {

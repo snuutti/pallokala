@@ -11,12 +11,12 @@ import UploadProgressModal, { UploadFile, UploadState } from "@/components/serve
 import FileItem from "@/components/server/files/FileItem";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
-import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
 import { useFileManager } from "@/context/FileManagerProvider";
+import useToast from "@/hooks/useToast";
 import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
 import { useColors } from "@/hooks/useStyle";
 import useBackHandler from "@/hooks/useBackHandler";
@@ -32,8 +32,8 @@ export default function FilesScreen() {
     const { refreshing, setRefreshing, files, currentPath, getCurrentPath, setCurrentPath,
         refresh, navigateTo, navigateToPath, isMovingFile, cancelMove, moveFile } = useFileManager();
     const { fabVisible, setFabVisible, onScroll } = useFabVisible();
-    const { showSuccess } = useToast();
     const { createAlertModal, createPromptModal, createListModal, createModal } = useModal();
+    const { showSuccessAlert } = useToast();
     const { formatFileSize } = useLocalizedFormatter();
     const isFocused = useIsFocused();
 
@@ -144,7 +144,7 @@ export default function FilesScreen() {
         const filePath = server!.getFileUrl(getCurrentPath() + "/" + file.name);
         const url = activeAccount!.serverAddress + filePath;
 
-        showSuccess("Check notifications for download progress");
+        showSuccessAlert("Check notifications for download progress");
         await ReactNativeBlobUtil
             .config({
                 addAndroidDownloads: {

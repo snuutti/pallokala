@@ -6,7 +6,7 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import Switch from "@/components/ui/Switch";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
-import { useToast } from "@/context/ToastProvider";
+import useToast from "@/hooks/useToast";
 import { useStyle } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
 
@@ -55,7 +55,7 @@ export default function PermissionScreen() {
         })
     );
     const { apiClient } = useApiClient();
-    const { showSuccess } = useToast();
+    const { showSuccessAlert } = useToast();
     const id = useBoundStore(state => state.currentUser);
     const [permissions, setPermissions] = useState<string[] | null>(null);
 
@@ -127,7 +127,7 @@ export default function PermissionScreen() {
 
     const updatePermissions = async () => {
         await apiClient?.user.updatePermissions(Number(id), { scopes: permissions! });
-        showSuccess(t("users:UpdateSuccess"));
+        showSuccessAlert(t("users:UpdateSuccess"));
     };
 
     if (!permissions) {

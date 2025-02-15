@@ -8,7 +8,7 @@ import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
-import { useToast } from "@/context/ToastProvider";
+import useToast from "@/hooks/useToast";
 import { updateAccount } from "@/utils/accountStorage";
 import { EmailAccount } from "@/types/account";
 
@@ -33,7 +33,7 @@ export default function ChangePasswordScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
-    const { showSuccess } = useToast();
+    const { showSuccessAlert } = useToast();
     const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
@@ -53,7 +53,7 @@ export default function ChangePasswordScreen() {
                 await updateAccount(account);
             }
 
-            showSuccess(t("users:PasswordChanged"));
+            showSuccessAlert(t("users:PasswordChanged"));
         } finally {
             setSaving(false);
         }

@@ -7,7 +7,7 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import Switch from "@/components/ui/Switch";
 import Button from "@/components/ui/Button";
 import { useServer } from "@/context/ServerProvider";
-import { useToast } from "@/context/ToastProvider";
+import useToast from "@/hooks/useToast";
 import useVersionCheck from "@/hooks/useVersionCheck";
 import { useStyle } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
@@ -53,7 +53,7 @@ export default function EditUserScreen() {
         })
     );
     const { server } = useServer();
-    const { showSuccess } = useToast();
+    const { showSuccessAlert } = useToast();
     const { email } = useLocalSearchParams<{ email: string }>();
     const hasBackups = useVersionCheck("3.0.0-rc.7");
     const user = useBoundStore(state => state.serverUsers[server!.id]).find((u) => u.email === email);
@@ -105,7 +105,7 @@ export default function EditUserScreen() {
         modifyServerUser(server!.id, user.email, updatedUser);
         await server?.updateUser(updatedUser);
 
-        showSuccess(t("users:UpdateSuccess"));
+        showSuccessAlert(t("users:UpdateSuccess"));
     };
 
     const permissionDisabled = (scope: string) => {
@@ -125,7 +125,7 @@ export default function EditUserScreen() {
         removeServerUser(server!.id, user.email);
         router.back();
 
-        showSuccess(t("users:DeleteSuccess"));
+        showSuccessAlert(t("users:DeleteSuccess"));
     };
 
     if (!user) {

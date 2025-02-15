@@ -14,7 +14,7 @@ import FormSwitch from "@/components/ui/form/FormSwitch";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
-import { useToast } from "@/context/ToastProvider";
+import useToast from "@/hooks/useToast";
 import { useStyle } from "@/hooks/useStyle";
 import { updateAccount } from "@/utils/accountStorage";
 import { EmailAccount } from "@/types/account";
@@ -50,7 +50,7 @@ export default function EnrollTwoFactorScreen() {
     );
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
-    const { showSuccess } = useToast();
+    const { showSuccessAlert } = useToast();
     const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
@@ -77,7 +77,7 @@ export default function EnrollTwoFactorScreen() {
                 await updateAccount(account);
             }
 
-            showSuccess(t("users:UpdateSuccess"));
+            showSuccessAlert(t("users:UpdateSuccess"));
 
             router.navigate(`/self/2fa?refresh=${data.code}`);
         } finally {

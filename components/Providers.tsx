@@ -3,7 +3,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ThemeProvider } from "@react-navigation/native";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { ToastProvider } from "@/context/ToastProvider";
+import { NotifierWrapper } from "react-native-notifier";
 import { ModalProvider } from "@/context/ModalProvider";
 import { ApiClientProvider } from "@/context/ApiClientProvider";
 import { AccountProvider } from "@/context/AccountProvider";
@@ -23,7 +23,7 @@ export default function Providers(props: ProvidersProps) {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemeProvider value={theme}>
                 <KeyboardProvider>
-                    <ToastProvider>
+                    <NotifierWrapper>
                         <ModalProvider>
                             <BottomSheetModalProvider>
                                 <ApiClientProvider>
@@ -39,7 +39,7 @@ export default function Providers(props: ProvidersProps) {
                                 </ApiClientProvider>
                             </BottomSheetModalProvider>
                         </ModalProvider>
-                    </ToastProvider>
+                    </NotifierWrapper>
                 </KeyboardProvider>
             </ThemeProvider>
         </GestureHandlerRootView>

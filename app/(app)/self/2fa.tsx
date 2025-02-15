@@ -7,8 +7,8 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
-import { useToast } from "@/context/ToastProvider";
 import { useModal } from "@/context/ModalProvider";
+import useToast from "@/hooks/useToast";
 import { useStyle } from "@/hooks/useStyle";
 import { updateAccount } from "@/utils/accountStorage";
 import { EmailAccount } from "@/types/account";
@@ -24,8 +24,8 @@ export default function TwoFactorAuthScreen() {
     );
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
-    const { showSuccess } = useToast();
     const { createPromptModal } = useModal();
+    const { showSuccessAlert } = useToast();
     const { refresh } = useLocalSearchParams<{ refresh?: string }>();
     const [loading, setLoading] = useState(true);
     const [enabled, setEnabled] = useState(false);
@@ -62,7 +62,7 @@ export default function TwoFactorAuthScreen() {
                             await apiClient?.self.disableOtp(code);
                             await setOtpSecret(undefined);
                             await refreshOtpStatus();
-                            showSuccess(t("users:UpdateSuccess"));
+                            showSuccessAlert(t("users:UpdateSuccess"));
                         } finally {
                             setLoading(false);
                         }
@@ -85,7 +85,7 @@ export default function TwoFactorAuthScreen() {
 
     const removeOtpSecret = async () => {
         await setOtpSecret(undefined);
-        showSuccess("2FA secret removed");
+        showSuccessAlert("2FA secret removed");
     };
 
     const enterOtpSecret = () => {
@@ -101,7 +101,7 @@ export default function TwoFactorAuthScreen() {
                     icon: "content-save",
                     onPress: async (secret: string) => {
                         await setOtpSecret(secret);
-                        showSuccess("2FA secret saved");
+                        showSuccessAlert("2FA secret saved");
                     }
                 },
                 {

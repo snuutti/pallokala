@@ -7,7 +7,7 @@ import Variables from "@/components/server/settings/Variables";
 import Switch from "@/components/ui/Switch";
 import Button from "@/components/ui/Button";
 import { useServer } from "@/context/ServerProvider";
-import { useToast } from "@/context/ToastProvider";
+import useToast from "@/hooks/useToast";
 import { useStyle } from "@/hooks/useStyle";
 import { ServerDefinition, ServerSettings, ServerFlags } from "pufferpanel";
 
@@ -23,7 +23,7 @@ export default function SettingsScreen() {
         })
     );
     const { server } = useServer();
-    const { showSuccess } = useToast();
+    const { showSuccessAlert } = useToast();
     const [variables, setVariables] = useState<ServerDefinition | ServerSettings | null>(null);
     const [flags, setFlags] = useState<ServerFlags | null>(null);
     const [canGetVariables, setCanGetVariables] = useState(false);
@@ -107,7 +107,7 @@ export default function SettingsScreen() {
             await server.setFlags(flags!);
         }
 
-        showSuccess(t("servers:SettingsSaved"));
+        showSuccessAlert(t("servers:SettingsSaved"));
     };
 
     if ((canGetVariables && !variables) || !flags) {

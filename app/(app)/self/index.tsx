@@ -7,8 +7,8 @@ import Button from "@/components/ui/Button";
 import Slider from "@/components/ui/Slider";
 import Switch from "@/components/ui/Switch";
 import { useApiClient } from "@/context/ApiClientProvider";
-import { useToast } from "@/context/ToastProvider";
 import { useModal, ListModalButton } from "@/context/ModalProvider";
+import useToast from "@/hooks/useToast";
 import { useStyle } from "@/hooks/useStyle";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import resources from "@/constants/resources";
@@ -24,8 +24,8 @@ export default function PreferencesScreen() {
     );
     const { t, i18n } = useTranslation();
     const { apiClient } = useApiClient();
-    const { showSuccess } = useToast();
     const { createListModal, createColorPickerModal } = useModal();
+    const { showSuccessAlert } = useToast();
     const {
         colorScheme,
         themeSettings,
@@ -139,7 +139,7 @@ export default function PreferencesScreen() {
 
         await apiClient?.settings.setUserSetting("themeSettings", JSON.stringify(settings));
 
-        showSuccess(t("users:PreferencesUpdated"));
+        showSuccessAlert(t("users:PreferencesUpdated"));
     };
 
     return (
