@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode, ComponentProps } from "react";
 import ModalWrapper from "@/components/modal/ModalWrapper";
-import AlertModal from "@/components/modal/AlertModal";
+import AlertModal, { AlertModalOptions } from "@/components/modal/AlertModal";
 import PromptModal, { PromptModalOptions } from "@/components/modal/PromptModal";
 import ListModal from "@/components/modal/ListModal";
 import ColorPickerModal from "@/components/modal/ColorPickerModal";
@@ -15,7 +15,7 @@ type ModalContextType = {
         title?: string,
         message?: string,
         buttons?: ModalButton[],
-        options?: ModalOptions
+        options?: ModalOptions & AlertModalOptions
     ) => string;
     createMarkdownAlertModal: (
         title?: string,
@@ -86,12 +86,13 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
         title?: string,
         message?: string,
         buttons?: ModalButton[],
-        options?: ModalOptions
+        options?: ModalOptions & AlertModalOptions
     ) => {
         return createModal(
             <AlertModal
                 title={title}
                 message={message}
+                options={options}
                 buttons={buttons}
             />,
             options

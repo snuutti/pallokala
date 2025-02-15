@@ -5,10 +5,15 @@ import Button from "@/components/ui/Button";
 import { ModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 
+export type AlertModalOptions = {
+    selectable?: boolean;
+};
+
 type AlertModalProps = {
     title?: string;
     message?: string;
     markdown?: string;
+    options?: AlertModalOptions;
     buttons?: ModalButton[];
     handleClose?: () => void;
 };
@@ -60,7 +65,7 @@ export default function AlertModal(props: AlertModalProps) {
             )}
 
             {props.message && (
-                <Text style={style.body}>{props.message}</Text>
+                <Text style={style.body} selectable={props.options?.selectable}>{props.message}</Text>
             )}
 
             {props.markdown && (

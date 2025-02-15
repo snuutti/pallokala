@@ -131,7 +131,10 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
             details,
             [
                 { text: t("common:Close") }
-            ]
+            ],
+            {
+                selectable: true
+            }
         );
     };
 
