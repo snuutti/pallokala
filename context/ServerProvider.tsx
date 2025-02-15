@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
+import { useModal } from "@/context/ModalProvider";
 import useToast from "@/hooks/useToast";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { FileManager, HttpFileManager, SftpFileManager } from "@/utils/fileManager";
@@ -32,8 +34,10 @@ type ServerProviderProps = {
 };
 
 export const ServerProvider = ({ children }: ServerProviderProps) => {
+    const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
+    const { createAlertModal } = useModal();
     const { showSuccessAlert, showErrorAlert } = useToast();
     const sftpFileManager = useSettingsStore(state => state.sftpFileManager);
     const [server, setServer] = useState<Server | undefined>(undefined);
@@ -123,9 +127,33 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
                     username: `${emailAccount.email}#${server.id}`,
                     password: emailAccount.password
                 });
-            } catch (e) {
+            } catch (e: unknown) {
                 console.error("Failed to connect to SFTP", e);
-                showErrorAlert("Failed to connect to SFTP. Falling back to HTTP");
+
+                showErrorAlert("Failed to connect to SFTP. Falling back to HTTP", undefined, {
+                    onPress: () => {
+                        let message: string;
+                        if (e instanceof Error) {
+                            message = e.message;
+                        } else if (typeof e === "string") {
+                            message = e;
+                        } else {
+                            message = t("errors:ErrUnknownError");
+                        }
+
+                        createAlertModal(
+                            t("common:ErrorDetails"),
+                            message,
+                            [
+                                { text: t("common:Close") }
+                            ],
+                            {
+                                selectable: true
+                            }
+                        );
+                    }
+                });
+
                 fileManager = new HttpFileManager(server);
             }
         } else {
