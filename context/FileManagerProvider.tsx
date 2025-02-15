@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useMemo, useCallback, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, useCallback, ReactNode } from "react";
 import { useServer } from "@/context/ServerProvider";
 import { sortFiles } from "@/utils/files";
 import { ExtendedFileDesc } from "@/types/server";
@@ -32,6 +32,13 @@ export const FileManagerProvider = ({ children }: FileManagerProviderProps) => {
     const [files, setFiles] = useState<FileDesc[]>([]);
     const [currentPath, setCurrentPath] = useState<FileDesc[]>([]);
     const [movingFile, setMovingFile] = useState<ExtendedFileDesc | null>(null);
+
+    useEffect(() => {
+        setRefreshing(true);
+        setFiles([]);
+        setCurrentPath([]);
+        setMovingFile(null);
+    }, [fileManager]);
 
     const getCurrentPath = useCallback(() => {
         return currentPath.map(e => e.name).join("/");
