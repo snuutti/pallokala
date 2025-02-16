@@ -3,6 +3,7 @@ import { Text, View, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import { CartesianChart, Line } from "victory-native";
 import ContentWrapper from "@/components/screen/ContentWrapper";
+import Query from "@/components/server/statistics/Query";
 import { useFont } from "@shopify/react-native-skia";
 import { useServer } from "@/context/ServerProvider";
 import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
@@ -112,6 +113,8 @@ export default function StatisticsScreen() {
 
     return (
         <ContentWrapper>
+            <Query />
+
             <Text style={style.title}>{t("servers:Memory")}</Text>
 
             <View style={style.chart}>
