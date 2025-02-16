@@ -632,6 +632,8 @@ declare module "pufferpanel" {
         async getUserSettings(): Promise<Record<string, string>>;
 
         async setUserSetting(key: string, value: any): Promise<boolean>;
+
+        async sendTestEmail(): Promise<boolean>;
     }
 
     export interface SessionStore {

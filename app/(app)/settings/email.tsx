@@ -7,6 +7,7 @@ import TextInput from "@/components/ui/TextInput";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import useToast from "@/hooks/useToast";
+import useVersionCheck from "@/hooks/useVersionCheck";
 
 const emailProviderConfigs: Record<string, { key: string; type: string }[]> = {
     none: [],
@@ -19,12 +20,12 @@ const emailProviderConfigs: Record<string, { key: string; type: string }[]> = {
     mailgun: [
         { key: "domain", type: "text" },
         { key: "from", type: "text" },
-        { key: "key", type: "text" }
+        { key: "key", type: "password" }
     ],
     mailjet: [
         { key: "domain", type: "text" },
         { key: "from", type: "text" },
-        { key: "key", type: "text" }
+        { key: "key", type: "password" }
     ]
 };
 
@@ -51,6 +52,7 @@ export default function EmailSettingScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const { showSuccessAlert } = useToast();
+    const hasEmailTest = useVersionCheck("3.0.0-rc.11");
     const [emailProvider, setEmailProvider] = useState("");
     const [emailSettings, setEmailSettings] = useState<EmailSettings>(defaultEmailSettings);
     const [loading, setLoading] = useState(true);
@@ -98,6 +100,11 @@ export default function EmailSettingScreen() {
         showSuccessAlert(t("settings:Saved"));
     };
 
+    const sendTestEmail = async () => {
+        await apiClient?.settings.sendTestEmail();
+        showSuccessAlert(t("settings:TestEmailSent"));
+    };
+
     if (loading) {
         return <LoadingScreen />;
     }
@@ -127,6 +134,14 @@ export default function EmailSettingScreen() {
                 icon="content-save"
                 onPress={saveSettings}
             />
+
+            {hasEmailTest && (
+                <Button
+                    text={t("settings:TestEmail")}
+                    icon="email-fast"
+                    onPress={sendTestEmail}
+                />
+            )}
         </ContentWrapper>
     );
 }
