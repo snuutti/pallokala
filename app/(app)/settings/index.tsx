@@ -24,7 +24,8 @@ export default function PanelSettingsScreen() {
     const loadSettings = async () => {
         setMasterUrl(await apiClient!.settings.get("panel.settings.masterUrl"));
         setCompanyName(await apiClient!.settings.get("panel.settings.companyName"));
-        setRegistrationEnabled((await apiClient!.settings.get("panel.registrationEnabled")) === "true");
+        const registrationEnabled = await apiClient!.settings.get("panel.registrationEnabled");
+        setRegistrationEnabled(registrationEnabled === "true" || Boolean(registrationEnabled));
         setLoading(false);
     };
 
