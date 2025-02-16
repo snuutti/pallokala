@@ -66,7 +66,10 @@ export default function EmailLoginScreen() {
                     t("app:Auth.UnsupportedVersion"),
                     t("app:Auth.UnsupportedVersionUpgrade"),
                     [
-                        { text: t("common:Close") }
+                        {
+                            text: t("common:Close"),
+                            icon: "close"
+                        }
                     ]
                 );
 
@@ -77,7 +80,10 @@ export default function EmailLoginScreen() {
                 t("app:Common.Error"),
                 t("app:Auth.VersionCheckFailed"),
                 [
-                    { text: t("common:Close") }
+                    {
+                        text: t("common:Close"),
+                        icon: "close"
+                    }
                 ]
             );
 
@@ -96,7 +102,10 @@ export default function EmailLoginScreen() {
                     t("app:Common.Error"),
                     error ? error : t("app:Auth.LoginFailed"),
                     [
-                        { text: t("common:Close") }
+                        {
+                            text: t("common:Close"),
+                            icon: "close"
+                        }
                     ]
                 );
             }
@@ -106,7 +115,10 @@ export default function EmailLoginScreen() {
                     t("errors:" + (e as ErrorHandlerResult).code),
                     (e as ErrorHandlerResult).msg,
                     [
-                        { text: t("common:Close") }
+                        {
+                            text: t("common:Close"),
+                            icon: "close"
+                        }
                     ]
                 );
             } else {
@@ -114,7 +126,10 @@ export default function EmailLoginScreen() {
                     t("app:Common.Error"),
                     t("app:Auth.AccountAddFailed"),
                     [
-                        { text: t("common:Close") }
+                        {
+                            text: t("common:Close"),
+                            icon: "close"
+                        }
                     ]
                 );
             }

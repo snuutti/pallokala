@@ -145,7 +145,10 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
                             t("common:ErrorDetails"),
                             message,
                             [
-                                { text: t("common:Close") }
+                                {
+                                    text: t("common:Close"),
+                                    icon: "close"
+                                }
                             ],
                             {
                                 selectable: true

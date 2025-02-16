@@ -132,7 +132,10 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
             t("common:ErrorDetails"),
             details,
             [
-                { text: t("common:Close") }
+                {
+                    text: t("common:Close"),
+                    icon: "close"
+                }
             ],
             {
                 selectable: true

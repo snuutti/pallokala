@@ -158,7 +158,10 @@ export default function NodeScreen() {
                     style: "danger",
                     onPress: deleteNode
                 },
-                { text: t("common:Cancel") }
+                {
+                    text: t("common:Cancel"),
+                    icon: "close"
+                }
             ]
         );
     };
