@@ -33,6 +33,7 @@ export default function RootLayout() {
         UbuntuMonoBoldItalic: require("../assets/fonts/UbuntuMono-BI.ttf")
     });
     const savedLanguage = useSettingsStore(state => state.language);
+    const setLanguage = useSettingsStore(state => state.setLanguage);
     const colorScheme = useSettingsStore(state => state.colorScheme);
     const [languageLoaded, setLanguageLoaded] = useState(false);
     const [isAppearanceSet, setIsAppearanceSet] = useState(false);
@@ -45,7 +46,8 @@ export default function RootLayout() {
         if (!languageLoaded) {
             let language = savedLanguage;
             if (language === "") {
-                language = Localization.getLocales()[0].languageTag;
+                language = Localization.getLocales()[0].languageTag.replaceAll("-", "_");
+                setLanguage(language);
             }
 
             i18n.changeLanguage(language).then(() => setLanguageLoaded(true));

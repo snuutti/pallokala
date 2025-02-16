@@ -31,7 +31,7 @@ export interface SettingsStore {
 export const useSettingsStore = create<SettingsStore>()(
     persist(
         (set, get) => ({
-            language: "",
+            language: "en_US",
             colorScheme: "device",
             themeSettings: {},
             consoleFontSize: 14,
