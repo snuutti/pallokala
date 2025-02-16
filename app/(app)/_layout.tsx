@@ -115,7 +115,7 @@ export default function AppLayout() {
                     drawerItemStyle: {
                         display: "none"
                     },
-                    title: "Profile"
+                    title: t("app:Self.Title")
                 }}
             />
 
@@ -135,7 +135,7 @@ export default function AppLayout() {
                     drawerItemStyle: {
                         display: "none"
                     },
-                    title: "Node"
+                    title: t("app:Node.Title")
                 }}
             />
 
@@ -145,7 +145,7 @@ export default function AppLayout() {
                     drawerItemStyle: {
                         display: "none"
                     },
-                    title: "User"
+                    title: t("app:User.Title")
                 }}
             />
         </Drawer>

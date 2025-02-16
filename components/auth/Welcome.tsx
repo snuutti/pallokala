@@ -1,7 +1,9 @@
 import { Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import { useStyle } from "@/hooks/useStyle";
 
 export default function Welcome() {
+    const { t } = useTranslation();
     const { style } = useStyle((colors) =>
         StyleSheet.create({
             header: {
@@ -18,9 +20,9 @@ export default function Welcome() {
 
     return (
         <>
-            <Text style={style.header}>Welcome!</Text>
-            <Text style={style.subheader}>Add a new PufferPanel server to get started.</Text>
-            <Text style={style.subheader}>Note: Pallokala only works with version 3.0 and later PufferPanel servers.</Text>
+            <Text style={style.header}>{t("app:Auth.WelcomeHeader")}</Text>
+            <Text style={style.subheader}>{t("app:Auth.WelcomeSubline")}</Text>
+            <Text style={style.subheader}>{t("app:Auth.WelcomeNote")}</Text>
         </>
     );
 }

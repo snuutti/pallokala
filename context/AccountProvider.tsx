@@ -186,7 +186,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
                             createAlertModal(
                                 t("users:OtpNeeded"),
-                                "The OTP secret stored for this account didn't work. You will need to enter the OTP code from your authenticator app manually.",
+                                t("app:Auth.OtpSecretError"),
                                 [
                                     {
                                         text: t("common:Close"),
@@ -274,7 +274,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
             try {
                 await apiClient.auth.reauth();
             } catch {
-                return [false, "Unsupported PufferPanel version"];
+                return [false, t("app:Auth.UnsupportedVersion")];
             }
         }
 

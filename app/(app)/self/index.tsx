@@ -106,19 +106,19 @@ export default function PreferencesScreen() {
         createListModal(
             [
                 {
-                    text: "Use Locale",
+                    text: t("app:Self.Preferences.TimeFormat.Locale"),
                     icon: "translate",
                     onPress: () => setTimeFormat("locale"),
                     selected: timeFormat === "locale"
                 },
                 {
-                    text: "12-hour",
+                    text: t("app:Self.Preferences.TimeFormat.12"),
                     icon: "biohazard",
                     onPress: () => setTimeFormat("12h"),
                     selected: timeFormat === "12h"
                 },
                 {
-                    text: "24-hour",
+                    text: t("app:Self.Preferences.TimeFormat.24"),
                     icon: "hand-okay",
                     onPress: () => setTimeFormat("24h"),
                     selected: timeFormat === "24h"
@@ -167,8 +167,8 @@ export default function PreferencesScreen() {
             />
 
             <Slider
-                label="Console Font Size (default 14)"
-                description={`Current: ${newConsoleFontSize}`}
+                label={t("app:Self.Preferences.ConsoleFontSize")}
+                description={t("app:Self.Preferences.ConsoleFontSizeDesc", { size: consoleFontSize })}
                 value={newConsoleFontSize}
                 onValueChange={setNewConsoleFontSize}
                 lowerLimit={10}
@@ -179,14 +179,14 @@ export default function PreferencesScreen() {
             />
 
             <Button
-                text="Time Format"
+                text={t("app:Self.Preferences.TimeFormat.TimeFormat")}
                 icon="clock-outline"
                 onPress={pickTimeFormat}
             />
 
             <Switch
-                label="Enable Additional SFTP Based Features"
-                description="The SFTP based file manager is experimental, however contains features not available in the HTTP based one. The app will fallback to the HTTP based one if the connection fails. SFTP cannot be used with OAuth2 accounts."
+                label={t("app:Self.Preferences.Sftp")}
+                description={t("app:Self.Preferences.SftpDesc")}
                 value={newSFTPFileManager}
                 onValueChange={setNewSFTPFileManager}
             />

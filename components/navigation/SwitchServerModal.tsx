@@ -1,6 +1,7 @@
 import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from "react";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/src/components/bottomSheetBackdrop/types";
 import { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
@@ -16,6 +17,7 @@ export type SwitchServerModalRef = {
 };
 
 export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
+    const { t } = useTranslation();
     const insets = useSafeAreaInsets();
     const { style, colors } = useStyle((colors) =>
         StyleSheet.create({
@@ -109,11 +111,19 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
 
         const deleteAlert = () => {
             createAlertModal(
-                "Remove Account",
-                "Are you sure you want to remove this account?",
+                t("app:Drawer.RemoveAccount"),
+                t("app:Drawer.RemoveAccountBody"),
                 [
-                    { text: "Remove", icon: "trash-can", style: "danger", onPress: deleteConfirm },
-                    { text: "Cancel" }
+                    {
+                        text: t("app:Drawer.RemoveAccountButton"),
+                        icon: "trash-can",
+                        style: "danger",
+                        onPress: deleteConfirm
+                    },
+                    {
+                        text: t("common:Cancel"),
+                        icon: "close"
+                    }
                 ]
             );
         };
@@ -171,7 +181,7 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
         >
             <TouchableOpacity style={[style.item, style.itemAdd]} onPress={addAccount}>
                 <View style={style.infoView}>
-                    <Text style={style.address}>Add new account</Text>
+                    <Text style={style.address}>{t("app:Drawer.AddAccount")}</Text>
                 </View>
             </TouchableOpacity>
 

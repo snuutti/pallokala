@@ -144,7 +144,7 @@ export default function FilesScreen() {
         const filePath = server!.getFileUrl(getCurrentPath() + "/" + file.name);
         const url = activeAccount!.serverAddress + filePath;
 
-        showSuccessAlert("Check notifications for download progress");
+        showSuccessAlert(t("app:Servers.DownloadNotification"));
         await ReactNativeBlobUtil
             .config({
                 addAndroidDownloads: {
@@ -289,8 +289,8 @@ export default function FilesScreen() {
             .reduce((acc, f) => acc + (f.size || 0), 0);
 
         createAlertModal(
-            "Folder details",
-            `Path: /${getCurrentPath()}\nFiles: ${fileCount}\nFolders: ${folderCount}\nTotal size: ${formatFileSize(totalSize)}`,
+            t("app:Servers.Files.FolderDetails"),
+            t("app:Servers.Files.FolderDetailsText", { path: getCurrentPath(), fileCount, folderCount, totalSize: formatFileSize(totalSize) }),
             [
                 {
                     text: t("common:Close"),
@@ -364,7 +364,7 @@ export default function FilesScreen() {
                     }
                 },
                 {
-                    text: "View folder details",
+                    text: t("app:Servers.Files.ViewFolderDetails"),
                     icon: "folder-information",
                     onPress: viewFolderDetails
                 }

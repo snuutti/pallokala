@@ -25,11 +25,11 @@ export default function useAppUpdated() {
         setPreviousVersion(currentVersion);
 
         createAlertModal(
-            "Pallokala just got updated!",
-            "Check out what's new in this version.",
+            t("app:Modal.Updated.Title"),
+            t("app:Modal.Updated.Body"),
             [
                 {
-                    text: "Go to changelog",
+                    text: t("app:Modal.Updated.Changelog"),
                     icon: "history",
                     onPress: () => router.push("/(modal)/changelog")
                 },

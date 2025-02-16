@@ -121,7 +121,7 @@ export default function BackupsScreen() {
         const filePath = server!.getBackupUrl(backup.id);
         const url = activeAccount!.serverAddress + filePath;
 
-        showSuccessAlert("Check notifications for download progress");
+        showSuccessAlert(t("app:Servers.DownloadNotification"));
         await ReactNativeBlobUtil
             .config({
                 addAndroidDownloads: {

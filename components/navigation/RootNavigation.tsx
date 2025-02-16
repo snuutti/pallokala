@@ -29,7 +29,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="(modal)/about"
                 options={{
-                    title: "About Pallokala",
+                    title: t("app:About.Title"),
                     presentation: "modal",
                     animation: "fade_from_bottom"
                 }}
@@ -38,7 +38,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="(modal)/changelog"
                 options={{
-                    title: "Changelog",
+                    title: t("app:About.ChangelogTitle"),
                     presentation: "modal",
                     animation: "fade_from_bottom"
                 }}
@@ -47,7 +47,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="(modal)/search"
                 options={{
-                    title: "Search",
+                    title: t("app:Search.Title"),
                     presentation: "modal",
                     animation: "fade_from_bottom"
                 }}
@@ -83,7 +83,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="(modal)/editfile"
                 options={{
-                    title: openFile?.name || "Edit File",
+                    title: openFile?.name || t("app:Servers.Files.EditFile"),
                     presentation: "modal",
                     animation: "fade_from_bottom",
                     headerRight: SaveButton
@@ -93,7 +93,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="(modal)/filedetails"
                 options={{
-                    title: "File Details",
+                    title: t("app:Servers.Files.FileDetails"),
                     presentation: "modal",
                     animation: "fade_from_bottom"
                 }}

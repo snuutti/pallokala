@@ -21,7 +21,7 @@ import { EmailAccount } from "@/types/account";
 import { OtpEnrollResponse } from "pufferpanel";
 
 const schema = z.object({
-    code: z.string().length(6, { message: "Invalid 2FA code" }),
+    code: z.string().length(6, { message: "app:Auth.Invalid2FACode" }),
     saveSecret: z.boolean()
 });
 
@@ -112,8 +112,8 @@ export default function EnrollTwoFactorScreen() {
                 <FormSwitch
                     control={control}
                     name="saveSecret"
-                    label="Save 2FA secret"
-                    description="Save the 2FA secret to your device to enable logging in without a code"
+                    label={t("app:Self.2FA.SaveSecret")}
+                    description={t("app:Self.2FA.SaveSecretDesc")}
                 />
             )}
 

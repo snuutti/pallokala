@@ -45,10 +45,10 @@ export default function SftpFileDetails(props: SftpFileDetailsProps) {
 
     const renameFile = () => {
         createPromptModal(
-            "Rename File",
+            t("app:Servers.Files.RenameFile"),
             {
                 defaultValue: props.openFile.name,
-                placeholder: "New Name",
+                placeholder: t("common:Name"),
                 inputType: "default"
             },
             [
@@ -82,27 +82,27 @@ export default function SftpFileDetails(props: SftpFileDetailsProps) {
     return (
         <>
             <View style={style.property}>
-                <Text style={style.propertyName}>Last Accessed</Text>
+                <Text style={style.propertyName}>{t("app:Servers.Files.LastAccessed")}</Text>
                 <Text selectable={true} style={style.propertyText}>
                     {formatDateTime(props.openFile.lastAccess)}
                 </Text>
             </View>
 
             <View style={[style.property, style.lastProperty]}>
-                <Text style={style.propertyName}>Permissions</Text>
+                <Text style={style.propertyName}>{t("app:Servers.Files.Permissions")}</Text>
                 <Text selectable={true} style={style.propertyText}>
                     {permissions}
                 </Text>
             </View>
 
             <Button
-                text="Rename"
+                text={t("app:Servers.Files.RenameFile")}
                 icon="pencil"
                 onPress={renameFile}
             />
 
             <Button
-                text="Move"
+                text={t("app:Servers.Files.MoveFile")}
                 icon="file-move"
                 onPress={moveFile}
             />

@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
+import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -12,6 +13,7 @@ import { avatarPlaceholder } from "@/constants/placeholder";
 import { md5 } from "js-md5";
 
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
+    const { t } = useTranslation();
     const insets = useSafeAreaInsets();
     const { style, colors } = useStyle((colors) =>
         StyleSheet.create({
@@ -99,7 +101,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                 <TouchableOpacity style={style.action} onPress={() => router.push("/(modal)/about")}>
                     <MaterialCommunityIcons name="information" size={22} color={colors.text} />
                     <Text style={style.actionTextHeader}>
-                        About Pallokala
+                        {t("app:Drawer.About")}
                     </Text>
                 </TouchableOpacity>
 
@@ -107,7 +109,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                     <MaterialCommunityIcons name="swap-horizontal" size={22} color={colors.text} />
                     <View style={style.actionTextContainer}>
                         <Text style={style.actionTextHeader}>
-                            Switch server
+                            {t("app:Drawer.SwitchServer")}
                         </Text>
 
                         <Text style={style.actionTextSubheader}>

@@ -149,16 +149,16 @@ export default function NodeScreen() {
 
     const deleteAlert = () => {
         createAlertModal(
-            "Delete Node",
-            `Are you sure you want to delete ${node?.name}?`,
+            t("nodes:Delete"),
+            t("nodes:ConfirmDelete", { name: node?.name }),
             [
                 {
-                    text: "Delete",
+                    text: t("nodes:Delete"),
                     icon: "trash-can",
                     style: "danger",
                     onPress: deleteNode
                 },
-                { text: "Cancel" }
+                { text: t("common:Cancel") }
             ]
         );
     };

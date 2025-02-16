@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import ColorPicker, { HueSlider, Panel1 } from "reanimated-color-picker";
 import Button from "@/components/ui/Button";
 import { useStyle } from "@/hooks/useStyle";
@@ -12,6 +13,7 @@ type ColorPickerModalProps = {
 };
 
 export default function ColorPickerModal(props: ColorPickerModalProps) {
+    const { t } = useTranslation();
     const { style, colors } = useStyle((colors) =>
         StyleSheet.create({
             container: {
@@ -70,7 +72,8 @@ export default function ColorPickerModal(props: ColorPickerModalProps) {
             </ColorPicker>
 
             <Button
-                text="Use color"
+                text={t("app:Modal.UseColor")}
+                icon="check"
                 onPress={onButtonPressed}
                 disabled={hasSelected}
             />

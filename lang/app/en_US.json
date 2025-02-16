@@ -1,0 +1,118 @@
+{
+    "Common": {
+        "Error": "Error",
+        "GetVersionError": "Failed to get panel version. Some features may be unavailable."
+    },
+    "ErrorBoundary": {
+        "Title": "An error has occurred",
+        "CopyStackTrace": "Copy Stack Trace",
+        "ReportIssue": "Report Issue",
+        "Restart": "Restart"
+    },
+    "Modal": {
+        "UseColor": "Use color",
+        "Disclaimer": {
+            "Title": "Thanks for trying out Pallokala!",
+            "Body": "Pallokala is still in development and is missing some features and contains bugs. Please report any issues you find.",
+            "GotIt": "Got it"
+        },
+        "Updated": {
+            "Title": "Pallokala just got updated!",
+            "Body": "Check out what's new in this version.",
+            "Changelog": "Go to changelog"
+        }
+    },
+    "Auth": {
+        "OtpSecretError": "The OTP secret stored for this account didn't work. You will need to enter the OTP code from your authenticator app manually.",
+        "LoginFailed": "Failed to login to the server.",
+        "UnsupportedVersion": "Unsupported PufferPanel version",
+        "UnsupportedVersionUpgrade": "2.x versions of PufferPanel are not supported. Please upgrade to 3.x.",
+        "VersionCheckFailed": "Failed to check server version. Please check the server address and try again.",
+        "AccountAddFailed": "Unable to add account. Please check the server address and try again.",
+        "WelcomeHeader": "Welcome!",
+        "WelcomeSubline": "Add a new PufferPanel server to get started.",
+        "WelcomeNote": "Note: Pallokala only works with version 3.0 and later PufferPanel servers.",
+        "ServerAddress": "Server address",
+        "AddAccount": "Add Account",
+        "InvalidClientId": "Invalid client ID",
+        "InvalidClientSecret": "Invalid client secret",
+        "SelectServer": "Select Server",
+        "Invalid2FACode": "Invalid 2FA code"
+    },
+    "Search": {
+        "Title": "Search"
+    },
+    "Self": {
+        "Title": "Profile",
+        "Preferences": {
+            "ConsoleFontSize": "Console Font Size (default 14)",
+            "ConsoleFontSizeDesc": "Current: {size}",
+            "TimeFormat": {
+                "TimeFormat": "Time Format",
+                "Locale": "Use Locale",
+                "12": "12-hour",
+                "24": "24-hour"
+            },
+            "Sftp": "Enable Additional SFTP Based Features",
+            "SftpDesc": "The SFTP based file manager is experimental, however contains features not available in the HTTP based one. The app will fallback to the HTTP based one if the connection fails. SFTP cannot be used with OAuth2 accounts."
+        },
+        "2FA": {
+            "EnterDesc": "If you provide your 2FA secret Pallokala can use it to bypass the need to use an authenticator app every time you open the app.",
+            "EnterSecret": "Enter 2FA secret",
+            "RemoveSecret": "Remove 2FA secret",
+            "Saved": "2FA secret saved",
+            "Removed": "2FA secret removed",
+            "SaveSecret": "Save 2FA secret",
+            "SaveSecretDesc": "Save the 2FA secret to your device to enable logging in without a code"
+        }
+    },
+    "Servers": {
+        "Error": "Failed to load server",
+        "DownloadNotification": "Check notifications for download progress",
+        "Files": {
+            "Saved": "File saved",
+            "SftpConnectionFailed": "Failed to connect to SFTP. Falling back to HTTP.",
+            "EditFile": "Edit File",
+            "LogDecompressed": "Log file decompressed in memory. Editing not available.",
+            "UnsavedChanges": "Unsaved Changes",
+            "UnsavedChangesBody": "You have unsaved changes. Are you sure you want to leave?",
+            "Leave": "Leave",
+            "FileDetails": "File Details",
+            "RenameFile": "Rename File",
+            "MoveFile": "Move File",
+            "LastAccessed": "Last Accessed",
+            "Permissions": "Permissions",
+            "ViewFolderDetails": "View folder details",
+            "FolderDetails": "Folder Details",
+            "FolderDetailsText": "Path: /{path}\nFiles: {fileCount}\nFolders: {folderCount}\nTotal size: {totalSize}"
+        }
+    },
+    "Node": {
+        "Title": "Node"
+    },
+    "User": {
+        "Title": "User"
+    },
+    "About": {
+        "Title": "About Pallokala",
+        "SourceCode": "Source code",
+        "ReportIssue": "Report an issue",
+        "ReportIssueSubline": "(or request a feature)",
+        "RateGooglePlay": "Rate on Google Play",
+        "RateGooglePlaySubline": "Thank you! ❤️️",
+        "Changelog": "Changelog",
+        "ChangelogSubline": "What's new in {version}?",
+        "AppVersion": "Pallokala version {version} ({build})",
+        "PanelVersion": "PufferPanel version {version}",
+        "ChangelogTitle": "Changelog",
+        "ChangelogError": "Failed to load changelog from GitHub! Are we rate limited?"
+    },
+    "Drawer": {
+        "About": "About Pallokala",
+        "SwitchServer": "Switch server",
+        "RemoveAccount": "Remove Account",
+        "RemoveAccountBody": "Are you sure you want to remove this account?",
+        "RemoveAccountButton": "Remove",
+        "AddAccount": "Add new account"
+    }
+}

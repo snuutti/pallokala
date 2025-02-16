@@ -4,12 +4,14 @@ import { router } from "expo-router";
 import { Image } from "expo-image";
 import * as Linking from "expo-linking";
 import * as Application from "expo-application";
+import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useStyle } from "@/hooks/useStyle";
 
 export default function AboutScreen() {
+    const { t } = useTranslation();
     const { style } = useStyle((colors) =>
         StyleSheet.create({
             banner: {
@@ -40,40 +42,40 @@ export default function AboutScreen() {
 
             <View style={style.linkContainer}>
                 <LinkItem
-                    title="Source code"
+                    title={t("app:About.SourceCode")}
                     subline="https://github.com/snuutti/pallokala"
                     icon="xml"
                     onPress={() => openLink("https://github.com/snuutti/pallokala")}
                 />
 
                 <LinkItem
-                    title="Report an issue"
-                    subline="(or request a feature)"
+                    title={t("app:About.ReportIssue")}
+                    subline={t("app:About.ReportIssueSubline")}
                     icon="bug"
                     onPress={() => openLink("https://github.com/snuutti/pallokala/issues/new/choose")}
                 />
 
                 <LinkItem
-                    title="Rate on Google Play"
-                    subline="Thank you! ❤️️"
+                    title={t("app:About.RateGooglePlay")}
+                    subline={t("app:About.RateGooglePlaySubline")}
                     icon="star"
                     onPress={() => openLink("https://play.google.com/store/apps/details?id=io.github.snuutti.pallokala")}
                 />
 
                 <LinkItem
-                    title="Changelog"
-                    subline={`What's new in ${Application.nativeApplicationVersion}?`}
+                    title={t("app:About.Changelog")}
+                    subline={t("app:About.ChangelogSubline", { version: Application.nativeApplicationVersion })}
                     icon="history"
                     onPress={() => router.push("/(modal)/changelog")}
                 />
             </View>
 
             <Text style={style.text}>
-                Pallokala version {Application.nativeApplicationVersion} ({Application.nativeBuildVersion})
+                {t("app:About.AppVersion", { version: Application.nativeApplicationVersion, build: Application.nativeBuildVersion })}
             </Text>
 
             <Text style={style.text}>
-                PufferPanel version {version}
+                {t("app:About.PanelVersion", { version })}
             </Text>
         </ContentWrapper>
     );

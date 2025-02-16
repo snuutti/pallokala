@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
@@ -7,6 +8,7 @@ import { useStyle } from "@/hooks/useStyle";
 import { getReleaseHistory, Release } from "@/utils/github";
 
 export default function ChangelogScreen() {
+    const { t } = useTranslation();
     const { style } = useStyle((colors) =>
         StyleSheet.create({
             tag: {
@@ -42,7 +44,7 @@ export default function ChangelogScreen() {
     if (!changelog.length) {
         return (
             <ContentWrapper>
-                <Text style={style.body}>Failed to load changelog from GitHub! Are we rate limited?</Text>
+                <Text style={style.body}>{t("app:About.ChangelogError")}</Text>
             </ContentWrapper>
         );
     }

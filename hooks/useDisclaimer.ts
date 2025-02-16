@@ -1,8 +1,10 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useModal } from "@/context/ModalProvider";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 
 export default function useDisclaimer() {
+    const { t } = useTranslation();
     const { createAlertModal } = useModal();
     const disclaimerRead = useSettingsStore(state => state.disclaimerRead);
     const setDisclaimerRead = useSettingsStore(state => state.setDisclaimerRead);
@@ -13,11 +15,12 @@ export default function useDisclaimer() {
         }
 
         createAlertModal(
-            "Thanks for trying out Pallokala!",
-            "Pallokala is still in development and is missing some features and contains bugs. Please report any issues you find.",
+            t("app:Modal.Disclaimer.Title"),
+            t("app:Modal.Disclaimer.Body"),
             [
                 {
-                    text: "Got it",
+                    text: t("app:Modal.Disclaimer.GotIt"),
+                    icon: "check",
                     onPress: () => setDisclaimerRead()
                 }
             ],
@@ -25,6 +28,5 @@ export default function useDisclaimer() {
                 closable: false
             }
         );
-
     }, [disclaimerRead]);
 }

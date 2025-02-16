@@ -73,7 +73,7 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
                 .catch(error => {
                     console.log("Failed to get panel version", error);
                     setVersion("unknown");
-                    showErrorAlert("Failed to get panel version. Some features may be unavailable.");
+                    showErrorAlert(t("app:Common.GetVersionError"));
                 });
         }
 

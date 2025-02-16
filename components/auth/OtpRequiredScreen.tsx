@@ -12,7 +12,7 @@ import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 
 const schema = z.object({
-    code: z.string().length(6, { message: "Invalid 2FA code" })
+    code: z.string().length(6, { message: "app:Auth.Invalid2FACode" })
 });
 
 type Schema = z.infer<typeof schema>;
@@ -74,7 +74,7 @@ export default function OtpRequiredScreen() {
             />
 
             <Button
-                text="Select Server"
+                text={t("app:Auth.SelectServer")}
                 icon="swap-horizontal"
                 onPress={present}
                 disabled={loading}

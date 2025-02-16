@@ -63,8 +63,8 @@ export default function EmailLoginScreen() {
         try {
             if (await isUnsupportedVersion(data.address)) {
                 createAlertModal(
-                    "Unsupported PufferPanel version",
-                    "2.x versions of PufferPanel are not supported. Please upgrade to 3.x.",
+                    t("app:Auth.UnsupportedVersion"),
+                    t("app:Auth.UnsupportedVersionUpgrade"),
                     [
                         { text: t("common:Close") }
                     ]
@@ -74,8 +74,8 @@ export default function EmailLoginScreen() {
             }
         } catch {
             createAlertModal(
-                "Error",
-                "Failed to check server version. Please check the server address and try again.",
+                t("app:Common.Error"),
+                t("app:Auth.VersionCheckFailed"),
                 [
                     { text: t("common:Close") }
                 ]
@@ -93,8 +93,8 @@ export default function EmailLoginScreen() {
                 router.replace("/");
             } else {
                 createAlertModal(
-                    "Error",
-                    error ? error : "Login failed",
+                    t("app:Common.Error"),
+                    error ? error : t("app:Auth.LoginFailed"),
                     [
                         { text: t("common:Close") }
                     ]
@@ -111,8 +111,8 @@ export default function EmailLoginScreen() {
                 );
             } else {
                 createAlertModal(
-                    "Error",
-                    "Unable to add account. Please check the server address and try again.",
+                    t("app:Common.Error"),
+                    t("app:Auth.AccountAddFailed"),
                     [
                         { text: t("common:Close") }
                     ]
@@ -130,13 +130,13 @@ export default function EmailLoginScreen() {
             <FormTextInput
                 control={control}
                 name="address"
-                placeholder="Server address"
+                placeholder={t("app:Auth.ServerAddress")}
                 autoCapitalize="none"
                 autoComplete="url"
                 keyboardType="url"
                 editable={!loading}
                 error={errors.address?.message}
-                errorFields={{ field: "Server address" }}
+                errorFields={{ field: t("app:Auth.ServerAddress") }}
             />
 
             <FormTextInput
@@ -162,7 +162,7 @@ export default function EmailLoginScreen() {
             />
 
             <Button
-                text="Add Account"
+                text={t("app:Auth.AddAccount")}
                 icon="account-plus"
                 onPress={handleSubmit(logIn)}
                 disabled={!isValid || loading}

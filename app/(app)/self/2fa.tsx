@@ -85,12 +85,12 @@ export default function TwoFactorAuthScreen() {
 
     const removeOtpSecret = async () => {
         await setOtpSecret(undefined);
-        showSuccessAlert("2FA secret removed");
+        showSuccessAlert(t("app:Self.2FA.Removed"));
     };
 
     const enterOtpSecret = () => {
         createPromptModal(
-            "Enter 2FA secret",
+            t("app:Self.2FA.EnterSecret"),
             {
                 placeholder: t("users:OtpSecret"),
                 inputType: "default"
@@ -101,7 +101,7 @@ export default function TwoFactorAuthScreen() {
                     icon: "content-save",
                     onPress: async (secret: string) => {
                         await setOtpSecret(secret);
-                        showSuccessAlert("2FA secret saved");
+                        showSuccessAlert(t("app:Self.2FA.Saved"));
                     }
                 },
                 {
@@ -137,18 +137,18 @@ export default function TwoFactorAuthScreen() {
 
             {(activeAccount!.type === "email" && enabled) && (
                 <>
-                    <Text style={style.text}>If you provide your 2FA secret Pallokala can use it to bypass the need to use an authenticator app every time you open the app.</Text>
+                    <Text style={style.text}>{t("app:Self.2FA.EnterDesc")}</Text>
 
                     {(activeAccount as EmailAccount).otpSecret ? (
                         <Button
-                            text="Remove 2FA secret"
+                            text={t("app:Self.2FA.RemoveSecret")}
                             icon="key"
                             style="danger"
                             onPress={removeOtpSecret}
                         />
                     ) : (
                         <Button
-                            text="Enter 2FA secret"
+                            text={t("app:Self.2FA.EnterSecret")}
                             icon="key"
                             onPress={enterOtpSecret}
                         />

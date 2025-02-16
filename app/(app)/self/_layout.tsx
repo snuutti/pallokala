@@ -16,7 +16,7 @@ export default function SelfLayout() {
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: "Preferences",
+                    title: t("users:Preferences"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <NavigationIcon name="cog" color={color} />

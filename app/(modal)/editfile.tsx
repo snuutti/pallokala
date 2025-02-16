@@ -61,7 +61,7 @@ export default function EditFileScreen() {
                     content = pako.ungzip(data, { to: "string" });
                     readOnly = true;
 
-                    showSuccessAlert("Log file decompressed in memory. Editing not available.");
+                    showSuccessAlert(t("app:Servers.Files.LogDecompressed"));
                 } catch (e) {
                     console.error("Failed to ungzip log file", e);
                 }
@@ -73,11 +73,11 @@ export default function EditFileScreen() {
 
     usePreventRemove(!isOriginalFileContent, ({ data }) => {
         createAlertModal(
-            "Unsaved Changes",
-            "You have unsaved changes. Are you sure you want to leave?",
+            t("app:Servers.Files.UnsavedChanges"),
+            t("app:Servers.Files.UnsavedChangesBody"),
             [
                 {
-                    text: "Leave",
+                    text: t("app:Servers.Files.Leave"),
                     icon: "check",
                     style: "danger",
                     onPress: () => {

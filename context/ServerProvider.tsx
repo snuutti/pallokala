@@ -80,7 +80,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     const saveFile = async () => {
         await server?.uploadFile(openFile!.path, fileContent!);
         setOriginalFileContent(fileContent);
-        showSuccessAlert("File saved");
+        showSuccessAlert(t("app:Servers.Files.Saved"));
     };
 
     const switchServer = (id: string) => {
@@ -130,7 +130,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
             } catch (e: unknown) {
                 console.error("Failed to connect to SFTP", e);
 
-                showErrorAlert("Failed to connect to SFTP. Falling back to HTTP", undefined, {
+                showErrorAlert(t("app:Servers.Files.SftpConnectionFailed"), undefined, {
                     onPress: () => {
                         let message: string;
                         if (e instanceof Error) {
