@@ -10,6 +10,7 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import useDisclaimer from "@/hooks/useDisclaimer";
 import useAppUpdated from "@/hooks/useAppUpdated";
 import { useStyle } from "@/hooks/useStyle";
+import { useQuickActionsStore } from "@/stores/useQuickActionsStore";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { ExtendedServerStatus, ExtendedServerView } from "@/types/server";
 import { ServerView } from "pufferpanel";
@@ -26,6 +27,7 @@ export default function ServersScreen() {
     );
     const { apiClient } = useApiClient();
     const { fabVisible, onScroll } = useFabVisible();
+    const currentAction = useQuickActionsStore(state => state.currentAction);
     const servers = useBoundStore(state => state.servers);
     const setServers = useBoundStore(state => state.setServers);
     const setServerStatus = useBoundStore(state => state.setServerStatus);
@@ -39,6 +41,21 @@ export default function ServersScreen() {
         const interval = setInterval(updateServerStatuses, 5000);
         return () => clearInterval(interval);
     }, [servers]);
+
+    useEffect(() => {
+        if (currentAction === null) {
+            return;
+        }
+
+        if (router.canDismiss()) {
+            router.dismissTo(`/server/${currentAction.serverId}`);
+        } else if (router.canGoBack()) {
+            router.back();
+            router.navigate(`/server/${currentAction.serverId}`);
+        } else {
+            router.navigate(`/server/${currentAction.serverId}`);
+        }
+    }, [currentAction]);
 
     useDisclaimer();
     useAppUpdated();

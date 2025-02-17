@@ -23,6 +23,7 @@ The code is messy in some places. I'm doing this as a hobby for fun, and writing
   - View file permissions
   - Rename files
   - Move files
+- App shortcuts/Quick actions
 
 ## Work in progress
 

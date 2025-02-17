@@ -42,6 +42,7 @@
         "expo-image": "~2.0.4",
         "expo-linking": "~7.0.5",
         "expo-localization": "~16.0.1",
+        "expo-quick-actions": "^4.0.2",
         "expo-router": "~4.0.17",
         "expo-secure-store": "~14.0.1",
         "expo-splash-screen": "~0.29.21",
