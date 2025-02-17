@@ -5,6 +5,7 @@ import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
 import useToast from "@/hooks/useToast";
 import { useSettingsStore } from "@/stores/useSettingsStore";
+import { useQuickActionsStore } from "@/stores/useQuickActionsStore";
 import { FileManager, HttpFileManager, SftpFileManager } from "@/utils/fileManager";
 import { getSftpHost } from "@/utils/files";
 import { ExtendedFileDesc } from "@/types/server";
@@ -40,6 +41,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     const { createAlertModal } = useModal();
     const { showSuccessAlert, showErrorAlert } = useToast();
     const sftpFileManager = useSettingsStore(state => state.sftpFileManager);
+    const addAction = useQuickActionsStore(state => state.addAction);
     const [server, setServer] = useState<Server | undefined>(undefined);
     const [fileManager, setFileManager] = useState<FileManager | undefined>(undefined);
     const [id, setId] = useState<string | undefined>(undefined);
@@ -99,6 +101,12 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
             .then(async (s) => {
                 const server = s as Server;
                 setServer(server);
+
+                addAction({
+                    name: server.name,
+                    serverId: server.id,
+                    accountId: activeAccount!.id!
+                });
 
                 await initFileManager(server);
             })

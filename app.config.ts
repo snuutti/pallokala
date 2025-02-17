@@ -59,6 +59,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
                 imageWidth: 288
             }
         ],
+        "expo-quick-actions",
         "react-native-edge-to-edge",
         "./app.plugin.js"
     ],
