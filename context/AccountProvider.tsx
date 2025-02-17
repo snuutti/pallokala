@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { useQuickAction } from "expo-quick-actions/hooks";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useModal } from "@/context/ModalProvider";
+import { useQuickActionsStore } from "@/stores/useQuickActionsStore";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { resetAllStores } from "@/stores/useBoundStore";
 import {
@@ -43,8 +45,10 @@ type AccountProviderProps = {
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
     const { t } = useTranslation();
+    const action = useQuickAction();
     const { apiClient, config, sessionTimedOut, changeServer } = useApiClient();
     const { createAlertModal } = useModal();
+    const setCurrentAction = useQuickActionsStore(state => state.setCurrentAction);
     const setThemeSettings = useSettingsStore(state => state.setThemeSettings);
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [activeAccount, setActiveAccount] = useState<Account | null>(null);
@@ -59,12 +63,12 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     }, []);
 
     useEffect(() => {
-        if (apiClient !== undefined) {
+        if (apiClient !== undefined || action) {
             return;
         }
 
-        initialLogin();
-    }, [apiClient]);
+        initialLogin(null);
+    }, [apiClient, action]);
 
     useEffect(() => {
         if (!sessionTimedOut) {
@@ -72,8 +76,30 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         }
 
         console.log("Session timed out, reauthenticating");
-        initialLogin();
+        initialLogin(null);
     }, [sessionTimedOut]);
+
+    useEffect(() => {
+        if (!action) {
+            return;
+        }
+
+        const accountId = action?.params?.accountId as number | null;
+        if (accountId === null) {
+            return;
+        }
+
+        const serverId = action!.params!.serverId as string;
+
+        if (accountId === activeAccount?.id) {
+            setCurrentAction({ serverId, accountId });
+            return;
+        }
+
+        initialLogin(accountId).then(() => {
+            setCurrentAction({ serverId, accountId });
+        });
+    }, [action]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -107,15 +133,22 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         getAccounts().then(setAccounts);
     };
 
-    const initialLogin = async () => {
+    const initialLogin = async (accountId: number | null) => {
         setLoading(true);
 
-        const lastAccountId = await getLastAccountId();
         let account: Account | null = null;
 
-        if (lastAccountId !== null) {
-            account = await getAccount(lastAccountId);
-            console.log("Last account found", JSON.stringify(account, getPrivateInfoReplacer()));
+        if (accountId !== null) {
+            account = await getAccount(accountId);
+            console.log("Using app shortcut account", JSON.stringify(account, getPrivateInfoReplacer()));
+        }
+
+        if (account === null) {
+            const lastAccountId = await getLastAccountId();
+            if (lastAccountId !== null) {
+                account = await getAccount(lastAccountId);
+                console.log("Last account found", JSON.stringify(account, getPrivateInfoReplacer()));
+            }
         }
 
         if (account === null) {
@@ -245,7 +278,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
             setActiveAccount(null);
             setUser(null);
 
-            await initialLogin();
+            await initialLogin(null);
         }
     };
 

@@ -3,6 +3,11 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as QuickActions from "expo-quick-actions";
 
+export type CurrentAction = {
+    serverId: string;
+    accountId: number;
+};
+
 export type ServerAction = {
     name: string;
     serverId: string;
@@ -10,14 +15,18 @@ export type ServerAction = {
 };
 
 export interface QuickActionsStore {
+    currentAction: CurrentAction | null;
     actions: ServerAction[];
+    setCurrentAction: (action: CurrentAction) => void;
     addAction: (action: ServerAction) => void;
 }
 
 export const useQuickActionsStore = create<QuickActionsStore>()(
     persist(
         (set, get) => ({
+            currentAction: null,
             actions: [],
+            setCurrentAction: (action) => set({ currentAction: action }),
             addAction: (action) => {
                 const currentActions = get().actions;
                 const actionIndex = currentActions.findIndex((a) => a.serverId === action.serverId
