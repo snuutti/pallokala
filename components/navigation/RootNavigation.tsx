@@ -118,6 +118,15 @@ export default function RootNavigation() {
             />
 
             <Stack.Screen
+                name="(modal)/edittask"
+                options={{
+                    title: t("app:Servers.Tasks.EditTask"),
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
                 name="(modal)/enroll2fa"
                 options={{
                     title: t("users:Otp"),

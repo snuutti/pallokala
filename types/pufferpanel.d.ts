@@ -25,9 +25,9 @@ declare module "pufferpanel" {
 
         async get(url: string, params?: any, headers?: any, options?: any): Promise<any>;
 
-        async post(url: string, data: any, params?: any, headers?: any, options?: any): Promise<any>;
+        async post(url: string, data?: any, params?: any, headers?: any, options?: any): Promise<any>;
 
-        async put(url: string, data: any, params?: any, headers?: any, options?: any): Promise<any>;
+        async put(url: string, data?: any, params?: any, headers?: any, options?: any): Promise<any>;
 
         async delete(url: string, params?: any, headers?: any, options?: any): Promise<any>;
 
