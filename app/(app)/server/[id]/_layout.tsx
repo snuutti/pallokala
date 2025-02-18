@@ -11,6 +11,7 @@ export default function TabsLayout() {
     const { t } = useTranslation();
     const { server, error, switchServer } = useServer();
     const { id } = useLocalSearchParams<{ id: string }>();
+    const hasTasks = useVersionCheck("3.0.0-rc.11");
     const hasBackups = useVersionCheck("3.0.0-rc.7");
 
     useEffect(() => {
@@ -89,6 +90,18 @@ export default function TabsLayout() {
                     )
                 }}
                 redirect={!server.hasScope("server.users.view")}
+            />
+
+            <Tabs.Screen
+                name="tasks"
+                options={{
+                    title: t("app:Servers.Tasks.Title"),
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => (
+                        <NavigationIcon name="timer" color={color} />
+                    )
+                }}
+                redirect={!hasTasks || !server.hasScope("server.tasks.view")}
             />
 
             <Tabs.Screen
