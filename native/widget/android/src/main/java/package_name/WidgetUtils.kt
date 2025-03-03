@@ -1,5 +1,7 @@
 package package_name
 
+import java.text.DateFormat
+import java.util.Date
 import java.util.Locale
 
 object WidgetUtils {
@@ -19,6 +21,13 @@ object WidgetUtils {
         }
 
         return String.format(Locale.ROOT, "%.1f %s", value, units[unitIndex])
+    }
+
+    fun formatDate(milliseconds: Long): String {
+        val date = Date(milliseconds)
+        val format = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM)
+
+        return format.format(date)
     }
 
 }

@@ -21,7 +21,7 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
 
         data object Loading : LoadState()
 
-        data class Loaded(val servers: List<Server>) : LoadState()
+        data class Loaded(val servers: List<Server>, val updatedAt: Long) : LoadState()
 
         data class Error(val message: String) : LoadState()
 
@@ -123,7 +123,7 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
             )
         }
 
-        loadState = LoadState.Loaded(serverList)
+        loadState = LoadState.Loaded(serverList, System.currentTimeMillis())
         Log.d("ServerListWidget", "Loaded ${serverList.size} servers")
     }
 
@@ -133,7 +133,10 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
     override fun getCount(): Int {
         return when (loadState) {
             is LoadState.Loading -> 1
-            is LoadState.Loaded -> (loadState as LoadState.Loaded).servers.size
+            is LoadState.Loaded -> {
+                val count = (loadState as LoadState.Loaded).servers.size
+                if (count == 0) 0 else count + 1
+            }
             is LoadState.Error -> 1
         }
     }
@@ -144,12 +147,28 @@ class ServerListRemoteViewsFactory(private val context: Context, private val int
                 loadingView
             }
             is LoadState.Loaded -> {
-                getServerView((loadState as LoadState.Loaded).servers[position])
+                val servers = (loadState as LoadState.Loaded).servers
+                if (position == servers.size) {
+                    return getUpdatedAtView()
+                }
+
+                return getServerView(servers[position])
             }
             is LoadState.Error -> {
                 getErrorView(loadState as LoadState.Error)
             }
         }
+    }
+
+    private fun getUpdatedAtView(): RemoteViews {
+        val views = RemoteViews(context.packageName, R.layout.server_list_widget_updated)
+        views.setTextViewText(
+            R.id.updated_at_message,
+            context.getString(R.string.server_list_updated_at_text,
+                WidgetUtils.formatDate((loadState as LoadState.Loaded).updatedAt))
+        )
+
+        return views
     }
 
     private fun getServerView(server: Server): RemoteViews {
