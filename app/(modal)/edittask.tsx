@@ -4,6 +4,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import TextInput from "@/components/ui/TextInput";
+import OperatorList from "@/components/templates/operator/OperatorList";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useServer } from "@/context/ServerProvider";
@@ -136,6 +137,11 @@ export default function EditTaskScreen() {
                 description={schedule}
                 error={schedule === undefined ? t("app:Servers.Tasks.CronInvalid") : undefined}
                 editable={canEdit}
+            />
+
+            <OperatorList
+                operations={operations}
+                setOperations={setOperations}
             />
 
             {canEdit && (

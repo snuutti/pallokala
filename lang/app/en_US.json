@@ -105,6 +105,11 @@
             "DeleteSuccess": "Task deleted"
         }
     },
+    "Templates": {
+        "Operators": {
+            "EditTitle": "Edit Operator"
+        }
+    },
     "Node": {
         "Title": "Node"
     },
