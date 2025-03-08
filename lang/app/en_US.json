@@ -85,6 +85,29 @@
             "ViewFolderDetails": "View folder details",
             "FolderDetails": "Folder Details",
             "FolderDetailsText": "Path: /{path}\nFiles: {fileCount}\nFolders: {folderCount}\nTotal size: {totalSize}"
+        },
+        "Tasks": {
+            "Title": "Tasks",
+            "NoTasks": "No tasks",
+            "CreateTask": "Create Task",
+            "EditTask": "Edit Task",
+            "Id": "Task ID",
+            "Name": "Task Name",
+            "Description": "Task Description",
+            "Cron": "Cron Expression",
+            "CronInvalid": "Invalid cron expression",
+            "SaveSuccess": "Task saved",
+            "Run": "Run",
+            "RunSuccess": "Task started",
+            "Delete": "Delete",
+            "DeletePrompt": "Delete task?",
+            "DeletePromptBody": "Are you sure you want to delete this task?",
+            "DeleteSuccess": "Task deleted"
+        }
+    },
+    "Templates": {
+        "Operators": {
+            "EditTitle": "Edit Operator"
         }
     },
     "Node": {

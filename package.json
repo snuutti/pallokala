@@ -30,6 +30,7 @@
         "anser": "^2.3.0",
         "apca-w3": "^0.1.9",
         "conditions": "file:./modules/conditions",
+        "cronstrue": "^2.54.0",
         "expo": "~52.0.31",
         "expo-application": "~6.0.2",
         "expo-build-properties": "~0.13.2",

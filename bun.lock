@@ -19,6 +19,7 @@
         "anser": "^2.3.0",
         "apca-w3": "^0.1.9",
         "conditions": "file:./modules/conditions",
+        "cronstrue": "^2.54.0",
         "expo": "~52.0.31",
         "expo-application": "~6.0.2",
         "expo-build-properties": "~0.13.2",
@@ -1039,6 +1040,8 @@
     "cosmiconfig": ["cosmiconfig@5.2.1", "", { "dependencies": { "import-fresh": "^2.0.0", "is-directory": "^0.3.1", "js-yaml": "^3.13.1", "parse-json": "^4.0.0" } }, "sha512-H65gsXo1SKjf8zmrJ67eJk8aIRKV5ff2D4uKZIBZShbhGSpEmsQOPW/SKMKYhSTrqR7ufy6RP69rPogdaPh/kA=="],
 
     "create-jest": ["create-jest@29.7.0", "", { "dependencies": { "@jest/types": "^29.6.3", "chalk": "^4.0.0", "exit": "^0.1.2", "graceful-fs": "^4.2.9", "jest-config": "^29.7.0", "jest-util": "^29.7.0", "prompts": "^2.0.1" }, "bin": { "create-jest": "bin/create-jest.js" } }, "sha512-Adz2bdH0Vq3F53KEMJOoftQFutWCukm6J24wbPWRO4k1kMY7gS7ds/uoJkNuV8wDCtWWnuwGcJwpWcih+zEW1Q=="],
+
+    "cronstrue": ["cronstrue@2.54.0", "", { "bin": { "cronstrue": "bin/cli.js" } }, "sha512-vyp5NklDxA5MjPfQgkn0bA+0vRQe7Q9keX7RPdV6rMgd7LtDvbuKgnT+3T5ZAX16anSP5HmahcRp8mziXsLfaw=="],
 
     "cross-fetch": ["cross-fetch@3.1.8", "", { "dependencies": { "node-fetch": "^2.6.12" } }, "sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg=="],
 
