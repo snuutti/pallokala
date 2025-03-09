@@ -119,7 +119,10 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     const initFileManager = async (server: Server) => {
         let fileManager: FileManager | undefined;
 
-        if (sftpFileManager && activeAccount!.type === "email" && server.hasScope("server.sftp")) {
+        if (sftpFileManager
+            && activeAccount!.type === "email"
+            && activeAccount!.serverAddress !== "http://pallokala.test"
+            && server.hasScope("server.sftp")) {
             try {
                 const host = getSftpHost(server, activeAccount!);
                 if (!host) {

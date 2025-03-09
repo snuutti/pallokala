@@ -9,6 +9,7 @@ import Switch from "@/components/ui/Switch";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useModal, ListModalButton } from "@/context/ModalProvider";
 import useToast from "@/hooks/useToast";
+import useIsTestMode from "@/hooks/useIsTestMode";
 import { useStyle } from "@/hooks/useStyle";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import resources from "@/constants/resources";
@@ -26,6 +27,7 @@ export default function PreferencesScreen() {
     const { apiClient } = useApiClient();
     const { createListModal, createColorPickerModal } = useModal();
     const { showSuccessAlert } = useToast();
+    const isTestMode = useIsTestMode();
     const {
         colorScheme,
         themeSettings,
@@ -187,8 +189,9 @@ export default function PreferencesScreen() {
             <Switch
                 label={t("app:Self.Preferences.Sftp")}
                 description={t("app:Self.Preferences.SftpDesc")}
-                value={newSFTPFileManager}
-                onValueChange={setNewSFTPFileManager}
+                value={isTestMode ? false : newSFTPFileManager}
+                onValueChange={isTestMode ? () => {} : setNewSFTPFileManager}
+                disabled={isTestMode}
             />
 
             <Button
