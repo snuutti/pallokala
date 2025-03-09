@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { useNavigation, usePreventRemove } from "@react-navigation/core";
 import { Image } from "expo-image";
-import { WebView } from "react-native-webview";
 import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
+import CodeEditor from "@/components/ui/CodeEditor";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useServer } from "@/context/ServerProvider";
@@ -12,7 +12,6 @@ import { useModal } from "@/context/ModalProvider";
 import useToast from "@/hooks/useToast";
 import { useStyle } from "@/hooks/useStyle";
 import { getType, skipDownload } from "@/utils/files";
-import editorHtml from "@/constants/editorHtml";
 import * as pako from "pako";
 import { ApiClient } from "pufferpanel";
 
@@ -110,18 +109,12 @@ export default function EditFileScreen() {
     }
 
     return (
-        <WebView
+        <CodeEditor
             style={style.container}
-            scrollEnabled={false}
-            source={{ html: editorHtml }}
-            injectedJavaScriptObject={{
-                content: fileContent,
-                name: openFile.name,
-                readOnly: forceReadOnly || !server?.hasScope("server.files.edit")
-            }}
-            onMessage={(event) => {
-                setFileContent(event.nativeEvent.data);
-            }}
+            content={fileContent}
+            fileName={openFile.name}
+            readonly={forceReadOnly || !server?.hasScope("server.files.edit")}
+            onContentChange={setFileContent}
         />
     );
 }
