@@ -1,9 +1,12 @@
 import { Fragment, useMemo } from "react";
+import { StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import Dropdown from "@/components/ui/Dropdown";
 import TextInput from "@/components/ui/TextInput";
 import Switch from "@/components/ui/Switch";
+import CodeEditor from "@/components/ui/CodeEditor";
 import ListInput from "@/components/ui/ListInput";
+import { useStyle } from "@/hooks/useStyle";
 import { OperatorOption, operators } from "@/utils/operators";
 import { ConditionalMetadataType } from "pufferpanel";
 
@@ -14,6 +17,15 @@ type OperatorProps = {
 
 export default function Operator(props: OperatorProps) {
     const { t } = useTranslation();
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            codeEditor: {
+                height: 200,
+                marginVertical: 10,
+                backgroundColor: colors.background
+            }
+        })
+    );
 
     const options = useMemo(() => {
         const options = operators[props.data.type!];
@@ -77,13 +89,11 @@ export default function Operator(props: OperatorProps) {
 
             {options.map((option, index) => (
                 <Fragment key={index}>
-                    {/* TODO: Implement textarea with code editor */}
-                    {(option.type === "text" || option.type === "textarea") && (
+                    {option.type === "text" && (
                         <TextInput
                             value={props.data[option.name] as string}
                             onChangeText={(value) => updateOption(option.name, value)}
                             placeholder={getLabel(option)}
-                            multiline={option.type === "textarea"}
                         />
                     )}
 
@@ -92,6 +102,15 @@ export default function Operator(props: OperatorProps) {
                             label={getLabel(option)}
                             value={props.data[option.name] as boolean}
                             onValueChange={(value) => updateOption(option.name, value)}
+                        />
+                    )}
+
+                    {option.type === "textarea" && (
+                        <CodeEditor
+                            style={style.codeEditor}
+                            content={props.data[option.name] as string}
+                            fileName={option.modeFile ? props.data[option.modeFile] as string : undefined}
+                            onContentChange={(value) => updateOption(option.name, value)}
                         />
                     )}
 
