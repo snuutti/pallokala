@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import Dropdown from "@/components/ui/Dropdown";
 import TextInput from "@/components/ui/TextInput";
 import Switch from "@/components/ui/Switch";
+import ListInput from "@/components/ui/ListInput";
 import { OperatorOption, operators } from "@/utils/operators";
 import { ConditionalMetadataType } from "pufferpanel";
 
@@ -94,9 +95,12 @@ export default function Operator(props: OperatorProps) {
                         />
                     )}
 
-                    {/* TODO: Implement list input */}
                     {option.type === "list" && (
-                        null
+                        <ListInput
+                            label={getLabel(option)}
+                            value={props.data[option.name] as string[]}
+                            onValueChange={(value) => updateOption(option.name, value)}
+                        />
                     )}
                 </Fragment>
             ))}
