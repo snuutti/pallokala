@@ -439,7 +439,7 @@ class MockServer implements Server {
     }
 
     canQuery(): Promise<boolean> {
-        throw new Error("Method not implemented.");
+        return Promise.resolve(false);
     }
 
     start(): Promise<boolean> {
@@ -756,6 +756,10 @@ class MockSettingsApi implements SettingsApi {
     }
 
     setUserSetting(key: string, value: any): Promise<boolean> {
+        return Promise.resolve(true);
+    }
+
+    sendTestEmail(): Promise<boolean> {
         return Promise.resolve(true);
     }
 }
