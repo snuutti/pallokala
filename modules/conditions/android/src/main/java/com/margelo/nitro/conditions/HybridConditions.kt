@@ -14,21 +14,21 @@ import dev.cel.runtime.CelRuntimeFactory
 @Keep
 class HybridConditions : HybridConditionsSpec() {
 
-    override fun resolve(script: String, data: Map<String, Variant_String_Double_Boolean>): Boolean {
+    override fun resolve(script: String, data: Map<String, VariableType>): Boolean {
         val varDecls = data.map { (key, value) ->
             when {
-                value.isString -> CelVarDecl.newVarDeclaration(key, SimpleType.STRING)
-                value.isDouble -> CelVarDecl.newVarDeclaration(key, SimpleType.DOUBLE)
-                value.isBoolean -> CelVarDecl.newVarDeclaration(key, SimpleType.BOOL)
+                value.isFirst -> CelVarDecl.newVarDeclaration(key, SimpleType.STRING)
+                value.isSecond -> CelVarDecl.newVarDeclaration(key, SimpleType.DOUBLE)
+                value.isThird -> CelVarDecl.newVarDeclaration(key, SimpleType.BOOL)
                 else -> throw IllegalArgumentException("Unknown type for key $key")
             }
         }
 
         val variables = data.mapValues { (key, value) ->
             when {
-                value.isString -> value.getAs<String>()!!
-                value.isDouble -> value.getAs<Double>()!!
-                value.isBoolean -> value.getAs<Boolean>()!!
+                value.isFirst -> value.getAs<String>()!!
+                value.isSecond -> value.getAs<Double>()!!
+                value.isThird -> value.getAs<Boolean>()!!
                 else -> throw IllegalArgumentException("Unknown type for key $key")
             }
         }

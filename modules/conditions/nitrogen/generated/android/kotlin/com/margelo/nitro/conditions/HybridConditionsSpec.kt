@@ -42,7 +42,7 @@ abstract class HybridConditionsSpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun resolve(script: String, data: Map<String, Variant_String_Double_Boolean>): Boolean
+  abstract fun resolve(script: String, data: Map<String, VariableType>): Boolean
 
   private external fun initHybrid(): HybridData
 

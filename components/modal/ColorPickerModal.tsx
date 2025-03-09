@@ -60,7 +60,7 @@ export default function ColorPickerModal(props: ColorPickerModalProps) {
 
             <ColorPicker
                 value={color}
-                onComplete={({ hex }) => setColor(hex)}
+                onCompleteJS={({ hex }) => setColor(hex)}
                 sliderThickness={25}
                 thumbSize={24}
                 thumbShape="circle"

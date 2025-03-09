@@ -12,7 +12,7 @@
 #include <string>
 #include <unordered_map>
 #include <variant>
-#include "JVariant_String_Double_Boolean.hpp"
+#include "JVariableType.hpp"
 
 namespace margelo::nitro::NitroConditions {
 
@@ -27,7 +27,7 @@ namespace margelo::nitro::NitroConditions {
   }
 
   size_t JHybridConditionsSpec::getExternalMemorySize() noexcept {
-    static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
+    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
   }
 
@@ -36,11 +36,11 @@ namespace margelo::nitro::NitroConditions {
 
   // Methods
   bool JHybridConditionsSpec::resolve(const std::string& script, const std::unordered_map<std::string, std::variant<std::string, double, bool>>& data) {
-    static const auto method = _javaPart->getClass()->getMethod<jboolean(jni::alias_ref<jni::JString> /* script */, jni::alias_ref<jni::JMap<jni::JString, JVariant_String_Double_Boolean>> /* data */)>("resolve");
-    auto __result = method(_javaPart, jni::make_jstring(script), [&]() -> jni::local_ref<jni::JMap<jni::JString, JVariant_String_Double_Boolean>> {
-      auto __map = jni::JHashMap<jni::JString, JVariant_String_Double_Boolean>::create(data.size());
+    static const auto method = javaClassStatic()->getMethod<jboolean(jni::alias_ref<jni::JString> /* script */, jni::alias_ref<jni::JMap<jni::JString, JVariableType>> /* data */)>("resolve");
+    auto __result = method(_javaPart, jni::make_jstring(script), [&]() -> jni::local_ref<jni::JMap<jni::JString, JVariableType>> {
+      auto __map = jni::JHashMap<jni::JString, JVariableType>::create(data.size());
       for (const auto& __entry : data) {
-        __map->put(jni::make_jstring(__entry.first), JVariant_String_Double_Boolean::fromCpp(__entry.second));
+        __map->put(jni::make_jstring(__entry.first), JVariableType::fromCpp(__entry.second));
       }
       return __map;
     }());
