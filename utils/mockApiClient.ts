@@ -399,8 +399,8 @@ class MockServer implements Server {
 
     hasScope(scope: string): boolean {
         return scope !== "server.files.edit" && scope !== "server.data.view" && scope !== "server.users.create"
-            && scope !== "server.data.edit" && scope !== "server.flags.edit" && scope !== "server.backup.view"
-            && scope !== "server.definition.view" && scope !== "server.delete";
+            && scope !== "server.data.edit" && scope !== "server.flags.edit" && scope !== "server.tasks.view"
+            && scope !== "server.backup.view" && scope !== "server.definition.view" && scope !== "server.delete";
     }
 
     on(event: string, cb: (data: any) => void): () => void {
