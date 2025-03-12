@@ -68,6 +68,13 @@ export default function AboutScreen() {
                     icon="history"
                     onPress={() => router.push("/(modal)/changelog")}
                 />
+
+                <LinkItem
+                    title={t("app:About.PrivacyPolicy")}
+                    subline={t("app:About.PrivacyPolicySubline")}
+                    icon="shield-lock"
+                    onPress={() => openLink("https://raw.githubusercontent.com/snuutti/pallokala/refs/heads/master/PRIVACY.MD")}
+                />
             </View>
 
             <Text style={style.text}>

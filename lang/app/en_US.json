@@ -125,6 +125,8 @@
         "RateGooglePlaySubline": "Thank you! ❤️️",
         "Changelog": "Changelog",
         "ChangelogSubline": "What's new in {version}?",
+        "PrivacyPolicy": "Privacy Policy",
+        "PrivacyPolicySubline": "Read our privacy policy",
         "AppVersion": "Pallokala version {version} ({build})",
         "PanelVersion": "PufferPanel version {version}",
         "ChangelogTitle": "Changelog",
