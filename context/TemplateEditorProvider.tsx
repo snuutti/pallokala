@@ -1,9 +1,10 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useMemo, ReactNode } from "react";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { ExtendedTemplate } from "@/types/template";
 
 type TemplateEditorContextType = {
     template: ExtendedTemplate | undefined;
+    json: string | undefined;
     setTemplate: (template: ExtendedTemplate) => void;
     loadTemplate: (name: string, repo: number) => Promise<void>;
     error: boolean;
@@ -20,6 +21,17 @@ export const TemplateEditorProvider = ({ children }: TemplateEditorProviderProps
     const [template, setTemplate] = useState<ExtendedTemplate | undefined>(undefined);
     const [error, setError] = useState(false);
 
+    const json = useMemo(() => {
+        if (!template) {
+            return undefined;
+        }
+
+        const newTemplate = { ...template };
+        delete (newTemplate as Partial<ExtendedTemplate>).repository;
+
+        return JSON.stringify(newTemplate, undefined, 4);
+    }, [template]);
+
     const loadTemplate = async (name: string, repo: number) => {
         setError(false);
         setTemplate(undefined);
@@ -34,7 +46,7 @@ export const TemplateEditorProvider = ({ children }: TemplateEditorProviderProps
     };
 
     return (
-        <TemplateEditorContext.Provider value={{ template, setTemplate, loadTemplate, error }}>
+        <TemplateEditorContext.Provider value={{ template, json, setTemplate, loadTemplate, error }}>
             {children}
         </TemplateEditorContext.Provider>
     );
