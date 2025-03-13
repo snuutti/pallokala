@@ -29,7 +29,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         versionCode: 7
     },
     plugins: [
-        "expo-router",
+        [
+            "expo-router",
+            {
+                sitemap: false
+            }
+        ],
         "expo-font",
         "expo-secure-store",
         "expo-localization",
