@@ -102,7 +102,7 @@ export default function ServerListItem(props: ServerListItemProps) {
     }
 
     const onPress = () => {
-        router.push(`./server/${props.server.id}`);
+        router.push(`/(app)/server/${props.server.id}`);
     };
 
     return (
