@@ -1,5 +1,6 @@
 import { Fragment, useMemo } from "react";
 import { StyleSheet } from "react-native";
+import Animated, { FadeOutUp, FadeInUp, LinearTransition } from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
 import Dropdown from "@/components/ui/Dropdown";
 import TextInput from "@/components/ui/TextInput";
@@ -88,7 +89,7 @@ export default function Operator(props: OperatorProps) {
             />
 
             {options.map((option, index) => (
-                <Fragment key={index}>
+                <Animated.View key={index} layout={LinearTransition} exiting={FadeOutUp} entering={FadeInUp}>
                     {option.type === "text" && (
                         <TextInput
                             value={props.data[option.name] as string}
@@ -121,7 +122,7 @@ export default function Operator(props: OperatorProps) {
                             onValueChange={(value) => updateOption(option.name, value)}
                         />
                     )}
-                </Fragment>
+                </Animated.View>
             ))}
         </>
     );

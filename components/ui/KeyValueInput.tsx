@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, StyleSheet } from "react-native";
+import Animated, { FadeOutUp, FadeInUp, LinearTransition } from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
 import TextInput from "@/components/ui/TextInput";
 import Button from "@/components/ui/Button";
@@ -128,7 +129,7 @@ export default function KeyValueInput(props: KeyValueInputProps) {
             )}
 
             {entries.map((entry, index) => (
-                <View style={style.field} key={index}>
+                <Animated.View layout={LinearTransition} exiting={FadeOutUp} entering={FadeInUp} style={style.field} key={index}>
                     <TextInput
                         value={entry.key}
                         onChangeText={(key) => onKeyChange(index, key)}
@@ -148,7 +149,7 @@ export default function KeyValueInput(props: KeyValueInputProps) {
                         style="danger"
                         onPress={() => removeEntry(index)}
                     />
-                </View>
+                </Animated.View>
             ))}
 
             <Button

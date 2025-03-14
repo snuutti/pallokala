@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import Animated, { FadeOutUp, FadeInUp, LinearTransition } from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
@@ -119,14 +120,15 @@ export default function EmailSettingScreen() {
             />
 
             {emailProviderConfigs[emailProvider].map((setting) => (
-                <TextInput
-                    key={setting.key}
-                    value={emailSettings[setting.key]}
-                    onChangeText={(value) => setEmailSettings({ ...emailSettings, [setting.key]: value })}
-                    placeholder={t(`settings:email.${setting.key}`)}
-                    autoCapitalize="none"
-                    secureTextEntry={setting.type === "password"}
-                />
+                <Animated.View key={setting.key} layout={LinearTransition} exiting={FadeOutUp} entering={FadeInUp}>
+                    <TextInput
+                        value={emailSettings[setting.key]}
+                        onChangeText={(value) => setEmailSettings({ ...emailSettings, [setting.key]: value })}
+                        placeholder={t(`settings:email.${setting.key}`)}
+                        autoCapitalize="none"
+                        secureTextEntry={setting.type === "password"}
+                    />
+                </Animated.View>
             ))}
 
             <Button

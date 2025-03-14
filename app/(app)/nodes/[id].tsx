@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import Animated, { FadeOut, FadeIn, LinearTransition } from "react-native-reanimated";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, useLocalSearchParams } from "expo-router";
@@ -187,14 +188,14 @@ export default function NodeScreen() {
             )}
 
             {(featuresFetched && features === null) && (
-                <View style={style.statusContainer}>
+                <Animated.View layout={LinearTransition} exiting={FadeOut} entering={FadeIn} style={style.statusContainer}>
                     <MaterialCommunityIcons name="stop-circle" size={20} color={colors.error} style={style.statusIcon} />
                     <Text style={style.text}>{t("nodes:Unreachable")}</Text>
-                </View>
+                </Animated.View>
             )}
 
             {(featuresFetched && features) && (
-                <View>
+                <Animated.View layout={LinearTransition} exiting={FadeOut} entering={FadeIn}>
                     <View style={style.statusContainer}>
                         <MaterialCommunityIcons name="play-circle" size={20} color={colors.primary} style={style.statusIcon} />
                         <Text style={style.text}>{t("nodes:Reachable")}</Text>
@@ -221,7 +222,7 @@ export default function NodeScreen() {
                             <Text style={style.text}>{t(`nodes:features.docker.${features.features.includes("docker")}`)}</Text>
                         </View>
                     </View>
-                </View>
+                </Animated.View>
             )}
 
             <Text style={style.header}>{t("nodes:Edit")}</Text>

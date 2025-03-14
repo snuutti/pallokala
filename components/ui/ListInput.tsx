@@ -1,4 +1,5 @@
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import Animated, { FadeOutUp, FadeInUp, LinearTransition } from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import TextInput from "@/components/ui/TextInput";
@@ -71,7 +72,7 @@ export default function ListInput(props: ListInputProps) {
             )}
 
             {props.value.map((item, index) => (
-                <View key={index} style={style.item}>
+                <Animated.View key={index} layout={LinearTransition} exiting={FadeOutUp} entering={FadeInUp} style={style.item}>
                     <TextInput
                         value={item}
                         onChangeText={(value) => onValueChange(value, index)}
@@ -110,7 +111,7 @@ export default function ListInput(props: ListInputProps) {
                             style={style.leftMargin}
                         />
                     </TouchableOpacity>
-                </View>
+                </Animated.View>
             ))}
 
             <Button

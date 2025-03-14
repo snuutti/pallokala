@@ -1,3 +1,4 @@
+import Animated, { FadeOutUp, FadeInUp, LinearTransition } from "react-native-reanimated";
 import { Control, FieldErrors } from "react-hook-form";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
@@ -88,7 +89,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
             />
 
             {props.withPrivateHost && (
-                <>
+                <Animated.View layout={LinearTransition} exiting={FadeOutUp} entering={FadeInUp}>
                     <FormTextInput
                         control={props.control}
                         name="private.privateHost"
@@ -114,7 +115,7 @@ export default function NodeOptions(props: NodeOptionsProps) {
                         errorFields={{ field: t("nodes:PrivatePort"), min: 1, max: 65535 }}
                         numeric={true}
                     />
-                </>
+                </Animated.View>
             )}
 
             <FormTextInput
