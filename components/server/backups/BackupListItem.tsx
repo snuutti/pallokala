@@ -46,6 +46,9 @@ export default function BackupListItem(props: BackupListItemProps) {
             },
             delete: {
                 marginLeft: 10
+            },
+            disabled: {
+                opacity: 0.5
             }
         })
     );
@@ -77,7 +80,7 @@ export default function BackupListItem(props: BackupListItemProps) {
                             name="restore"
                             size={30}
                             color={colors.text}
-                            style={style.restore}
+                            style={[style.restore, props.isBackingUp && style.disabled]}
                         />
                     </TouchableOpacity>
                 )}
@@ -87,6 +90,7 @@ export default function BackupListItem(props: BackupListItemProps) {
                         name="download"
                         size={30}
                         color={colors.text}
+                        style={props.isBackingUp && style.disabled}
                     />
                 </TouchableOpacity>
 
@@ -96,7 +100,7 @@ export default function BackupListItem(props: BackupListItemProps) {
                             name="trash-can"
                             size={30}
                             color={colors.text}
-                            style={style.delete}
+                            style={[style.delete, props.isBackingUp && style.disabled]}
                         />
                     </TouchableOpacity>
                 )}
