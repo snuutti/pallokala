@@ -95,7 +95,7 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
                 onPress: () => showErrorDetails(error)
             });
         } else {
-            showErrorAlert(t("errors:" + error.code));
+            showErrorAlert(t("errors:" + error.code, error.response.error.metadata as Record<string, unknown>));
         }
     }, [apiClient]);
 
