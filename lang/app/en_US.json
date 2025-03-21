@@ -103,6 +103,7 @@
         }
     },
     "Templates": {
+        "Error": "Failed to load template",
         "Operators": {
             "EditTitle": "Edit Operator"
         }
