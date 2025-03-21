@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Tabs, useLocalSearchParams } from "expo-router";
 import { useTranslation } from "react-i18next";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
+import TemplateErrorScreen from "@/components/templates/TemplateErrorScreen";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import { useTemplateEditor } from "@/context/TemplateEditorProvider";
 
@@ -19,8 +20,7 @@ export default function TemplateLayout() {
     console.log(id, repo)
 
     if (error) {
-        // TODO
-        return null;
+        return <TemplateErrorScreen />;
     }
 
     if (!template || template.name !== id || template.repository !== parseInt(repo)) {
