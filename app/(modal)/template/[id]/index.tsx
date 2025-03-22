@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,11 +25,25 @@ const defaultValues = {
 export default function GeneralScreen() {
     const { t } = useTranslation();
     const { template } = useTemplateEditor();
-    const { control, formState: { errors, isValid } } = useForm<Schema>({
+    const { control, setValue, formState: { errors, isValid } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
     });
+
+    useEffect(() => {
+        if (!template) {
+            return;
+        }
+
+        setValue("name", template.name);
+        setValue("display", template.display || "");
+        setValue("type", template.type);
+    }, []);
+
+    if (!template) {
+        return null;
+    }
 
     return (
         <ContentWrapper>
