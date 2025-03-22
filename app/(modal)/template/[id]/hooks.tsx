@@ -2,6 +2,7 @@ import { Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import OperatorList from "@/components/templates/operator/OperatorList";
+import { useTemplateEditor } from "@/context/TemplateEditorProvider";
 import { useStyle } from "@/hooks/useStyle";
 
 export default function HooksScreen() {
@@ -13,11 +14,12 @@ export default function HooksScreen() {
                 fontSize: 16
             },
             description: {
-                color: colors.text,
+                color: colors.textDisabled,
                 marginBottom: 10
             }
         })
     );
+    const { template } = useTemplateEditor();
 
     return (
         <ContentWrapper>
@@ -25,7 +27,7 @@ export default function HooksScreen() {
             <Text style={style.description}>{t("templates:description.PreRunHook")}</Text>
 
             <OperatorList
-                operations={[]}
+                operations={template?.run.pre || []}
                 setOperations={() => {}}
                 addLabel={t("templates:AddPreStep")}
             />
@@ -34,7 +36,7 @@ export default function HooksScreen() {
             <Text style={style.description}>{t("templates:description.PostRunHook")}</Text>
 
             <OperatorList
-                operations={[]}
+                operations={template?.run.post || []}
                 setOperations={() => {}}
                 addLabel={t("templates:AddPostStep")}
             />
