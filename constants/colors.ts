@@ -14,7 +14,13 @@ export type Colors = {
     textDisabled: string;
     textPrimary: string;
     success: string;
+    successBg: string;
+    info: string;
+    infoBg: string;
+    warning: string;
+    warningBg: string;
     error: string;
+    errorBg: string;
 };
 
 const primary = "#07a7e3";
@@ -29,7 +35,13 @@ export const darkColors: Colors = {
     textDisabled: "rgba(240, 240, 240, 0.5)",
     textPrimary: "#eee",
     success: "#4caf50",
-    error: "#fe4242"
+    successBg: "#4caf5040",
+    info: "#3b8db8",
+    infoBg: "#3b8db840",
+    warning: "#fbac00",
+    warningBg: "#fbac0040",
+    error: "#fe4242",
+    errorBg: "#fe424240"
 };
 
 export const lightColors: Colors = {
@@ -41,7 +53,13 @@ export const lightColors: Colors = {
     textDisabled: "rgba(16, 16, 16, 0.5)",
     textPrimary: "#eee",
     success: "#4caf50",
-    error: "#dc3131"
+    successBg: "#4caf5040",
+    info: "#21a1de",
+    infoBg: "#21a1de40",
+    warning: "#fb8c00",
+    warningBg: "#fb8c0040",
+    error: "#dc3131",
+    errorBg: "#dc313140"
 };
 
 export const amoledColors: Colors = {

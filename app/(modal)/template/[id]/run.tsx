@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Text } from "react-native";
 import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
+import RemoteTemplateAlert from "@/components/templates/RemoteTemplateAlert";
 import Button from "@/components/ui/Button";
 import TextInput from "@/components/ui/TextInput";
 import Dropdown, { DropdownItem } from "@/components/ui/Dropdown";
@@ -52,6 +53,8 @@ export default function RunScreen() {
 
     return (
         <ContentWrapper>
+            <RemoteTemplateAlert />
+
             {Array.isArray(template?.run.command) ? (
                 <>
                     {template!.run.command.map((command, index) => (
