@@ -3,6 +3,7 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ContentWrapper from "@/components/screen/ContentWrapper";
+import RemoteTemplateAlert from "@/components/templates/RemoteTemplateAlert";
 import Button from "@/components/ui/Button";
 import { useTemplateEditor } from "@/context/TemplateEditorProvider";
 import { useStyle } from "@/hooks/useStyle";
@@ -72,6 +73,8 @@ export default function EnvironmentScreen() {
 
     return (
         <ContentWrapper>
+            <RemoteTemplateAlert />
+
             {template?.supportedEnvironments?.map((env) => (
                 <TouchableOpacity key={env.type} style={style.environment}>
                     <Text style={style.name}>{t(`env:${env.type}.name`)}</Text>

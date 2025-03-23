@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ContentWrapper from "@/components/screen/ContentWrapper";
+import RemoteTemplateAlert from "@/components/templates/RemoteTemplateAlert";
 import VariableListItem from "@/components/templates/variables/VariableListItem";
 import Hr from "@/components/ui/Hr";
 import Button from "@/components/ui/Button";
@@ -88,6 +89,8 @@ export default function VariablesScreen() {
 
     return (
         <ContentWrapper>
+            <RemoteTemplateAlert />
+
             <Text style={style.description}>{t("templates:description.Variables")}</Text>
 
             {template?.groups && template.groups.length > 0 ? (
