@@ -4,6 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
+import RemoteTemplateAlert from "@/components/templates/RemoteTemplateAlert";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import TemplateActions from "@/components/templates/TemplateActions";
 import { useTemplateEditor } from "@/context/TemplateEditorProvider";
@@ -47,6 +48,8 @@ export default function GeneralScreen() {
 
     return (
         <ContentWrapper>
+            <RemoteTemplateAlert />
+
             <FormTextInput
                 control={control}
                 name="name"
