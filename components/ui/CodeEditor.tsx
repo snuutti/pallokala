@@ -15,6 +15,7 @@ export default function CodeEditor(props: CodeEditorProps) {
             scrollEnabled={false}
             source={{ html: editorHtml }}
             domStorageEnabled={true}
+            nestedScrollEnabled={true}
             injectedJavaScriptObject={{
                 content: props.content || "",
                 name: props.fileName,
