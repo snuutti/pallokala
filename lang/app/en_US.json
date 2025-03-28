@@ -106,6 +106,9 @@
         "Error": "Failed to load template",
         "Operators": {
             "EditTitle": "Edit Operator"
+        },
+        "Environment": {
+            "EditTitle": "Edit Environment"
         }
     },
     "Node": {

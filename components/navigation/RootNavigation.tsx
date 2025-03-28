@@ -136,6 +136,15 @@ export default function RootNavigation() {
             />
 
             <Stack.Screen
+                name="(modal)/editenvironment"
+                options={{
+                    title: t("app:Templates.Environment.EditTitle"),
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
                 name="(modal)/enroll2fa"
                 options={{
                     title: t("users:Otp"),
