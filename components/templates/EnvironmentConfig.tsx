@@ -1,7 +1,9 @@
+import { Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import KeyValueInput from "@/components/ui/KeyValueInput";
 import PortMappingInput from "@/components/ui/PortMappingInput";
 import TextInput from "@/components/ui/TextInput";
+import { useStyle } from "@/hooks/useStyle";
 import { MetadataType } from "pufferpanel";
 
 const fields: { [key: string]: any[] } = {
@@ -49,10 +51,18 @@ const fields: { [key: string]: any[] } = {
 type EnvironmentConfigProps = {
     environment: MetadataType;
     onChange: (environment: MetadataType) => void;
+    noFieldsMessage?: string;
 };
 
 export default function EnvironmentConfig(props: EnvironmentConfigProps) {
     const { t } = useTranslation();
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            text: {
+                color: colors.text
+            }
+        })
+    );
 
     const getLabel = (field: any): string => {
         if (field.label) {
@@ -67,6 +77,14 @@ export default function EnvironmentConfig(props: EnvironmentConfigProps) {
         newEnvironment[field] = value;
         props.onChange(newEnvironment);
     };
+
+    if (!props.environment.type) {
+        return null;
+    }
+
+    if (props.noFieldsMessage && fields[props.environment.type!].length === 0) {
+        return <Text style={style.text}>{props.noFieldsMessage}</Text>;
+    }
 
     return fields[props.environment.type!].map(field => {
         if (field.type === "map") {

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ContentWrapper from "@/components/screen/ContentWrapper";
@@ -7,21 +8,9 @@ import RemoteTemplateAlert from "@/components/templates/RemoteTemplateAlert";
 import Button from "@/components/ui/Button";
 import { useTemplateEditor } from "@/context/TemplateEditorProvider";
 import { useStyle } from "@/hooks/useStyle";
-
-type Environment = {
-    value: string;
-    label: string;
-};
-
-type EnvironmentDefault = {
-    host: {
-        type: "host";
-    };
-    docker: {
-        type: "docker";
-        image: string;
-    };
-};
+import { useBoundStore } from "@/stores/useBoundStore";
+import { Environment, EnvironmentDefault, environmentDefaults } from "@/types/template";
+import { MetadataType } from "pufferpanel";
 
 const environments: Environment[] = [
     {
@@ -33,16 +22,6 @@ const environments: Environment[] = [
         label: "env:docker.name"
     }
 ];
-
-const environmentDefaults: EnvironmentDefault = {
-    host: {
-        type: "host"
-    },
-    docker: {
-        type: "docker",
-        image: "pufferpanel/generic"
-    }
-};
 
 export default function EnvironmentScreen() {
     const { t } = useTranslation();
@@ -64,6 +43,8 @@ export default function EnvironmentScreen() {
         })
     );
     const { template } = useTemplateEditor();
+    const setInitialEnvironmentData = useBoundStore(state => state.setInitialEnvironmentData);
+    const setReturnedEnvironmentData = useBoundStore(state => state.setReturnedEnvironmentData);
 
     const unsupportedEnvironments = useMemo(() => {
         return environments.filter(environment => {
@@ -71,12 +52,29 @@ export default function EnvironmentScreen() {
         });
     }, [template]);
 
+    const edit = (environment: MetadataType, adding: boolean) => {
+        setInitialEnvironmentData({
+            data: environment,
+            unsupportedEnvironments,
+            adding
+        });
+
+        setReturnedEnvironmentData(undefined);
+        router.push("/(modal)/editenvironment");
+    };
+
+    const add = () => {
+        const environment = environmentDefaults[unsupportedEnvironments[0].value as keyof EnvironmentDefault];
+        // TODO: actually add the environment
+        edit(environment, true);
+    };
+
     return (
         <ContentWrapper>
             <RemoteTemplateAlert />
 
             {template?.supportedEnvironments?.map((env) => (
-                <TouchableOpacity key={env.type} style={style.environment}>
+                <TouchableOpacity key={env.type} onPress={() => edit(env, false)} style={style.environment}>
                     <Text style={style.name}>{t(`env:${env.type}.name`)}</Text>
 
                     <TouchableOpacity onPress={() => {}} disabled={template!.supportedEnvironments!.length < 2}>
@@ -93,7 +91,7 @@ export default function EnvironmentScreen() {
             <Button
                 text={t("templates:AddEnvironment")}
                 icon="plus"
-                onPress={() => {}}
+                onPress={add}
                 disabled={unsupportedEnvironments.length === 0}
             />
         </ContentWrapper>
