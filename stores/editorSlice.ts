@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { MetadataType, ConditionalMetadataType } from "pufferpanel";
-import { Environment } from "@/types/template";
+import { ExtendedVariable, Environment } from "@/types/template";
 
 export type EnvironmentData = {
     data: MetadataType;
@@ -9,10 +9,14 @@ export type EnvironmentData = {
 };
 
 export interface EditorSlice {
+    initialVariableData?: ExtendedVariable;
+    returnedVariableData?: ExtendedVariable;
     initialOperatorData?: ConditionalMetadataType;
     returnedOperatorData?: ConditionalMetadataType;
     initialEnvironmentData?: EnvironmentData;
     returnedEnvironmentData?: MetadataType;
+    setInitialVariableData: (data?: ExtendedVariable) => void;
+    setReturnedVariableData: (data?: ExtendedVariable) => void;
     setInitialOperatorData: (data?: ConditionalMetadataType) => void;
     setReturnedOperatorData: (data?: ConditionalMetadataType) => void;
     setInitialEnvironmentData: (data?: EnvironmentData) => void;
@@ -20,10 +24,14 @@ export interface EditorSlice {
 }
 
 export const createEditorSlice: StateCreator<EditorSlice> = (set) => ({
+    initialVariableData: undefined,
+    returnedVariableData: undefined,
     initialOperatorData: undefined,
     returnedOperatorData: undefined,
     initialEnvironmentData: undefined,
     returnedEnvironmentData: undefined,
+    setInitialVariableData: (data) => set({ initialVariableData: data }),
+    setReturnedVariableData: (data) => set({ returnedVariableData: data }),
     setInitialOperatorData: (data) => set({ initialOperatorData: data }),
     setReturnedOperatorData: (data) => set({ returnedOperatorData: data }),
     setInitialEnvironmentData: (data) => set({ initialEnvironmentData: data }),

@@ -1,5 +1,6 @@
 import { Fragment, useMemo } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ContentWrapper from "@/components/screen/ContentWrapper";
@@ -9,6 +10,7 @@ import Hr from "@/components/ui/Hr";
 import Button from "@/components/ui/Button";
 import { useTemplateEditor } from "@/context/TemplateEditorProvider";
 import { useStyle } from "@/hooks/useStyle";
+import { useBoundStore } from "@/stores/useBoundStore";
 
 export default function VariablesScreen() {
     const { t } = useTranslation();
@@ -42,6 +44,8 @@ export default function VariablesScreen() {
         })
     );
     const { template } = useTemplateEditor();
+    const setInitialVariableData = useBoundStore(state => state.setInitialVariableData);
+    const setReturnedVariableData = useBoundStore(state => state.setReturnedVariableData);
 
     const grouplessVars = useMemo(() => {
         if (template?.groups && Array.isArray(template.groups)) {
@@ -85,6 +89,12 @@ export default function VariablesScreen() {
 
     const isLastGroup = (order: number) => {
         return order === getLastGroup();
+    };
+
+    const edit = (name: string) => {
+        setInitialVariableData({ ...template!.data![name], name });
+        setReturnedVariableData(undefined);
+        router.push("/(modal)/editvariable");
     };
 
     return (
@@ -151,6 +161,7 @@ export default function VariablesScreen() {
                                     key={name}
                                     variable={template.data![name]}
                                     canChangeGroup={true}
+                                    edit={() => edit(name)}
                                 />
                             ))}
 
@@ -179,6 +190,7 @@ export default function VariablesScreen() {
                                     key={name}
                                     variable={template.data![name]}
                                     canChangeGroup={true}
+                                    edit={() => edit(name)}
                                 />
                             ))}
                         </>
@@ -191,6 +203,7 @@ export default function VariablesScreen() {
                             key={name}
                             variable={variable}
                             canChangeGroup={false}
+                            edit={() => edit(name)}
                         />
                     ))}
 

@@ -6,6 +6,7 @@ import { Variable } from "pufferpanel";
 type VariableListItemProps = {
     variable: Variable;
     canChangeGroup: boolean;
+    edit: () => void;
 };
 
 export default function VariableListItem(props: VariableListItemProps) {
@@ -36,7 +37,7 @@ export default function VariableListItem(props: VariableListItemProps) {
 
     return (
         <View style={style.variable}>
-            <TouchableOpacity style={style.nameView}>
+            <TouchableOpacity onPress={props.edit} style={style.nameView}>
                 <Text style={style.label}>{props.variable.display}</Text>
             </TouchableOpacity>
 

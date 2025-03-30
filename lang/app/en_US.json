@@ -107,6 +107,9 @@
         "Operators": {
             "EditTitle": "Edit Operator"
         },
+        "Variables": {
+            "EditTitle": "Edit Variable"
+        },
         "Environment": {
             "EditTitle": "Edit Environment"
         }
