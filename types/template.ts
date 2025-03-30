@@ -18,13 +18,3 @@ export type EnvironmentDefault = {
         image: string;
     };
 };
-
-export const environmentDefaults: EnvironmentDefault = {
-    host: {
-        type: "host"
-    },
-    docker: {
-        type: "docker",
-        image: "pufferpanel/generic"
-    }
-};

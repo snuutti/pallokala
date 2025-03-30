@@ -7,7 +7,8 @@ import EnvironmentConfig from "@/components/templates/EnvironmentConfig";
 import Button from "@/components/ui/Button";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { MetadataType } from "pufferpanel";
-import { EnvironmentDefault, environmentDefaults } from "@/types/template";
+import { environmentDefaults } from "@/constants/template";
+import { EnvironmentDefault } from "@/types/template";
 
 export default function EditEnvironmentScreen() {
     const { t } = useTranslation();

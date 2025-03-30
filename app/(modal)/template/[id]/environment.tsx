@@ -9,7 +9,8 @@ import Button from "@/components/ui/Button";
 import { useTemplateEditor } from "@/context/TemplateEditorProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
-import { Environment, EnvironmentDefault, environmentDefaults } from "@/types/template";
+import { environmentDefaults } from "@/constants/template";
+import { Environment, EnvironmentDefault } from "@/types/template";
 import { MetadataType } from "pufferpanel";
 
 const environments: Environment[] = [
