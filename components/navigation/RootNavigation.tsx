@@ -145,6 +145,15 @@ export default function RootNavigation() {
             />
 
             <Stack.Screen
+                name="(modal)/editvariablegroup"
+                options={{
+                    title: t("app:Templates.Variables.EditGroupTitle"),
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
                 name="(modal)/editenvironment"
                 options={{
                     title: t("app:Templates.Environment.EditTitle"),

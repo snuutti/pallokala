@@ -108,7 +108,8 @@
             "EditTitle": "Edit Operator"
         },
         "Variables": {
-            "EditTitle": "Edit Variable"
+            "EditTitle": "Edit Variable",
+            "EditGroupTitle": "Edit Variable Group"
         },
         "Environment": {
             "EditTitle": "Edit Environment"
