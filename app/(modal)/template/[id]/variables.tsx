@@ -46,6 +46,8 @@ export default function VariablesScreen() {
     const { template } = useTemplateEditor();
     const setInitialVariableData = useBoundStore(state => state.setInitialVariableData);
     const setReturnedVariableData = useBoundStore(state => state.setReturnedVariableData);
+    const setInitialVariableGroupData = useBoundStore(state => state.setInitialVariableGroupData);
+    const setReturnedVariableGroupData = useBoundStore(state => state.setReturnedVariableGroupData);
 
     const grouplessVars = useMemo(() => {
         if (template?.groups && Array.isArray(template.groups)) {
@@ -91,6 +93,12 @@ export default function VariablesScreen() {
         return order === getLastGroup();
     };
 
+    const editGroup = (index: number) => {
+        setInitialVariableGroupData(template!.groups![index]);
+        setReturnedVariableGroupData(undefined);
+        router.push("/(modal)/editvariablegroup");
+    };
+
     const edit = (name: string) => {
         setInitialVariableData({ ...template!.data![name], name });
         setReturnedVariableData(undefined);
@@ -113,7 +121,7 @@ export default function VariablesScreen() {
                             </View>
 
                             <View style={style.actionsView}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => editGroup(index)}>
                                     <MaterialCommunityIcons
                                         name="pencil"
                                         size={30}
