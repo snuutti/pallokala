@@ -1,11 +1,11 @@
-import { createContext, useContext, useState, useMemo, ReactNode } from "react";
+import { createContext, useContext, useState, useMemo, Dispatch, SetStateAction, ReactNode } from "react";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { ExtendedTemplate } from "@/types/template";
 
 type TemplateEditorContextType = {
     template: ExtendedTemplate | undefined;
     json: string | undefined;
-    setTemplate: (template: ExtendedTemplate) => void;
+    setTemplate: Dispatch<SetStateAction<ExtendedTemplate | undefined>>;
     loadTemplate: (name: string, repo: number) => Promise<void>;
     error: boolean;
 };
