@@ -53,9 +53,8 @@ export default function StatisticsScreen() {
     const font = useFont(ubuntu, 12);
     const [unbindEvent, setUnbindEvent] = useState<(() => void) | undefined>(undefined);
     const [task, setTask] = useState<NodeJS.Timeout | undefined>(undefined);
-    // https://github.com/FormidableLabs/victory-native-xl/issues/439
-    const [cpu, setCpu] = useState<CpuDataPoint[]>([{ time: new Date().getTime(), value: 0 }]);
-    const [memory, setMemory] = useState<MemoryDataPoint[]>([{ time: new Date().getTime(), memory: 0 }]);
+    const [cpu, setCpu] = useState<CpuDataPoint[]>([]);
+    const [memory, setMemory] = useState<MemoryDataPoint[]>([]);
 
     useEffect(() => {
         if (server === undefined) {
