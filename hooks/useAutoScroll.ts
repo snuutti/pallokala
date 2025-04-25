@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
-import { FlashList } from "@shopify/flash-list";
+import { LegendListRef } from "@legendapp/list";
 
 type AutoScrollHookProps<T> = {
     data: T[];
@@ -8,7 +8,7 @@ type AutoScrollHookProps<T> = {
 };
 
 export default function useAutoScroll<T>({ data, inverted }: AutoScrollHookProps<T>) {
-    const listRef = useRef<FlashList<T>>(null);
+    const listRef = useRef<LegendListRef>(null);
     const [isAtBottom, setIsAtBottom] = useState(true);
     const [listMounted, setListMounted] = useState(false);
 
