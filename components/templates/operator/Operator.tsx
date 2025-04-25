@@ -86,6 +86,8 @@ export default function Operator(props: OperatorProps) {
                 onChangeText={(value) => updateOption("if", value)}
                 placeholder={t("common:Condition")}
                 description={t("operators:ConditionHint")}
+                autoCapitalize="none"
+                autoCorrect={false}
             />
 
             {options.map((option, index) => (
@@ -95,6 +97,8 @@ export default function Operator(props: OperatorProps) {
                             value={props.data[option.name] as string}
                             onChangeText={(value) => updateOption(option.name, value)}
                             placeholder={getLabel(option)}
+                            autoCapitalize="none"
+                            autoCorrect={false}
                         />
                     )}
 
