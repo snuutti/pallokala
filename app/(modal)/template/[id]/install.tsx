@@ -16,7 +16,7 @@ export default function InstallScreen() {
             }
         })
     );
-    const { template } = useTemplateEditor();
+    const { template, setTemplate } = useTemplateEditor();
 
     return (
         <ContentWrapper>
@@ -26,7 +26,9 @@ export default function InstallScreen() {
 
             <OperatorList
                 operations={template?.install || []}
-                setOperations={() => {}}
+                setOperations={(operations) => {
+                    setTemplate({ ...template!, install: operations });
+                }}
                 addLabel={t("templates:AddInstallStep")}
             />
         </ContentWrapper>
