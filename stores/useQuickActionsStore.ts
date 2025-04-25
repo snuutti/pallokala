@@ -17,8 +17,9 @@ export type ServerAction = {
 export interface QuickActionsStore {
     currentAction: CurrentAction | null;
     actions: ServerAction[];
-    setCurrentAction: (action: CurrentAction) => void;
+    setCurrentAction: (action: CurrentAction | null) => void;
     addAction: (action: ServerAction) => void;
+    removeAccountActions: (accountId: number) => void;
 }
 
 export const useQuickActionsStore = create<QuickActionsStore>()(
@@ -44,6 +45,17 @@ export const useQuickActionsStore = create<QuickActionsStore>()(
                     }
                 }
 
+                set({ actions: newActions });
+
+                QuickActions.setItems(newActions.map((a) => ({
+                    id: a.accountId + "." + a.serverId,
+                    title: a.name,
+                    params: { accountId: a.accountId, serverId: a.serverId }
+                })));
+            },
+            removeAccountActions: (accountId) => {
+                const currentActions = get().actions;
+                const newActions = currentActions.filter((a) => a.accountId !== accountId);
                 set({ actions: newActions });
 
                 QuickActions.setItems(newActions.map((a) => ({

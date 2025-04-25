@@ -49,6 +49,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     const { apiClient, config, sessionTimedOut, changeServer } = useApiClient();
     const { createAlertModal } = useModal();
     const setCurrentAction = useQuickActionsStore(state => state.setCurrentAction);
+    const removeAccountActions = useQuickActionsStore(state => state.removeAccountActions);
     const setThemeSettings = useSettingsStore(state => state.setThemeSettings);
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [activeAccount, setActiveAccount] = useState<Account | null>(null);
@@ -96,7 +97,11 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
             return;
         }
 
-        initialLogin(accountId).then(() => {
+        initialLogin(accountId).then(({ shortcutValid }) => {
+            if (!shortcutValid) {
+                return;
+            }
+
             setCurrentAction({ serverId, accountId });
         });
     }, [action]);
@@ -133,14 +138,23 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         getAccounts().then(setAccounts);
     };
 
-    const initialLogin = async (accountId: number | null) => {
+    const initialLogin = async (accountId: number | null): Promise<{ shortcutValid?: boolean }> => {
         setLoading(true);
 
         let account: Account | null = null;
+        let shortcutValid: boolean | undefined = undefined;
 
         if (accountId !== null) {
             account = await getAccount(accountId);
-            console.log("Using app shortcut account", JSON.stringify(account, getPrivateInfoReplacer()));
+
+            if (account !== null) {
+                console.log("Using app shortcut account", JSON.stringify(account, getPrivateInfoReplacer()));
+                shortcutValid = true;
+            } else {
+                console.log("App shortcut account was null");
+                shortcutValid = false;
+                removeAccountActions(accountId);
+            }
         }
 
         if (account === null) {
@@ -156,7 +170,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
             if (accounts.length === 0) {
                 console.log("No accounts found");
                 router.replace("../(auth)/email");
-                return;
+                return {};
             }
 
             account = accounts[0];
@@ -166,10 +180,12 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         if (account === null) {
             console.log("Account returned was null?");
             router.replace("../(auth)/email");
-            return;
+            return {};
         }
 
         await changeAccount(account);
+
+        return { shortcutValid };
     };
 
     const changeAccount = async (account: Account) => {
