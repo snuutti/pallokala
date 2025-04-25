@@ -17,6 +17,9 @@ export default function HooksScreen() {
             description: {
                 color: colors.textDisabled,
                 marginBottom: 10
+            },
+            operatorList: {
+                marginBottom: 10
             }
         })
     );
@@ -35,6 +38,7 @@ export default function HooksScreen() {
                     setTemplate({ ...template!, run: { ...template!.run, pre: operations } });
                 }}
                 addLabel={t("templates:AddPreStep")}
+                style={style.operatorList}
             />
 
             <Text style={style.header}>{t("templates:PostRunHook")}</Text>
