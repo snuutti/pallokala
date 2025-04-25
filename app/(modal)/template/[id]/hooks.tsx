@@ -20,7 +20,7 @@ export default function HooksScreen() {
             }
         })
     );
-    const { template } = useTemplateEditor();
+    const { template, setTemplate } = useTemplateEditor();
 
     return (
         <ContentWrapper>
@@ -31,7 +31,9 @@ export default function HooksScreen() {
 
             <OperatorList
                 operations={template?.run.pre || []}
-                setOperations={() => {}}
+                setOperations={(operations) => {
+                    setTemplate({ ...template!, run: { ...template!.run, pre: operations } });
+                }}
                 addLabel={t("templates:AddPreStep")}
             />
 
@@ -40,7 +42,9 @@ export default function HooksScreen() {
 
             <OperatorList
                 operations={template?.run.post || []}
-                setOperations={() => {}}
+                setOperations={(operations) => {
+                    setTemplate({ ...template!, run: { ...template!.run, post: operations } });
+                }}
                 addLabel={t("templates:AddPostStep")}
             />
         </ContentWrapper>
