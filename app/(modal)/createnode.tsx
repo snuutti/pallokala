@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
@@ -16,16 +15,13 @@ export default function CreateNodeScreen() {
     const { apiClient } = useApiClient();
     const { showSuccessAlert } = useToast();
     const addNode = useBoundStore(state => state.addNode);
-    const { control, handleSubmit, watch, formState: { errors, isValid } } = useForm<NodeSchemaType>({
+    const { control, handleSubmit, watch, formState: { errors, isValid, isSubmitting } } = useForm<NodeSchemaType>({
         defaultValues: NodeDefaultValues,
         resolver: zodResolver(NodeSchema),
         mode: "onBlur"
     });
-    const [loading, setLoading] = useState(false);
 
     const createNode = async (data: NodeSchemaType) => {
-        setLoading(true);
-
         const node = {
             name: data.name,
             publicHost: data.publicHost,
@@ -40,15 +36,11 @@ export default function CreateNodeScreen() {
             node.privatePort = data.private.privatePort;
         }
 
-        try {
-            const id = await apiClient?.node.create(node as Node);
-            addNode({ ...node, id: id! } as Node);
+        const id = await apiClient?.node.create(node as Node);
+        addNode({ ...node, id: id! } as Node);
 
-            showSuccessAlert(t("nodes:Created"));
-            router.dismissTo(`/(app)/nodes/${id!}?created=true`);
-        } finally {
-            setLoading(false);
-        }
+        showSuccessAlert(t("nodes:Created"));
+        router.dismissTo(`/(app)/nodes/${id!}?created=true`);
     };
 
     return (
@@ -56,7 +48,7 @@ export default function CreateNodeScreen() {
             <NodeOptions
                 control={control}
                 errors={errors}
-                editable={!loading}
+                editable={!isSubmitting}
                 withPrivateHost={watch("private.withPrivateHost")!}
             />
 
@@ -64,7 +56,7 @@ export default function CreateNodeScreen() {
                 text={t("nodes:Create")}
                 icon="content-save"
                 onPress={handleSubmit(createNode)}
-                disabled={loading || !isValid}
+                disabled={isSubmitting || !isValid}
             />
         </ContentWrapper>
     );

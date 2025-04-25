@@ -51,7 +51,7 @@ export default function EnrollTwoFactorScreen() {
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
     const { showSuccessAlert } = useToast();
-    const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
+    const { control, handleSubmit, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
@@ -66,23 +66,17 @@ export default function EnrollTwoFactorScreen() {
     }, []);
 
     const confirmOtpEnroll = async (data: Schema) => {
-        setLoading(true);
+        await apiClient!.self.validateOtpEnroll(data.code);
 
-        try {
-            await apiClient!.self.validateOtpEnroll(data.code);
-
-            if (activeAccount!.type === "email" && data.saveSecret) {
-                const account = activeAccount as EmailAccount;
-                account.otpSecret = otpData!.secret;
-                await updateAccount(account);
-            }
-
-            showSuccessAlert(t("users:UpdateSuccess"));
-
-            router.navigate(`/self/2fa?refresh=${data.code}`);
-        } finally {
-            setLoading(false);
+        if (activeAccount!.type === "email" && data.saveSecret) {
+            const account = activeAccount as EmailAccount;
+            account.otpSecret = otpData!.secret;
+            await updateAccount(account);
         }
+
+        showSuccessAlert(t("users:UpdateSuccess"));
+
+        router.navigate(`/self/2fa?refresh=${data.code}`);
     };
 
     if (loading) {
@@ -105,6 +99,7 @@ export default function EnrollTwoFactorScreen() {
                 name="code"
                 keyboardType="number-pad"
                 placeholder={t("users:OtpConfirm")}
+                editable={!isSubmitting}
                 error={errors.code?.message}
             />
 
@@ -114,6 +109,7 @@ export default function EnrollTwoFactorScreen() {
                     name="saveSecret"
                     label={t("app:Self.2FA.SaveSecret")}
                     description={t("app:Self.2FA.SaveSecretDesc")}
+                    disabled={isSubmitting}
                 />
             )}
 
@@ -121,7 +117,7 @@ export default function EnrollTwoFactorScreen() {
                 text={t("users:OtpEnable")}
                 style="success"
                 onPress={handleSubmit(confirmOtpEnroll)}
-                disabled={!isValid}
+                disabled={!isValid || isSubmitting}
             />
         </ContentWrapper>
     );

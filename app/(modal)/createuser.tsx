@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,24 +27,17 @@ export default function CreateUserScreen() {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
     const addUser = useBoundStore(state => state.addUser);
-    const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
+    const { control, handleSubmit, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
     });
-    const [loading, setLoading] = useState(false);
 
     const createUser = async (data: Schema) => {
-        setLoading(true);
+        const id = await apiClient!.user.create(data.username, data.email, data.password);
+        addUser({ id, username: data.username, email: data.email });
 
-        try {
-            const id = await apiClient!.user.create(data.username, data.email, data.password);
-            addUser({ id, username: data.username, email: data.email });
-
-            router.dismissTo(`/(app)/users/${id}`);
-        } finally {
-            setLoading(false);
-        }
+        router.dismissTo(`/(app)/users/${id}`);
     };
 
     return (
@@ -56,7 +48,7 @@ export default function CreateUserScreen() {
                 placeholder={t("users:Username")}
                 autoCapitalize="none"
                 autoComplete="username"
-                editable={!loading}
+                editable={!isSubmitting}
                 error={errors.username?.message}
                 errorFields={{ field: t("users:Username"), length: 5 }}
             />
@@ -68,7 +60,7 @@ export default function CreateUserScreen() {
                 autoCapitalize="none"
                 autoComplete="email"
                 keyboardType="email-address"
-                editable={!loading}
+                editable={!isSubmitting}
                 error={errors.email?.message}
                 errorFields={{ field: t("users:Email") }}
             />
@@ -80,7 +72,7 @@ export default function CreateUserScreen() {
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
-                editable={!loading}
+                editable={!isSubmitting}
                 error={errors.password?.message}
                 errorFields={{ field: t("users:Password") }}
             />
@@ -89,7 +81,7 @@ export default function CreateUserScreen() {
                 text={t("users:Create")}
                 icon="content-save"
                 onPress={handleSubmit(createUser)}
-                disabled={loading || !isValid}
+                disabled={isSubmitting || !isValid}
             />
         </ContentWrapper>
     );

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Text, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -37,21 +36,14 @@ export default function OtpRequiredScreen() {
     );
     const { submitOtp } = useAccount();
     const { present } = useSwitchServerModal();
-    const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
+    const { control, handleSubmit, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
     });
-    const [loading, setLoading] = useState(false);
 
     const onSubmit = async (data: Schema) => {
-        setLoading(true);
-
-        try {
-            await submitOtp(data.code);
-        } finally {
-            setLoading(false);
-        }
+        await submitOtp(data.code);
     };
 
     return (
@@ -62,7 +54,7 @@ export default function OtpRequiredScreen() {
                 control={control}
                 name="code"
                 keyboardType="number-pad"
-                editable={!loading}
+                editable={!isSubmitting}
                 error={errors.code?.message}
             />
 
@@ -70,14 +62,14 @@ export default function OtpRequiredScreen() {
                 text={t("users:Login")}
                 icon="login"
                 onPress={handleSubmit(onSubmit)}
-                disabled={!isValid || loading}
+                disabled={!isValid || isSubmitting}
             />
 
             <Button
                 text={t("app:Auth.SelectServer")}
                 icon="swap-horizontal"
                 onPress={present}
-                disabled={loading}
+                disabled={isSubmitting}
             />
         </ContentWrapper>
     );

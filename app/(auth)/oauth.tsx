@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -42,16 +41,13 @@ export default function OAuthLoginScreen() {
     );
     const { addAccount } = useAccount();
     const { createAlertModal } = useModal();
-    const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
+    const { control, handleSubmit, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
     });
-    const [loading, setLoading] = useState(false);
 
     const logIn = async (data: Schema) => {
-        setLoading(true);
-
         const account: OAuthAccount = {
             serverAddress: data.address,
             nickname: "",
@@ -88,8 +84,6 @@ export default function OAuthLoginScreen() {
             );
 
             return;
-        } finally {
-            setLoading(false);
         }
 
         try {
@@ -134,8 +128,6 @@ export default function OAuthLoginScreen() {
                 );
             }
         }
-
-        setLoading(false);
     };
 
     return (
@@ -149,7 +141,7 @@ export default function OAuthLoginScreen() {
                 autoCapitalize="none"
                 autoComplete="url"
                 keyboardType="url"
-                editable={!loading}
+                editable={!isSubmitting}
                 error={errors.address?.message}
                 errorFields={{ field: t("app:Auth.ServerAddress") }}
             />
@@ -160,7 +152,7 @@ export default function OAuthLoginScreen() {
                 placeholder={t("oauth:ClientId")}
                 autoCapitalize="none"
                 autoComplete="off"
-                editable={!loading}
+                editable={!isSubmitting}
                 error={errors.id?.message}
             />
 
@@ -171,7 +163,7 @@ export default function OAuthLoginScreen() {
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
-                editable={!loading}
+                editable={!isSubmitting}
                 error={errors.secret?.message}
             />
 
@@ -179,7 +171,7 @@ export default function OAuthLoginScreen() {
                 text={t("app:Auth.AddAccount")}
                 icon="account-plus"
                 onPress={handleSubmit(logIn)}
-                disabled={!isValid || loading}
+                disabled={!isValid || isSubmitting}
             />
         </ContentWrapper>
     );

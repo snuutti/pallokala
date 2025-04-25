@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -31,12 +31,11 @@ export default function AccountDetailsScreen() {
     const { apiClient } = useApiClient();
     const { activeAccount, user, refreshSelf } = useAccount();
     const { showSuccessAlert } = useToast();
-    const { control, handleSubmit, setValue, formState: { errors, isValid } } = useForm<Schema>({
+    const { control, handleSubmit, setValue, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
     });
-    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         setValue("username", user?.username || "");
@@ -44,22 +43,16 @@ export default function AccountDetailsScreen() {
     }, []);
 
     const updateUser = async (data: Schema) => {
-        setSaving(true);
+        await apiClient?.self.updateDetails(data.username, data.email, data.password);
+        await refreshSelf();
 
-        try {
-            await apiClient?.self.updateDetails(data.username, data.email, data.password);
-            await refreshSelf();
-
-            if (activeAccount!.type === "email") {
-                const account = activeAccount as EmailAccount;
-                account.email = data.email;
-                await updateAccount(account);
-            }
-
-            showSuccessAlert(t("users:InfoChanged"));
-        } finally {
-            setSaving(false);
+        if (activeAccount!.type === "email") {
+            const account = activeAccount as EmailAccount;
+            account.email = data.email;
+            await updateAccount(account);
         }
+
+        showSuccessAlert(t("users:InfoChanged"));
     };
 
     return (
@@ -70,7 +63,7 @@ export default function AccountDetailsScreen() {
                 placeholder={t("users:Username")}
                 autoCapitalize="none"
                 autoComplete="username"
-                editable={!saving}
+                editable={!isSubmitting}
                 error={errors.username?.message}
                 errorFields={{ field: t("users:Username"), length: 5 }}
             />
@@ -82,7 +75,7 @@ export default function AccountDetailsScreen() {
                 autoCapitalize="none"
                 autoComplete="email"
                 keyboardType="email-address"
-                editable={!saving}
+                editable={!isSubmitting}
                 error={errors.email?.message}
                 errorFields={{ field: t("users:Email") }}
             />
@@ -94,7 +87,7 @@ export default function AccountDetailsScreen() {
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
-                editable={!saving}
+                editable={!isSubmitting}
                 error={errors.password?.message}
             />
 
@@ -102,7 +95,7 @@ export default function AccountDetailsScreen() {
                 text={t("users:ChangeInfo")}
                 icon="content-save"
                 onPress={handleSubmit(updateUser)}
-                disabled={saving || !isValid}
+                disabled={isSubmitting || !isValid}
             />
         </ContentWrapper>
     );

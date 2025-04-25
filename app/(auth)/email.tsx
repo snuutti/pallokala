@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -42,16 +41,13 @@ export default function EmailLoginScreen() {
     );
     const { addAccount } = useAccount();
     const { createAlertModal } = useModal();
-    const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
+    const { control, handleSubmit, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
     });
-    const [loading, setLoading] = useState(false);
 
     const logIn = async (data: Schema) => {
-        setLoading(true);
-
         const account: EmailAccount = {
             serverAddress: data.address,
             nickname: "",
@@ -88,8 +84,6 @@ export default function EmailLoginScreen() {
             );
 
             return;
-        } finally {
-            setLoading(false);
         }
 
         try {
@@ -134,8 +128,6 @@ export default function EmailLoginScreen() {
                 );
             }
         }
-
-        setLoading(false);
     };
 
     return (
@@ -149,7 +141,7 @@ export default function EmailLoginScreen() {
                 autoCapitalize="none"
                 autoComplete="url"
                 keyboardType="url"
-                editable={!loading}
+                editable={!isSubmitting}
                 error={errors.address?.message}
                 errorFields={{ field: t("app:Auth.ServerAddress") }}
             />
@@ -160,7 +152,7 @@ export default function EmailLoginScreen() {
                 placeholder={t("users:Email")}
                 autoCapitalize="none"
                 autoComplete="off"
-                editable={!loading}
+                editable={!isSubmitting}
                 error={errors.email?.message}
                 errorFields={{ field: t("users:Email") }}
             />
@@ -172,7 +164,7 @@ export default function EmailLoginScreen() {
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
-                editable={!loading}
+                editable={!isSubmitting}
                 error={errors.password?.message}
             />
 
@@ -180,7 +172,7 @@ export default function EmailLoginScreen() {
                 text={t("app:Auth.AddAccount")}
                 icon="account-plus"
                 onPress={handleSubmit(logIn)}
-                disabled={!isValid || loading}
+                disabled={!isValid || isSubmitting}
             />
         </ContentWrapper>
     );

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,29 +33,22 @@ export default function ChangePasswordScreen() {
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
     const { showSuccessAlert } = useToast();
-    const { control, handleSubmit, formState: { errors, isValid } } = useForm<Schema>({
+    const { control, handleSubmit, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
     });
-    const [saving, setSaving] = useState(false);
 
     const updatePassword = async (data: Schema) => {
-        setSaving(true);
+        await apiClient?.self.changePassword(data.old, data.new);
 
-        try {
-            await apiClient?.self.changePassword(data.old, data.new);
-
-            if (activeAccount!.type === "email") {
-                const account = activeAccount as EmailAccount;
-                account.password = data.new;
-                await updateAccount(account);
-            }
-
-            showSuccessAlert(t("users:PasswordChanged"));
-        } finally {
-            setSaving(false);
+        if (activeAccount!.type === "email") {
+            const account = activeAccount as EmailAccount;
+            account.password = data.new;
+            await updateAccount(account);
         }
+
+        showSuccessAlert(t("users:PasswordChanged"));
     };
 
     return (
@@ -68,7 +60,7 @@ export default function ChangePasswordScreen() {
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
-                editable={!saving}
+                editable={!isSubmitting}
                 error={errors.old?.message}
                 errorFields={{ field: t("users:OldPassword") }}
             />
@@ -80,7 +72,7 @@ export default function ChangePasswordScreen() {
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
-                editable={!saving}
+                editable={!isSubmitting}
                 error={errors.new?.message}
                 errorFields={{ field: t("users:NewPassword"), length: 8 }}
             />
@@ -92,7 +84,7 @@ export default function ChangePasswordScreen() {
                 autoCapitalize="none"
                 autoComplete="password"
                 secureTextEntry={true}
-                editable={!saving}
+                editable={!isSubmitting}
                 error={errors.confirm?.message}
             />
 
@@ -100,7 +92,7 @@ export default function ChangePasswordScreen() {
                 text={t("users:ChangePassword")}
                 icon="content-save"
                 onPress={handleSubmit(updatePassword)}
-                disabled={saving || !isValid}
+                disabled={isSubmitting || !isValid}
             />
         </ContentWrapper>
     );
