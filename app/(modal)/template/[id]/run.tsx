@@ -11,7 +11,7 @@ import { useTemplateEditor } from "@/context/TemplateEditorProvider";
 
 export default function RunScreen() {
     const { t } = useTranslation();
-    const { template } = useTemplateEditor();
+    const { template, setTemplate } = useTemplateEditor();
 
     const stopType = useMemo(() => {
         if (template!.run.stop || template!.run.stop === "") {
@@ -20,6 +20,32 @@ export default function RunScreen() {
 
         return "signal";
     }, [template]);
+
+    const addCommand = () => {
+        const newTemplate = { ...template! };
+
+        if (!Array.isArray(newTemplate.run.command)) {
+            newTemplate.run.command = [{ command: newTemplate.run.command, if: "" }];
+        }
+
+        newTemplate.run.command.push({ command: "", if: "" });
+
+        setTemplate(newTemplate);
+    };
+
+    const updateStopType = (value: string) => {
+        const newTemplate = { ...template! };
+
+        if (value === "command") {
+            delete newTemplate.run.stopCode;
+            newTemplate.run.stop = "";
+        } else if (value === "signal") {
+            delete newTemplate.run.stop;
+            newTemplate.run.stopCode = 2;
+        }
+
+        setTemplate(newTemplate);
+    };
 
     const stopTypes: DropdownItem[] = [
         {
@@ -64,9 +90,13 @@ export default function RunScreen() {
             ) : (
                 <TextInput
                     value={template?.run.command}
-                    onChangeText={() => {}}
+                    onChangeText={(value) => {
+                        setTemplate({ ...template!, run: { ...template!.run, command: value } });
+                    }}
                     placeholder={t("templates:Command")}
                     description={t("templates:description.Command")}
+                    autoCapitalize="none"
+                    autoCorrect={false}
                     // TODO: Add validation
                 />
             )}
@@ -74,23 +104,31 @@ export default function RunScreen() {
             <Button
                 text={t("templates:AddCommand")}
                 icon="plus"
-                onPress={() => {}}
+                onPress={addCommand}
             />
 
             <TextInput
+                value={template?.run.workingDirectory}
+                onChangeText={(value) => {
+                    setTemplate({ ...template!, run: { ...template!.run, workingDirectory: value } });
+                }}
                 placeholder={t("templates:WorkingDirectory")}
+                autoCapitalize="none"
+                autoCorrect={false}
             />
 
             <Dropdown
                 options={stopTypes}
                 value={stopType}
-                onChange={() => {}}
+                onChange={(value) => updateStopType(value as string)}
             />
 
             {stopType === "command" && (
                 <TextInput
                     value={template!.run.stop}
-                    onChangeText={() => {}}
+                    onChangeText={(value) => {
+                        setTemplate({ ...template!, run: { ...template!.run, stop: value } });
+                    }}
                     placeholder={t("templates:StopCommand")}
                     description={t("templates:description.StopCommand")}
                 />
@@ -100,7 +138,9 @@ export default function RunScreen() {
                 <Dropdown
                     options={stopSuggestions}
                     value={String(template!.run.stopCode)}
-                    onChange={() => {}}
+                    onChange={(value) => {
+                        setTemplate({ ...template!, run: { ...template!.run, stopCode: value as number } });
+                    }}
                     label={t("templates:StopSignal")}
                     description={t("templates:description.StopSignal")}
                 />
@@ -110,7 +150,9 @@ export default function RunScreen() {
                 label={t("templates:EnvVars")}
                 addLabel={t("templates:AddEnvVar")}
                 fields={template?.run.environmentVars || {}}
-                onChange={() => {}}
+                onChange={(value) => {
+                    setTemplate({ ...template!, run: { ...template!.run, environmentVars: value as Record<string, string> } });
+                }}
             />
         </ContentWrapper>
     );
