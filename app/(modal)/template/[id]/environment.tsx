@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
@@ -43,9 +43,28 @@ export default function EnvironmentScreen() {
             }
         })
     );
-    const { template } = useTemplateEditor();
+    const { template, setTemplate } = useTemplateEditor();
+    const returnedEnvironmentData = useBoundStore(state => state.returnedEnvironmentData);
     const setInitialEnvironmentData = useBoundStore(state => state.setInitialEnvironmentData);
     const setReturnedEnvironmentData = useBoundStore(state => state.setReturnedEnvironmentData);
+    const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
+
+    useEffect(() => {
+        if (!returnedEnvironmentData) {
+            return;
+        }
+
+        if (editIndex === undefined) {
+            return;
+        }
+
+        const newTemplate = { ...template! };
+        newTemplate.supportedEnvironments![editIndex] = returnedEnvironmentData;
+
+        setTemplate(newTemplate);
+        setEditIndex(undefined);
+        setInitialEnvironmentData(undefined);
+    }, [returnedEnvironmentData, editIndex]);
 
     const unsupportedEnvironments = useMemo(() => {
         return environments.filter(environment => {
@@ -53,9 +72,10 @@ export default function EnvironmentScreen() {
         });
     }, [template]);
 
-    const edit = (environment: MetadataType, adding: boolean) => {
+    const edit = (data: MetadataType, index: number, adding: boolean) => {
+        setEditIndex(index);
         setInitialEnvironmentData({
-            data: environment,
+            data,
             unsupportedEnvironments,
             adding
         });
@@ -66,19 +86,39 @@ export default function EnvironmentScreen() {
 
     const add = () => {
         const environment = environmentDefaults[unsupportedEnvironments[0].value as keyof EnvironmentDefault];
-        // TODO: actually add the environment
-        edit(environment, true);
+
+        const newTemplate = { ...template! };
+        newTemplate.supportedEnvironments = [...(newTemplate.supportedEnvironments || []), environment];
+
+        setTemplate(newTemplate);
+        edit(environment, newTemplate.supportedEnvironments.length - 1, true);
+    };
+
+    const remove = (index: number) => {
+        const newTemplate = { ...template! };
+        const environment = newTemplate.supportedEnvironments![index];
+
+        newTemplate.supportedEnvironments!.splice(index, 1);
+
+        if (newTemplate.environment.type === environment.type) {
+            newTemplate.environment = newTemplate.supportedEnvironments![0];
+        }
+
+        setTemplate(newTemplate);
     };
 
     return (
         <ContentWrapper>
             <RemoteTemplateAlert />
 
-            {template?.supportedEnvironments?.map((env) => (
-                <TouchableOpacity key={env.type} onPress={() => edit(env, false)} style={style.environment}>
+            {template?.supportedEnvironments?.map((env, index) => (
+                <TouchableOpacity key={env.type} onPress={() => edit(env, index, false)} style={style.environment}>
                     <Text style={style.name}>{t(`env:${env.type}.name`)}</Text>
 
-                    <TouchableOpacity onPress={() => {}} disabled={template!.supportedEnvironments!.length < 2}>
+                    <TouchableOpacity
+                        onPress={() => remove(index)}
+                        disabled={template!.supportedEnvironments!.length < 2}
+                    >
                         <MaterialCommunityIcons
                             name="trash-can"
                             size={30}
