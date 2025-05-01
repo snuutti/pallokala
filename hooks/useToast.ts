@@ -1,11 +1,10 @@
 import { Notifier, NotifierComponents, ShowNotificationParams } from "react-native-notifier";
-import { AlertComponent } from "react-native-notifier/src/ui-components/Alert";
 import { useColors } from "@/hooks/useStyle";
 
 export default function useToast() {
     const colors = useColors();
 
-    const showSuccessAlert = (title?: string, description?: string, params?: ShowNotificationParams<typeof AlertComponent>) => {
+    const showSuccessAlert = (title?: string, description?: string, params?: ShowNotificationParams<typeof NotifierComponents.Alert>) => {
         Notifier.showNotification({
             title,
             description,
@@ -19,7 +18,7 @@ export default function useToast() {
         });
     };
 
-    const showErrorAlert = (title?: string, description?: string, params?: ShowNotificationParams<typeof AlertComponent>) => {
+    const showErrorAlert = (title?: string, description?: string, params?: ShowNotificationParams<typeof NotifierComponents.Alert>) => {
         Notifier.showNotification({
             title,
             description,

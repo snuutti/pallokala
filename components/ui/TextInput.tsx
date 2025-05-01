@@ -1,3 +1,4 @@
+import { JSX } from "react";
 import { TextInputProps as RNTextInputProps, TextInput as RNTextInput, Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useStyle } from "@/hooks/useStyle";

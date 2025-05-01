@@ -15,7 +15,7 @@ export default function Query() {
         })
     );
     const { server } = useServer();
-    const [task, setTask] = useState<NodeJS.Timeout | undefined>(undefined);
+    const [task, setTask] = useState<NodeJS.Timeout | number | undefined>(undefined);
     const [data, setData] = useState<any | undefined>(undefined);
 
     useEffect(() => {

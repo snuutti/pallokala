@@ -472,9 +472,9 @@ declare module "pufferpanel" {
 
         emit(event: string, data: any): void;
 
-        startTask(f: () => void, interval: number): NodeJS.Timeout;
+        startTask(f: () => void, interval: number): NodeJS.Timeout | number;
 
-        stopTask(ref: NodeJS.Timeout): void;
+        stopTask(ref: NodeJS.Timeout | number): void;
 
         needsPolling(): boolean;
 

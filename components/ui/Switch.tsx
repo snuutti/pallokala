@@ -1,3 +1,4 @@
+import { JSX } from "react";
 import { Switch as RNSwitch, View, Text, StyleSheet } from "react-native";
 import { useStyle } from "@/hooks/useStyle";
 

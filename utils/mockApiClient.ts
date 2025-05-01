@@ -411,11 +411,11 @@ class MockServer implements Server {
         throw new Error("Method not implemented.");
     }
 
-    startTask(f: () => void, interval: number): NodeJS.Timeout {
+    startTask(f: () => void, interval: number): NodeJS.Timeout | number {
         return setTimeout(f, interval);
     }
 
-    stopTask(ref: NodeJS.Timeout): void {
+    stopTask(ref: NodeJS.Timeout | number): void {
         clearTimeout(ref);
     }
 

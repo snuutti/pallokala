@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { JSX, useMemo } from "react";
 import { Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import Button from "@/components/ui/Button";

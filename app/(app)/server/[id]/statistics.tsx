@@ -52,7 +52,7 @@ export default function StatisticsScreen() {
     const { formatFileSize } = useLocalizedFormatter();
     const font = useFont(ubuntu, 12);
     const [unbindEvent, setUnbindEvent] = useState<(() => void) | undefined>(undefined);
-    const [task, setTask] = useState<NodeJS.Timeout | undefined>(undefined);
+    const [task, setTask] = useState<NodeJS.Timeout | number | undefined>(undefined);
     const [cpu, setCpu] = useState<CpuDataPoint[]>([]);
     const [memory, setMemory] = useState<MemoryDataPoint[]>([]);
 

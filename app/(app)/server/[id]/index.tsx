@@ -82,7 +82,7 @@ export default function ConsoleScreen() {
     const [initialScroll, setInitialScroll] = useState(true);
     const [hasGotItems, setHasGotItems] = useState(false);
     const [unbindEvent, setUnbindEvent] = useState<(() => void) | undefined>(undefined);
-    const [task, setTask] = useState<NodeJS.Timeout | undefined>(undefined);
+    const [task, setTask] = useState<NodeJS.Timeout | number | undefined>(undefined);
     const [lastMessageTime, setLastMessageTime] = useState(0);
     const [command, setCommand] = useState("");
     const { height } = useGradualAnimation();

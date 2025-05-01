@@ -15,7 +15,7 @@ import { getType, skipDownload } from "@/utils/files";
 import * as pako from "pako";
 import { ApiClient } from "pufferpanel";
 
-async function getFile(client: ApiClient, url: string): Promise<ArrayBuffer> {
+async function getFile(client: ApiClient, url: string): Promise<ArrayBufferLike> {
     if (client._host === "http://pallokala.test") {
         return new TextEncoder().encode(`#Minecraft server properties
 #Fri Dec 06 16:04:34 UTC 2024
