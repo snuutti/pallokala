@@ -12,7 +12,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     icon: "./assets/images/icon.png",
     scheme: "pallokala",
     userInterfaceStyle: "automatic",
-    jsEngine: "hermes",
+    newArchEnabled: false,
     ios: {
         bundleIdentifier: packageIdentifier,
         config: {
@@ -65,6 +65,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
             }
         ],
         "expo-quick-actions",
+        "expo-web-browser",
         "react-native-edge-to-edge",
         "./app.plugin.js"
     ],

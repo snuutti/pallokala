@@ -3,10 +3,10 @@ import { BackHandler } from "react-native";
 
 export default function useBackHandler(handler: () => boolean) {
     useEffect(() => {
-        BackHandler.addEventListener("hardwareBackPress", handler);
+        const backHandler = BackHandler.addEventListener("hardwareBackPress", handler);
 
         return () => {
-            BackHandler.removeEventListener("hardwareBackPress", handler);
+            backHandler.remove();
         };
     }, [handler]);
 }
