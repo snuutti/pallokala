@@ -31,8 +31,8 @@ const html = `
             const modeList = ace.require("ace/ext/modelist");
 
             window.onload = () => {
-                if (window.ReactNativeWebView.injectedObjectJson()) {
-                    const injectedObject = JSON.parse(window.ReactNativeWebView.injectedObjectJson());
+                const injectedObject = window.editorContent;
+                if (injectedObject) {
                     editor.setValue(injectedObject.content, -1);
                     const mode = modeList.getModeForPath(injectedObject.name).mode;
                     editor.session.setMode(mode);

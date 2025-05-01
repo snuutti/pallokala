@@ -9,18 +9,19 @@ type CodeEditorProps = WebViewProps & {
 };
 
 export default function CodeEditor(props: CodeEditorProps) {
+    const injectedObject = {
+        content: props.content || "",
+        name: props.fileName,
+        readOnly: props.readonly ?? false
+    };
+
     return (
         <WebView
             {...props}
             scrollEnabled={false}
             source={{ html: editorHtml }}
-            domStorageEnabled={true}
             nestedScrollEnabled={true}
-            injectedJavaScriptObject={{
-                content: props.content || "",
-                name: props.fileName,
-                readOnly: props.readonly ?? false
-            }}
+            injectedJavaScriptBeforeContentLoaded={`window.editorContent = ${JSON.stringify(injectedObject)};`}
             onMessage={(event) => {
                 props.onContentChange(event.nativeEvent.data);
             }}
