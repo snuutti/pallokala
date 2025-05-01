@@ -34,7 +34,7 @@ export default function ErrorBoundaryScreen({ error, retry }: ErrorBoundaryProps
     };
 
     const openIssue = async () => {
-        await Linking.openURL("https://github.com/snuutti/pallokala/issues/new/choose");
+        await Linking.openURL("https://github.com/snuutti/pallokala/issues/new?template=bug---crash-report.md");
     };
 
     return (
