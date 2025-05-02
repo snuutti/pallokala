@@ -30,7 +30,7 @@ export interface SettingsStore {
 
 export const useSettingsStore = create<SettingsStore>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             language: "en_US",
             colorScheme: "device",
             themeSettings: {},

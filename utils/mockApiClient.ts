@@ -44,23 +44,23 @@ export default class MockApiClient extends ApiClient {
         this.settings = new MockSettingsApi();
     }
 
-    async head(url: string, params?: any, headers?: any, options?: any): Promise<any> {
+    async head(_url: string, _params?: any, _headers?: any, _options?: any): Promise<any> {
         throw new Error("Method not implemented.");
     }
 
-    async get(url: string, params?: any, headers?: any, options?: any): Promise<any> {
+    async get(_url: string, _params?: any, _headers?: any, _options?: any): Promise<any> {
         throw new Error("Method not implemented.");
     }
 
-    async post(url: string, data: any, params?: any, headers?: any, options?: any): Promise<any> {
+    async post(_url: string, _data: any, _params?: any, _headers?: any, _options?: any): Promise<any> {
         throw new Error("Method not implemented.");
     }
 
-    async put(url: string, data: any, params?: any, headers?: any, options?: any): Promise<any> {
+    async put(_url: string, _data: any, _params?: any, _headers?: any, _options?: any): Promise<any> {
         throw new Error("Method not implemented.");
     }
 
-    async delete(url: string, params?: any, headers?: any, options?: any): Promise<any> {
+    async delete(_url: string, _params?: any, _headers?: any, _options?: any): Promise<any> {
         throw new Error("Method not implemented.");
     }
 
@@ -78,25 +78,25 @@ export default class MockApiClient extends ApiClient {
         });
     }
 
-    async getTheme(name: string): Promise<ArrayBuffer> {
+    async getTheme(_name: string): Promise<ArrayBuffer> {
         throw new Error("Method not implemented.");
     }
 }
 
 class MockAuthApi implements AuthApi {
-    oauth(clientId: string, clientSecret: string): Promise<boolean> {
+    oauth(_clientId: string, _clientSecret: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    async login(email: string, password: string): Promise<"otp" | boolean> {
+    async login(_email: string, _password: string): Promise<"otp" | boolean> {
         return Promise.resolve(true);
     }
 
-    loginOtp(token: string): Promise<boolean> {
+    loginOtp(_token: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    register(username: string, email: string, password: string): Promise<boolean> {
+    register(_username: string, _email: string, _password: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -134,11 +134,11 @@ class MockSelfApi implements SelfApi {
         });
     }
 
-    updateDetails(username: string, email: string, password: string): Promise<boolean> {
+    updateDetails(_username: string, _email: string, _password: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    changePassword(password: string, newPassword: string): Promise<boolean> {
+    changePassword(_password: string, _newPassword: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -150,11 +150,11 @@ class MockSelfApi implements SelfApi {
         throw new Error("Method not implemented.");
     }
 
-    validateOtpEnroll(token: string): Promise<boolean> {
+    validateOtpEnroll(_token: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    disableOtp(token: string): Promise<boolean> {
+    disableOtp(_token: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -162,7 +162,7 @@ class MockSelfApi implements SelfApi {
         throw new Error("Method not implemented.");
     }
 
-    updateSetting(key: string, value: string): Promise<boolean> {
+    updateSetting(_key: string, _value: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -170,22 +170,22 @@ class MockSelfApi implements SelfApi {
         throw new Error("Method not implemented.");
     }
 
-    createOAuthClient(name: string, description: string): Promise<OAuthClient> {
+    createOAuthClient(_name: string, _description: string): Promise<OAuthClient> {
         throw new Error("Method not implemented.");
     }
 
-    deleteOAuthClient(clientId: string): Promise<boolean> {
+    deleteOAuthClient(_clientId: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
 }
 
 class MockServerApi implements ServerApi {
-    create(data: ServerCreation): Promise<string> {
+    create(_data: ServerCreation): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
-    list(page?: number, pageSize?: number | undefined, name?: string | undefined): Promise<ServerSearchResponse> {
+    list(_page?: number, _pageSize?: number | undefined, _name?: string | undefined): Promise<ServerSearchResponse> {
         return Promise.resolve({
             paging: {
                 page: 1,
@@ -215,159 +215,159 @@ class MockServerApi implements ServerApi {
         });
     }
 
-    get(id: string, withSocket?: boolean | undefined): Promise<Server | ServerData> {
+    get(_id: string, _withSocket?: boolean | undefined): Promise<Server | ServerData> {
         return Promise.resolve(new MockServer());
     }
 
-    getStatus(id: string): Promise<ServerStatus> {
+    getStatus(_id: string): Promise<ServerStatus> {
         return Promise.resolve("online");
     }
 
-    getStats(id: string): Promise<ServerStats> {
+    getStats(_id: string): Promise<ServerStats> {
         throw new Error("Method not implemented.");
     }
 
-    getQuery(id: string): Promise<Record<string, any>> {
+    getQuery(_id: string): Promise<Record<string, any>> {
         throw new Error("Method not implemented.");
     }
 
-    canQuery(id: string): Promise<boolean> {
+    canQuery(_id: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    action(id: string, action: ServerAction, wait?: boolean | undefined): Promise<boolean> {
+    action(_id: string, _action: ServerAction, _wait?: boolean | undefined): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    start(id: string, wait?: boolean | undefined): Promise<boolean> {
+    start(_id: string, _wait?: boolean | undefined): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    stop(id: string, wait?: boolean | undefined): Promise<boolean> {
+    stop(_id: string, _wait?: boolean | undefined): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    kill(id: string, wait?: boolean | undefined): Promise<boolean> {
+    kill(_id: string, _wait?: boolean | undefined): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    install(id: string, wait?: boolean | undefined): Promise<boolean> {
+    install(_id: string, _wait?: boolean | undefined): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    reload(id: string): Promise<boolean> {
+    reload(_id: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    sendCommand(id: string, command: string): Promise<boolean> {
+    sendCommand(_id: string, _command: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    getConsole(id: string, time?: number | undefined): Promise<ServerLogs> {
+    getConsole(_id: string, _time?: number | undefined): Promise<ServerLogs> {
         throw new Error("Method not implemented.");
     }
 
-    updateName(id: string, name: string): Promise<boolean> {
+    updateName(_id: string, _name: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    getFlags(id: string): Promise<ServerFlags> {
+    getFlags(_id: string): Promise<ServerFlags> {
         throw new Error("Method not implemented.");
     }
 
-    setFlags(id: string, flags: ServerFlags): Promise<boolean> {
+    setFlags(_id: string, _flags: ServerFlags): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    getDefinition(id: string): Promise<ServerDefinition> {
+    getDefinition(_id: string): Promise<ServerDefinition> {
         throw new Error("Method not implemented.");
     }
 
-    updateDefinition(id: string, data: ServerDefinition): Promise<boolean> {
+    updateDefinition(_id: string, _data: ServerDefinition): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    getData(id: string): Promise<ServerSettings> {
+    getData(_id: string): Promise<ServerSettings> {
         throw new Error("Method not implemented.");
     }
 
-    adminUpdateData(id: string, data: Record<string, unknown>): Promise<boolean> {
+    adminUpdateData(_id: string, _data: Record<string, unknown>): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    updateData(id: string, data: Record<string, unknown>): Promise<boolean> {
+    updateData(_id: string, _data: Record<string, unknown>): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    getUsers(id: string): Promise<UserPermissionsView[]> {
+    getUsers(_id: string): Promise<UserPermissionsView[]> {
         throw new Error("Method not implemented.");
     }
 
-    getUser(id: string, email: string): Promise<UserPermissionsView[]> {
+    getUser(_id: string, _email: string): Promise<UserPermissionsView[]> {
         throw new Error("Method not implemented.");
     }
 
-    updateUser(id: string, user: UserPermissionsView): Promise<boolean> {
+    updateUser(_id: string, _user: UserPermissionsView): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    deleteUser(id: string, email: string): Promise<boolean> {
+    deleteUser(_id: string, _email: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    getFileUrl(id: string, path: string): string {
+    getFileUrl(_id: string, _path: string): string {
         throw new Error("Method not implemented.");
     }
 
-    getFile(id: string, path?: string | undefined, raw?: boolean | undefined): Promise<string | FileDesc[]> {
+    getFile(_id: string, _path?: string | undefined, _raw?: boolean | undefined): Promise<string | FileDesc[]> {
         throw new Error("Method not implemented.");
     }
 
-    fileExists(id: string, path: string): Promise<false | "file" | "folder"> {
+    fileExists(_id: string, _path: string): Promise<false | "file" | "folder"> {
         throw new Error("Method not implemented.");
     }
 
-    uploadFile(id: string, path: string, content: any, onUploadProgress?: ((progressEvent: ProgressEvent<EventTarget>) => void) | undefined): Promise<boolean> {
+    uploadFile(_id: string, _path: string, _content: any, _onUploadProgress?: ((progressEvent: ProgressEvent<EventTarget>) => void) | undefined): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    createFolder(id: string, path: string): Promise<boolean> {
+    createFolder(_id: string, _path: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    archiveFile(id: string, destination: string, files: string | string[]): Promise<boolean> {
+    archiveFile(_id: string, _destination: string, _files: string | string[]): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    extractFile(id: string, path: string, destination: string): Promise<boolean> {
+    extractFile(_id: string, _path: string, _destination: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    async getBackups(id: string): Promise<Backup[]> {
+    async getBackups(_id: string): Promise<Backup[]> {
         throw new Error("Method not implemented.");
     }
 
-    async createBackup(id: string, name: string): Promise<boolean> {
+    async createBackup(_id: string, _name: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    async deleteBackup(id: string, backupId: number): Promise<boolean> {
+    async deleteBackup(_id: string, _backupId: number): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    async restoreBackup(id: string, backupId: number): Promise<boolean> {
+    async restoreBackup(_id: string, _backupId: number): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    getBackupUrl(id: string, backupId: number): string {
+    getBackupUrl(_id: string, _backupId: number): string {
         throw new Error("Method not implemented.");
     }
 
-    deleteFile(id: string, path: string): Promise<boolean> {
+    deleteFile(_id: string, _path: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    delete(id: string): Promise<boolean> {
+    delete(_id: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 }
@@ -403,11 +403,11 @@ class MockServer implements Server {
             && scope !== "server.backup.view" && scope !== "server.definition.view" && scope !== "server.delete";
     }
 
-    on(event: string, cb: (data: any) => void): () => void {
+    on(_event: string, _cb: (data: any) => void): () => void {
         return () => {};
     }
 
-    emit(event: string, data: any): void {
+    emit(_event: string, _data: any): void {
         throw new Error("Method not implemented.");
     }
 
@@ -462,18 +462,18 @@ class MockServer implements Server {
         throw new Error("Method not implemented.");
     }
 
-    sendCommand(command: string): Promise<boolean> {
+    sendCommand(_command: string): Promise<boolean> {
         return Promise.resolve(true);
     }
 
-    getConsole(since?: number | undefined): Promise<ServerLogs> {
+    getConsole(_since?: number | undefined): Promise<ServerLogs> {
         return Promise.resolve({
             epoch: 1733754325885215,
             logs: "W0RBRU1PTl0gRGFlbW9uIGhhcyBiZWVuIHN0YXJ0ZWQKW0RBRU1PTl0gU3RhcnRpbmcgc2VydmVyCltEQUVNT05dIFN0YXJ0aW5nIGNvbnRhaW5lcgpMb2FkaW5nIGxpYnJhcmllcywgcGxlYXNlIHdhaXQuLi4KWzE4OjI0OjMwIElORk9dOiBTdGFydGluZyBtaW5lY3JhZnQgc2VydmVyIHZlcnNpb24gMS4yMS4zClsxODoyNDozMCBJTkZPXTogUHJlcGFyaW5nIGxldmVsICJ3b3JsZCIKWzE4OjI0OjMwIElORk9dOiBQcmVwYXJpbmcgc3RhcnQgcmVnaW9uIGZvciBkaW1lbnNpb24gbWluZWNyYWZ0Om92ZXJ3b3JsZApbMTg6MjQ6MzAgSU5GT106IFRpbWUgZWxhcHNlZDogMzYzIG1zClsxODoyNDozMCBJTkZPXTogUHJlcGFyaW5nIHN0YXJ0IHJlZ2lvbiBmb3IgZGltZW5zaW9uIG1pbmVjcmFmdDp0aGVfbmV0aGVyClsxODoyNDozMCBJTkZPXTogVGltZSBlbGFwc2VkOiAxNDcgbXMKWzE4OjI0OjMxIElORk9dOiBQcmVwYXJpbmcgc3RhcnQgcmVnaW9uIGZvciBkaW1lbnNpb24gbWluZWNyYWZ0OnRoZV9lbmQKWzE4OjI0OjMxIElORk9dOiBUaW1lIGVsYXBzZWQ6IDM2NiBtcwpbMTg6MjQ6MzEgSU5GT106IFJ1bm5pbmcgZGVsYXllZCBpbml0IHRhc2tzClsxODoyNDozMSBJTkZPXTogRG9uZSAoMi4yNzRzKSEgRm9yIGhlbHAsIHR5cGUgImhlbHA="
         });
     }
 
-    updateName(name: string): Promise<boolean> {
+    updateName(_name: string): Promise<boolean> {
         return Promise.resolve(true);
     }
 
@@ -485,7 +485,7 @@ class MockServer implements Server {
         });
     }
 
-    setFlags(flags: ServerFlags): Promise<boolean> {
+    setFlags(_flags: ServerFlags): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -493,7 +493,7 @@ class MockServer implements Server {
         throw new Error("Method not implemented.");
     }
 
-    updateDefinition(data: ServerDefinition): Promise<boolean> {
+    updateDefinition(_data: ServerDefinition): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -501,11 +501,11 @@ class MockServer implements Server {
         throw new Error("Method not implemented.");
     }
 
-    adminUpdateData(data: Record<string, unknown>): Promise<boolean> {
+    adminUpdateData(_data: Record<string, unknown>): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    updateData(data: Record<string, unknown>): Promise<boolean> {
+    updateData(_data: Record<string, unknown>): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -517,11 +517,11 @@ class MockServer implements Server {
         return Promise.resolve([]);
     }
 
-    updateUser(user: UserPermissionsView): Promise<boolean> {
+    updateUser(_user: UserPermissionsView): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    deleteUser(email: string): Promise<boolean> {
+    deleteUser(_email: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -549,23 +549,23 @@ hello=world`);
         );
     }
 
-    fileExists(path: string): Promise<false | "file" | "folder"> {
+    fileExists(_path: string): Promise<false | "file" | "folder"> {
         throw new Error("Method not implemented.");
     }
 
-    uploadFile(path: string, content: any, onUploadProgress?: ((progressEvent: ProgressEvent<EventTarget>) => void) | undefined): Promise<boolean> {
+    uploadFile(_path: string, _content: any, _onUploadProgress?: ((progressEvent: ProgressEvent<EventTarget>) => void) | undefined): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    createFolder(path: string): Promise<boolean> {
+    createFolder(_path: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    archiveFile(destination: string, files: string | string[]): Promise<boolean> {
+    archiveFile(_destination: string, _files: string | string[]): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    extractFile(path: string, destination: string): Promise<boolean> {
+    extractFile(_path: string, _destination: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -573,23 +573,23 @@ hello=world`);
         throw new Error("Method not implemented.");
     }
 
-    async createBackup(name: string): Promise<boolean> {
+    async createBackup(_name: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    async deleteBackup(backupId: number): Promise<boolean> {
+    async deleteBackup(_backupId: number): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    async restoreBackup(backupId: number): Promise<boolean> {
+    async restoreBackup(_backupId: number): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    getBackupUrl(backupId: number): string {
+    getBackupUrl(_backupId: number): string {
         throw new Error("Method not implemented.");
     }
 
-    deleteFile(path: string): Promise<boolean> {
+    deleteFile(_path: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -598,7 +598,7 @@ hello=world`);
 }
 
 class MockNodeApi implements NodeApi {
-    fixNode(node: Node): Node {
+    fixNode(_node: Node): Node {
         throw new Error("Method not implemented.");
     }
 
@@ -617,7 +617,7 @@ class MockNodeApi implements NodeApi {
         ]);
     }
 
-    get(id: number): Promise<Node> {
+    get(_id: number): Promise<Node> {
         return Promise.resolve({
             id: 0,
             name: "LocalNode",
@@ -630,7 +630,7 @@ class MockNodeApi implements NodeApi {
         });
     }
 
-    deployment(id: number): Promise<NodeDeployment> {
+    deployment(_id: number): Promise<NodeDeployment> {
         return Promise.resolve({
             clientId: "",
             clientSecret: "",
@@ -638,7 +638,7 @@ class MockNodeApi implements NodeApi {
         });
     }
 
-    features(id: number): Promise<NodeFeatures> {
+    features(_id: number): Promise<NodeFeatures> {
         return Promise.resolve({
             features: ["docker"],
             environments: ["docker"],
@@ -647,21 +647,21 @@ class MockNodeApi implements NodeApi {
         });
     }
 
-    create(node: Node): Promise<number> {
+    create(_node: Node): Promise<number> {
         throw new Error("Method not implemented.");
     }
 
-    update(id: number, node: Node): Promise<boolean> {
+    update(_id: number, _node: Node): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    delete(id: number): Promise<boolean> {
+    delete(_id: number): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 }
 
 class MockUserApi implements UserApi {
-    list(page?: number): Promise<UserSearchResponse> {
+    list(_page?: number): Promise<UserSearchResponse> {
         return Promise.resolve({
             paging: {
                 page: 1,
@@ -679,7 +679,7 @@ class MockUserApi implements UserApi {
         });
     }
 
-    search(name: string, limit: number): Promise<User[]> {
+    search(_name: string, _limit: number): Promise<User[]> {
         return Promise.resolve([
             {
                 id: 1,
@@ -689,7 +689,7 @@ class MockUserApi implements UserApi {
         ]);
     }
 
-    searchEmail(email: string, limit: number): Promise<User[]> {
+    searchEmail(_email: string, _limit: number): Promise<User[]> {
         return Promise.resolve([
             {
                 id: 1,
@@ -699,11 +699,11 @@ class MockUserApi implements UserApi {
         ]);
     }
 
-    create(username: string, email: string, password: string): Promise<number> {
+    create(_username: string, _email: string, _password: string): Promise<number> {
         throw new Error("Method not implemented.");
     }
 
-    get(id: number): Promise<User> {
+    get(_id: number): Promise<User> {
         return Promise.resolve({
             id: 1,
             username: "testuser",
@@ -711,19 +711,19 @@ class MockUserApi implements UserApi {
         });
     }
 
-    getPermissions(id: number): Promise<string[]> {
+    getPermissions(_id: number): Promise<string[]> {
         return Promise.resolve(["admin"]);
     }
 
-    update(id: number, user: User): Promise<boolean> {
+    update(_id: number, _user: User): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
-    updatePermissions(id: number, permissions: PermissionView): Promise<boolean> {
+    updatePermissions(_id: number, _permissions: PermissionView): Promise<boolean> {
         return Promise.resolve(true);
     }
 
-    delete(id: number): Promise<boolean> {
+    delete(_id: number): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 }
@@ -745,7 +745,7 @@ class MockSettingsApi implements SettingsApi {
         return Promise.resolve("");
     }
 
-    set(data: Record<string, string>): Promise<string> {
+    set(_data: Record<string, string>): Promise<string> {
         return Promise.resolve("");
     }
 
@@ -755,7 +755,7 @@ class MockSettingsApi implements SettingsApi {
         });
     }
 
-    setUserSetting(key: string, value: any): Promise<boolean> {
+    setUserSetting(_key: string, _value: any): Promise<boolean> {
         return Promise.resolve(true);
     }
 

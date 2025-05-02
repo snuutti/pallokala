@@ -96,7 +96,7 @@ export default function SearchScreen() {
         setNodes(filtered);
     };
 
-    const findTemplates = async (query: string) => {
+    const findTemplates = async (_: string) => {
         // TODO
     };
 
