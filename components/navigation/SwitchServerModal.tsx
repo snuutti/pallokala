@@ -16,7 +16,7 @@ export type SwitchServerModalRef = {
     present: () => void;
 };
 
-export const SwitchServerModal = forwardRef<SwitchServerModalRef>((_, ref) => {
+export const SwitchServerModal = forwardRef<SwitchServerModalRef>(function SwitchServerModal(_, ref) {
     const { t } = useTranslation();
     const insets = useSafeAreaInsets();
     const { style, colors } = useStyle((colors) =>

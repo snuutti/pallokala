@@ -3,6 +3,8 @@
     "compilerOptions": {
         "strict": true,
         "module": "ESNext",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
         "paths": {
             "@/*": [
                 "./*"

@@ -24,7 +24,7 @@ export class HttpFileManager implements FileManager {
         return await this.server.getFile(path) as FileDesc[];
     }
 
-    rename(oldPath: string, newPath: string): Promise<void> {
+    rename(_oldPath: string, _newPath: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
 }
