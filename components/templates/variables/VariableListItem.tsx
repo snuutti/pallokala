@@ -4,9 +4,12 @@ import { useStyle } from "@/hooks/useStyle";
 import { Variable } from "pufferpanel";
 
 type VariableListItemProps = {
+    name: string;
     variable: Variable;
     canChangeGroup: boolean;
     edit: () => void;
+    remove: () => void;
+    changeGroup: () => void;
 };
 
 export default function VariableListItem(props: VariableListItemProps) {
@@ -38,12 +41,12 @@ export default function VariableListItem(props: VariableListItemProps) {
     return (
         <View style={style.variable}>
             <TouchableOpacity onPress={props.edit} style={style.nameView}>
-                <Text style={style.label}>{props.variable.display}</Text>
+                <Text style={style.label}>{props.variable.display || props.name}</Text>
             </TouchableOpacity>
 
             <View style={style.actionsView}>
                 {props.canChangeGroup && (
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={props.changeGroup}>
                         <MaterialCommunityIcons
                             name="select-group"
                             size={30}
@@ -53,7 +56,7 @@ export default function VariableListItem(props: VariableListItemProps) {
                     </TouchableOpacity>
                 )}
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={props.remove}>
                     <MaterialCommunityIcons
                         name="trash-can"
                         size={30}
