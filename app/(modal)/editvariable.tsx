@@ -9,6 +9,7 @@ import Switch from "@/components/ui/Switch";
 import KeyValueInput from "@/components/ui/KeyValueInput";
 import Button from "@/components/ui/Button";
 import { useBoundStore } from "@/stores/useBoundStore";
+import { ExtendedVariable } from "@/types/template";
 
 const supportsOptions: Record<string, boolean> = {
     string: true,
@@ -20,6 +21,7 @@ export default function EditVariableScreen() {
     const initialVariableData = useBoundStore(state => state.initialVariableData);
     const setReturnedVariableData = useBoundStore(state => state.setReturnedVariableData);
     const [name, setName] = useState("");
+    const [oldName, setOldName] = useState("");
     const [display, setDisplay] = useState("");
     const [description, setDescription] = useState("");
     const [type, setType] = useState("string");
@@ -38,6 +40,7 @@ export default function EditVariableScreen() {
         }
 
         setName(initialVariableData.name);
+        setOldName(initialVariableData.name);
         setDisplay(initialVariableData.display || "");
         setDescription(initialVariableData.desc || "");
         setType(initialVariableData.type);
@@ -77,8 +80,9 @@ export default function EditVariableScreen() {
     }, [t]);
 
     const save = () => {
-        setReturnedVariableData({
+        const data: ExtendedVariable = {
             name,
+            oldName,
             type,
             value,
             display,
@@ -90,7 +94,13 @@ export default function EditVariableScreen() {
                 value: key,
                 display: options[key] as string
             }))
-        });
+        };
+
+        if (data.type === "boolean" || (data.options && data.options.length === 0)) {
+            delete data.options;
+        }
+
+        setReturnedVariableData(data);
 
         router.back();
     };
@@ -105,6 +115,8 @@ export default function EditVariableScreen() {
                 value={name}
                 onChangeText={setName}
                 placeholder={t("common:Name")}
+                autoCapitalize="none"
+                autoComplete="off"
             />
 
             <TextInput
@@ -130,6 +142,8 @@ export default function EditVariableScreen() {
                 value={value}
                 onChangeText={setValue}
                 placeholder={t("templates:variables.Value")}
+                autoCapitalize="none"
+                autoComplete="off"
             />
 
             <Switch

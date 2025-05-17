@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from "react";
+import { useState, useEffect, useMemo, Fragment } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
@@ -9,8 +9,11 @@ import VariableListItem from "@/components/templates/variables/VariableListItem"
 import Hr from "@/components/ui/Hr";
 import Button from "@/components/ui/Button";
 import { useTemplateEditor } from "@/context/TemplateEditorProvider";
+import { useModal, ListModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
+import { ExtendedVariable } from "@/types/template";
+import { Group } from "pufferpanel";
 
 export default function VariablesScreen() {
     const { t } = useTranslation();
@@ -43,11 +46,66 @@ export default function VariablesScreen() {
             }
         })
     );
-    const { template } = useTemplateEditor();
+    const { template, setTemplate } = useTemplateEditor();
+    const { createPromptModal, createListModal } = useModal();
+    const returnedVariableData = useBoundStore(state => state.returnedVariableData);
     const setInitialVariableData = useBoundStore(state => state.setInitialVariableData);
     const setReturnedVariableData = useBoundStore(state => state.setReturnedVariableData);
+    const returnedVariableGroupData = useBoundStore(state => state.returnedVariableGroupData);
     const setInitialVariableGroupData = useBoundStore(state => state.setInitialVariableGroupData);
     const setReturnedVariableGroupData = useBoundStore(state => state.setReturnedVariableGroupData);
+    const [editGroupIndex, setEditGroupIndex] = useState<number | undefined>(undefined);
+
+    useEffect(() => {
+        if (!returnedVariableData) {
+            return;
+        }
+
+        const newTemplate = { ...template! };
+        const name = returnedVariableData.name;
+        const oldName = returnedVariableData.oldName;
+
+        delete (returnedVariableData as Partial<ExtendedVariable>).name;
+        delete (returnedVariableData as Partial<ExtendedVariable>).oldName;
+
+        if (oldName !== undefined && oldName !== name) {
+            delete newTemplate.data![oldName];
+
+            newTemplate.groups = newTemplate.groups?.map(group => {
+                group.variables = group.variables.map(variableName => {
+                    if (variableName === oldName) {
+                        return name;
+                    }
+
+                    return variableName;
+                });
+
+                return group;
+            });
+        }
+
+        newTemplate.data![name] = returnedVariableData;
+
+        setTemplate(newTemplate);
+        setReturnedVariableData(undefined);
+    }, [returnedVariableData]);
+
+    useEffect(() => {
+        if (!returnedVariableGroupData) {
+            return;
+        }
+
+        if (editGroupIndex === undefined) {
+            return;
+        }
+
+        const newTemplate = { ...template! };
+        newTemplate.groups![editGroupIndex] = returnedVariableGroupData;
+
+        setTemplate(newTemplate);
+        setEditGroupIndex(undefined);
+        setReturnedVariableGroupData(undefined);
+    }, [returnedVariableGroupData, editGroupIndex]);
 
     const grouplessVars = useMemo(() => {
         if (template?.groups && Array.isArray(template.groups)) {
@@ -58,6 +116,118 @@ export default function VariablesScreen() {
             return Object.keys(template?.data || {});
         }
     }, [template]);
+
+    const removeVariable = (name: string) => {
+        const newTemplate = { ...template! };
+        delete newTemplate.data![name];
+        newTemplate.groups = newTemplate.groups?.map(group => {
+            group.variables = group.variables.filter(variableName => variableName !== name);
+            return group;
+        });
+
+        setTemplate(newTemplate);
+    };
+
+    const editVariable = (variable: ExtendedVariable) => {
+        setInitialVariableData(variable);
+        setReturnedVariableData(undefined);
+        router.push("/(modal)/editvariable");
+    };
+
+    const editVariableByName = (name: string) => {
+        const variable = template?.data![name];
+        if (!variable) {
+            return;
+        }
+
+        editVariable({ ...variable, name });
+    };
+
+    const addVariableAlert = (group?: Group) => {
+        createPromptModal(
+            t("templates:AddVariable"),
+            {
+                placeholder: t("common:Name"),
+                inputType: "default"
+            },
+            [
+                {
+                    text: t("templates:AddVariable"),
+                    icon: "plus",
+                    onPress: (name: string) => {
+                        addVariable(name, group);
+                    }
+                },
+                {
+                    text: t("common:Cancel"),
+                    icon: "close"
+                }
+            ]
+        );
+    };
+
+    const addVariable = (name: string, group?: Group) => {
+        const newTemplate = { ...template! };
+
+        const newVariable: ExtendedVariable = {
+            name,
+            type: "string",
+            value: "",
+            display: "",
+            desc: "",
+            required: false,
+            internal: false,
+            userEdit: false,
+            options: []
+        };
+
+        newTemplate.data![newVariable.name] = newVariable;
+
+        if (group) {
+            newTemplate.groups = newTemplate.groups?.map(g => {
+                if (g === group) {
+                    g.variables.push(newVariable.name);
+                }
+
+                return g;
+            });
+        }
+
+        setTemplate(newTemplate);
+        editVariable(newVariable);
+    };
+
+    const openChangeGroupList = (name: string, currentGroup?: Group) => {
+        const items: ListModalButton[] = [];
+
+        for (const group of (template?.groups || [])) {
+            items.push({
+                text: group.display,
+                onPress: () => changeGroup(name, group, currentGroup),
+                selected: group === currentGroup
+            });
+        }
+
+        createListModal(items);
+    };
+
+    const changeGroup = (name: string, group: Group, oldGroup?: Group) => {
+        const newTemplate = { ...template! };
+
+        newTemplate.groups = newTemplate.groups!.map(g => {
+            if (oldGroup && group === oldGroup && g === group) {
+                g.variables = g.variables.filter(variableName => variableName !== name);
+            } else if (g === group) {
+                g.variables.push(name);
+            } else {
+                g.variables = g.variables.filter(variableName => variableName !== name);
+            }
+
+            return g;
+        });
+
+        setTemplate(newTemplate);
+    };
 
     const isFirstGroup = (order: number) => {
         if (!template?.groups) {
@@ -93,16 +263,68 @@ export default function VariablesScreen() {
         return order === getLastGroup();
     };
 
-    const editGroup = (index: number) => {
-        setInitialVariableGroupData(template!.groups![index]);
+    const moveGroupUp = (order: number) => {
+        const newTemplate = { ...template! };
+
+        newTemplate.groups = newTemplate.groups!.map(group => {
+            if (group.order === order) {
+                group.order = order - 1;
+            } else if (group.order === (order - 1)) {
+                group.order = order;
+            }
+
+            return group;
+        }).sort((a, b) => a.order > b.order ? 1 : -1);
+
+        setTemplate(newTemplate);
+    };
+
+    const moveGroupDown = (order: number) => {
+        const newTemplate = { ...template! };
+
+        newTemplate.groups = newTemplate.groups!.map(group => {
+            if (group.order === order) {
+                group.order = order + 1;
+            } else if (group.order === (order + 1)) {
+                group.order = order;
+            }
+
+            return group;
+        }).sort((a, b) => a.order > b.order ? 1 : -1);
+
+        setTemplate(newTemplate);
+    };
+
+    const removeGroup = (group: Group) => {
+        const newTemplate = { ...template! };
+        newTemplate.groups = newTemplate.groups!.filter(g => g !== group);
+        setTemplate(newTemplate);
+    };
+
+    const editGroup = (index: number, group: Group) => {
+        setEditGroupIndex(index);
+        setInitialVariableGroupData(group);
         setReturnedVariableGroupData(undefined);
         router.push("/(modal)/editvariablegroup");
     };
 
-    const edit = (name: string) => {
-        setInitialVariableData({ ...template!.data![name], name });
-        setReturnedVariableData(undefined);
-        router.push("/(modal)/editvariable");
+    const addVariableGroup = () => {
+        const newTemplate = { ...template! };
+
+        if (!Array.isArray(newTemplate.groups)) {
+            newTemplate.groups = [];
+        }
+
+        const newGroup: Group = {
+            display: "",
+            description: "",
+            variables: [],
+            order: getLastGroup() + 1
+        };
+
+        newTemplate.groups.push(newGroup);
+        setTemplate(newTemplate);
+        editGroup(newTemplate.groups.length - 1, newGroup);
     };
 
     return (
@@ -121,7 +343,7 @@ export default function VariablesScreen() {
                             </View>
 
                             <View style={style.actionsView}>
-                                <TouchableOpacity onPress={() => editGroup(index)}>
+                                <TouchableOpacity onPress={() => editGroup(index, group)}>
                                     <MaterialCommunityIcons
                                         name="pencil"
                                         size={30}
@@ -129,7 +351,7 @@ export default function VariablesScreen() {
                                     />
                                 </TouchableOpacity>
 
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => addVariableAlert(group)}>
                                     <MaterialCommunityIcons
                                         name="plus"
                                         size={30}
@@ -137,7 +359,10 @@ export default function VariablesScreen() {
                                     />
                                 </TouchableOpacity>
 
-                                <TouchableOpacity disabled={isFirstGroup(group.order)}>
+                                <TouchableOpacity
+                                    onPress={() => moveGroupUp(group.order)}
+                                    disabled={isFirstGroup(group.order)}
+                                >
                                     <MaterialCommunityIcons
                                         name="chevron-up"
                                         size={30}
@@ -146,7 +371,10 @@ export default function VariablesScreen() {
                                     />
                                 </TouchableOpacity>
 
-                                <TouchableOpacity disabled={isLastGroup(group.order)}>
+                                <TouchableOpacity
+                                    onPress={() => moveGroupDown(group.order)}
+                                    disabled={isLastGroup(group.order)}
+                                >
                                     <MaterialCommunityIcons
                                         name="chevron-down"
                                         size={30}
@@ -155,7 +383,7 @@ export default function VariablesScreen() {
                                     />
                                 </TouchableOpacity>
 
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => removeGroup(group)}>
                                     <MaterialCommunityIcons
                                         name="close"
                                         size={30}
@@ -167,9 +395,12 @@ export default function VariablesScreen() {
                             {group.variables.map((name) => (
                                 <VariableListItem
                                     key={name}
+                                    name={name}
                                     variable={template.data![name]}
                                     canChangeGroup={true}
-                                    edit={() => edit(name)}
+                                    edit={() => editVariableByName(name)}
+                                    remove={() => removeVariable(name)}
+                                    changeGroup={() => openChangeGroupList(name, group)}
                                 />
                             ))}
 
@@ -184,7 +415,7 @@ export default function VariablesScreen() {
                             <View style={[style.nameView, style.nameViewWithActions]}>
                                 <Text style={style.header}>{t("templates:NoGroup")}</Text>
 
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => addVariableAlert()}>
                                     <MaterialCommunityIcons
                                         name="plus"
                                         size={30}
@@ -196,9 +427,12 @@ export default function VariablesScreen() {
                             {grouplessVars.map((name) => (
                                 <VariableListItem
                                     key={name}
+                                    name={name}
                                     variable={template.data![name]}
                                     canChangeGroup={true}
-                                    edit={() => edit(name)}
+                                    edit={() => editVariableByName(name)}
+                                    remove={() => removeVariable(name)}
+                                    changeGroup={() => openChangeGroupList(name)}
                                 />
                             ))}
                         </>
@@ -209,16 +443,19 @@ export default function VariablesScreen() {
                     {Object.entries(template?.data || {}).map(([name, variable]) => (
                         <VariableListItem
                             key={name}
+                            name={name}
                             variable={variable}
                             canChangeGroup={false}
-                            edit={() => edit(name)}
+                            edit={() => editVariableByName(name)}
+                            remove={() => removeVariable(name)}
+                            changeGroup={() => {}}
                         />
                     ))}
 
                     <Button
                         text={t("templates:AddVariable")}
                         icon="plus"
-                        onPress={() => {}}
+                        onPress={addVariableAlert}
                     />
                 </>
             )}
@@ -226,7 +463,7 @@ export default function VariablesScreen() {
             <Button
                 text={t("templates:AddVariableGroup")}
                 icon="plus"
-                onPress={() => {}}
+                onPress={addVariableGroup}
             />
         </ContentWrapper>
     );
