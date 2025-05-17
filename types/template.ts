@@ -9,7 +9,10 @@ export type IncompatibleTemplates = {
     env: Template[];
 };
 
-export type ExtendedVariable = Variable & { name: string };
+export type ExtendedVariable = Variable & {
+    name: string;
+    oldName?: string;
+};
 
 export type Environment = {
     value: string;
