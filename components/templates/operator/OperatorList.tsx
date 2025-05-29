@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { View, StyleProp, ViewStyle } from "react-native";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import OperatorListItem from "@/components/templates/operator/OperatorListItem";
@@ -10,6 +11,7 @@ type OperatorListProps = {
     operations: ConditionalMetadataType[];
     setOperations: (operations: ConditionalMetadataType[]) => void;
     addLabel?: string;
+    style?: StyleProp<ViewStyle>;
 };
 
 export default function OperatorList(props: OperatorListProps) {
@@ -71,7 +73,7 @@ export default function OperatorList(props: OperatorListProps) {
     };
 
     return (
-        <>
+        <View style={props.style}>
             {props.operations.map((operation, index) => (
                 <OperatorListItem
                     key={index}
@@ -90,6 +92,6 @@ export default function OperatorList(props: OperatorListProps) {
                 icon="plus"
                 onPress={add}
             />
-        </>
+        </View>
     );
 }

@@ -1,3 +1,23 @@
-import { Template } from "pufferpanel";
+import { Template, Variable } from "pufferpanel";
 
 export type ExtendedTemplate = Template & { repository: number };
+
+export type ExtendedVariable = Variable & {
+    name: string;
+    oldName?: string;
+};
+
+export type Environment = {
+    value: string;
+    label: string;
+};
+
+export type EnvironmentDefault = {
+    host: {
+        type: "host";
+    };
+    docker: {
+        type: "docker";
+        image: string;
+    };
+};
