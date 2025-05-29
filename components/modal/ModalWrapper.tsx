@@ -97,7 +97,7 @@ export default function ModalWrapper(props: ModalWrapperProps) {
     return (
         <TouchableWithoutFeedback onPress={tryClose}>
             <Animated.View style={[style.overlay, backgroundStyle]}>
-                <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={style.modalWrapper}>
+                <KeyboardAvoidingView behavior="padding" style={style.modalWrapper}>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <Animated.View style={[style.modal, modalStyle]}>
                             {cloneElement(props.content as any, { handleClose })}
