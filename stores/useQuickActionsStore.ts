@@ -67,7 +67,8 @@ export const useQuickActionsStore = create<QuickActionsStore>()(
         }),
         {
             name: "quick-actions-storage",
-            storage: createJSONStorage(() => AsyncStorage)
+            storage: createJSONStorage(() => AsyncStorage),
+            partialize: (state) => ({ actions: state.actions })
         }
     )
 );
