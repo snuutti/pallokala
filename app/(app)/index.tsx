@@ -28,6 +28,7 @@ export default function ServersScreen() {
     const { apiClient } = useApiClient();
     const { fabVisible, onScroll } = useFabVisible();
     const currentAction = useQuickActionsStore(state => state.currentAction);
+    const setCurrentAction = useQuickActionsStore(state => state.setCurrentAction);
     const servers = useBoundStore(state => state.servers);
     const setServers = useBoundStore(state => state.setServers);
     const setServerStatus = useBoundStore(state => state.setServerStatus);
@@ -55,6 +56,8 @@ export default function ServersScreen() {
         } else {
             router.navigate(`/server/${currentAction.serverId}`);
         }
+
+        setCurrentAction(null);
     }, [currentAction]);
 
     useDisclaimer();
