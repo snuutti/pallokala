@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
-import { FlashList } from "@shopify/flash-list";
+import { LegendListRef } from "@legendapp/list";
 
 type AutoScrollHookProps<T> = {
     data: T[];
@@ -8,7 +7,7 @@ type AutoScrollHookProps<T> = {
 };
 
 export default function useAutoScroll<T>({ data, inverted }: AutoScrollHookProps<T>) {
-    const listRef = useRef<FlashList<T>>(null);
+    const listRef = useRef<LegendListRef>(null);
     const [isAtBottom, setIsAtBottom] = useState(true);
     const [listMounted, setListMounted] = useState(false);
 
@@ -18,15 +17,8 @@ export default function useAutoScroll<T>({ data, inverted }: AutoScrollHookProps
         }
     }, [data, listMounted, isAtBottom]);
 
-    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-        const paddingToBottom = 20;
-
-        if (inverted) {
-            setIsAtBottom(contentOffset.y <= paddingToBottom);
-        } else {
-            setIsAtBottom(layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom);
-        }
+    const handleScroll = () => {
+        setIsAtBottom(listRef.current?.getState().isAtEnd || false);
     };
 
     const handleContentSizeChange = () => {

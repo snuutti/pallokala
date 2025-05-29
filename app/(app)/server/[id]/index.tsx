@@ -9,7 +9,7 @@ import Animated, {
 import { useKeyboardHandler } from "react-native-keyboard-controller";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
-import { FlashList } from "@shopify/flash-list";
+import { LegendList } from "@legendapp/list";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ConsoleText from "@/components/server/console/ConsoleText";
 import TextInput from "@/components/ui/TextInput";
@@ -77,7 +77,7 @@ export default function ConsoleScreen() {
     );
     const { server } = useServer();
     const [lines, setLines] = useState<string[]>([]);
-    const { listRef, isAtBottom, listMounted, handleScroll, handleContentSizeChange, goToBottom } = useAutoScroll<string>({ data: lines, inverted: true });
+    const { listRef, isAtBottom, listMounted, handleScroll, handleContentSizeChange, goToBottom } = useAutoScroll<string>({ data: lines, inverted: false });
     const chevronVisible = useSharedValue(0);
     const [initialScroll, setInitialScroll] = useState(true);
     const [hasGotItems, setHasGotItems] = useState(false);
@@ -155,7 +155,7 @@ export default function ConsoleScreen() {
             newLines.pop();
         }
 
-        setLines((lines) => [...newLines.reverse(), ...lines]);
+        setLines((lines) => [...lines, ...newLines]);
         setHasGotItems(true);
     };
 
@@ -172,7 +172,7 @@ export default function ConsoleScreen() {
         <View style={style.container}>
             {server?.hasScope("server.console") && (
                 <>
-                    <FlashList
+                    <LegendList
                         ref={listRef}
                         onScroll={handleScroll}
                         onContentSizeChange={handleContentSizeChange}
@@ -180,8 +180,12 @@ export default function ConsoleScreen() {
                         keyExtractor={(_, index) => index.toString()}
                         renderItem={({ item }) => <ConsoleText text={item} />}
                         estimatedItemSize={30}
-                        inverted={true}
+                        recycleItems={true}
+                        alignItemsAtEnd={true}
+                        maintainScrollAtEnd={true}
+                        maintainScrollAtEndThreshold={0.1}
                         showsVerticalScrollIndicator={false}
+                        waitForInitialLayout={true}
                     />
 
                     <TouchableOpacity style={style.clearConsole} onPress={clearConsole}>
