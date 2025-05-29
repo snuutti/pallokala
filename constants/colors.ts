@@ -10,6 +10,7 @@ export type Colors = {
     primaryHover: string;
     backdrop: string;
     background: string;
+    codeBackground: string;
     text: string;
     textDisabled: string;
     textPrimary: string;
@@ -26,6 +27,7 @@ export const darkColors: Colors = {
     primaryHover: primaryHover,
     backdrop: "#292929",
     background: "#333",
+    codeBackground: "#1d1d1d",
     text: "rgba(240, 240, 240, 0.87)",
     textDisabled: "rgba(240, 240, 240, 0.5)",
     textPrimary: "#eee",
@@ -39,6 +41,7 @@ export const lightColors: Colors = {
     primaryHover: primaryHover,
     backdrop: "#eee",
     background: "#fff",
+    codeBackground: "#d9d9d9",
     text: "rgba(16, 16, 16, 0.75)",
     textDisabled: "rgba(16, 16, 16, 0.5)",
     textPrimary: "#eee",

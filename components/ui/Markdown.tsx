@@ -1,5 +1,6 @@
-import { StyleSheet } from "react-native";
-import { default as MarkdownDisplay } from "react-native-markdown-display";
+import { Fragment } from "react";
+import { StyleSheet, useColorScheme } from "react-native";
+import { useMarkdown } from "react-native-marked";
 import { useStyle } from "@/hooks/useStyle";
 
 export type MarkdownProps = {
@@ -7,57 +8,35 @@ export type MarkdownProps = {
 };
 
 export default function Markdown(props: MarkdownProps) {
-    const { style } = useStyle((colors) =>
+    const { style, colors } = useStyle(() =>
         StyleSheet.create({
-            heading1: {
-                color: colors.text
-            },
-            heading2: {
-                color: colors.text
-            },
-            heading3: {
-                color: colors.text
-            },
-            heading4: {
-                color: colors.text
-            },
-            heading5: {
-                color: colors.text
-            },
-            heading6: {
-                color: colors.text
-            },
-            bullet_list: {
-                color: colors.text
-            },
-            ordered_list: {
-                color: colors.text
-            },
-            paragraph: {
-                color: colors.text
+            em: {
+                fontStyle: "normal"
             },
             link: {
-                color: colors.primary,
-                textDecorationLine: "none"
+                fontStyle: "normal"
             },
-            code_inline: {
-                backgroundColor: colors.background,
-                borderColor: colors.textDisabled,
-                color: colors.text,
-                fontFamily: "UbuntuMono"
-            },
-            fence: {
-                backgroundColor: colors.background,
-                borderColor: colors.textDisabled,
-                color: colors.text,
-                fontFamily: "UbuntuMono"
+            codespan: {
+                fontStyle: "normal",
+                fontWeight: "normal"
             }
         })
     );
+    const colorScheme = useColorScheme();
+    const elements = useMarkdown(props.text, {
+        colorScheme,
+        styles: style,
+        theme: {
+            colors: {
+                code: colors.codeBackground,
+                link: colors.primary,
+                text: colors.text,
+                border: colors.textDisabled
+            }
+        }
+    });
 
-    return (
-        <MarkdownDisplay style={style}>
-            {props.text}
-        </MarkdownDisplay>
-    );
+    return elements.map((element, index) => {
+        return <Fragment key={index}>{element}</Fragment>;
+    });
 }
