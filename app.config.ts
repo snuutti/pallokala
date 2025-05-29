@@ -12,7 +12,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     icon: "./assets/images/icon.png",
     scheme: "pallokala",
     userInterfaceStyle: "automatic",
-    newArchEnabled: false,
     ios: {
         bundleIdentifier: packageIdentifier,
         config: {
