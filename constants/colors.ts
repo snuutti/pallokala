@@ -15,6 +15,7 @@ export type Colors = {
     textPrimary: string;
     success: string;
     error: string;
+    serverTypeIconFilter: string;
 };
 
 const primary = "#07a7e3";
@@ -29,7 +30,8 @@ export const darkColors: Colors = {
     textDisabled: "rgba(240, 240, 240, 0.5)",
     textPrimary: "#eee",
     success: "#4caf50",
-    error: "#fe4242"
+    error: "#fe4242",
+    serverTypeIconFilter: "brightness(0.625)"
 };
 
 export const lightColors: Colors = {
@@ -41,7 +43,8 @@ export const lightColors: Colors = {
     textDisabled: "rgba(16, 16, 16, 0.5)",
     textPrimary: "#eee",
     success: "#4caf50",
-    error: "#dc3131"
+    error: "#dc3131",
+    serverTypeIconFilter: "none"
 };
 
 export const amoledColors: Colors = {

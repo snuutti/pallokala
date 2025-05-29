@@ -55,7 +55,8 @@ export default function ServerListItem(props: ServerListItemProps) {
             },
             iconImage: {
                 height: "100%",
-                width: 40
+                width: 40,
+                filter: colors.serverTypeIconFilter
             },
             statusIcon: {
                 position: "absolute",
