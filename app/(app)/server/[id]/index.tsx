@@ -185,6 +185,7 @@ export default function ConsoleScreen() {
                         maintainScrollAtEnd={true}
                         maintainScrollAtEndThreshold={0.1}
                         showsVerticalScrollIndicator={false}
+                        waitForInitialLayout={true}
                     />
 
                     <TouchableOpacity style={style.clearConsole} onPress={clearConsole}>

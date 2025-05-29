@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-import { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { LegendListRef } from "@legendapp/list";
 
 type AutoScrollHookProps<T> = {
@@ -18,15 +17,8 @@ export default function useAutoScroll<T>({ data, inverted }: AutoScrollHookProps
         }
     }, [data, listMounted, isAtBottom]);
 
-    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-        const paddingToBottom = 20;
-
-        if (inverted) {
-            setIsAtBottom(contentOffset.y <= paddingToBottom);
-        } else {
-            setIsAtBottom(layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom);
-        }
+    const handleScroll = () => {
+        setIsAtBottom(listRef.current?.getState().isAtEnd || false);
     };
 
     const handleContentSizeChange = () => {
