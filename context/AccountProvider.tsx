@@ -1,9 +1,10 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useRef, useEffect, ReactNode } from "react";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useQuickAction } from "expo-quick-actions/hooks";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useModal } from "@/context/ModalProvider";
+import useAppState from "@/hooks/useAppState";
 import { useQuickActionsStore } from "@/stores/useQuickActionsStore";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { resetAllStores } from "@/stores/useBoundStore";
@@ -48,9 +49,11 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     const action = useQuickAction();
     const { apiClient, config, sessionTimedOut, changeServer } = useApiClient();
     const { createAlertModal } = useModal();
+    const currentAppState = useAppState();
     const setCurrentAction = useQuickActionsStore(state => state.setCurrentAction);
     const removeAccountActions = useQuickActionsStore(state => state.removeAccountActions);
     const setThemeSettings = useSettingsStore(state => state.setThemeSettings);
+    const previousAppState = useRef(currentAppState);
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [activeAccount, setActiveAccount] = useState<Account | null>(null);
     const [newAccount, setNewAccount] = useState<Account | null>(null);
@@ -119,6 +122,22 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
         return () => clearInterval(interval);
     }, [apiClient]);
+
+    useEffect(() => {
+        if (previousAppState.current.match(/inactive|background/) && currentAppState === "active") {
+            if (apiClient?.auth.isLoggedIn()) {
+                console.log("App has come back to the foreground, refreshing session");
+
+                try {
+                    apiClient?.auth.reauth();
+                } catch (e) {
+                    console.error("Reauth failed", e);
+                }
+            }
+        }
+
+        previousAppState.current = currentAppState;
+    }, [currentAppState, apiClient]);
 
     useEffect(() => {
         if (!apiClient || !config || !activeAccount || !user) {
