@@ -39,9 +39,6 @@
         "SelectServer": "Select Server",
         "Invalid2FACode": "Invalid 2FA code"
     },
-    "Search": {
-        "Title": "Search"
-    },
     "Self": {
         "Title": "Profile",
         "Preferences": {

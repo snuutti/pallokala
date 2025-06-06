@@ -47,7 +47,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="(modal)/search"
                 options={{
-                    title: t("app:Search.Title"),
+                    title: t("hotkeys:Global./"),
                     presentation: "modal",
                     animation: "fade_from_bottom"
                 }}
