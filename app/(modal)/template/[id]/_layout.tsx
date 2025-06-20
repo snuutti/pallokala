@@ -1,21 +1,46 @@
 import { useEffect } from "react";
 import { Tabs, useLocalSearchParams } from "expo-router";
+import { useNavigation, usePreventRemove } from "@react-navigation/core";
 import { useTranslation } from "react-i18next";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import TemplateErrorScreen from "@/components/templates/TemplateErrorScreen";
 import LoadingScreen from "@/components/screen/LoadingScreen";
+import { useModal } from "@/context/ModalProvider";
 import { useTemplateEditor } from "@/context/TemplateEditorProvider";
 
 export default function TemplateLayout() {
     const { t } = useTranslation();
-    const { template, loadTemplate, error } = useTemplateEditor();
+    const { createAlertModal } = useModal();
+    const { template, templateModified, loadTemplate, error } = useTemplateEditor();
     const { id, repo } = useLocalSearchParams<{ id: string, repo: string }>();
+    const navigation = useNavigation();
 
     useEffect(() => {
         console.log(`Fetching template ${id} from ${repo}`);
 
         loadTemplate(id, parseInt(repo));
     }, [id, repo]);
+
+    usePreventRemove(templateModified, ({ data }) => {
+        createAlertModal(
+            t("common:ConfirmLeave"),
+            undefined,
+            [
+                {
+                    text: t("common:Discard"),
+                    icon: "trash-can",
+                    style: "danger",
+                    onPress: () => {
+                        navigation.dispatch(data.action);
+                    }
+                },
+                {
+                    text: t("common:Cancel"),
+                    icon: "close"
+                }
+            ]
+        );
+    });
 
     console.log(id, repo)
 
