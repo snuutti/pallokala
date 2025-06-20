@@ -13,7 +13,7 @@ type TemplateActionsProps = {
 export default function TemplateActions(props: TemplateActionsProps) {
     const { t } = useTranslation();
     const { apiClient } = useApiClient();
-    const { template } = useTemplateEditor();
+    const { template, saveTemplate } = useTemplateEditor();
     const { createAlertModal } = useModal();
     const { showSuccessAlert } = useToast();
 
@@ -42,6 +42,11 @@ export default function TemplateActions(props: TemplateActionsProps) {
         router.dismissTo("/(app)/templates");
     };
 
+    const save = async () => {
+        await saveTemplate();
+        showSuccessAlert(t("templates:Saved"));
+    };
+
     return (
         <>
             <Button
@@ -55,7 +60,7 @@ export default function TemplateActions(props: TemplateActionsProps) {
             <Button
                 text={t("templates:Save")}
                 icon="content-save"
-                onPress={() => {}}
+                onPress={save}
                 disabled={!props.isValid || !template || template.repository !== 0}
             />
         </>

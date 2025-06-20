@@ -8,6 +8,7 @@ type TemplateEditorContextType = {
     json: string | undefined;
     setTemplate: Dispatch<SetStateAction<ExtendedTemplate | undefined>>;
     loadTemplate: (name: string, repo: number) => Promise<void>;
+    saveTemplate: () => Promise<void>;
     error: boolean;
 };
 
@@ -57,8 +58,16 @@ export const TemplateEditorProvider = ({ children }: TemplateEditorProviderProps
         }
     };
 
+    const saveTemplate = async () => {
+        const currentTemplate = { ...template! };
+        delete (currentTemplate as Partial<ExtendedTemplate>).repository;
+
+        await apiClient!.template.save(currentTemplate.name, currentTemplate);
+        setUnmodifiedTemplate({ ...currentTemplate, repository: currentTemplate.repository });
+    };
+
     return (
-        <TemplateEditorContext.Provider value={{ template, templateModified, json, setTemplate, loadTemplate, error }}>
+        <TemplateEditorContext.Provider value={{ template, templateModified, json, setTemplate, loadTemplate, saveTemplate, error }}>
             {children}
         </TemplateEditorContext.Provider>
     );
