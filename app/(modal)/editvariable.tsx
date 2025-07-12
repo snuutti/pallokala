@@ -1,15 +1,40 @@
 import { useState, useEffect, useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
-import TextInput from "@/components/ui/TextInput";
+import FormTextInput from "@/components/ui/form/FormTextInput";
 import Dropdown from "@/components/ui/Dropdown";
-import Switch from "@/components/ui/Switch";
+import FormSwitch from "@/components/ui/form/FormSwitch";
 import KeyValueInput from "@/components/ui/KeyValueInput";
 import Button from "@/components/ui/Button";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { ExtendedVariable } from "@/types/template";
+
+const schema = z.object({
+    name: z.string().trim().min(1, { message: "errors:ErrFieldRequired" }),
+    display: z.string(),
+    description: z.string(),
+    value: z.string(),
+    internal: z.boolean(),
+    required: z.boolean(),
+    userEdit: z.boolean(),
+});
+
+type Schema = z.infer<typeof schema>;
+
+const defaultValues: Schema = {
+    name: "",
+    display: "",
+    description: "",
+    value: "",
+    internal: false,
+    required: false,
+    userEdit: false
+};
 
 const supportsOptions: Record<string, boolean> = {
     string: true,
@@ -20,15 +45,13 @@ export default function EditVariableScreen() {
     const { t } = useTranslation();
     const initialVariableData = useBoundStore(state => state.initialVariableData);
     const setReturnedVariableData = useBoundStore(state => state.setReturnedVariableData);
-    const [name, setName] = useState("");
+    const { control, handleSubmit, setValue, formState: { errors, isValid } } = useForm<Schema>({
+        defaultValues,
+        resolver: zodResolver(schema),
+        mode: "onBlur"
+    });
     const [oldName, setOldName] = useState("");
-    const [display, setDisplay] = useState("");
-    const [description, setDescription] = useState("");
     const [type, setType] = useState("string");
-    const [value, setValue] = useState("");
-    const [internal, setInternal] = useState(false);
-    const [required, setRequired] = useState(false);
-    const [userEdit, setUserEdit] = useState(false);
     const [options, setOptions] = useState<Record<string, unknown>>({});
     const [loading, setLoading] = useState(true);
 
@@ -39,15 +62,16 @@ export default function EditVariableScreen() {
             return;
         }
 
-        setName(initialVariableData.name);
+        setValue("name", initialVariableData.name, { shouldValidate: true });
+        setValue("display", initialVariableData.display || "", { shouldValidate: true });
+        setValue("description", initialVariableData.desc || "", { shouldValidate: true });
+        setValue("value", initialVariableData.value as string, { shouldValidate: true });
+        setValue("internal", initialVariableData.internal || false, { shouldValidate: true });
+        setValue("required", initialVariableData.required, { shouldValidate: true });
+        setValue("userEdit", initialVariableData.userEdit, { shouldValidate: true });
+
         setOldName(initialVariableData.name);
-        setDisplay(initialVariableData.display || "");
-        setDescription(initialVariableData.desc || "");
         setType(initialVariableData.type);
-        setValue(initialVariableData.value as string);
-        setInternal(initialVariableData.internal || false);
-        setRequired(initialVariableData.required);
-        setUserEdit(initialVariableData.userEdit);
 
         const opt: Record<string, unknown> = {};
         initialVariableData.options?.map((option) => {
@@ -79,28 +103,28 @@ export default function EditVariableScreen() {
         ];
     }, [t]);
 
-    const save = () => {
-        const data: ExtendedVariable = {
-            name,
+    const save = (data: Schema) => {
+        const variableData: ExtendedVariable = {
+            name: data.name,
             oldName,
             type,
-            value,
-            display,
-            desc: description,
-            required,
-            internal,
-            userEdit,
+            value: data.value,
+            display: data.display,
+            desc: data.description,
+            required: data.required,
+            internal: data.internal,
+            userEdit: data.userEdit,
             options: Object.keys(options).map((key) => ({
                 value: key,
                 display: options[key] as string
             }))
         };
 
-        if (data.type === "boolean" || (data.options && data.options.length === 0)) {
-            delete data.options;
+        if (variableData.type === "boolean" || (variableData.options && variableData.options.length === 0)) {
+            delete variableData.options;
         }
 
-        setReturnedVariableData(data);
+        setReturnedVariableData(variableData);
 
         router.back();
     };
@@ -111,24 +135,28 @@ export default function EditVariableScreen() {
 
     return (
         <ContentWrapper>
-            <TextInput
-                value={name}
-                onChangeText={setName}
+            <FormTextInput
+                control={control}
+                name="name"
                 placeholder={t("common:Name")}
+                error={errors.name?.message}
+                errorFields={{ field: t("common:Name") }}
                 autoCapitalize="none"
                 autoComplete="off"
             />
 
-            <TextInput
-                value={display}
-                onChangeText={setDisplay}
+            <FormTextInput
+                control={control}
+                name="display"
                 placeholder={t("templates:Display")}
+                error={errors.display?.message}
             />
 
-            <TextInput
-                value={description}
-                onChangeText={setDescription}
+            <FormTextInput
+                control={control}
+                name="description"
                 placeholder={t("templates:variables.Description")}
+                error={errors.description?.message}
             />
 
             <Dropdown
@@ -138,30 +166,31 @@ export default function EditVariableScreen() {
                 label={t("templates:variables.Type")}
             />
 
-            <TextInput
-                value={value}
-                onChangeText={setValue}
+            <FormTextInput
+                control={control}
+                name="value"
                 placeholder={t("templates:variables.Value")}
+                error={errors.value?.message}
                 autoCapitalize="none"
                 autoComplete="off"
             />
 
-            <Switch
+            <FormSwitch
+                control={control}
+                name="internal"
                 label={t("templates:variables.Internal")}
-                value={internal}
-                onValueChange={setInternal}
             />
 
-            <Switch
+            <FormSwitch
+                control={control}
+                name="required"
                 label={t("templates:variables.Required")}
-                value={required}
-                onValueChange={setRequired}
             />
 
-            <Switch
+            <FormSwitch
+                control={control}
+                name="userEdit"
                 label={t("templates:variables.UserEdit")}
-                value={userEdit}
-                onValueChange={setUserEdit}
             />
 
             {supportsOptions[type] && (
@@ -175,8 +204,8 @@ export default function EditVariableScreen() {
             <Button
                 text={t("common:Apply")}
                 icon="content-save"
-                onPress={save}
-                // TODO: add disabled state
+                onPress={handleSubmit(save)}
+                disabled={!isValid}
             />
         </ContentWrapper>
     );
