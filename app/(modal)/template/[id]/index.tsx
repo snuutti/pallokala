@@ -8,11 +8,12 @@ import RemoteTemplateAlert from "@/components/templates/RemoteTemplateAlert";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import TemplateActions from "@/components/templates/TemplateActions";
 import { useTemplateEditor } from "@/context/TemplateEditorProvider";
+import { useAutoSave } from "@/hooks/useAutoSave";
 
 const schema = z.object({
-    name: z.string().min(1, { message: "templates:errors.NameInvalid" }), // TODO: cannot contain spaces or special chars, check uniqueness
-    display: z.string().min(1, { message: "templates:errors.DisplayInvalid" }),
-    type: z.string().min(1, { message: "templates:errors.TypeInvalid" }),
+    name: z.string().trim().min(1, { message: "templates:errors.NameInvalid" }), // TODO: cannot contain spaces or special chars, check uniqueness
+    display: z.string().trim().min(1, { message: "templates:errors.DisplayInvalid" }),
+    type: z.string().trim().min(1, { message: "templates:errors.TypeInvalid" }),
 });
 
 type Schema = z.infer<typeof schema>;
@@ -25,8 +26,8 @@ const defaultValues = {
 
 export default function GeneralScreen() {
     const { t } = useTranslation();
-    const { template } = useTemplateEditor();
-    const { control, setValue, formState: { errors, isValid } } = useForm<Schema>({
+    const { template, setTemplate } = useTemplateEditor();
+    const { control, setValue, formState: { errors, isValid, isDirty } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
@@ -41,6 +42,24 @@ export default function GeneralScreen() {
         setValue("display", template.display || "");
         setValue("type", template.type);
     }, []);
+
+    useAutoSave({
+        control,
+        isDirty,
+        onSave: (data: Schema) => {
+            if (!isValid) {
+                return;
+            }
+
+            setTemplate({
+                ...template!,
+                name: data.name,
+                display: data.display,
+                type: data.type
+            });
+        },
+        delay: 200
+    });
 
     if (!template) {
         return null;
