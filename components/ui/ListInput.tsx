@@ -76,6 +76,8 @@ export default function ListInput(props: ListInputProps) {
                     <TextInput
                         value={item}
                         onChangeText={(value) => onValueChange(value, index)}
+                        autoCapitalize="none"
+                        autoCorrect={false}
                         style={style.input}
                     />
 

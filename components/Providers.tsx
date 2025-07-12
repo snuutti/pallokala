@@ -10,6 +10,7 @@ import { AccountProvider } from "@/context/AccountProvider";
 import { SwitchServerModalProvider } from "@/context/SwitchServerModalProvider";
 import { ServerProvider } from "@/context/ServerProvider";
 import { FileManagerProvider } from "@/context/FileManagerProvider";
+import { TemplateEditorProvider } from "@/context/TemplateEditorProvider";
 import { useNavigationColors } from "@/hooks/useStyle";
 
 type ProvidersProps = {
@@ -31,7 +32,9 @@ export default function Providers(props: ProvidersProps) {
                                         <SwitchServerModalProvider>
                                             <ServerProvider>
                                                 <FileManagerProvider>
-                                                    {props.children}
+                                                    <TemplateEditorProvider>
+                                                        {props.children}
+                                                    </TemplateEditorProvider>
                                                 </FileManagerProvider>
                                             </ServerProvider>
                                         </SwitchServerModalProvider>

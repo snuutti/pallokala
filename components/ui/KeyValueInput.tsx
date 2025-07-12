@@ -17,8 +17,8 @@ type KeyValueInputProps = {
     error?: string;
     fields: Record<string, unknown>;
     onChange: (fields: Record<string, unknown>) => void;
-    keyLabel: string;
-    valueLabel: string;
+    keyLabel?: string;
+    valueLabel?: string;
     addLabel?: string;
 };
 

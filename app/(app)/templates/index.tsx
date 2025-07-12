@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import TemplatesListItem from "@/components/templates/TemplatesListItem";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useStyle } from "@/hooks/useStyle";
+import { ExtendedTemplate } from "@/types/template";
 import { Template } from "pufferpanel";
 
 export default function TemplatesScreen() {
@@ -36,12 +37,12 @@ export default function TemplatesScreen() {
 
         const data = await apiClient!.template.listAllTemplates();
         const sortedRepos = data.sort((a, b) => a.id - b.id);
-        const newData: (string | Template)[] = [];
+        const newData: (string | ExtendedTemplate)[] = [];
 
         for (const repository of sortedRepos) {
             newData.push(repository.name);
             for (const template of repository.templates) {
-                newData.push(template);
+                newData.push({ ...template, repository: repository.id });
             }
         }
 
@@ -57,7 +58,7 @@ export default function TemplatesScreen() {
                     return <Text style={style.header}>{item}</Text>;
                 }
 
-                return <TemplatesListItem template={item as Template} />;
+                return <TemplatesListItem template={item as ExtendedTemplate} />;
             }}
             getItemType={(item) => {
                 return typeof item === "string" ? "header" : "template";

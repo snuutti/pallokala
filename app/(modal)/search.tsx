@@ -7,6 +7,7 @@ import ContentWrapper from "@/components/screen/ContentWrapper";
 import TextInput from "@/components/ui/TextInput";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useStyle } from "@/hooks/useStyle";
+import { ExtendedTemplate } from "@/types/template";
 import { ServerView, User, Node } from "pufferpanel";
 
 export default function SearchScreen() {
@@ -27,6 +28,7 @@ export default function SearchScreen() {
     const [servers, setServers] = useState<ServerView[]>([]);
     const [users, setUsers] = useState<User[]>([]);
     const [nodes, setNodes] = useState<Node[]>([]);
+    const [templates, setTemplates] = useState<ExtendedTemplate[]>([]);
     const [hasSearched, setHasSearched] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -42,13 +44,14 @@ export default function SearchScreen() {
     );
 
     const empty = useMemo(() => {
-        return servers.length === 0 && users.length === 0 && nodes.length === 0;
-    }, [servers, users, nodes]);
+        return servers.length === 0 && users.length === 0 && nodes.length === 0 && templates.length === 0;
+    }, [servers, users, nodes, templates]);
 
     const reset = () => {
         setServers([]);
         setUsers([]);
         setNodes([]);
+        setTemplates([]);
     };
 
     const search = async (query: string) => {
@@ -96,8 +99,25 @@ export default function SearchScreen() {
         setNodes(filtered);
     };
 
-    const findTemplates = async (_: string) => {
-        // TODO
+    const findTemplates = async (query: string) => {
+        const data = await apiClient!.template.listAllTemplates();
+        const newData: ExtendedTemplate[] = [];
+
+        for (const repository of data) {
+            let count = 0;
+            for (const template of repository.templates) {
+                if (count >= 5) {
+                    break;
+                }
+
+                if ((template.display || "").toLowerCase().includes(query) || template.name.toLowerCase().includes(query)) {
+                    newData.push({ ...template, repository: repository.id });
+                    count++;
+                }
+            }
+        }
+
+        setTemplates(newData);
     };
 
     const getServerAddress = (server: ServerView) => {
@@ -164,6 +184,20 @@ export default function SearchScreen() {
                                     title={n.name!}
                                     subline={`${n.publicHost}:${n.publicPort}`}
                                     onPress={() => router.dismissTo(`/nodes/${n.id}`)}
+                                />
+                            ))}
+                        </>
+                    )}
+
+                    {templates.length > 0 && (
+                        <>
+                            <Text style={style.header}>{t("templates:Templates")}</Text>
+                            {templates.map(t => (
+                                <SearchItem
+                                    key={t.name}
+                                    title={t.display!}
+                                    subline={t.name}
+                                    onPress={() => router.dismissTo(`/(modal)/template/${t.name}?repo=${t.repository}`)}
                                 />
                             ))}
                         </>
