@@ -10,7 +10,7 @@ export default function useToast() {
             description,
             Component: NotifierComponents.Alert,
             componentProps: {
-                type: "success",
+                alertType: "success",
                 backgroundColor: colors.success,
                 textColor: colors.textPrimary
             },
@@ -24,7 +24,7 @@ export default function useToast() {
             description,
             Component: NotifierComponents.Alert,
             componentProps: {
-                type: "error",
+                alertType: "error",
                 backgroundColor: colors.error,
                 textColor: colors.textPrimary
             },
