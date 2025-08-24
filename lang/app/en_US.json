@@ -67,7 +67,6 @@
         "Error": "Failed to load server",
         "DownloadNotification": "Check notifications for download progress",
         "Files": {
-            "Saved": "File saved",
             "SftpConnectionFailed": "Failed to connect to SFTP. Falling back to HTTP.",
             "EditFile": "Edit File",
             "LogDecompressed": "Log file decompressed in memory. Editing not available.",

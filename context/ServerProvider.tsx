@@ -82,7 +82,7 @@ export const ServerProvider = ({ children }: ServerProviderProps) => {
     const saveFile = async () => {
         await server?.uploadFile(openFile!.path, fileContent!);
         setOriginalFileContent(fileContent);
-        showSuccessAlert(t("app:Servers.Files.Saved"));
+        showSuccessAlert(t("files:Saved"));
     };
 
     const switchServer = (id: string) => {
