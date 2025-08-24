@@ -16,8 +16,8 @@
 
 
 #include <string>
-#include <unordered_map>
 #include <variant>
+#include <unordered_map>
 
 namespace margelo::nitro::NitroConditions {
 

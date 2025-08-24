@@ -9,6 +9,7 @@ package com.margelo.nitro.conditions
 
 import com.facebook.proguard.annotations.DoNotStrip
 
+
 /**
  * Represents the TypeScript variant "String|Double|Boolean".
  */

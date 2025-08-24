@@ -10,8 +10,8 @@
 
 
 #include <string>
-#include <unordered_map>
 #include <variant>
+#include <unordered_map>
 #include "JVariableType.hpp"
 
 namespace margelo::nitro::NitroConditions {
@@ -29,6 +29,11 @@ namespace margelo::nitro::NitroConditions {
   size_t JHybridConditionsSpec::getExternalMemorySize() noexcept {
     static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
+  }
+
+  void JHybridConditionsSpec::dispose() noexcept {
+    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
+    method(_javaPart);
   }
 
   // Properties

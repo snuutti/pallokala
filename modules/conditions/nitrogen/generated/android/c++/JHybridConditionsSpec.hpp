@@ -29,6 +29,7 @@ namespace margelo::nitro::NitroConditions {
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridConditionsSpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridConditionsSpec::TAG),
+      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -39,6 +40,7 @@ namespace margelo::nitro::NitroConditions {
 
   public:
     size_t getExternalMemorySize() noexcept override;
+    void dispose() noexcept override;
 
   public:
     inline const jni::global_ref<JHybridConditionsSpec::javaobject>& getJavaPart() const noexcept {

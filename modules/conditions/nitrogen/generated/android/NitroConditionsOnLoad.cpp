@@ -16,7 +16,6 @@
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 #include "JHybridConditionsSpec.hpp"
-#include <NitroModules/JNISharedPtr.hpp>
 #include <NitroModules/DefaultConstructableObject.hpp>
 
 namespace margelo::nitro::NitroConditions {
@@ -37,7 +36,7 @@ int initialize(JavaVM* vm) {
         static DefaultConstructableObject<JHybridConditionsSpec::javaobject> object("com/margelo/nitro/conditions/HybridConditions");
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
-        return JNISharedPtr::make_shared_from_jni<JHybridConditionsSpec>(globalRef);
+        return globalRef->cthis()->shared();
       }
     );
   });

@@ -7,12 +7,12 @@ import FormSwitch from "@/components/ui/form/FormSwitch";
 
 export const NodeSchema = z.object({
     name: z.string().min(1, { message: "errors:ErrFieldRequired" }).regex(/^[a-zA-Z0-9\-._~]+$/, { message: "errors:ErrFieldHasURICharacters" }),
-    publicHost: z.union([z.string().url({ message: "errors:ErrFieldIsInvalidHost" }), z.string().ip({ message: "errors:ErrFieldIsInvalidHost" })]),
+    publicHost: z.union([z.url({ message: "errors:ErrFieldIsInvalidHost" }), z.ipv4({ message: "errors:ErrFieldIsInvalidHost" }), z.ipv6({ message: "errors:ErrFieldIsInvalidHost" })]),
     publicPort: z.number().int().min(1, { message: "errors:ErrFieldNotBetween" }).max(65535, { message: "errors:ErrFieldNotBetween" }),
     private: z.discriminatedUnion("withPrivateHost", [
         z.object({
             withPrivateHost: z.literal(true),
-            privateHost: z.union([z.string().url({ message: "errors:ErrFieldIsInvalidHost" }), z.string().ip({ message: "errors:ErrFieldIsInvalidHost" })]),
+            privateHost: z.union([z.url({ message: "errors:ErrFieldIsInvalidHost" }), z.ipv4({ message: "errors:ErrFieldIsInvalidHost" }), z.ipv6({ message: "errors:ErrFieldIsInvalidHost" })]),
             privatePort: z.number().int().min(1, { message: "errors:ErrFieldNotBetween" }).max(65535, { message: "errors:ErrFieldNotBetween" })
         }),
         z.object({
