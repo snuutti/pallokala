@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
+import DeletingServerModal from "@/components/server/admin/DeletingServerModal";
 import { useServer } from "@/context/ServerProvider";
 import { useModal } from "@/context/ModalProvider";
 import useToast from "@/hooks/useToast";
@@ -10,7 +11,7 @@ import { useBoundStore } from "@/stores/useBoundStore";
 export default function AdminScreen() {
     const { t } = useTranslation();
     const { server } = useServer();
-    const { createAlertModal } = useModal();
+    const { createAlertModal, createModal, closeModal } = useModal();
     const { showSuccessAlert } = useToast();
     const removeServer = useBoundStore(state => state.removeServer);
 
@@ -34,17 +35,28 @@ export default function AdminScreen() {
     };
 
     const deleteServer = async () => {
-        await server?.delete();
-        server?.closeSocket();
-        removeServer(server!.id);
-        showSuccessAlert(t("servers:Deleted"));
+        const modal = createModal(<DeletingServerModal />, {
+            closable: false
+        });
 
-        // Expo Router sucks
-        while (router.canGoBack()) {
-            router.back();
+        try {
+            await server?.delete();
+            server?.closeSocket();
+            removeServer(server!.id);
+            showSuccessAlert(t("servers:Deleted"));
+
+            // The Expo devs are incapable of writing functional code,
+            // so we have to do this hacky workaround to get back to the main screen
+            for (let i = 0; i < 10; i++) {
+                if (router.canGoBack()) {
+                    router.back();
+                }
+            }
+
+            router.replace("/");
+        } finally {
+            closeModal(modal);
         }
-
-        router.replace("/");
     };
 
     return (
