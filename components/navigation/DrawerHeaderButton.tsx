@@ -7,6 +7,7 @@ import * as DropdownMenu from "zeego/dropdown-menu";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useServer } from "@/context/ServerProvider";
 import { useModal } from "@/context/ModalProvider";
+import useVersionCheck from "@/hooks/useVersionCheck";
 import { useStyle } from "@/hooks/useStyle";
 import { useBoundStore } from "@/stores/useBoundStore";
 
@@ -21,6 +22,7 @@ export default function DrawerHeaderButton() {
     );
     const { server, error } = useServer();
     const { createPromptModal } = useModal();
+    const hasRestart = useVersionCheck("3.0.0-rc.16");
     const modifyServer = useBoundStore(state => state.modifyServer);
     const route = useRoute();
 
@@ -94,6 +96,13 @@ export default function DrawerHeaderButton() {
                     <DropdownMenu.Item key="start" onSelect={() => server?.start()}>
                         <DropdownMenu.ItemIcon androidIconName="pk_play_circle" />
                         <DropdownMenu.ItemTitle>{t("servers:Start")}</DropdownMenu.ItemTitle>
+                    </DropdownMenu.Item>
+                )}
+
+                {(hasRestart && server.hasScope("server.start") && server.hasScope("server.stop")) && (
+                    <DropdownMenu.Item key="restart" onSelect={() => server?.restart()}>
+                        <DropdownMenu.ItemIcon androidIconName="pk_restart" />
+                        <DropdownMenu.ItemTitle>{t("servers:Restart")}</DropdownMenu.ItemTitle>
                     </DropdownMenu.Item>
                 )}
 

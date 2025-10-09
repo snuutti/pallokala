@@ -241,6 +241,8 @@ declare module "pufferpanel" {
 
         async start(id: string, wait?: boolean = false): Promise<boolean>;
 
+        async restart(id: string, wait?: boolean = false): Promise<boolean>;
+
         async stop(id: string, wait?: boolean = false): Promise<boolean>;
 
         async kill(id: string, wait?: boolean = false): Promise<boolean>;
@@ -487,6 +489,8 @@ declare module "pufferpanel" {
         async canQuery(): Promise<boolean>;
 
         async start(): Promise<boolean>;
+
+        async restart(): Promise<boolean>;
 
         async stop(): Promise<boolean>;
 

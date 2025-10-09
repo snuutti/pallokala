@@ -243,6 +243,10 @@ class MockServerApi implements ServerApi {
         throw new Error("Method not implemented.");
     }
 
+    restart(_id: string, _wait?: boolean | undefined): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
     stop(_id: string, _wait?: boolean | undefined): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
@@ -443,6 +447,10 @@ class MockServer implements Server {
     }
 
     start(): Promise<boolean> {
+        return Promise.resolve(true);
+    }
+
+    restart(): Promise<boolean> {
         return Promise.resolve(true);
     }
 
