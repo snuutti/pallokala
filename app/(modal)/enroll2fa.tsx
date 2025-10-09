@@ -66,7 +66,7 @@ export default function EnrollTwoFactorScreen() {
     }, []);
 
     const confirmOtpEnroll = async (data: Schema) => {
-        await apiClient!.self.validateOtpEnroll(data.code);
+        const res = await apiClient!.self.validateOtpEnroll(data.code);
 
         if (activeAccount!.type === "email" && data.saveSecret) {
             const account = activeAccount as EmailAccount;
@@ -77,6 +77,7 @@ export default function EnrollTwoFactorScreen() {
         showSuccessAlert(t("users:UpdateSuccess"));
 
         router.navigate(`/self/2fa?refresh=${data.code}`);
+        router.push(`/(modal)/recoverycodes?codes=${JSON.stringify(res!.recoveryCodes)}`);
     };
 
     if (loading) {

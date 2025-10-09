@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Text, StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -8,10 +9,11 @@ import FormTextInput from "@/components/ui/form/FormTextInput";
 import Button from "@/components/ui/Button";
 import { useAccount } from "@/context/AccountProvider";
 import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
+import useVersionCheck from "@/hooks/useVersionCheck";
 import { useStyle } from "@/hooks/useStyle";
 
 const schema = z.object({
-    code: z.string().length(6, { message: "app:Auth.Invalid2FACode" })
+    code: z.string().min(6, { message: "app:Auth.Invalid2FACode" })
 });
 
 type Schema = z.infer<typeof schema>;
@@ -41,6 +43,8 @@ export default function OtpRequiredScreen() {
         resolver: zodResolver(schema),
         mode: "onBlur"
     });
+    const hasRecoveryCodes = useVersionCheck("3.0.0-rc.15");
+    const [useRecovery, setUseRecovery] = useState(false);
 
     const onSubmit = async (data: Schema) => {
         await submitOtp(data.code);
@@ -53,10 +57,18 @@ export default function OtpRequiredScreen() {
             <FormTextInput
                 control={control}
                 name="code"
-                keyboardType="number-pad"
+                keyboardType={useRecovery ? "default" : "number-pad"}
                 editable={!isSubmitting}
                 error={errors.code?.message}
             />
+
+            {hasRecoveryCodes && (
+                <Button
+                    text={t(useRecovery ? "users:OtpUseAuthenticator" : "users:OtpUseRecovery")}
+                    icon={useRecovery ? "clock-outline" : "dots-horizontal"}
+                    onPress={() => setUseRecovery(!useRecovery)}
+                />
+            )}
 
             <Button
                 text={t("users:Login")}

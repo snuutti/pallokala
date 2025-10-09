@@ -145,6 +145,15 @@ export default function RootNavigation() {
             />
 
             <Stack.Screen
+                name="(modal)/recoverycodes"
+                options={{
+                    title: t("users:RecoveryCodes"),
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
                 name="(modal)/oauthcreds"
                 options={{
                     title: t("oauth:Credentials"),

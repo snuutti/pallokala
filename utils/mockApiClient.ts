@@ -10,6 +10,7 @@ import {
     EditableConfigSettings,
     OAuthClient,
     OtpEnrollResponse,
+    OtpRecoveryCodes,
     User,
     FileDesc,
     Backup,
@@ -150,7 +151,11 @@ class MockSelfApi implements SelfApi {
         throw new Error("Method not implemented.");
     }
 
-    validateOtpEnroll(_token: string): Promise<boolean> {
+    validateOtpEnroll(_token: string): Promise<OtpRecoveryCodes> {
+        throw new Error("Method not implemented.");
+    }
+
+    regenerateRecoveryCodes(_token: string): Promise<OtpRecoveryCodes> {
         throw new Error("Method not implemented.");
     }
 

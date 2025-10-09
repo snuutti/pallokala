@@ -9,6 +9,7 @@ import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
 import useToast from "@/hooks/useToast";
+import useVersionCheck from "@/hooks/useVersionCheck";
 import { useStyle } from "@/hooks/useStyle";
 import { updateAccount } from "@/utils/accountStorage";
 import { EmailAccount } from "@/types/account";
@@ -27,6 +28,7 @@ export default function TwoFactorAuthScreen() {
     const { createPromptModal } = useModal();
     const { showSuccessAlert } = useToast();
     const { refresh } = useLocalSearchParams<{ refresh?: string }>();
+    const hasRecoveryCodes = useVersionCheck("3.0.0-rc.15");
     const [loading, setLoading] = useState(true);
     const [enabled, setEnabled] = useState(false);
 
@@ -44,16 +46,17 @@ export default function TwoFactorAuthScreen() {
         setLoading(false);
     }, []);
 
-    const confirmDisableOtp = () => {
+    const confirmDisableOtp = (useRecovery: boolean) => {
         createPromptModal(
             t("users:OtpDisable"),
             {
                 placeholder: t("users:OtpConfirm"),
-                inputType: "number-pad"
+                inputType: useRecovery ? "default" : "number-pad"
             },
             [
                 {
                     text: t("users:OtpDisable"),
+                    icon: "lock-off",
                     style: "danger",
                     onPress: async (code: string) => {
                         setLoading(true);
@@ -66,6 +69,52 @@ export default function TwoFactorAuthScreen() {
                         } finally {
                             setLoading(false);
                         }
+                    }
+                },
+                {
+                    text: t(useRecovery ? "users:OtpUseAuthenticator" : "users:OtpUseRecovery"),
+                    icon: useRecovery ? "clock-outline" : "dots-horizontal",
+                    onPress: () => {
+                        confirmDisableOtp(!useRecovery);
+                    }
+                },
+                {
+                    text: t("common:Cancel"),
+                    icon: "close"
+                }
+            ]
+        );
+    };
+
+    const regenerateRecoveryCodes = (useRecovery: boolean) => {
+        createPromptModal(
+            t("users:RegenerateRecoveryCodes"),
+            {
+                placeholder: t("users:OtpConfirm"),
+                inputType: useRecovery ? "default" : "number-pad"
+            },
+            [
+                {
+                    text: t("users:RegenerateRecoveryCodes"),
+                    icon: "refresh",
+                    style: "danger",
+                    onPress: async (code: string) => {
+                        setLoading(true);
+
+                        try {
+                            const res = await apiClient?.self.regenerateRecoveryCodes(code);
+                            router.push(`/(modal)/recoverycodes?codes=${JSON.stringify(res!.recoveryCodes)}`);
+                            showSuccessAlert(t("users:UpdateSuccess"));
+                        } finally {
+                            setLoading(false);
+                        }
+                    }
+                },
+                {
+                    text: t(useRecovery ? "users:OtpUseAuthenticator" : "users:OtpUseRecovery"),
+                    icon: useRecovery ? "clock-outline" : "dots-horizontal",
+                    onPress: () => {
+                        regenerateRecoveryCodes(!useRecovery);
                     }
                 },
                 {
@@ -125,13 +174,22 @@ export default function TwoFactorAuthScreen() {
                     text={t("users:OtpDisable")}
                     icon="lock-off"
                     style="danger"
-                    onPress={confirmDisableOtp}
+                    onPress={() => confirmDisableOtp(false)}
                 />
             ) : (
                 <Button
                     text={t("users:OtpEnable")}
                     icon="lock"
                     onPress={() => router.push("/(modal)/enroll2fa")}
+                />
+            )}
+
+            {(hasRecoveryCodes && enabled) && (
+                <Button
+                    text={t("users:RegenerateRecoveryCodes")}
+                    icon="refresh"
+                    style="danger"
+                    onPress={() => regenerateRecoveryCodes(false)}
                 />
             )}
 

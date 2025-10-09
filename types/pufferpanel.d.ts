@@ -99,7 +99,9 @@ declare module "pufferpanel" {
 
         async startOtpEnroll(): Promise<OtpEnrollResponse>;
 
-        async validateOtpEnroll(token: string): Promise<boolean>;
+        async validateOtpEnroll(token: string): Promise<OtpRecoveryCodes>;
+
+        async regenerateRecoveryCodes(token: string): Promise<OtpRecoveryCodes>;
 
         async disableOtp(token: string): Promise<boolean>;
 
@@ -126,6 +128,10 @@ declare module "pufferpanel" {
     export type OtpEnrollResponse = {
         secret: string;
         img: string;
+    };
+
+    export type OtpRecoveryCodes = {
+        recoveryCodes: string[];
     };
 
     export type OAuthClient = {
