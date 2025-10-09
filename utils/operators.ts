@@ -138,6 +138,14 @@ export const operators: Record<string, OperatorOption[]> = {
             label: "templates:Filename",
             default: ""
         }
+    ],
+    nodejsdl: [
+        {
+            name: "version",
+            type: "text",
+            label: "templates:Version",
+            default: ""
+        }
     ]
 };
 
