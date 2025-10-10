@@ -41,6 +41,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
             "expo-build-properties",
             {
                 android: {
+                    packagingOptions: {
+                        pickFirst: [
+                            "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+                        ]
+                    },
                     usesCleartextTraffic: true
                 }
             }
@@ -65,7 +70,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         ],
         "expo-quick-actions",
         "expo-web-browser",
-        "react-native-edge-to-edge",
         "./app.plugin.js"
     ],
     experiments: {

@@ -6,6 +6,7 @@ import { deriveOpacity, deriveContrast } from "@/utils/theme";
 export type ColorScheme = "device" | "light" | "dark" | "amoled";
 
 export type Colors = {
+    dark: boolean;
     primary: string;
     primaryHover: string;
     backdrop: string;
@@ -23,6 +24,7 @@ const primary = "#07a7e3";
 const primaryHover = deriveOpacity(primary, 0.15);
 
 export const darkColors: Colors = {
+    dark: true,
     primary: primary,
     primaryHover: primaryHover,
     backdrop: "#292929",
@@ -37,6 +39,7 @@ export const darkColors: Colors = {
 };
 
 export const lightColors: Colors = {
+    dark: false,
     primary: primary,
     primaryHover: primaryHover,
     backdrop: "#eee",
@@ -86,7 +89,7 @@ export function getNavigationColors(colorScheme: ColorScheme, primaryColor?: str
     const colors = getColors(colorScheme, primaryColor);
 
     return {
-        dark: colorScheme === "dark" || colorScheme === "amoled",
+        dark: colors.dark,
         colors: {
             primary: colors.primary,
             background: colors.backdrop,
@@ -100,6 +103,8 @@ export function getNavigationColors(colorScheme: ColorScheme, primaryColor?: str
 }
 
 export function setAppearanceColor(colorScheme: ColorScheme) {
-    Appearance.setColorScheme(colorScheme === "device" ? null : colorScheme === "light" ? "light" : "dark");
-    SystemUI.setBackgroundColorAsync(getColors(colorScheme).backdrop);
+    const colors = getColors(colorScheme);
+
+    Appearance.setColorScheme(colorScheme === "device" ? null : colors.dark ? "dark" : "light");
+    SystemUI.setBackgroundColorAsync(colors.backdrop);
 }

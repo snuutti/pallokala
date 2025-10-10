@@ -85,7 +85,6 @@ export default function ListModal(props: ListModalProps) {
                         )}
                     </TouchableOpacity>
                 )}
-                estimatedItemSize={39}
                 onContentSizeChange={onContentSizeChange}
                 showsVerticalScrollIndicator={listHeight > 1}
             />

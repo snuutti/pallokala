@@ -389,7 +389,6 @@ export default function FilesScreen() {
                         onExtract={onExtract}
                     />
                 )}
-                estimatedItemSize={58}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={refresh} />
                 }

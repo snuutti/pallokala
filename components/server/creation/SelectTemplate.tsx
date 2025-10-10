@@ -194,7 +194,6 @@ export default function SelectTemplate(props: SelectTemplateProps) {
                 getItemType={(item) => {
                     return typeof item === "string" ? "header" : "template";
                 }}
-                estimatedItemSize={58}
                 contentContainerStyle={style.templatesContainer}
             />
 
@@ -217,7 +216,6 @@ export default function SelectTemplate(props: SelectTemplateProps) {
                                                 <Text style={style.text}>{item.display}</Text>
                                             </View>
                                         )}
-                                        estimatedItemSize={58}
                                         contentContainerStyle={style.templatesContainer}
                                     />
                                 </>
@@ -233,7 +231,6 @@ export default function SelectTemplate(props: SelectTemplateProps) {
                                                 <Text style={style.text}>{item.display}</Text>
                                             </View>
                                         )}
-                                        estimatedItemSize={58}
                                         contentContainerStyle={style.templatesContainer}
                                     />
                                 </>
@@ -249,7 +246,6 @@ export default function SelectTemplate(props: SelectTemplateProps) {
                                                 <Text style={style.text}>{item.display}</Text>
                                             </View>
                                         )}
-                                        estimatedItemSize={58}
                                         contentContainerStyle={style.templatesContainer}
                                     />
                                 </>

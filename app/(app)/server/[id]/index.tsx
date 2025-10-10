@@ -77,7 +77,7 @@ export default function ConsoleScreen() {
     );
     const { server } = useServer();
     const [lines, setLines] = useState<string[]>([]);
-    const { listRef, isAtBottom, listMounted, handleScroll, handleContentSizeChange, goToBottom } = useAutoScroll<string>({ data: lines, inverted: true });
+    const { listRef, isAtBottom, listMounted, handleScroll, handleContentSizeChange, goToBottom } = useAutoScroll<string>({ data: lines });
     const chevronVisible = useSharedValue(0);
     const [initialScroll, setInitialScroll] = useState(true);
     const [hasGotItems, setHasGotItems] = useState(false);
@@ -155,7 +155,7 @@ export default function ConsoleScreen() {
             newLines.pop();
         }
 
-        setLines((lines) => [...newLines.reverse(), ...lines]);
+        setLines((lines) => [...lines, ...newLines]);
         setHasGotItems(true);
     };
 
@@ -179,8 +179,10 @@ export default function ConsoleScreen() {
                         data={lines}
                         keyExtractor={(_, index) => index.toString()}
                         renderItem={({ item }) => <ConsoleText text={item} />}
-                        estimatedItemSize={30}
-                        inverted={true}
+                        maintainVisibleContentPosition={{
+                            autoscrollToBottomThreshold: 0.2,
+                            startRenderingFromBottom: true
+                        }}
                         showsVerticalScrollIndicator={false}
                     />
 

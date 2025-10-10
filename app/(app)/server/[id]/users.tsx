@@ -92,7 +92,6 @@ export default function UsersScreen() {
                 data={users}
                 keyExtractor={user => user.email}
                 renderItem={({ item }) => <UsersListItem user={item} />}
-                estimatedItemSize={90}
                 contentContainerStyle={style.usersContainer}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={loadUsers} />

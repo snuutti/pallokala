@@ -133,7 +133,6 @@ export default function ServersScreen() {
                 renderItem={({ item }) => (
                     <ServerListItem server={item} />
                 )}
-                estimatedItemSize={85}
                 contentContainerStyle={style.serversContainer}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={loadPage} />

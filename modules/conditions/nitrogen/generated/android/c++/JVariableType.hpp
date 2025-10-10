@@ -80,19 +80,4 @@ namespace margelo::nitro::NitroConditions {
       }
     };
   } // namespace JVariableType_impl
-
-  std::variant<std::string, double, bool> JVariableType::toCpp() const {
-    if (isInstanceOf(JVariableType_impl::First::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariableType_impl::First*>(this)->getValue();
-      return jniValue->toStdString();
-    } else if (isInstanceOf(JVariableType_impl::Second::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariableType_impl::Second*>(this)->getValue();
-      return jniValue;
-    } else if (isInstanceOf(JVariableType_impl::Third::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariableType_impl::Third*>(this)->getValue();
-      return static_cast<bool>(jniValue);
-    }
-    throw std::invalid_argument("Variant is unknown Kotlin instance!");
-  }
-
 } // namespace margelo::nitro::NitroConditions

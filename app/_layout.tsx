@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { ErrorBoundaryProps } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import * as Localization from "expo-localization";
-import { SystemBars } from "react-native-edge-to-edge";
 import Providers from "@/components/Providers";
 import RootNavigation from "@/components/navigation/RootNavigation";
 import ErrorBoundaryScreen from "@/components/screen/ErrorBoundaryScreen";
@@ -65,7 +64,6 @@ export default function RootLayout() {
 
     return (
         <Providers>
-            <SystemBars style="auto" />
             <RootNavigation />
         </Providers>
     );

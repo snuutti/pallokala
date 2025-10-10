@@ -62,7 +62,6 @@ export default function TemplatesScreen() {
             getItemType={(item) => {
                 return typeof item === "string" ? "header" : "template";
             }}
-            estimatedItemSize={80}
             contentContainerStyle={style.templatesContainer}
             refreshControl={
                 <RefreshControl refreshing={loading} onRefresh={loadTemplates} />

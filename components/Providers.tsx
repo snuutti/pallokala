@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+import { useEffect, ReactNode } from "react";
+import { useColorScheme, StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ThemeProvider } from "@react-navigation/native";
 import { KeyboardProvider } from "react-native-keyboard-controller";
@@ -11,6 +12,7 @@ import { SwitchServerModalProvider } from "@/context/SwitchServerModalProvider";
 import { ServerProvider } from "@/context/ServerProvider";
 import { FileManagerProvider } from "@/context/FileManagerProvider";
 import { useNavigationColors } from "@/hooks/useStyle";
+import { getColors } from "@/constants/colors";
 
 type ProvidersProps = {
     children: ReactNode;
@@ -18,6 +20,12 @@ type ProvidersProps = {
 
 export default function Providers(props: ProvidersProps) {
     const theme = useNavigationColors();
+    const colorScheme = useColorScheme();
+
+    useEffect(() => {
+        const colors = getColors(colorScheme);
+        StatusBar.setBarStyle(colors.dark ? "light-content" : "dark-content", true);
+    }, [colorScheme]);
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>

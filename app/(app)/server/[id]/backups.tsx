@@ -187,7 +187,6 @@ export default function BackupsScreen() {
                         onDelete={deleteAlert}
                     />
                 )}
-                estimatedItemSize={65}
                 contentContainerStyle={style.backupsContainer}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={loadBackups} />

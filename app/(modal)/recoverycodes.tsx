@@ -2,7 +2,7 @@ import { Text, View, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import { FlashList } from "@shopify/flash-list";
 import { useLocalSearchParams } from "expo-router";
-import { File, Paths } from "expo-file-system/next";
+import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
@@ -68,7 +68,6 @@ export default function RecoveryCodesScreen() {
                         </View>
                     </View>
                 )}
-                estimatedItemSize={20}
                 contentContainerStyle={style.codes}
                 numColumns={2}
             />

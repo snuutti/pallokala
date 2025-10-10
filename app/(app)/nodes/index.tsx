@@ -42,7 +42,6 @@ export default function NodesScreen() {
                 data={nodes}
                 keyExtractor={node => String(node.id)}
                 renderItem={({ item }) => <NodeListItem node={item} />}
-                estimatedItemSize={85}
                 contentContainerStyle={style.nodesContainer}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={loadNodes} />

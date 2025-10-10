@@ -100,7 +100,6 @@ export default function TasksScreen() {
                 data={tasks}
                 keyExtractor={item => item.id}
                 renderItem={({ item }) => <ServerTaskItem task={item} />}
-                estimatedItemSize={100}
                 contentContainerStyle={style.tasksContainer}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={loadTasks} />
