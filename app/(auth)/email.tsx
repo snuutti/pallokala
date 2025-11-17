@@ -16,9 +16,9 @@ import { EmailAccount } from "@/types/account";
 import { ErrorHandlerResult } from "pufferpanel";
 
 const schema = z.object({
-    address: z.string().url({ message: "errors:ErrFieldIsInvalidHost" })
+    address: z.url({ message: "errors:ErrFieldIsInvalidHost" })
         .refine(val => !val.endsWith("/") && !val.includes(" "), { message: "errors:ErrFieldIsInvalidHost" }),
-    email: z.string().email({ message: "errors:ErrFieldNotEmail" }),
+    email: z.email({ message: "errors:ErrFieldNotEmail" }),
     password: z.string()
 });
 

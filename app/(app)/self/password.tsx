@@ -13,7 +13,7 @@ import { EmailAccount } from "@/types/account";
 
 const schema = z.object({
     old: z.string().min(1, { message: "errors:ErrFieldRequired" }),
-    new: z.string().min(8, { message: "errors:ErrFieldLength" }),
+    new: z.string().min(8, { message: "errors:ErrPasswordRequirements" }),
     confirm: z.string()
 }).refine(data => data.new === data.confirm, {
     path: ["confirm"],
@@ -74,7 +74,6 @@ export default function ChangePasswordScreen() {
                 secureTextEntry={true}
                 editable={!isSubmitting}
                 error={errors.new?.message}
-                errorFields={{ field: t("users:NewPassword"), length: 8 }}
             />
 
             <FormTextInput

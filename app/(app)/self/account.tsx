@@ -14,8 +14,8 @@ import { EmailAccount } from "@/types/account";
 
 const schema = z.object({
     username: z.string().min(5, { message: "errors:ErrFieldLength" }),
-    email: z.string().email({ message: "errors:ErrFieldNotEmail" }),
-    password: z.string()
+    email: z.email({ message: "errors:ErrFieldNotEmail" }),
+    password: z.string().min(8, { message: "errors:ErrPasswordRequirements" })
 });
 
 type Schema = z.infer<typeof schema>;

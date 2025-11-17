@@ -11,7 +11,7 @@ import { useBoundStore } from "@/stores/useBoundStore";
 
 const schema = z.object({
     username: z.string().min(5, { message: "errors:ErrFieldLength" }),
-    email: z.string().email({ message: "errors:ErrFieldNotEmail" }),
+    email: z.email({ message: "errors:ErrFieldNotEmail" }),
     password: z.string().min(1, { message: "errors:ErrFieldRequired" })
 });
 
