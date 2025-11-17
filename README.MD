@@ -34,6 +34,7 @@ Either locally or on another branch, I'm currently working on the following feat
 
 ## Missing features
 
+- Passkey support
 - Template management
 - Themes (Ability to modify the stylesheets, won't be added anytime soon if ever)
 - I'm sure there are some other small features that I've missed (Let me know!)

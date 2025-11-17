@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import { router, useLocalSearchParams } from "expo-router";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
+import PasskeyListItem from "@/components/self/PasskeyListItem";
+import Collapse from "@/components/ui/Collapse";
+import Switch from "@/components/ui/Switch";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
@@ -13,13 +16,23 @@ import useVersionCheck from "@/hooks/useVersionCheck";
 import { useStyle } from "@/hooks/useStyle";
 import { updateAccount } from "@/utils/accountStorage";
 import { EmailAccount } from "@/types/account";
+import { WebauthnCredentialView } from "pufferpanel";
 
 export default function TwoFactorAuthScreen() {
     const { t } = useTranslation();
     const { style } = useStyle((colors) =>
         StyleSheet.create({
+            header: {
+                marginBottom: 10,
+                color: colors.text,
+                fontSize: 16
+            },
             text: {
                 color: colors.text
+            },
+            passkeys: {
+                marginVertical: 20,
+                gap: 5
             }
         })
     );
@@ -29,12 +42,29 @@ export default function TwoFactorAuthScreen() {
     const { showSuccessAlert } = useToast();
     const { refresh } = useLocalSearchParams<{ refresh?: string }>();
     const hasRecoveryCodes = useVersionCheck("3.0.0-rc.15");
+    const hasPasskeys = useVersionCheck("3.0.0-rc.16");
     const [loading, setLoading] = useState(true);
     const [enabled, setEnabled] = useState(false);
+    const [passkeys, setPasskeys] = useState<WebauthnCredentialView[]>([]);
+    const [allowPasswordless, setAllowPasswordless] = useState(false);
 
     useEffect(() => {
-        refreshOtpStatus();
+        loadData();
     }, [refresh]);
+
+    const loadData = async () => {
+        setLoading(true);
+
+        setEnabled(await apiClient.self.isOtpEnabled());
+
+        if (hasPasskeys) {
+            const passkeys = await apiClient.self.getPasskeys();
+            setPasskeys(passkeys);
+            setAllowPasswordless((await apiClient.self.get()).allowPasswordlessLogin && passkeys.length > 0);
+        }
+
+        setLoading(false);
+    };
 
     const refreshOtpStatus = useCallback(async () => {
         if (!apiClient) {
@@ -43,6 +73,18 @@ export default function TwoFactorAuthScreen() {
 
         setLoading(true);
         setEnabled(await apiClient.self.isOtpEnabled());
+        setLoading(false);
+    }, []);
+
+    const loadPasskeys = useCallback(async () => {
+        if (!apiClient) {
+            return;
+        }
+
+        setLoading(true);
+        const passkeys = await apiClient.self.getPasskeys();
+        setPasskeys(passkeys);
+        setAllowPasswordless((await apiClient.self.get()).allowPasswordlessLogin && passkeys.length > 0);
         setLoading(false);
     }, []);
 
@@ -161,12 +203,39 @@ export default function TwoFactorAuthScreen() {
         );
     };
 
+    const setAllowPasswordlessState = async (allow: boolean) => {
+        setLoading(true);
+
+        try {
+            setAllowPasswordless(allow);
+            await apiClient.self.setAllowPasswordlessLogin(allow);
+            showSuccessAlert(t("users:UpdateSuccess"));
+        } catch {
+            setAllowPasswordless(!allow);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const removePasskey = async (passkeyId: string) => {
+        setLoading(true);
+
+        try {
+            await apiClient.self.deletePasskey(passkeyId);
+            await loadPasskeys();
+        } finally {
+            setLoading(false);
+        }
+    };
+
     if (loading) {
         return <LoadingScreen />;
     }
 
     return (
         <ContentWrapper>
+            <Text style={style.header}>{t("users:Otp")}</Text>
+
             <Text style={style.text}>{t("users:OtpHint")}</Text>
 
             {enabled ? (
@@ -211,6 +280,32 @@ export default function TwoFactorAuthScreen() {
                             onPress={enterOtpSecret}
                         />
                     )}
+                </>
+            )}
+
+            {hasPasskeys && (
+                <>
+                    <Text style={style.header}>{t("users:Passkeys")}</Text>
+
+                    <View style={style.passkeys}>
+                        {passkeys.map(passkey => (
+                            <PasskeyListItem
+                                key={passkey.id}
+                                passkey={passkey}
+                                onDelete={removePasskey}
+                            />
+                        ))}
+                    </View>
+
+                    <Collapse title={t("users:PasskeyAdvanced")}>
+                        <Switch
+                            label={t("users:AllowPasswordlessLogin")}
+                            description={t("users:AllowPasswordlessLoginHint")}
+                            value={allowPasswordless}
+                            onValueChange={setAllowPasswordlessState}
+                            disabled={passkeys.length === 0}
+                        />
+                    </Collapse>
                 </>
             )}
         </ContentWrapper>

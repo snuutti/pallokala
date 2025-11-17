@@ -135,3 +135,6 @@ docs/pages/versions/*/react-native/*.diff
 # Native folders
 /android
 /ios
+
+# Nitro
+.cxx

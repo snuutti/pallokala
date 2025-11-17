@@ -69,9 +69,15 @@ declare module "pufferpanel" {
 
         async oauth(clientId: string, clientSecret: string): Promise<boolean>;
 
-        async login(email: string, password: string): Promise<"otp" | boolean>;
+        async login(email: string, password: string): Promise<PasswordLoginResult | boolean>;
 
         async loginOtp(token: string): Promise<boolean>;
+
+        async startPasskeyLogin(email: string, onError?: (error: any) => void): Promise<Credential>;
+
+        async validatePasskeyLogin(data: Credential): Promise<boolean>;
+
+        async passkeyLogin(email: string): Promise<boolean>;
 
         async register(username: string, email: string, password: string): Promise<boolean>;
 
@@ -85,6 +91,12 @@ declare module "pufferpanel" {
 
         async logout(): Promise<void>;
     }
+
+    export type PasswordLoginResult = {
+        needsSecondFactor: boolean;
+        otpEnabled: boolean;
+        webauthnChallenge?: CredentialRequestOptions;
+    };
 
     export abstract class SelfApi {
         constructor(api: ApiClient);
@@ -105,6 +117,18 @@ declare module "pufferpanel" {
 
         async disableOtp(token: string): Promise<boolean>;
 
+        async getPasskeys(): Promise<WebauthnCredentialView[]>;
+
+        async startPasskeyEnroll(name: string): Promise<CredentialCreationOptions>;
+
+        async validatePasskeyEnroll(data: Credential): Promise<boolean>;
+
+        async enrollPasskey(name: string): Promise<boolean>;
+
+        async deletePasskey(id: string): Promise<boolean>;
+
+        async setAllowPasswordlessLogin(value: boolean): Promise<boolean>;
+
         async getSettings(): Promise<Record<string, string>>;
 
         async updateSetting(key: string, value: string): Promise<boolean>;
@@ -121,6 +145,7 @@ declare module "pufferpanel" {
         username?: string;
         email?: string;
         otpActive?: boolean;
+        allowPasswordlessLogin?: boolean;
         password?: string;
         newPassword?: string;
     };
@@ -132,6 +157,18 @@ declare module "pufferpanel" {
 
     export type OtpRecoveryCodes = {
         recoveryCodes: string[];
+    };
+
+    export type WebauthnCredentialView = {
+        id: string;
+        name: string;
+        descriptor: CredentialDescriptor;
+    };
+
+    export type CredentialDescriptor = {
+        type: string;
+        id: string;
+        transports?: string[];
     };
 
     export type OAuthClient = {
@@ -342,7 +379,7 @@ declare module "pufferpanel" {
     export type ServerAction = "start" | "stop" | "kill" | "install";
 
     export type ServerLogs = {
-        epoch?: number; // todo: can this ever be undefined?
+        epoch?: number;
         logs: string;
     };
 

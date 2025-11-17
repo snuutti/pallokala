@@ -22,13 +22,14 @@ import MockApiClient from "@/utils/mockApiClient";
 import { getPrivateInfoReplacer } from "@/utils/json";
 import * as OTPAuth from "otpauth";
 import { Account, OAuthAccount, EmailAccount } from "@/types/account";
-import { User, ApiClient } from "pufferpanel";
+import { User, PasswordLoginResult, ApiClient } from "pufferpanel";
 
 type AccountContextType = {
     accounts: Account[];
     activeAccount: Account | null;
     user: User | null;
     otpRequired: boolean;
+    webauthnChallenge: CredentialRequestOptions | null;
     loading: boolean;
     error: boolean;
     changeAccount: (account: Account) => Promise<void>;
@@ -59,6 +60,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     const [newAccount, setNewAccount] = useState<Account | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [otpRequired, setOtpRequired] = useState(false);
+    const [webauthnChallenge, setWebauthnChallenge] = useState<CredentialRequestOptions | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
@@ -215,6 +217,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         setNewAccount(account);
         setUser(null);
         setOtpRequired(false);
+        setWebauthnChallenge(null);
 
         resetAllStores();
 
@@ -231,6 +234,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
                     success = true;
                 } else {
                     console.error("Login failed");
+                    setError(true);
                 }
             } else if (account.type === "email") {
                 const emailAccount = account as EmailAccount;
@@ -238,7 +242,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
                 const result = await apiClient.auth.login(emailAccount.email, emailAccount.password);
                 if (result === true) {
                     success = true;
-                } else if (result === "otp") {
+                } else if ((result as PasswordLoginResult).needsSecondFactor && (result as PasswordLoginResult).otpEnabled) {
                     if (emailAccount.otpSecret) {
                         try {
                             const totp = new OTPAuth.TOTP({
@@ -266,8 +270,11 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
                     } else {
                         setOtpRequired(true);
                     }
+                } else if ((result as PasswordLoginResult).needsSecondFactor && (result as PasswordLoginResult).webauthnChallenge) {
+                    setWebauthnChallenge((result as PasswordLoginResult).webauthnChallenge!);
                 } else {
                     console.error("Login failed");
+                    setError(true);
                 }
             }
 
@@ -334,8 +341,14 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         } else if (account.type === "email") {
             const emailAccount = account as EmailAccount;
             const result = await apiClient.auth.login(emailAccount.email, emailAccount.password);
-            success = result === true || result === "otp";
+            const passwordLoginResult = result as PasswordLoginResult;
+
+            success = result === true || (passwordLoginResult.needsSecondFactor && passwordLoginResult.webauthnChallenge === undefined);
             tryVersion = result === true;
+
+            if (!success && passwordLoginResult.needsSecondFactor && passwordLoginResult.webauthnChallenge !== undefined) {
+                return [false, t("app:Auth.PasskeyLoginUnsupported")];
+            }
         }
 
         if (success && tryVersion) {
@@ -371,7 +384,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     };
 
     return (
-        <AccountContext.Provider value={{ accounts, activeAccount, user, otpRequired, loading, error, changeAccount, deleteAccount, addAccount, submitOtp, refreshSelf }}>
+        <AccountContext.Provider value={{ accounts, activeAccount, user, otpRequired, webauthnChallenge, loading, error, changeAccount, deleteAccount, addAccount, submitOtp, refreshSelf }}>
             {children}
         </AccountContext.Provider>
     );

@@ -51,7 +51,7 @@ export default function SelfLayout() {
             <Tabs.Screen
                 name="2fa"
                 options={{
-                    title: t("users:Otp"),
+                    title: t("users:2fa"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <NavigationIcon name="two-factor-authentication" color={color} />

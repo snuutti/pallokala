@@ -37,7 +37,8 @@
         "InvalidClientId": "Invalid client ID",
         "InvalidClientSecret": "Invalid client secret",
         "SelectServer": "Select Server",
-        "Invalid2FACode": "Invalid 2FA code"
+        "Invalid2FACode": "Invalid 2FA code",
+        "PasskeyLoginUnsupported": "Passkey login is not supported by Pallokala. Please use a different login method."
     },
     "Self": {
         "Title": "Profile",

@@ -52,7 +52,7 @@ export default function OtpRequiredScreen() {
 
     return (
         <ContentWrapper contentContainerStyle={style.contentContainer}>
-            <Text style={style.header}>{t("users:OtpNeeded")}</Text>
+            <Text style={style.header}>{t("users:2fa")}</Text>
 
             <FormTextInput
                 control={control}

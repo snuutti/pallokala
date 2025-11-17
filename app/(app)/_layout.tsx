@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import LoginErrorScreen from "@/components/auth/LoginErrorScreen";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import OtpRequiredScreen from "@/components/auth/OtpRequiredScreen";
+import PasskeyRequiredScreen from "@/components/auth/PasskeyRequiredScreen";
 import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
 import DrawerHeaderButton from "@/components/navigation/DrawerHeaderButton";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
@@ -15,7 +16,7 @@ export default function AppLayout() {
     const colors = useColors();
     const { t } = useTranslation();
     const { apiClient, config } = useApiClient();
-    const { otpRequired, loading, error } = useAccount();
+    const { otpRequired, webauthnChallenge, loading, error } = useAccount();
     const { server } = useServer();
 
     if (error) {
@@ -28,6 +29,10 @@ export default function AppLayout() {
 
     if (otpRequired) {
         return <OtpRequiredScreen />;
+    }
+
+    if (webauthnChallenge) {
+        return <PasskeyRequiredScreen />;
     }
 
     return (

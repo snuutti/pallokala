@@ -46,7 +46,7 @@ class PufferPanelApiClient(private val baseUrl: String) {
             LoginResult.SUCCESS
         } else {
             val json = response.body<LoginResponse>()
-            if (json.otpNeeded == true) {
+            if (json.otpNeeded == true || (json.needsSecondFactor == true && json.otpEnabled == true)) {
                 LoginResult.OTP_REQUIRED
             } else {
                 LoginResult.FAILED

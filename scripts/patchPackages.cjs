@@ -86,9 +86,12 @@ function patchAuthJs() {
     if (loginIndex !== -1) {
         lines[loginIndex] = "    const res = await this._api.post('/auth/login', { email, password })\n" +
             "    const cookies = res.headers['set-cookie'][0]\n" +
-            "    if (res.data.otpNeeded) {\n" +
+            "    if (res.data.needsSecondFactor || res.data.otpNeeded) {\n" +
             "      const session = cookies.split('session=')[1].split(';')[0]\n" +
             "      this._sessionStore.setSessionCookie(session)\n" +
+            "      if (res.data.otpNeeded) {\n" +
+            "        return { needsSecondFactor: true, otpEnabled: true }\n" +
+            "      }\n" +
             "    } else {\n" +
             "      const pufferAuth = cookies.split('puffer_auth=')[1].split(';')[0]\n" +
             "      this._sessionStore.setAuthCookie(pufferAuth)\n" +
