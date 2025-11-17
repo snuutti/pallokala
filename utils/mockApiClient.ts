@@ -8,9 +8,11 @@ import {
     SettingsApi,
     SessionStore,
     EditableConfigSettings,
+    PasswordLoginResult,
     OAuthClient,
     OtpEnrollResponse,
     OtpRecoveryCodes,
+    WebauthnCredentialView,
     User,
     FileDesc,
     Backup,
@@ -89,11 +91,23 @@ class MockAuthApi implements AuthApi {
         throw new Error("Method not implemented.");
     }
 
-    async login(_email: string, _password: string): Promise<"otp" | boolean> {
+    async login(_email: string, _password: string): Promise<PasswordLoginResult | boolean> {
         return Promise.resolve(true);
     }
 
     loginOtp(_token: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    startPasskeyLogin(_email: string, _onError?: (error: any) => void): Promise<Credential> {
+        throw new Error("Method not implemented.");
+    }
+
+    validatePasskeyLogin(_data: Credential): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    passkeyLogin(_email: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -160,6 +174,30 @@ class MockSelfApi implements SelfApi {
     }
 
     disableOtp(_token: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    getPasskeys(): Promise<WebauthnCredentialView[]> {
+        throw new Error("Method not implemented.");
+    }
+
+    startPasskeyEnroll(_name: string): Promise<CredentialCreationOptions> {
+        throw new Error("Method not implemented.");
+    }
+
+    validatePasskeyEnroll(_data: Credential): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    enrollPasskey(_name: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    deletePasskey(_id: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    setAllowPasswordlessLogin(_value: boolean): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
