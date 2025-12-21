@@ -18,8 +18,10 @@
         },
         "Updated": {
             "Title": "Pallokala just got updated!",
-            "Body": "Check out what's new in this version.",
-            "Changelog": "Go to changelog"
+            "Body": "Check out what's new in this version by visiting the changelog.",
+            "Changelog": "Go to changelog",
+            "RateLongText": "If you like using Pallokala, please consider leaving a positive review on the app store and starring the project on GitHub. It really helps out a lot!",
+            "StarOnGitHub": "Star on GitHub"
         }
     },
     "Auth": {
