@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
+import OTPInput from "@/components/ui/OTPInput";
 import Button from "@/components/ui/Button";
 import { useAccount } from "@/context/AccountProvider";
 import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
@@ -38,7 +39,7 @@ export default function OtpRequiredScreen() {
     );
     const { submitOtp } = useAccount();
     const { present } = useSwitchServerModal();
-    const { control, handleSubmit, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
+    const { control, handleSubmit, setValue, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
@@ -54,13 +55,25 @@ export default function OtpRequiredScreen() {
         <ContentWrapper contentContainerStyle={style.contentContainer}>
             <Text style={style.header}>{t("users:2fa")}</Text>
 
-            <FormTextInput
-                control={control}
-                name="code"
-                keyboardType={useRecovery ? "default" : "number-pad"}
-                editable={!isSubmitting}
-                error={errors.code?.message}
-            />
+            {useRecovery ? (
+                <FormTextInput
+                    control={control}
+                    name="code"
+                    keyboardType="default"
+                    editable={!isSubmitting}
+                    error={errors.code?.message}
+                />
+            ) : (
+                <OTPInput
+                    error={errors.code?.message}
+                    editable={!isSubmitting}
+                    blurOnComplete={true}
+                    onComplete={(code) => {
+                        setValue("code", code, { shouldValidate: true });
+                        handleSubmit(onSubmit)();
+                    }}
+                />
+            )}
 
             {hasRecoveryCodes && (
                 <Button

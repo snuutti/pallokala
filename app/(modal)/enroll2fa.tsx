@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Copyable from "@/components/ui/Copyable";
-import FormTextInput from "@/components/ui/form/FormTextInput";
+import OTPInput from "@/components/ui/OTPInput";
 import FormSwitch from "@/components/ui/form/FormSwitch";
 import Button from "@/components/ui/Button";
 import { useApiClient } from "@/context/ApiClientProvider";
@@ -51,7 +51,7 @@ export default function EnrollTwoFactorScreen() {
     const { apiClient } = useApiClient();
     const { activeAccount } = useAccount();
     const { showSuccessAlert } = useToast();
-    const { control, handleSubmit, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
+    const { control, handleSubmit, setValue, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
         mode: "onBlur"
@@ -95,13 +95,14 @@ export default function EnrollTwoFactorScreen() {
 
             <Copyable text={otpData!.secret} />
 
-            <FormTextInput
-                control={control}
-                name="code"
-                keyboardType="number-pad"
-                placeholder={t("users:OtpConfirm")}
-                editable={!isSubmitting}
+            <OTPInput
+                label={t("users:OtpConfirm")}
                 error={errors.code?.message}
+                editable={!isSubmitting}
+                blurOnComplete={true}
+                onChange={(code) => {
+                    setValue("code", code, { shouldValidate: true });
+                }}
             />
 
             {activeAccount!.type === "email" && (
