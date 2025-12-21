@@ -65,7 +65,7 @@
         "js-md5": "^0.8.3",
         "otpauth": "^9.4.1",
         "pako": "^2.1.0",
-        "pufferpanel": "https://gitpkg.vercel.app/pufferpanel/pufferpanel/client/api?v3",
+        "pufferpanel": "./pufferpanel/client/api",
         "react": "19.1.0",
         "react-dom": "19.1.0",
         "react-hook-form": "^7.64.0",
