@@ -5,6 +5,7 @@ import { router } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ServerListItem from "@/components/server/ServerListItem";
+import NoServers from "@/components/server/NoServers";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useApiClient } from "@/context/ApiClientProvider";
 import useDisclaimer from "@/hooks/useDisclaimer";
@@ -137,6 +138,7 @@ export default function ServersScreen() {
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={loadPage} />
                 }
+                ListEmptyComponent={NoServers}
                 onScroll={onScroll}
             />
 

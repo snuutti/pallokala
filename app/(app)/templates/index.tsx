@@ -3,6 +3,7 @@ import { Text, RefreshControl, StyleSheet } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import TemplatesListItem from "@/components/templates/TemplatesListItem";
+import NoTemplates from "@/components/templates/NoTemplates";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { Template } from "pufferpanel";
@@ -66,6 +67,7 @@ export default function TemplatesScreen() {
             refreshControl={
                 <RefreshControl refreshing={loading} onRefresh={loadTemplates} />
             }
+            ListEmptyComponent={NoTemplates}
         />
     );
 }

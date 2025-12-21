@@ -67,9 +67,11 @@
         }
     },
     "Servers": {
+        "NoServers": "No servers available",
         "Error": "Failed to load server",
         "DownloadNotification": "Check notifications for download progress",
         "Files": {
+            "NoFiles": "This directory is empty",
             "SftpConnectionFailed": "Failed to connect to SFTP. Falling back to HTTP.",
             "EditFile": "Edit File",
             "LogDecompressed": "Log file decompressed in memory. Editing not available.",
@@ -102,9 +104,13 @@
             "DeletePrompt": "Delete task?",
             "DeletePromptBody": "Are you sure you want to delete this task?",
             "DeleteSuccess": "Task deleted"
+        },
+        "Backups": {
+            "NoBackups": "No backups available"
         }
     },
     "Templates": {
+        "NoTemplates": "No templates available",
         "Operators": {
             "EditTitle": "Edit Operator"
         }

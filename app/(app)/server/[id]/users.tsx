@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { RefreshControl, Text, StyleSheet } from "react-native";
+import { RefreshControl, StyleSheet } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UsersListItem from "@/components/users/UsersListItem";
+import NoUsers from "@/components/server/users/NoUsers";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useServer } from "@/context/ServerProvider";
 import { useModal } from "@/context/ModalProvider";
@@ -14,15 +15,11 @@ import { useBoundStore } from "@/stores/useBoundStore";
 
 export default function UsersScreen() {
     const { t } = useTranslation();
-    const { style, colors } = useStyle((colors) =>
+    const { style, colors } = useStyle(() =>
         StyleSheet.create({
             usersContainer: {
                 paddingTop: 5,
                 paddingBottom: 20
-            },
-            emptyText: {
-                color: colors.text,
-                textAlign: "center"
             }
         })
     );
@@ -97,7 +94,7 @@ export default function UsersScreen() {
                     <RefreshControl refreshing={refreshing} onRefresh={loadUsers} />
                 }
                 onScroll={onScroll}
-                ListEmptyComponent={<Text style={style.emptyText}>{t("servers:NoUsers")}</Text>}
+                ListEmptyComponent={NoUsers}
             />
 
             {server?.hasScope("server.users.create") && (

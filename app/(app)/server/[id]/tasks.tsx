@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { RefreshControl, Text, StyleSheet } from "react-native";
+import { RefreshControl, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ServerTaskItem from "@/components/server/tasks/ServerTaskItem";
+import NoTasks from "@/components/server/tasks/NoTasks";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useServer } from "@/context/ServerProvider";
@@ -25,15 +26,11 @@ async function editServerTask(api: ApiClient, serverId: string, taskId: string, 
 
 export default function TasksScreen() {
     const { t } = useTranslation();
-    const { style, colors } = useStyle((colors) =>
+    const { style, colors } = useStyle(() =>
         StyleSheet.create({
             tasksContainer: {
                 paddingTop: 5,
                 paddingBottom: 20
-            },
-            emptyText: {
-                color: colors.text,
-                textAlign: "center"
             }
         })
     );
@@ -105,7 +102,7 @@ export default function TasksScreen() {
                     <RefreshControl refreshing={refreshing} onRefresh={loadTasks} />
                 }
                 onScroll={onScroll}
-                ListEmptyComponent={<Text style={style.emptyText}>{t("app:Servers.Tasks.NoTasks")}</Text>}
+                ListEmptyComponent={NoTasks}
             />
 
             {server?.hasScope("server.tasks.edit") && (

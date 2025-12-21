@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { RefreshControl, Text, StyleSheet } from "react-native";
+import { RefreshControl, StyleSheet } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import ReactNativeBlobUtil from "react-native-blob-util";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import BackupListItem from "@/components/server/backups/BackupListItem";
+import NoBackups from "@/components/server/backups/NoBackups";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useServer } from "@/context/ServerProvider";
@@ -16,15 +17,11 @@ import { Backup } from "pufferpanel";
 
 export default function BackupsScreen() {
     const { t } = useTranslation();
-    const { style, colors } = useStyle((colors) =>
+    const { style, colors } = useStyle(() =>
         StyleSheet.create({
             backupsContainer: {
                 paddingTop: 5,
                 paddingBottom: 20
-            },
-            emptyText: {
-                color: colors.text,
-                textAlign: "center"
             }
         })
     );
@@ -192,7 +189,7 @@ export default function BackupsScreen() {
                     <RefreshControl refreshing={refreshing} onRefresh={loadBackups} />
                 }
                 onScroll={onScroll}
-                ListEmptyComponent={<Text style={style.emptyText}>No backups</Text>}
+                ListEmptyComponent={NoBackups}
             />
 
             {server?.hasScope("server.backup.create") && (

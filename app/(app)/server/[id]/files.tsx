@@ -10,6 +10,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UploadProgressModal, { UploadFile, UploadState } from "@/components/server/files/UploadProgressModal";
 import FileItem from "@/components/server/files/FileItem";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import NoFiles from "@/components/server/files/NoFiles";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";
 import { useModal } from "@/context/ModalProvider";
 import { useApiClient } from "@/context/ApiClientProvider";
@@ -399,6 +400,7 @@ export default function FilesScreen() {
                         onNavigate={navigateBreadcrumb}
                     />
                 }
+                ListEmptyComponent={NoFiles}
             />
 
             {isMovingFile ? (
