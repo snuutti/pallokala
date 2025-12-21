@@ -2,12 +2,12 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
+import { SheetManager } from "react-native-actions-sheet";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
-import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 import { avatarPlaceholder } from "@/constants/placeholder";
 import { md5 } from "js-md5";
@@ -72,7 +72,6 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
     );
     const { config } = useApiClient();
     const { activeAccount, user } = useAccount();
-    const { present } = useSwitchServerModal();
 
     return (
         <View style={style.drawerContainer}>
@@ -105,7 +104,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={style.action} onPress={present}>
+                <TouchableOpacity style={style.action} onPress={() => SheetManager.show("switch-server-sheet")}>
                     <MaterialCommunityIcons name="swap-horizontal" size={22} color={colors.text} />
                     <View style={style.actionTextContainer}>
                         <Text style={style.actionTextHeader}>

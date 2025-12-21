@@ -3,14 +3,14 @@ import { useColorScheme, StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ThemeProvider } from "@react-navigation/native";
 import { KeyboardProvider } from "react-native-keyboard-controller";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { NotifierWrapper } from "react-native-notifier";
 import { ModalProvider } from "@/context/ModalProvider";
 import { ApiClientProvider } from "@/context/ApiClientProvider";
 import { AccountProvider } from "@/context/AccountProvider";
-import { SwitchServerModalProvider } from "@/context/SwitchServerModalProvider";
 import { ServerProvider } from "@/context/ServerProvider";
 import { FileManagerProvider } from "@/context/FileManagerProvider";
+import { SheetProvider } from "react-native-actions-sheet";
+import Sheets from "@/components/Sheets";
 import { useNavigationColors } from "@/hooks/useStyle";
 import { getColors } from "@/constants/colors";
 
@@ -33,19 +33,18 @@ export default function Providers(props: ProvidersProps) {
                 <KeyboardProvider>
                     <NotifierWrapper>
                         <ModalProvider>
-                            <BottomSheetModalProvider>
-                                <ApiClientProvider>
-                                    <AccountProvider>
-                                        <SwitchServerModalProvider>
-                                            <ServerProvider>
-                                                <FileManagerProvider>
-                                                    {props.children}
-                                                </FileManagerProvider>
-                                            </ServerProvider>
-                                        </SwitchServerModalProvider>
-                                    </AccountProvider>
-                                </ApiClientProvider>
-                            </BottomSheetModalProvider>
+                            <ApiClientProvider>
+                                <AccountProvider>
+                                    <ServerProvider>
+                                        <FileManagerProvider>
+                                            <SheetProvider>
+                                                <Sheets />
+                                                {props.children}
+                                            </SheetProvider>
+                                        </FileManagerProvider>
+                                    </ServerProvider>
+                                </AccountProvider>
+                            </ApiClientProvider>
                         </ModalProvider>
                     </NotifierWrapper>
                 </KeyboardProvider>

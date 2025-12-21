@@ -28,7 +28,6 @@
         "@expo/vector-icons": "^15.0.2",
         "@formatjs/intl-displaynames": "^6.8.13",
         "@formatjs/intl-locale": "^4.2.13",
-        "@gorhom/bottom-sheet": "^5.2.6",
         "@hookform/resolvers": "^5.2.2",
         "@react-native-async-storage/async-storage": "2.2.0",
         "@react-native-community/slider": "5.0.1",
@@ -72,6 +71,7 @@
         "react-hook-form": "^7.64.0",
         "react-i18next": "^16.0.0",
         "react-native": "0.81.4",
+        "react-native-actions-sheet": "^10.1.1",
         "react-native-blob-util": "^0.22.2",
         "react-native-gesture-handler": "~2.28.0",
         "react-native-ios-context-menu": "^3.2.1",
@@ -115,8 +115,5 @@
         "react-test-renderer": "^19.2.0",
         "typescript": "~5.9.2"
     },
-    "private": true,
-    "patchedDependencies": {
-        "@gorhom/bottom-sheet@5.2.6": "patches/@gorhom%2Fbottom-sheet@5.2.6.patch"
-    }
+    "private": true
 }

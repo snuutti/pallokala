@@ -1,8 +1,8 @@
 import { Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
+import { SheetManager } from "react-native-actions-sheet";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import Button from "@/components/ui/Button";
-import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 
 export default function LoginErrorScreen() {
@@ -23,7 +23,6 @@ export default function LoginErrorScreen() {
             }
         })
     );
-    const { present } = useSwitchServerModal();
 
     return (
         <ContentWrapper contentContainerStyle={style.contentContainer}>
@@ -33,7 +32,7 @@ export default function LoginErrorScreen() {
             <Button
                 text={t("app:Auth.SelectServer")}
                 icon="swap-horizontal"
-                onPress={present}
+                onPress={() => SheetManager.show("switch-server-sheet")}
             />
         </ContentWrapper>
     );

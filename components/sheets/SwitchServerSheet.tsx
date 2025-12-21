@@ -1,22 +1,16 @@
-import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from "react";
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { useRef } from "react";
+import { Text, TouchableOpacity, View, FlatList, StyleSheet } from "react-native";
+import ActionSheet, { ActionSheetRef, ScrollView } from "react-native-actions-sheet";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/src/components/bottomSheetBackdrop/types";
-import { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
-import useBottomSheetBackHandler from "@/hooks/useBottomSheetBackHandler";
 import { Account } from "@/types/account";
 
-export type SwitchServerModalRef = {
-    present: () => void;
-};
-
-export const SwitchServerModal = forwardRef<SwitchServerModalRef>(function SwitchServerModal(_, ref) {
+export default function SwitchServerSheet() {
     const { t } = useTranslation();
     const insets = useSafeAreaInsets();
     const { style, colors } = useStyle((colors) =>
@@ -71,27 +65,10 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>(function Switc
         })
     );
     const { createAlertModal } = useModal();
-    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-    const { handleSheetPositionChange } = useBottomSheetBackHandler(bottomSheetModalRef);
+    const actionSheetRef = useRef<ActionSheetRef>(null);
     const { accounts, activeAccount, changeAccount, deleteAccount } = useAccount();
 
-    const snapPoints = useMemo(() => ["40%", "60%"], []);
-
-    const handlePresentModalPress = useCallback(() => {
-        bottomSheetModalRef.current?.present();
-    }, []);
-
-    const renderBackdrop = useCallback(
-        (props: BottomSheetDefaultBackdropProps) => (
-            <BottomSheetBackdrop
-                {...props}
-                disappearsOnIndex={-1}
-            />
-        ),
-        []
-    );
-
-    const renderItem = useCallback(({ item }: { item: Account }) => {
+    const renderItem = ({ item }: { item: Account }) => {
         const isActive = activeAccount?.id === item.id;
 
         const getIcon = () => {
@@ -105,7 +82,7 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>(function Switc
         };
 
         const switchAccount = async () => {
-            bottomSheetModalRef.current?.dismiss();
+            actionSheetRef.current?.hide();
             await changeAccount(item);
         };
 
@@ -130,7 +107,7 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>(function Switc
 
         const deleteConfirm = async () => {
             if (isActive) {
-                bottomSheetModalRef.current?.dismiss();
+                actionSheetRef.current?.hide();
             }
 
             await deleteAccount(item);
@@ -158,26 +135,20 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>(function Switc
                 </TouchableOpacity>
             </TouchableOpacity>
         );
-    }, [bottomSheetModalRef, colors, style, activeAccount]);
-
-    useImperativeHandle(ref, () => ({
-        present: handlePresentModalPress,
-    }));
+    };
 
     const addAccount = () => {
-        bottomSheetModalRef.current?.dismiss();
+        actionSheetRef.current?.hide();
         router.push("/(auth)/email");
     };
 
     return (
-        <BottomSheetModal
-            ref={bottomSheetModalRef}
-            onChange={handleSheetPositionChange}
-            index={1}
-            snapPoints={snapPoints}
-            backdropComponent={renderBackdrop}
-            backgroundStyle={style.background}
-            handleIndicatorStyle={style.handle}
+        <ActionSheet
+            ref={actionSheetRef}
+            gestureEnabled={true}
+            snapPoints={[60, 80]}
+            containerStyle={style.background}
+            indicatorStyle={style.handle}
         >
             <TouchableOpacity style={[style.item, style.itemAdd]} onPress={addAccount}>
                 <View style={style.infoView}>
@@ -185,12 +156,13 @@ export const SwitchServerModal = forwardRef<SwitchServerModalRef>(function Switc
                 </View>
             </TouchableOpacity>
 
-            <BottomSheetFlatList
+            <FlatList
                 data={accounts}
                 keyExtractor={(_, index) => index.toString()}
                 renderItem={renderItem}
                 contentContainerStyle={style.content}
+                renderScrollComponent={props => <ScrollView {...props} />}
             />
-        </BottomSheetModal>
+        </ActionSheet>
     );
-});
+}

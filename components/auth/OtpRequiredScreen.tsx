@@ -4,12 +4,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
+import { SheetManager } from "react-native-actions-sheet";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import FormTextInput from "@/components/ui/form/FormTextInput";
 import OTPInput from "@/components/ui/OTPInput";
 import Button from "@/components/ui/Button";
 import { useAccount } from "@/context/AccountProvider";
-import { useSwitchServerModal } from "@/context/SwitchServerModalProvider";
 import useVersionCheck from "@/hooks/useVersionCheck";
 import { useStyle } from "@/hooks/useStyle";
 
@@ -38,7 +38,6 @@ export default function OtpRequiredScreen() {
         })
     );
     const { submitOtp } = useAccount();
-    const { present } = useSwitchServerModal();
     const { control, handleSubmit, setValue, formState: { errors, isValid, isSubmitting } } = useForm<Schema>({
         defaultValues,
         resolver: zodResolver(schema),
@@ -93,7 +92,7 @@ export default function OtpRequiredScreen() {
             <Button
                 text={t("app:Auth.SelectServer")}
                 icon="swap-horizontal"
-                onPress={present}
+                onPress={() => SheetManager.show("switch-server-sheet")}
                 disabled={isSubmitting}
             />
         </ContentWrapper>
