@@ -7,7 +7,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config,
     name: "Pallokala" + (IS_DEV ? " (Development)" : ""),
     slug: "pallokala",
-    version: "1.6.0",
+    version: "1.7.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
     scheme: "pallokala",
@@ -25,7 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
             backgroundColor: "#ffffff"
         },
         package: packageIdentifier,
-        versionCode: 8
+        versionCode: 9
     },
     plugins: [
         [
