@@ -416,7 +416,7 @@ const resources = {
         users: require("@/lang/pufferpanel/sk_SK/users.json"),
         backup: require("@/lang/pufferpanel/sk_SK/backup.json")
     },
-    /*"sr_SP": {
+    "sr_SP": {
         common: require("@/lang/pufferpanel/sr_SP/common.json"),
         env: require("@/lang/pufferpanel/sr_SP/env.json"),
         errors: require("@/lang/pufferpanel/sr_SP/errors.json"),
@@ -431,7 +431,7 @@ const resources = {
         templates: require("@/lang/pufferpanel/sr_SP/templates.json"),
         users: require("@/lang/pufferpanel/sr_SP/users.json"),
         backup: require("@/lang/pufferpanel/sr_SP/backup.json")
-    },*/
+    },
     "sv_SE": {
         common: require("@/lang/pufferpanel/sv_SE/common.json"),
         env: require("@/lang/pufferpanel/sv_SE/env.json"),
