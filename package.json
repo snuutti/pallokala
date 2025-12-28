@@ -10,7 +10,8 @@
         "test": "jest --watchAll",
         "lint": "expo lint",
         "check-types": "tsc --noEmit",
-        "plugin:build": "tsc -p ./plugin/tsconfig.json"
+        "plugin:build": "tsc -p ./plugin/tsconfig.json",
+        "build-aab": "mkdir -p ~/eas-temp-workdir && TMPDIR=~/eas-temp-workdir eas build --local --non-interactive --platform android --profile production && rm -rf ~/eas-temp-workdir"
     },
     "jest": {
         "preset": "jest-expo"
