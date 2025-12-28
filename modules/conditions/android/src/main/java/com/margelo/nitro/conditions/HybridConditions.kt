@@ -17,18 +17,18 @@ class HybridConditions : HybridConditionsSpec() {
     override fun resolve(script: String, data: Map<String, VariableType>): Boolean {
         val varDecls = data.map { (key, value) ->
             when {
-                value.isFirst -> CelVarDecl.newVarDeclaration(key, SimpleType.STRING)
-                value.isSecond -> CelVarDecl.newVarDeclaration(key, SimpleType.DOUBLE)
-                value.isThird -> CelVarDecl.newVarDeclaration(key, SimpleType.BOOL)
+                value.isFirst -> CelVarDecl.newVarDeclaration(key, SimpleType.BOOL)
+                value.isSecond -> CelVarDecl.newVarDeclaration(key, SimpleType.STRING)
+                value.isThird -> CelVarDecl.newVarDeclaration(key, SimpleType.DOUBLE)
                 else -> throw IllegalArgumentException("Unknown type for key $key")
             }
         }
 
         val variables = data.mapValues { (key, value) ->
             when {
-                value.isFirst -> value.getAs<String>()!!
-                value.isSecond -> value.getAs<Double>()!!
-                value.isThird -> value.getAs<Boolean>()!!
+                value.isFirst -> value.asFirstOrNull()!!
+                value.isSecond -> value.asSecondOrNull()!!
+                value.isThird -> value.asThirdOrNull()!!
                 else -> throw IllegalArgumentException("Unknown type for key $key")
             }
         }

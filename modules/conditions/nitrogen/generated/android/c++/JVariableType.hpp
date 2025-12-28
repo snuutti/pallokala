@@ -24,35 +24,45 @@ namespace margelo::nitro::NitroConditions {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/conditions/VariableType;";
 
-    static jni::local_ref<JVariableType> create_0(jni::alias_ref<jni::JString> value) {
-      static const auto method = javaClassStatic()->getStaticMethod<JVariableType(jni::alias_ref<jni::JString>)>("create");
-      return method(javaClassStatic(), value);
-    }
-    static jni::local_ref<JVariableType> create_1(double value) {
-      static const auto method = javaClassStatic()->getStaticMethod<JVariableType(double)>("create");
-      return method(javaClassStatic(), value);
-    }
-    static jni::local_ref<JVariableType> create_2(jboolean value) {
+    static jni::local_ref<JVariableType> create_0(jboolean value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariableType(jboolean)>("create");
       return method(javaClassStatic(), value);
     }
+    static jni::local_ref<JVariableType> create_1(jni::alias_ref<jni::JString> value) {
+      static const auto method = javaClassStatic()->getStaticMethod<JVariableType(jni::alias_ref<jni::JString>)>("create");
+      return method(javaClassStatic(), value);
+    }
+    static jni::local_ref<JVariableType> create_2(double value) {
+      static const auto method = javaClassStatic()->getStaticMethod<JVariableType(double)>("create");
+      return method(javaClassStatic(), value);
+    }
 
-    static jni::local_ref<JVariableType> fromCpp(const std::variant<std::string, double, bool>& variant) {
+    static jni::local_ref<JVariableType> fromCpp(const std::variant<bool, std::string, double>& variant) {
       switch (variant.index()) {
-        case 0: return create_0(jni::make_jstring(std::get<0>(variant)));
-        case 1: return create_1(std::get<1>(variant));
+        case 0: return create_0(std::get<0>(variant));
+        case 1: return create_1(jni::make_jstring(std::get<1>(variant)));
         case 2: return create_2(std::get<2>(variant));
         default: throw std::invalid_argument("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
     }
 
-    [[nodiscard]] std::variant<std::string, double, bool> toCpp() const;
+    [[nodiscard]] std::variant<bool, std::string, double> toCpp() const;
   };
 
   namespace JVariableType_impl {
-    class First: public jni::JavaClass<First, JVariableType> {
+    class First final: public jni::JavaClass<First, JVariableType> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/conditions/VariableType$First;";
+    
+      [[nodiscard]] jboolean getValue() const {
+        static const auto field = javaClassStatic()->getField<jboolean>("value");
+        return getFieldValue(field);
+      }
+    };
+    
+    class Second final: public jni::JavaClass<Second, JVariableType> {
+    public:
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/conditions/VariableType$Second;";
     
       [[nodiscard]] jni::local_ref<jni::JString> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JString>("value");
@@ -60,22 +70,12 @@ namespace margelo::nitro::NitroConditions {
       }
     };
     
-    class Second: public jni::JavaClass<Second, JVariableType> {
-    public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/conditions/VariableType$Second;";
-    
-      [[nodiscard]] double getValue() const {
-        static const auto field = javaClassStatic()->getField<double>("value");
-        return getFieldValue(field);
-      }
-    };
-    
-    class Third: public jni::JavaClass<Third, JVariableType> {
+    class Third final: public jni::JavaClass<Third, JVariableType> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/conditions/VariableType$Third;";
     
-      [[nodiscard]] jboolean getValue() const {
-        static const auto field = javaClassStatic()->getField<jboolean>("value");
+      [[nodiscard]] double getValue() const {
+        static const auto field = javaClassStatic()->getField<double>("value");
         return getFieldValue(field);
       }
     };

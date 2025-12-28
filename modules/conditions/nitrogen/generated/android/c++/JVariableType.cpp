@@ -9,21 +9,21 @@
 
 namespace margelo::nitro::NitroConditions {
   /**
-   * Converts JVariableType to std::variant<std::string, double, bool>
+   * Converts JVariableType to std::variant<bool, std::string, double>
    */
-  std::variant<std::string, double, bool> JVariableType::toCpp() const {
+  std::variant<bool, std::string, double> JVariableType::toCpp() const {
     if (isInstanceOf(JVariableType_impl::First::javaClassStatic())) {
-      // It's a `std::string`
-      auto jniValue = static_cast<const JVariableType_impl::First*>(this)->getValue();
-      return jniValue->toStdString();
-    } else if (isInstanceOf(JVariableType_impl::Second::javaClassStatic())) {
-      // It's a `double`
-      auto jniValue = static_cast<const JVariableType_impl::Second*>(this)->getValue();
-      return jniValue;
-    } else if (isInstanceOf(JVariableType_impl::Third::javaClassStatic())) {
       // It's a `bool`
-      auto jniValue = static_cast<const JVariableType_impl::Third*>(this)->getValue();
+      auto jniValue = static_cast<const JVariableType_impl::First*>(this)->getValue();
       return static_cast<bool>(jniValue);
+    } else if (isInstanceOf(JVariableType_impl::Second::javaClassStatic())) {
+      // It's a `std::string`
+      auto jniValue = static_cast<const JVariableType_impl::Second*>(this)->getValue();
+      return jniValue->toStdString();
+    } else if (isInstanceOf(JVariableType_impl::Third::javaClassStatic())) {
+      // It's a `double`
+      auto jniValue = static_cast<const JVariableType_impl::Third*>(this)->getValue();
+      return jniValue;
     }
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }

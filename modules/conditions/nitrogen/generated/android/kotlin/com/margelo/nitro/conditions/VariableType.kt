@@ -11,18 +11,19 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "String|Double|Boolean".
+ * Represents the TypeScript variant "Boolean | String | Double".
  */
 @Suppress("ClassName")
 @DoNotStrip
 sealed class VariableType {
   @DoNotStrip
-  data class First(@DoNotStrip val value: String): VariableType()
+  data class First(@DoNotStrip val value: Boolean): VariableType()
   @DoNotStrip
-  data class Second(@DoNotStrip val value: Double): VariableType()
+  data class Second(@DoNotStrip val value: String): VariableType()
   @DoNotStrip
-  data class Third(@DoNotStrip val value: Boolean): VariableType()
+  data class Third(@DoNotStrip val value: Double): VariableType()
 
+  @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
   inline fun <reified T> getAs(): T? = when (this) {
     is First -> value as? T
     is Second -> value as? T
@@ -36,15 +37,36 @@ sealed class VariableType {
   val isThird: Boolean
     get() = this is Third
 
+  fun asFirstOrNull(): Boolean? {
+    val value = (this as? First)?.value ?: return null
+    return value
+  }
+  fun asSecondOrNull(): String? {
+    val value = (this as? Second)?.value ?: return null
+    return value
+  }
+  fun asThirdOrNull(): Double? {
+    val value = (this as? Third)?.value ?: return null
+    return value
+  }
+
+  inline fun <R> match(first: (Boolean) -> R, second: (String) -> R, third: (Double) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+      is Third -> third(value)
+    }
+  }
+
   companion object {
     @JvmStatic
     @DoNotStrip
-    fun create(value: String): VariableType = First(value)
+    fun create(value: Boolean): VariableType = First(value)
     @JvmStatic
     @DoNotStrip
-    fun create(value: Double): VariableType = Second(value)
+    fun create(value: String): VariableType = Second(value)
     @JvmStatic
     @DoNotStrip
-    fun create(value: Boolean): VariableType = Third(value)
+    fun create(value: Double): VariableType = Third(value)
   }
 }

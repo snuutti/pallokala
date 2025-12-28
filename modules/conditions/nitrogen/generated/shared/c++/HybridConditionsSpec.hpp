@@ -50,7 +50,7 @@ namespace margelo::nitro::NitroConditions {
 
     public:
       // Methods
-      virtual bool resolve(const std::string& script, const std::unordered_map<std::string, std::variant<std::string, double, bool>>& data) = 0;
+      virtual bool resolve(const std::string& script, const std::unordered_map<std::string, std::variant<bool, std::string, double>>& data) = 0;
 
     protected:
       // Hybrid Setup

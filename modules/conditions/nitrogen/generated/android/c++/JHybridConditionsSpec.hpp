@@ -41,6 +41,7 @@ namespace margelo::nitro::NitroConditions {
   public:
     size_t getExternalMemorySize() noexcept override;
     void dispose() noexcept override;
+    std::string toString() override;
 
   public:
     inline const jni::global_ref<JHybridConditionsSpec::javaobject>& getJavaPart() const noexcept {
@@ -53,7 +54,7 @@ namespace margelo::nitro::NitroConditions {
 
   public:
     // Methods
-    bool resolve(const std::string& script, const std::unordered_map<std::string, std::variant<std::string, double, bool>>& data) override;
+    bool resolve(const std::string& script, const std::unordered_map<std::string, std::variant<bool, std::string, double>>& data) override;
 
   private:
     friend HybridBase;

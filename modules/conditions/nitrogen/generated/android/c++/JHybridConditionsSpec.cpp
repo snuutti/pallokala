@@ -36,11 +36,17 @@ namespace margelo::nitro::NitroConditions {
     method(_javaPart);
   }
 
+  std::string JHybridConditionsSpec::toString() {
+    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    auto javaString = method(_javaPart);
+    return javaString->toStdString();
+  }
+
   // Properties
   
 
   // Methods
-  bool JHybridConditionsSpec::resolve(const std::string& script, const std::unordered_map<std::string, std::variant<std::string, double, bool>>& data) {
+  bool JHybridConditionsSpec::resolve(const std::string& script, const std::unordered_map<std::string, std::variant<bool, std::string, double>>& data) {
     static const auto method = javaClassStatic()->getMethod<jboolean(jni::alias_ref<jni::JString> /* script */, jni::alias_ref<jni::JMap<jni::JString, JVariableType>> /* data */)>("resolve");
     auto __result = method(_javaPart, jni::make_jstring(script), [&]() -> jni::local_ref<jni::JMap<jni::JString, JVariableType>> {
       auto __map = jni::JHashMap<jni::JString, JVariableType>::create(data.size());
