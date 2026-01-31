@@ -106,8 +106,8 @@ jobs:
 
       - name: Build archive
         run: |
-          xcodebuild -workspace ios/pallokala.xcworkspace \
-            -scheme Pallokala \
+          xcodebuild -workspace ios/${{ (github.event_name == 'workflow_dispatch' && inputs.production == false) && 'PallokalaDevelopment' || 'Pallokala' }}.xcworkspace \
+            -scheme ${{ (github.event_name == 'workflow_dispatch' && inputs.production == false) && 'PallokalaDevelopment' || 'Pallokala' }} \
             -configuration ${{ (github.event_name == 'workflow_dispatch' && inputs.production == false) && 'Debug' || 'Release' }} \
             -destination 'generic/platform=iOS' \
             -archivePath pallokala.xcarchive \
