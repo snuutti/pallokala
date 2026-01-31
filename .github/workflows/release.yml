@@ -3,9 +3,28 @@ on:
     tags:
       - "v*"
 
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "Platform to build"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - android
+          - ios
+      production:
+        description: "Production build"
+        required: true
+        type: boolean
+        default: true
+
 name: Release
 jobs:
   build-apk:
+    name: Build Android
+    if: github.event_name == 'push' || inputs.platform == 'android' || inputs.platform == 'all'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,7 +59,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Build app
-        run: eas build --local --non-interactive --platform android --profile apk
+        run: eas build --local --non-interactive --platform android --profile ${{ (github.event_name == 'workflow_dispatch' && inputs.production == false) && 'development' || 'apk' }}
         env:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx4g"
 
@@ -50,20 +69,87 @@ jobs:
           name: pallokala_apk
           path: build-*.apk
 
+  build-ipa:
+    name: Build iOS
+    if: github.event_name == 'push' || inputs.platform == 'ios' || inputs.platform == 'all'
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: true
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20.x
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+          packager: bun
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Expo prebuild
+        run: bunx expo prebuild -p ios --clean
+
+      - name: Build archive
+        run: |
+          xcodebuild -workspace ios/pallokala.xcworkspace \
+            -scheme pallokala \
+            -configuration ${{ (github.event_name == 'workflow_dispatch' && inputs.production == false) && 'Debug' || 'Release' }} \
+            -destination 'generic/platform=iOS' \
+            -archivePath pallokala.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            clean archive
+
+      - name: Package IPA
+        run: |
+          mkdir Payload
+          cp -r ios/pallokala.xcarchive/Products/Applications/ Payload/
+          zip -r pallokala.ipa Payload/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: pallokala_ipa
+          path: pallokala.ipa
+
   release:
-    needs: [build-apk]
+    name: Create Release
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [build-apk, build-ipa]
     permissions:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifact
+      - name: Download artifact (Android)
         uses: actions/download-artifact@v7
         with:
           name: pallokala_apk
           path: pallokala_apk
 
+      - name: Download artifact (iOS)
+        uses: actions/download-artifact@v7
+        with:
+          name: pallokala_ipa
+          path: pallokala_ipa
+
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          files: pallokala_apk/**
+          files: |
+            pallokala_apk/**
+            pallokala_ipa/**
