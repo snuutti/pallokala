@@ -95,7 +95,7 @@ declare module "pufferpanel" {
     export type PasswordLoginResult = {
         needsSecondFactor: boolean;
         otpEnabled: boolean;
-        webauthnChallenge?: CredentialRequestOptions;
+        webauthnChallenge?: CredentialRequestOptions | null;
     };
 
     export abstract class SelfApi {

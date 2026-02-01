@@ -342,11 +342,12 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
             const emailAccount = account as EmailAccount;
             const result = await apiClient.auth.login(emailAccount.email, emailAccount.password);
             const passwordLoginResult = result as PasswordLoginResult;
+            const passkeyLogin = passwordLoginResult.webauthnChallenge !== undefined && passwordLoginResult.webauthnChallenge !== null;
 
-            success = result === true || (passwordLoginResult.needsSecondFactor && passwordLoginResult.webauthnChallenge === undefined);
+            success = result === true || (passwordLoginResult.needsSecondFactor && !passkeyLogin);
             tryVersion = result === true;
 
-            if (!success && passwordLoginResult.needsSecondFactor && passwordLoginResult.webauthnChallenge !== undefined) {
+            if (!success && passwordLoginResult.needsSecondFactor && passkeyLogin) {
                 return [false, t("app:Auth.PasskeyLoginUnsupported")];
             }
         }
