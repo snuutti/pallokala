@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import { Stack } from "expo-router";
 import { useTranslation } from "react-i18next";
 import SaveButton from "@/components/server/files/SaveButton";
@@ -14,6 +15,7 @@ export default function RootNavigation() {
             <Stack.Screen
                 name="(app)"
                 options={{
+                    title: "",
                     headerShown: false
                 }}
             />
@@ -30,8 +32,7 @@ export default function RootNavigation() {
                 name="(modal)/about"
                 options={{
                     title: t("app:About.Title"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -39,8 +40,7 @@ export default function RootNavigation() {
                 name="(modal)/changelog"
                 options={{
                     title: t("app:About.ChangelogTitle"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -48,8 +48,7 @@ export default function RootNavigation() {
                 name="(modal)/search"
                 options={{
                     title: t("hotkeys:Global./"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -57,8 +56,7 @@ export default function RootNavigation() {
                 name="(modal)/createserver"
                 options={{
                     title: t("servers:Create"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -66,8 +64,7 @@ export default function RootNavigation() {
                 name="(modal)/createnode"
                 options={{
                     title: t("nodes:Create"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -75,8 +72,7 @@ export default function RootNavigation() {
                 name="(modal)/createuser"
                 options={{
                     title: t("users:Create"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -84,8 +80,7 @@ export default function RootNavigation() {
                 name="(modal)/editfile"
                 options={{
                     title: openFile?.name || t("app:Servers.Files.EditFile"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom",
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom",
                     headerRight: SaveButton
                 }}
             />
@@ -94,8 +89,7 @@ export default function RootNavigation() {
                 name="(modal)/filedetails"
                 options={{
                     title: t("app:Servers.Files.FileDetails"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -103,8 +97,7 @@ export default function RootNavigation() {
                 name="(modal)/deploynode"
                 options={{
                     title: t("nodes:Deploy"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -112,8 +105,7 @@ export default function RootNavigation() {
                 name="(modal)/edituser"
                 options={{
                     title: t("users:Edit"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -121,8 +113,7 @@ export default function RootNavigation() {
                 name="(modal)/edittask"
                 options={{
                     title: t("app:Servers.Tasks.EditTask"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -130,8 +121,7 @@ export default function RootNavigation() {
                 name="(modal)/editoperator"
                 options={{
                     title: t("app:Templates.Operators.EditTitle"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -139,8 +129,7 @@ export default function RootNavigation() {
                 name="(modal)/enroll2fa"
                 options={{
                     title: t("users:Otp"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -148,8 +137,7 @@ export default function RootNavigation() {
                 name="(modal)/recoverycodes"
                 options={{
                     title: t("users:RecoveryCodes"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
 
@@ -157,8 +145,7 @@ export default function RootNavigation() {
                 name="(modal)/oauthcreds"
                 options={{
                     title: t("oauth:Credentials"),
-                    presentation: "modal",
-                    animation: "fade_from_bottom"
+                    animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
                 }}
             />
         </Stack>

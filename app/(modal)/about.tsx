@@ -1,5 +1,5 @@
 import { ComponentProps } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import { router } from "expo-router";
 import { Image } from "expo-image";
 import * as Linking from "expo-linking";
@@ -55,12 +55,14 @@ export default function AboutScreen() {
                     onPress={() => openLink("https://github.com/snuutti/pallokala/issues/new/choose")}
                 />
 
-                <LinkItem
-                    title={t("app:About.RateGooglePlay")}
-                    subline={t("app:About.RateGooglePlaySubline")}
-                    icon="star"
-                    onPress={() => openLink("https://play.google.com/store/apps/details?id=io.github.snuutti.pallokala")}
-                />
+                {Platform.OS === "android" && (
+                    <LinkItem
+                        title={t("app:About.RateGooglePlay")}
+                        subline={t("app:About.RateGooglePlaySubline")}
+                        icon="star"
+                        onPress={() => openLink("https://play.google.com/store/apps/details?id=io.github.snuutti.pallokala")}
+                    />
+                )}
 
                 <LinkItem
                     title={t("app:About.Changelog")}

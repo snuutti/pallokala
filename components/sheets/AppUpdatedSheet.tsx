@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import { router } from "expo-router";
 import * as Linking from "expo-linking";
@@ -67,11 +67,13 @@ export default function AppUpdatedSheet() {
 
                 <Text style={[style.text, style.rateText]}>{t("app:Modal.Updated.RateLongText")}</Text>
 
-                <Button
-                    text={t("app:About.RateGooglePlay")}
-                    icon="star"
-                    onPress={() => openLink("https://play.google.com/store/apps/details?id=io.github.snuutti.pallokala")}
-                />
+                {Platform.OS === "android" && (
+                    <Button
+                        text={t("app:About.RateGooglePlay")}
+                        icon="star"
+                        onPress={() => openLink("https://play.google.com/store/apps/details?id=io.github.snuutti.pallokala")}
+                    />
+                )}
 
                 <Button
                     text={t("app:Modal.Updated.StarOnGitHub")}

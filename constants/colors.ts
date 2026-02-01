@@ -1,4 +1,4 @@
-import { Appearance } from "react-native";
+import { Appearance, Platform } from "react-native";
 import { Theme as NavigationTheme, DefaultTheme } from "@react-navigation/native";
 import * as SystemUI from "expo-system-ui";
 import { deriveOpacity, deriveContrast } from "@/utils/theme";
@@ -74,6 +74,10 @@ export function getColors(colorScheme: ColorScheme, primaryColor?: string): Colo
         default:
             colors = { ...lightColors };
             break;
+    }
+
+    if (Platform.OS === "ios") {
+        colors.serverTypeIconFilter = "none";
     }
 
     if (primaryColor) {
