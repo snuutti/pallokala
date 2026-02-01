@@ -87,9 +87,10 @@ export default function SwitchServerSheet() {
         };
 
         const deleteAlert = () => {
+            actionSheetRef.current?.hide();
             createAlertModal(
                 t("app:Drawer.RemoveAccount"),
-                t("app:Drawer.RemoveAccountBody"),
+                t("app:Drawer.RemoveAccountBody", { name: item.nickname }),
                 [
                     {
                         text: t("app:Drawer.RemoveAccountButton"),

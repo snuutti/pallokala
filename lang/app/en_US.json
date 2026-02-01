@@ -141,7 +141,7 @@
         "About": "About Pallokala",
         "SwitchServer": "Switch server",
         "RemoveAccount": "Remove Account",
-        "RemoveAccountBody": "Are you sure you want to remove this account?",
+        "RemoveAccountBody": "Are you sure you want to remove this account ({name})?",
         "RemoveAccountButton": "Remove",
         "AddAccount": "Add new account"
     }
