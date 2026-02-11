@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ColorScheme, setAppearanceColor } from "@/constants/colors";
 
@@ -36,7 +37,7 @@ export const useSettingsStore = create<SettingsStore>()(
             themeSettings: {},
             consoleFontSize: 14,
             timeFormat: "24h",
-            sftpFileManager: true,
+            sftpFileManager: Platform.OS === "android",
             disclaimerRead: false,
             previousVersion: undefined,
             setLanguage: (language) => set({ language }),

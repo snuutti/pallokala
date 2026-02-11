@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, Platform } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { useTranslation } from "react-i18next";
 import ContentWrapper from "@/components/screen/ContentWrapper";
@@ -186,13 +186,15 @@ export default function PreferencesScreen() {
                 onPress={pickTimeFormat}
             />
 
-            <Switch
-                label={t("app:Self.Preferences.Sftp")}
-                description={t("app:Self.Preferences.SftpDesc")}
-                value={isTestMode ? false : newSFTPFileManager}
-                onValueChange={isTestMode ? () => {} : setNewSFTPFileManager}
-                disabled={isTestMode}
-            />
+            {Platform.OS === "android" && (
+                <Switch
+                    label={t("app:Self.Preferences.Sftp")}
+                    description={t("app:Self.Preferences.SftpDesc")}
+                    value={isTestMode ? false : newSFTPFileManager}
+                    onValueChange={isTestMode ? () => {} : setNewSFTPFileManager}
+                    disabled={isTestMode}
+                />
+            )}
 
             <Button
                 text={t("users:SavePreferences")}
