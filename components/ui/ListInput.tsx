@@ -1,3 +1,4 @@
+import { JSX } from "react";
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import Animated, { FadeOutUp, FadeInUp, LinearTransition } from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
@@ -8,6 +9,7 @@ import { useStyle } from "@/hooks/useStyle";
 
 export type ListInputProps = {
     label?: string;
+    description?: string | JSX.Element | JSX.Element[];
     value: string[];
     onValueChange: (value: string[]) => void;
     addLabel?: string;
@@ -36,6 +38,9 @@ export default function ListInput(props: ListInputProps) {
             },
             actionDisabled: {
                 opacity: 0.4
+            },
+            description: {
+                color: colors.textDisabled
             }
         })
     );
@@ -119,6 +124,10 @@ export default function ListInput(props: ListInputProps) {
                 icon="plus"
                 onPress={add}
             />
+
+            {props.description && (
+                <Text style={style.description}>{props.description}</Text>
+            )}
         </>
     );
 }
