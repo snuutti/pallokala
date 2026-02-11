@@ -17,7 +17,8 @@ export default function ServerTaskItem(props: ServerTaskItemProps) {
                 backgroundColor: colors.background,
                 marginHorizontal: 10,
                 marginVertical: 5,
-                borderRadius: 15
+                borderRadius: 15,
+                boxShadow: colors.raised
             },
             infoView: {
                 flexGrow: 1,

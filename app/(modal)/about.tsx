@@ -107,7 +107,8 @@ function LinkItem(props: LinkItemProps) {
                 alignItems: "center",
                 backgroundColor: colors.background,
                 marginVertical: 5,
-                borderRadius: 15
+                borderRadius: 15,
+                boxShadow: colors.raised
             },
             icon: {
                 marginRight: 10

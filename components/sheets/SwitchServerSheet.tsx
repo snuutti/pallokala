@@ -31,7 +31,8 @@ export default function SwitchServerSheet() {
                 flexDirection: "row",
                 backgroundColor: colors.background,
                 marginHorizontal: 10,
-                borderRadius: 15
+                borderRadius: 15,
+                boxShadow: colors.raised
             },
             itemActive: {
                 backgroundColor: colors.primaryHover

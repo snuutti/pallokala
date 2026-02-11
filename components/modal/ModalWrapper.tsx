@@ -34,14 +34,7 @@ export default function ModalWrapper(props: ModalWrapperProps) {
                 backgroundColor: colors.backdrop,
                 padding: 20,
                 borderRadius: 16,
-                shadowColor: "#000",
-                shadowOffset: {
-                    width: 0,
-                    height: 2
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3.84,
-                elevation: 5
+                boxShadow: colors.raised
             }
         })
     );

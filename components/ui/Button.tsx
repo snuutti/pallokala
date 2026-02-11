@@ -23,14 +23,7 @@ export default function Button(props: ButtonProps) {
                 marginVertical: 5,
                 backgroundColor: colors.primary,
                 borderRadius: 16,
-                shadowColor: "#000",
-                shadowOffset: {
-                    width: 0,
-                    height: 2
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3.84,
-                elevation: 5
+                boxShadow: colors.raised
             },
             danger: {
                 backgroundColor: colors.error

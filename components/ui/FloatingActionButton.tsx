@@ -18,7 +18,7 @@ type FloatingActionButtonProps = {
 };
 
 export default function FloatingActionButton({ visible = true, color, onPress, safeArea, children }: FloatingActionButtonProps) {
-    const { style, colors } = useStyle(() =>
+    const { style, colors } = useStyle((colors) =>
         StyleSheet.create({
             container: {
                 position: "absolute",
@@ -31,14 +31,7 @@ export default function FloatingActionButton({ visible = true, color, onPress, s
                 borderRadius: 30,
                 justifyContent: "center",
                 alignItems: "center",
-                shadowColor: "#000",
-                shadowOffset: {
-                    width: 0,
-                    height: 2
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3.84,
-                elevation: 5
+                boxShadow: colors.raised
             }
         })
     );

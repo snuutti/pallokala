@@ -21,7 +21,8 @@ export default function UsersListItem(props: UsersListItemProps) {
                 backgroundColor: colors.background,
                 marginHorizontal: 10,
                 marginVertical: 5,
-                borderRadius: 15
+                borderRadius: 15,
+                boxShadow: colors.raised
             },
             avatarView: {
                 minWidth: 20,

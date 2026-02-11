@@ -71,7 +71,7 @@ export default function ServerListItem(props: ServerListItemProps) {
                 borderRadius: 15,
                 padding: 15,
                 flexDirection: "row",
-                boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)"
+                boxShadow: colors.raised
             },
             backgroundImage: {
                 borderRadius: 15,

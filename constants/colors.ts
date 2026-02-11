@@ -18,10 +18,12 @@ export type Colors = {
     success: string;
     error: string;
     serverTypeIconFilter: string;
+    raised: string;
 };
 
 const primary = "#07a7e3";
 const primaryHover = deriveOpacity(primary, 0.15);
+const raised = "0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)";
 
 export const darkColors: Colors = {
     dark: true,
@@ -35,7 +37,8 @@ export const darkColors: Colors = {
     textPrimary: "#eee",
     success: "#4caf50",
     error: "#fe4242",
-    serverTypeIconFilter: "brightness(0.625)"
+    serverTypeIconFilter: "brightness(0.625)",
+    raised: raised
 };
 
 export const lightColors: Colors = {
@@ -50,7 +53,8 @@ export const lightColors: Colors = {
     textPrimary: "#eee",
     success: "#4caf50",
     error: "#dc3131",
-    serverTypeIconFilter: "none"
+    serverTypeIconFilter: "none",
+    raised: raised
 };
 
 export const amoledColors: Colors = {
