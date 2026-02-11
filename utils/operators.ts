@@ -5,6 +5,7 @@ export type OperatorOption = {
     name: string;
     type: "text" | "boolean" | "textarea" | "list";
     label?: string;
+    hint?: string;
     modeFile?: string;
     default: unknown;
 };
@@ -81,6 +82,46 @@ export const operators: Record<string, OperatorOption[]> = {
             default: ""
         }
     ],
+    archive: [
+        {
+            name: "source",
+            type: "list",
+            default: []
+        },
+        {
+            name: "destination",
+            type: "text",
+            label: "templates:Filename",
+            default: ""
+        }
+    ],
+    extract: [
+        {
+            name: "source",
+            type: "text",
+            label: "templates:Filename",
+            default: ""
+        },
+        {
+            name: "destination",
+            type: "text",
+            default: ""
+        }
+    ],
+    console: [
+        {
+            name: "message",
+            type: "text",
+            default: ""
+        }
+    ],
+    sleep: [
+        {
+            name: "duration",
+            type: "text",
+            default: "5s"
+        }
+    ],
     steamgamedl: [
         {
             name: "appId",
@@ -112,15 +153,51 @@ export const operators: Record<string, OperatorOption[]> = {
     ],
     forgedl: [
         {
+            name: "minecraftVersion",
+            type: "text",
+            label: "templates:MinecraftVersion",
+            default: "latest"
+        },
+        {
             name: "version",
             type: "text",
             label: "templates:Version",
             default: ""
         },
         {
-            name: "filename",
+            name: "target",
             type: "text",
             label: "templates:Filename",
+            default: ""
+        },
+        {
+            name: "outputVariable",
+            type: "text",
+            default: ""
+        }
+    ],
+    neoforgedl: [
+        {
+            name: "minecraftVersion",
+            type: "text",
+            label: "templates:MinecraftVersion",
+            default: "latest"
+        },
+        {
+            name: "version",
+            type: "text",
+            label: "templates:Version",
+            default: ""
+        },
+        {
+            name: "target",
+            type: "text",
+            label: "templates:Filename",
+            default: ""
+        },
+        {
+            name: "outputVariable",
+            type: "text",
             default: ""
         }
     ],
@@ -137,6 +214,47 @@ export const operators: Record<string, OperatorOption[]> = {
             type: "text",
             label: "templates:Filename",
             default: ""
+        }
+    ],
+    paperdl: [
+        {
+            name: "project",
+            type: "text",
+            default: "paper"
+        },
+        {
+            name: "minecraftVersion",
+            type: "text",
+            label: "templates:MinecraftVersion",
+            default: "latest"
+        },
+        {
+            name: "build",
+            type: "text",
+            default: "latest"
+        },
+        {
+            name: "target",
+            type: "text",
+            label: "templates:Filename",
+            default: "server.jar"
+        }
+    ],
+    curseforge: [
+        {
+            name: "projectId",
+            type: "text",
+            default: ""
+        },
+        {
+            name: "fileId",
+            type: "text",
+            default: ""
+        },
+        {
+            name: "java",
+            type: "text",
+            default: "java"
         }
     ],
     nodejsdl: [
@@ -164,6 +282,13 @@ export function getOperatorLabel(t: TFunction, operator: ConditionalMetadataType
         count = Array.isArray(operator.commands) ? operator.commands.length : 1;
         if (count === 1) {
             params.command = Array.isArray(operator.commands) ? operator.commands[0] : operator.commands
+        }
+    }
+
+    if (operator.type === "archive") {
+        count = Array.isArray(operator.source) ? operator.source.length : 1;
+        if (count === 1) {
+            params.file = Array.isArray(operator.source) ? operator.source[0] : operator.source;
         }
     }
 

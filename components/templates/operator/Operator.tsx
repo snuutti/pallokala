@@ -17,7 +17,7 @@ type OperatorProps = {
 };
 
 export default function Operator(props: OperatorProps) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { style } = useStyle((colors) =>
         StyleSheet.create({
             codeEditor: {
@@ -73,6 +73,19 @@ export default function Operator(props: OperatorProps) {
         return t(`operators:${props.data.type!}.${option.name}`);
     };
 
+    const getHint = (option: OperatorOption) => {
+        if (option.hint) {
+            return t(option.hint);
+        }
+
+        const key = `operators:${props.data.type!}.${option.name}Hint`;
+        if (i18n.exists(key)) {
+            return t(key);
+        }
+
+        return undefined;
+    };
+
     return (
         <>
             <Dropdown
@@ -95,6 +108,7 @@ export default function Operator(props: OperatorProps) {
                             value={props.data[option.name] as string}
                             onChangeText={(value) => updateOption(option.name, value)}
                             placeholder={getLabel(option)}
+                            description={getHint(option)}
                         />
                     )}
 
@@ -103,6 +117,7 @@ export default function Operator(props: OperatorProps) {
                             label={getLabel(option)}
                             value={props.data[option.name] as boolean}
                             onValueChange={(value) => updateOption(option.name, value)}
+                            description={getHint(option)}
                         />
                     )}
 
@@ -120,6 +135,7 @@ export default function Operator(props: OperatorProps) {
                             label={getLabel(option)}
                             value={props.data[option.name] as string[]}
                             onValueChange={(value) => updateOption(option.name, value)}
+                            description={getHint(option)}
                         />
                     )}
                 </Animated.View>
