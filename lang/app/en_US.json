@@ -33,7 +33,6 @@
         "AccountAddFailed": "Unable to add account. Please check the server address and try again.",
         "WelcomeHeader": "Welcome!",
         "WelcomeSubline": "Add a new PufferPanel server to get started.",
-        "WelcomeNote": "Note: Pallokala only works with version 3.0 and later PufferPanel servers.",
         "ServerAddress": "Server address",
         "AddAccount": "Add Account",
         "InvalidClientId": "Invalid client ID",

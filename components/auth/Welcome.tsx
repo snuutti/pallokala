@@ -22,7 +22,6 @@ export default function Welcome() {
         <>
             <Text style={style.header}>{t("app:Auth.WelcomeHeader")}</Text>
             <Text style={style.subheader}>{t("app:Auth.WelcomeSubline")}</Text>
-            <Text style={style.subheader}>{t("app:Auth.WelcomeNote")}</Text>
         </>
     );
 }
