@@ -127,6 +127,16 @@ export const operators: Record<string, OperatorOption[]> = {
             name: "appId",
             type: "text",
             default: ""
+        },
+        {
+            name: "branch",
+            type: "text",
+            default: ""
+        },
+        {
+            name: "branchPassword",
+            type: "text",
+            default: ""
         }
     ],
     javadl: [
