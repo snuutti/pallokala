@@ -190,7 +190,8 @@ function SearchItem(props: SearchItemProps) {
                 justifyContent: "center",
                 backgroundColor: colors.background,
                 marginVertical: 5,
-                borderRadius: 15
+                borderRadius: 15,
+                boxShadow: colors.raised
             },
             title: {
                 color: colors.text
