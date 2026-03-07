@@ -2,13 +2,12 @@
 
 ![](assets/images/banner.png)
 
-Pallokala is a mobile client for [PufferPanel](https://www.pufferpanel.com) made with React Native. 
-The UI attempts to closely mimic the PufferPanel web interface, down to the colors and icons.
+Pallokala is a mobile client for [PufferPanel](https://www.pufferpanel.com) available on Android and iOS made with React Native.
 
 > [!NOTE]  
 > Pallokala is still in development. Not all features are implemented yet and there may be bugs.
 
-The code is messy in some places. I'm doing this as a hobby for fun, and writing clean code is not fun. I'll clean it up later™️.
+![](.github/screenshot.png)
 
 ## Notable features
 
@@ -25,9 +24,7 @@ The code is messy in some places. I'm doing this as a hobby for fun, and writing
   - Move files
 - App shortcuts/Quick actions
 
-## Work in progress
-
-Either locally or on another branch, I'm currently working on the following features:
+## Coming soon
 
 - Template management
 - Server info widget
@@ -36,7 +33,9 @@ Either locally or on another branch, I'm currently working on the following feat
 
 - Passkey support
 - Template management
-- Themes (Ability to modify the stylesheets, won't be added anytime soon if ever)
-- I'm sure there are some other small features that I've missed (Let me know!)
+- Themes (Won't be implemented)
 
-Yes, that's really it. Everything else is implemented.
+## iOS
+
+Pallokala is not available on the App Store due to insane Apple developer license pricing.
+You can get the .ipa file from the releases page and sideload it using SideStore or similar apps.
