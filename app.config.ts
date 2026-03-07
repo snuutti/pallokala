@@ -7,13 +7,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config,
     name: "Pallokala" + (IS_DEV ? " (Development)" : ""),
     slug: "pallokala",
-    version: "1.7.0",
+    version: "1.8.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
     scheme: "pallokala",
     userInterfaceStyle: "automatic",
     ios: {
         bundleIdentifier: packageIdentifier,
+        buildNumber: "1.8.0",
         config: {
             usesNonExemptEncryption: false
         },
@@ -25,7 +26,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
             backgroundColor: "#ffffff"
         },
         package: packageIdentifier,
-        versionCode: 9
+        versionCode: 10
     },
     plugins: [
         [
