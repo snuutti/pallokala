@@ -87,7 +87,6 @@ export const ApiClientProvider = ({ children }: ApiClientProviderProps) => {
     const handleError = useCallback(async (error: ErrorHandlerResult) => {
         if (error.status === 401) {
             setSessionTimedOut(true);
-            showErrorAlert(t("errors:ErrSessionTimedOut"));
         } else if (error.code === "ErrGeneric" && error.msg) {
             showErrorAlert(t(error.msg));
         } else if (error.code === "ErrUnknownError") {
