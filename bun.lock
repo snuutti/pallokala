@@ -6,11 +6,11 @@
       "name": "pallokala",
       "dependencies": {
         "@dylankenneally/react-native-ssh-sftp": "^1.7.0",
+        "@expo/ui": "^56.0.18",
         "@formatjs/intl-displaynames": "^7.3.10",
         "@formatjs/intl-locale": "^5.3.9",
         "@hookform/resolvers": "^5.4.0",
         "@react-native-async-storage/async-storage": "2.2.0",
-        "@react-native-community/slider": "5.2.0",
         "@react-native-menu/menu": "^2.0.0",
         "@react-native-vector-icons/material-design-icons": "^13.1.2",
         "@shopify/flash-list": "2.0.2",
@@ -679,8 +679,6 @@
     "@radix-ui/rect": ["@radix-ui/rect@1.1.0", "", {}, "sha512-A9+lCBZoaMJlVKcRBz2YByCG+Cp2t6nAnMnNba+XiWxnj6r4JUFqfsgwocMBZU9LPtdxC6wB56ySYpc7LQIoJg=="],
 
     "@react-native-async-storage/async-storage": ["@react-native-async-storage/async-storage@2.2.0", "", { "dependencies": { "merge-options": "^3.0.4" }, "peerDependencies": { "react-native": "^0.0.0-0 || >=0.65 <1.0" } }, "sha512-gvRvjR5JAaUZF8tv2Kcq/Gbt3JHwbKFYfmb445rhOj6NUMx3qPLixmDx5pZAyb9at1bYvJ4/eTUipU5aki45xw=="],
-
-    "@react-native-community/slider": ["@react-native-community/slider@5.2.0", "", {}, "sha512-484sH8aWEaSjxaZ7HT3YZ8CKDcNes2synko1vdEz5DFEdvKAduxKJTj22L/qBMD7rtIkfbX69DMzWDAGbOAV6w=="],
 
     "@react-native-masked-view/masked-view": ["@react-native-masked-view/masked-view@0.3.2", "", { "peerDependencies": { "react": ">=16", "react-native": ">=0.57" } }, "sha512-XwuQoW7/GEgWRMovOQtX3A4PrXhyaZm0lVUiY8qJDvdngjLms9Cpdck6SmGAUNqQwcj2EadHC1HwL0bEyoa/SQ=="],
 

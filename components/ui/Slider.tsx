@@ -1,8 +1,8 @@
 import { Text, StyleSheet } from "react-native";
-import { default as RNCSlider, SliderProps as RNCSliderProps } from "@react-native-community/slider";
+import { default as EUISlider, SliderProps as EUISliderProps } from "@expo/ui/community/slider";
 import { useStyle } from "@/hooks/useStyle";
 
-export type SliderProps = RNCSliderProps & {
+export type SliderProps = EUISliderProps & {
     label?: string;
     description?: string;
 };
@@ -17,9 +17,7 @@ export default function Slider(props: SliderProps) {
                 alignSelf: "flex-start"
             },
             slider: {
-                marginVertical: 5,
-                marginLeft: -15,
-                marginRight: -15
+                marginVertical: 5
             },
             description: {
                 color: colors.textDisabled,
@@ -36,7 +34,7 @@ export default function Slider(props: SliderProps) {
                 <Text style={style.label}>{props.label}</Text>
             )}
 
-            <RNCSlider
+            <EUISlider
                 {...props}
                 style={style.slider}
                 thumbTintColor={colors.primary}

@@ -1,5 +1,6 @@
 import { JSX } from "react";
-import { Switch as RNSwitch, View, Text, StyleSheet } from "react-native";
+import { Switch as RNSwitch, View, Text, StyleSheet, Platform } from "react-native";
+import { Host, Switch as EUISwitch } from "@expo/ui/jetpack-compose";
 import { useStyle } from "@/hooks/useStyle";
 
 export type SwitchProps = {
@@ -19,9 +20,6 @@ export default function Switch(props: SwitchProps) {
                 alignItems: "center",
                 marginVertical: 5
             },
-            disabled: {
-                opacity: 0.5
-            },
             textContainer: {
                 flex: 1,
                 marginLeft: 10
@@ -37,14 +35,27 @@ export default function Switch(props: SwitchProps) {
 
     return (
         <View style={style.container}>
-            <RNSwitch
-                thumbColor={colors.textPrimary}
-                trackColor={{ false: "#bbb", true: colors.primary }}
-                value={props.value}
-                onValueChange={props.onValueChange}
-                disabled={props.disabled}
-                style={props.disabled && style.disabled}
-            />
+            {Platform.OS === "android" ? (
+                <Host matchContents={true}>
+                    <EUISwitch
+                        value={props.value}
+                        onCheckedChange={props.onValueChange}
+                        enabled={!props.disabled}
+                        colors={{
+                            checkedThumbColor: colors.textPrimary,
+                            checkedTrackColor: colors.primary
+                        }}
+                    />
+                </Host>
+            ) : (
+                <RNSwitch
+                    thumbColor={colors.textPrimary}
+                    trackColor={{ false: "#bbb", true: colors.primary }}
+                    value={props.value}
+                    onValueChange={props.onValueChange}
+                    disabled={props.disabled}
+                />
+            )}
 
             <View style={style.textContainer}>
                 <Text style={style.name}>{props.label}</Text>
