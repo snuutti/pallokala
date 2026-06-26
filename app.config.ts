@@ -71,6 +71,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         ],
         "expo-quick-actions",
         "expo-web-browser",
+        "expo-image",
+        "expo-sharing",
+        "@react-native-vector-icons/material-design-icons",
         "./app.plugin.js"
     ],
     experiments: {

@@ -1,5 +1,5 @@
 import { Appearance, Platform } from "react-native";
-import { Theme as NavigationTheme, DefaultTheme } from "@react-navigation/native";
+import { Theme as NavigationTheme, DefaultTheme } from "expo-router/react-navigation";
 import * as SystemUI from "expo-system-ui";
 import { deriveOpacity, deriveContrast } from "@/utils/theme";
 

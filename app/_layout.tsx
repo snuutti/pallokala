@@ -12,9 +12,9 @@ import { setAppearanceColor } from "@/constants/colors";
 import "@/constants/i18n";
 
 // Polyfill
-import "@formatjs/intl-locale/polyfill";
+/*import "@formatjs/intl-locale/polyfill";
 import "@formatjs/intl-displaynames/polyfill";
-import "@formatjs/intl-displaynames/locale-data/en";
+import "@formatjs/intl-displaynames/locale-data/en";*/
 
 SplashScreen.preventAutoHideAsync();
 

@@ -1,7 +1,7 @@
 import { Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
-import { useHeaderHeight } from "@react-navigation/elements";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useHeaderHeight } from "expo-router/react-navigation";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import { useStyle } from "@/hooks/useStyle";
 

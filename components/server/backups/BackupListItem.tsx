@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import useLocalizedFormatter from "@/hooks/useLocalizedFormatter";
 import { useStyle } from "@/hooks/useStyle";
 import { Backup } from "pufferpanel";

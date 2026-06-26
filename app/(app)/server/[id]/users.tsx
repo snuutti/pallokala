@@ -3,7 +3,7 @@ import { RefreshControl, StyleSheet } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import UsersListItem from "@/components/users/UsersListItem";
 import NoUsers from "@/components/server/users/NoUsers";
 import FloatingActionButton, { useFabVisible } from "@/components/ui/FloatingActionButton";

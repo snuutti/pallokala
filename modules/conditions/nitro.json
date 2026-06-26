@@ -10,7 +10,10 @@
     },
     "autolinking": {
         "Conditions": {
-            "kotlin": "HybridConditions"
+            "android": {
+                "language": "kotlin",
+                "implementationClassName": "HybridConditions"
+            }
         }
     },
     "ignorePaths": ["node_modules"]

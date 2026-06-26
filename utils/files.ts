@@ -1,5 +1,5 @@
 import { ComponentProps } from "react";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import { Account } from "@/types/account";
 import { FileDesc, Server } from "pufferpanel";
 

@@ -1,7 +1,7 @@
 import { useEffect, ReactNode } from "react";
 import { useColorScheme, StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ThemeProvider } from "@react-navigation/native";
+import { ThemeProvider } from "expo-router/react-navigation";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { NotifierWrapper } from "react-native-notifier";
 import { ModalProvider } from "@/context/ModalProvider";

@@ -1,4 +1,4 @@
-import { useNavigationState } from "@react-navigation/core";
+import { useNavigationState } from "expo-router/react-navigation";
 
 export default function useIsInsideTabsNavigator() {
     return useNavigationState((state) => {

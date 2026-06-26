@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { StyleSheet } from "react-native";
-import { useNavigation, usePreventRemove } from "@react-navigation/core";
+import { useNavigation, usePreventRemove } from "expo-router/react-navigation";
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import LoadingScreen from "@/components/screen/LoadingScreen";

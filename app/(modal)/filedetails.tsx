@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet } from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import SftpFileDetails from "@/components/server/files/SftpFileDetails";
 import { useServer } from "@/context/ServerProvider";
