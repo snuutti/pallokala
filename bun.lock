@@ -5,6 +5,7 @@
     "": {
       "name": "pallokala",
       "dependencies": {
+        "@dylankenneally/react-native-ssh-sftp": "^1.7.0",
         "@formatjs/intl-displaynames": "^7.3.10",
         "@formatjs/intl-locale": "^5.3.9",
         "@hookform/resolvers": "^5.4.0",
@@ -99,6 +100,9 @@
   "trustedDependencies": [
     "@shopify/react-native-skia",
   ],
+  "patchedDependencies": {
+    "@dylankenneally/react-native-ssh-sftp@1.7.0": "patches/@dylankenneally%2Freact-native-ssh-sftp@1.7.0.patch",
+  },
   "packages": {
     "@adobe/css-tools": ["@adobe/css-tools@4.5.0", "", {}, "sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q=="],
 
@@ -359,6 +363,8 @@
     "@bcoe/v8-coverage": ["@bcoe/v8-coverage@0.2.3", "", {}, "sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw=="],
 
     "@dominicstop/ts-event-emitter": ["@dominicstop/ts-event-emitter@1.1.0", "", {}, "sha512-CcxmJIvUb1vsFheuGGVSQf4KdPZC44XolpUT34+vlal+LyQoBUOn31pjFET5M9ctOxEpt8xa0M3/2M7uUiAoJw=="],
+
+    "@dylankenneally/react-native-ssh-sftp": ["@dylankenneally/react-native-ssh-sftp@1.7.0", "", { "peerDependencies": { "react-native": "*" } }, "sha512-gk7sBBJa+0QBlRP+ZmJbdBr0QJz+/JARbAIopky5ffjGKCmOlN5iG2f3x3jHmlKQNa0U9zs3XmYx0WcLt7pmYw=="],
 
     "@egjs/hammerjs": ["@egjs/hammerjs@2.0.17", "", { "dependencies": { "@types/hammerjs": "^2.0.36" } }, "sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A=="],
 

@@ -1,4 +1,4 @@
-//import SSHClient from "@dylankenneally/react-native-ssh-sftp";
+import SSHClient from "@dylankenneally/react-native-ssh-sftp";
 import { ExtendedFileDesc } from "@/types/server";
 import { FileDesc, Server } from "pufferpanel";
 

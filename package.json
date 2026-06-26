@@ -17,6 +17,7 @@
         "preset": "jest-expo"
     },
     "dependencies": {
+        "@dylankenneally/react-native-ssh-sftp": "^1.7.0",
         "@formatjs/intl-displaynames": "^7.3.10",
         "@formatjs/intl-locale": "^5.3.9",
         "@hookform/resolvers": "^5.4.0",
@@ -109,5 +110,8 @@
     "private": true,
     "trustedDependencies": [
         "@shopify/react-native-skia"
-    ]
+    ],
+    "patchedDependencies": {
+        "@dylankenneally/react-native-ssh-sftp@1.7.0": "patches/@dylankenneally%2Freact-native-ssh-sftp@1.7.0.patch"
+    }
 }
