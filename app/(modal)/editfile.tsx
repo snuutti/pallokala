@@ -57,7 +57,7 @@ export default function EditFileScreen() {
 
             if (openFile?.name.endsWith(".log.gz")) {
                 try {
-                    content = pako.ungzip(data, { to: "string" });
+                    content = pako.ungzip(data, { toText: true });
                     readOnly = true;
 
                     showSuccessAlert(t("app:Servers.Files.LogDecompressed"));

@@ -1,9 +1,9 @@
-import { Appearance, Platform } from "react-native";
+import { ColorSchemeName, Appearance, Platform } from "react-native";
 import { Theme as NavigationTheme, DefaultTheme } from "expo-router/react-navigation";
 import * as SystemUI from "expo-system-ui";
 import { deriveOpacity, deriveContrast } from "@/utils/theme";
 
-export type ColorScheme = "device" | "light" | "dark" | "amoled";
+export type ColorScheme = ColorSchemeName | "device" | "amoled";
 
 export type Colors = {
     dark: boolean;
