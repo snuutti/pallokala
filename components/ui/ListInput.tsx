@@ -2,7 +2,7 @@ import { JSX } from "react";
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import Animated, { FadeOutUp, FadeInUp, LinearTransition } from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import TextInput from "@/components/ui/TextInput";
 import Button from "@/components/ui/Button";
 import { useStyle } from "@/hooks/useStyle";

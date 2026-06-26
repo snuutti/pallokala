@@ -4,7 +4,7 @@ import ActionSheet, { ActionSheetRef, ScrollView } from "react-native-actions-sh
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import { useAccount } from "@/context/AccountProvider";
 import { useModal } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";

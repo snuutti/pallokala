@@ -1,0 +1,24 @@
+diff --git a/node_modules/@dylankenneally/react-native-ssh-sftp/.bun-tag-4f590e11b0b8eb63 b/.bun-tag-4f590e11b0b8eb63
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/android/build.gradle b/android/build.gradle
+index c1b0818e141eb5fdd32048d3856e4ebf2ee0d708..71188c532855ddd0a10b1158b25a2af7175a18e2 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -1,7 +1,7 @@
+ 
+ buildscript {
+     repositories {
+-        jcenter()
++        mavenCentral()
+         google()
+     }
+ 
+@@ -29,7 +29,6 @@ android {
+ 
+ repositories {
+     mavenCentral()
+-    jcenter()
+ }
+ 
+ dependencies {

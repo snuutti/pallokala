@@ -4,7 +4,7 @@ import AlertModal, { AlertModalOptions } from "@/components/modal/AlertModal";
 import PromptModal, { PromptModalOptions } from "@/components/modal/PromptModal";
 import ListModal from "@/components/modal/ListModal";
 import ColorPickerModal from "@/components/modal/ColorPickerModal";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 
 type ModalContextType = {
     createModal: (

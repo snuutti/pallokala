@@ -7,10 +7,10 @@ import Animated, {
     useDerivedValue,
 } from "react-native-reanimated";
 import { useKeyboardHandler } from "react-native-keyboard-controller";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useBottomTabBarHeight } from "expo-router/js-tabs";
 import { useTranslation } from "react-i18next";
 import { FlashList } from "@shopify/flash-list";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import ConsoleText from "@/components/server/console/ConsoleText";
 import TextInput from "@/components/ui/TextInput";
 import { useServer } from "@/context/ServerProvider";

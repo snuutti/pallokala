@@ -1,6 +1,6 @@
 import { View, ScrollView, Text, TouchableOpacity, StyleSheet } from "react-native";
 import * as Clipboard from "expo-clipboard";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import { useStyle } from "@/hooks/useStyle";
 
 export type CopyableProps = {

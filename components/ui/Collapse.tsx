@@ -1,7 +1,7 @@
 import { useState, ReactNode } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Animated, { FadeOutUp, FadeInUp, LinearTransition } from "react-native-reanimated";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import { useStyle } from "@/hooks/useStyle";
 
 export type CollapseProps = {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { FlashList } from "@shopify/flash-list";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import { ListModalButton } from "@/context/ModalProvider";
 import { useStyle } from "@/hooks/useStyle";
 

@@ -1,11 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import { useTranslation } from "react-i18next";
+import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from "expo-router/drawer";
 import { router } from "expo-router";
 import { SheetManager } from "react-native-actions-sheet";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import { useApiClient } from "@/context/ApiClientProvider";
 import { useAccount } from "@/context/AccountProvider";
 import { useStyle } from "@/hooks/useStyle";

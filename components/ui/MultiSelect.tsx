@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Text, View, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useDebouncedCallback } from "use-debounce";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import TextInput from "@/components/ui/TextInput";
 import Button from "@/components/ui/Button";
 import { useModal } from "@/context/ModalProvider";

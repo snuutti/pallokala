@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { Image } from "expo-image";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import { useStyle } from "@/hooks/useStyle";
 import { avatarPlaceholder } from "@/constants/placeholder";
 import { md5 } from "js-md5";
