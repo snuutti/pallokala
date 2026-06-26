@@ -16,6 +16,14 @@
     "jest": {
         "preset": "jest-expo"
     },
+    "expo": {
+        "doctor": {
+            "reactNativeDirectoryCheck": {
+                "exclude": ["@dylankenneally/react-native-ssh-sftp"],
+                "listUnknownPackages": false
+            }
+        }
+    },
     "dependencies": {
         "@dylankenneally/react-native-ssh-sftp": "^1.7.0",
         "@formatjs/intl-displaynames": "^7.3.10",
