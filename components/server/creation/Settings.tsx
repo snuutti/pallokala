@@ -3,6 +3,7 @@ import { Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import EnvironmentConfig from "@/components/templates/EnvironmentConfig";
 import Variables from "@/components/server/settings/Variables";
+import Collapse from "@/components/ui/Collapse";
 import Button from "@/components/ui/Button";
 import { useStyle } from "@/hooks/useStyle";
 import { Template, ServerSettings, MetadataType } from "pufferpanel";
@@ -84,13 +85,6 @@ export default function Settings(props: SettingsProps) {
 
     return (
         <>
-            {environment && (
-                <EnvironmentConfig
-                    environment={environment}
-                    onChange={setEnvironment}
-                />
-            )}
-
             {(variables && anySettings) && (
                 <Variables
                     variables={variables}
@@ -101,6 +95,15 @@ export default function Settings(props: SettingsProps) {
 
             {!anySettings && (
                 <Text style={style.noSettingsText}>{t("servers:NoSettings")}</Text>
+            )}
+
+            {environment && (
+                <Collapse title={t("servers:AdvancedSettings")}>
+                    <EnvironmentConfig
+                        environment={environment}
+                        onChange={setEnvironment}
+                    />
+                </Collapse>
             )}
 
             <Button
