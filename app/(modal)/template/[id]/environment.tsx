@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import ContentWrapper from "@/components/screen/ContentWrapper";
 import RemoteTemplateAlert from "@/components/templates/RemoteTemplateAlert";
 import Button from "@/components/ui/Button";

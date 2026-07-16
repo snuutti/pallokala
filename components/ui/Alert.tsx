@@ -1,6 +1,6 @@
 import { ComponentProps } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "@react-native-vector-icons/material-design-icons";
 import { useStyle } from "@/hooks/useStyle";
 
 type AlertVariant = "success" | "info" | "warning" | "error";

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Tabs, useLocalSearchParams } from "expo-router";
-import { useNavigation, usePreventRemove } from "@react-navigation/core";
+import { useNavigation, usePreventRemove } from "expo-router/react-navigation";
 import { useTranslation } from "react-i18next";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import TemplateErrorScreen from "@/components/templates/TemplateErrorScreen";
