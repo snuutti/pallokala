@@ -348,7 +348,7 @@ declare module "pufferpanel" {
 
         async deleteFile(id: string, path: string): Promise<boolean>;
 
-        async delete(id: string): Promise<boolean>;
+        async delete(id: string, skipNode: boolean = false): Promise<boolean>;
     }
 
     export type ServerCreation = ServerDefinition & {
@@ -563,7 +563,7 @@ declare module "pufferpanel" {
 
         async updateData(data: Record<string, unknown>): Promise<boolean>;
 
-        async delete(): Promise<boolean>;
+        async delete(skipNode: boolean = false): Promise<boolean>;
 
         async getUsers(): Promise<UserPermissionsView[]>;
 

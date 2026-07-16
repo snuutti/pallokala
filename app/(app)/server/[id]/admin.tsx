@@ -6,6 +6,7 @@ import DeletingServerModal from "@/components/server/admin/DeletingServerModal";
 import { useServer } from "@/context/ServerProvider";
 import { useModal } from "@/context/ModalProvider";
 import useToast from "@/hooks/useToast";
+import useVersionCheck from "@/hooks/useVersionCheck";
 import { useBoundStore } from "@/stores/useBoundStore";
 
 export default function AdminScreen() {
@@ -13,18 +14,19 @@ export default function AdminScreen() {
     const { server } = useServer();
     const { createAlertModal, createModal, closeModal } = useModal();
     const { showSuccessAlert } = useToast();
+    const hasForceDelete = useVersionCheck("3.0.9");
     const removeServer = useBoundStore(state => state.removeServer);
 
-    const deleteAlert = () => {
+    const deleteAlert = (skipNode: boolean) => {
         createAlertModal(
             t("servers:Delete"),
-            t("servers:ConfirmDelete", { name: server?.name }),
+            t(skipNode ? "servers:ConfirmForceDelete" : "servers:ConfirmDelete", { name: server?.name }),
             [
                 {
-                    text: t("servers:Delete"),
+                    text: t(skipNode ? "servers:ForceDelete" : "servers:Delete"),
                     icon: "trash-can",
                     style: "danger",
-                    onPress: deleteServer
+                    onPress: () => deleteServer(skipNode)
                 },
                 {
                     text: t("common:Cancel"),
@@ -34,13 +36,13 @@ export default function AdminScreen() {
         );
     };
 
-    const deleteServer = async () => {
+    const deleteServer = async (skipNode: boolean) => {
         const modal = createModal(<DeletingServerModal />, {
             closable: false
         });
 
         try {
-            await server?.delete();
+            await server?.delete(skipNode);
             server?.closeSocket();
             removeServer(server!.id);
             showSuccessAlert(t("servers:Deleted"));
@@ -66,7 +68,16 @@ export default function AdminScreen() {
                     text={t("servers:Delete")}
                     icon="trash-can"
                     style="danger"
-                    onPress={deleteAlert}
+                    onPress={() => deleteAlert(false)}
+                />
+            )}
+
+            {(hasForceDelete && server?.hasScope("server.delete")) && (
+                <Button
+                    text={t("servers:ForceDelete")}
+                    icon="trash-can"
+                    style="danger"
+                    onPress={() => deleteAlert(true)}
                 />
             )}
         </ContentWrapper>
