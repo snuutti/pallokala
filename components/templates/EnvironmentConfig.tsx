@@ -3,11 +3,28 @@ import { useTranslation } from "react-i18next";
 import KeyValueInput from "@/components/ui/KeyValueInput";
 import PortMappingInput from "@/components/ui/PortMappingInput";
 import TextInput from "@/components/ui/TextInput";
+import Switch from "@/components/ui/Switch";
+import ListInput from "@/components/ui/ListInput";
 import { useStyle } from "@/hooks/useStyle";
 import { MetadataType } from "pufferpanel";
 
 const fields: { [key: string]: any[] } = {
-    host: [],
+    host: [
+        {
+            name: "disableUnshare",
+            type: "boolean",
+            label: "env:host.DisableUnshare",
+            hint: "env:host.DisableUnshareHint",
+            default: false
+        },
+        {
+            name: "mounts",
+            type: "list",
+            label: "env:host.Mounts",
+            hint: "env:host.MountsHint",
+            default: []
+        }
+    ],
     docker: [
         {
             name: "image",
@@ -116,6 +133,26 @@ export default function EnvironmentConfig(props: EnvironmentConfigProps) {
                     defaultValue={props.environment[field.name] || field.default}
                     onChangeText={(value) => onFieldChange(field.name, value)}
                     placeholder={getLabel(field)}
+                    description={t(field.hint)}
+                />
+            );
+        } else if (field.type === "boolean") {
+            return (
+                <Switch
+                    key={field.name}
+                    value={props.environment[field.name] || field.default}
+                    onValueChange={(value) => onFieldChange(field.name, value)}
+                    label={getLabel(field)}
+                    description={t(field.hint)}
+                />
+            );
+        } else if (field.type === "list") {
+            return (
+                <ListInput
+                    key={field.name}
+                    value={props.environment[field.name] || field.default}
+                    onValueChange={(value) => onFieldChange(field.name, value)}
+                    label={getLabel(field)}
                     description={t(field.hint)}
                 />
             );

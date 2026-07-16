@@ -140,6 +140,7 @@ export default function Operator(props: OperatorProps) {
                             value={props.data[option.name] as string[]}
                             onValueChange={(value) => updateOption(option.name, value)}
                             description={getHint(option)}
+                            allowSwap={true}
                         />
                     )}
                 </Animated.View>
