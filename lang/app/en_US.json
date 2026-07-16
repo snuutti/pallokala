@@ -110,8 +110,16 @@
     },
     "Templates": {
         "NoTemplates": "No templates available",
+        "Error": "Failed to load template",
         "Operators": {
             "EditTitle": "Edit Operator"
+        },
+        "Variables": {
+            "EditTitle": "Edit Variable",
+            "EditGroupTitle": "Edit Variable Group"
+        },
+        "Environment": {
+            "EditTitle": "Edit Environment"
         }
     },
     "Node": {

@@ -441,7 +441,7 @@ declare module "pufferpanel" {
     };
 
     export type Execution = {
-        command: Command[];
+        command: string | Command[];
         stop?: string;
         stopCode?: number;
         pre?: ConditionalMetadataType[];

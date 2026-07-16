@@ -1,0 +1,36 @@
+import { Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
+import ContentWrapper from "@/components/screen/ContentWrapper";
+import RemoteTemplateAlert from "@/components/templates/RemoteTemplateAlert";
+import OperatorList from "@/components/templates/operator/OperatorList";
+import { useTemplateEditor } from "@/context/TemplateEditorProvider";
+import { useStyle } from "@/hooks/useStyle";
+
+export default function InstallScreen() {
+    const { t } = useTranslation();
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            description: {
+                color: colors.textDisabled,
+                marginBottom: 10
+            }
+        })
+    );
+    const { template, setTemplate } = useTemplateEditor();
+
+    return (
+        <ContentWrapper>
+            <RemoteTemplateAlert />
+
+            <Text style={style.description}>{t("templates:description.Install")}</Text>
+
+            <OperatorList
+                operations={template?.install || []}
+                setOperations={(operations) => {
+                    setTemplate({ ...template!, install: operations });
+                }}
+                addLabel={t("templates:AddInstallStep")}
+            />
+        </ContentWrapper>
+    );
+}

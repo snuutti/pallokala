@@ -99,6 +99,8 @@ export default function Operator(props: OperatorProps) {
                 onChangeText={(value) => updateOption("if", value)}
                 placeholder={t("common:Condition")}
                 description={t("operators:ConditionHint")}
+                autoCapitalize="none"
+                autoCorrect={false}
             />
 
             {options.map((option, index) => (
@@ -109,6 +111,8 @@ export default function Operator(props: OperatorProps) {
                             onChangeText={(value) => updateOption(option.name, value)}
                             placeholder={getLabel(option)}
                             description={getHint(option)}
+                            autoCapitalize="none"
+                            autoCorrect={false}
                         />
                     )}
 
@@ -136,6 +140,7 @@ export default function Operator(props: OperatorProps) {
                             value={props.data[option.name] as string[]}
                             onValueChange={(value) => updateOption(option.name, value)}
                             description={getHint(option)}
+                            allowSwap={true}
                         />
                     )}
                 </Animated.View>

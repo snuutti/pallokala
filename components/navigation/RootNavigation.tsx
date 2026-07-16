@@ -126,6 +126,33 @@ export default function RootNavigation() {
             />
 
             <Stack.Screen
+                name="(modal)/editvariable"
+                options={{
+                    title: t("app:Templates.Variables.EditTitle"),
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
+                name="(modal)/editvariablegroup"
+                options={{
+                    title: t("app:Templates.Variables.EditGroupTitle"),
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
+                name="(modal)/editenvironment"
+                options={{
+                    title: t("app:Templates.Environment.EditTitle"),
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
                 name="(modal)/enroll2fa"
                 options={{
                     title: t("users:Otp"),
@@ -146,6 +173,15 @@ export default function RootNavigation() {
                 options={{
                     title: t("oauth:Credentials"),
                     animation: Platform.OS === "ios" ? "default" : "fade_from_bottom"
+                }}
+            />
+
+            <Stack.Screen
+                name="(modal)/template/[id]"
+                options={{
+                    title: "Template",
+                    presentation: "modal",
+                    animation: "fade_from_bottom"
                 }}
             />
         </Stack>

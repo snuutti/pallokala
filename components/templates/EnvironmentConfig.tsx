@@ -1,11 +1,30 @@
+import { Text, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import KeyValueInput from "@/components/ui/KeyValueInput";
 import PortMappingInput from "@/components/ui/PortMappingInput";
 import TextInput from "@/components/ui/TextInput";
+import Switch from "@/components/ui/Switch";
+import ListInput from "@/components/ui/ListInput";
+import { useStyle } from "@/hooks/useStyle";
 import { MetadataType } from "pufferpanel";
 
 const fields: { [key: string]: any[] } = {
-    host: [],
+    host: [
+        {
+            name: "disableUnshare",
+            type: "boolean",
+            label: "env:host.DisableUnshare",
+            hint: "env:host.DisableUnshareHint",
+            default: false
+        },
+        {
+            name: "mounts",
+            type: "list",
+            label: "env:host.Mounts",
+            hint: "env:host.MountsHint",
+            default: []
+        }
+    ],
     docker: [
         {
             name: "image",
@@ -49,10 +68,18 @@ const fields: { [key: string]: any[] } = {
 type EnvironmentConfigProps = {
     environment: MetadataType;
     onChange: (environment: MetadataType) => void;
+    noFieldsMessage?: string;
 };
 
 export default function EnvironmentConfig(props: EnvironmentConfigProps) {
     const { t } = useTranslation();
+    const { style } = useStyle((colors) =>
+        StyleSheet.create({
+            text: {
+                color: colors.text
+            }
+        })
+    );
 
     const getLabel = (field: any): string => {
         if (field.label) {
@@ -67,6 +94,14 @@ export default function EnvironmentConfig(props: EnvironmentConfigProps) {
         newEnvironment[field] = value;
         props.onChange(newEnvironment);
     };
+
+    if (!props.environment.type) {
+        return null;
+    }
+
+    if (props.noFieldsMessage && fields[props.environment.type!].length === 0) {
+        return <Text style={style.text}>{props.noFieldsMessage}</Text>;
+    }
 
     return fields[props.environment.type!].map(field => {
         if (field.type === "map") {
@@ -98,6 +133,26 @@ export default function EnvironmentConfig(props: EnvironmentConfigProps) {
                     defaultValue={props.environment[field.name] || field.default}
                     onChangeText={(value) => onFieldChange(field.name, value)}
                     placeholder={getLabel(field)}
+                    description={t(field.hint)}
+                />
+            );
+        } else if (field.type === "boolean") {
+            return (
+                <Switch
+                    key={field.name}
+                    value={props.environment[field.name] || field.default}
+                    onValueChange={(value) => onFieldChange(field.name, value)}
+                    label={getLabel(field)}
+                    description={t(field.hint)}
+                />
+            );
+        } else if (field.type === "list") {
+            return (
+                <ListInput
+                    key={field.name}
+                    value={props.environment[field.name] || field.default}
+                    onValueChange={(value) => onFieldChange(field.name, value)}
+                    label={getLabel(field)}
                     description={t(field.hint)}
                 />
             );

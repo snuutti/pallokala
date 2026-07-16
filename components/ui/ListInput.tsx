@@ -13,6 +13,7 @@ export type ListInputProps = {
     value: string[];
     onValueChange: (value: string[]) => void;
     addLabel?: string;
+    allowSwap?: boolean;
 };
 
 export default function ListInput(props: ListInputProps) {
@@ -40,6 +41,7 @@ export default function ListInput(props: ListInputProps) {
                 opacity: 0.4
             },
             description: {
+                marginHorizontal: 16,
                 color: colors.textDisabled
             }
         })
@@ -76,37 +78,47 @@ export default function ListInput(props: ListInputProps) {
                 <Text style={style.label}>{props.label}</Text>
             )}
 
+            {props.description && (
+                <Text style={style.description}>{props.description}</Text>
+            )}
+
             {props.value.map((item, index) => (
                 <Animated.View key={index} layout={LinearTransition} exiting={FadeOutUp} entering={FadeInUp} style={style.item}>
                     <TextInput
                         value={item}
                         onChangeText={(value) => onValueChange(value, index)}
+                        autoCapitalize="none"
+                        autoCorrect={false}
                         style={style.input}
                     />
 
-                    <TouchableOpacity
-                        onPress={() => swap(index, index - 1)}
-                        disabled={index === 0}
-                    >
-                        <MaterialCommunityIcons
-                            name="chevron-up"
-                            size={30}
-                            color={colors.text}
-                            style={[style.leftMargin, index === 0 && style.actionDisabled]}
-                        />
-                    </TouchableOpacity>
+                    {props.allowSwap && (
+                        <>
+                            <TouchableOpacity
+                                onPress={() => swap(index, index - 1)}
+                                disabled={index === 0}
+                            >
+                                <MaterialCommunityIcons
+                                    name="chevron-up"
+                                    size={30}
+                                    color={colors.text}
+                                    style={[style.leftMargin, index === 0 && style.actionDisabled]}
+                                />
+                            </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => swap(index, index + 1)}
-                        disabled={index === props.value.length - 1}
-                    >
-                        <MaterialCommunityIcons
-                            name="chevron-down"
-                            size={30}
-                            color={colors.text}
-                            style={[style.leftMargin, index === props.value.length - 1 && style.actionDisabled]}
-                        />
-                    </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => swap(index, index + 1)}
+                                disabled={index === props.value.length - 1}
+                            >
+                                <MaterialCommunityIcons
+                                    name="chevron-down"
+                                    size={30}
+                                    color={colors.text}
+                                    style={[style.leftMargin, index === props.value.length - 1 && style.actionDisabled]}
+                                />
+                            </TouchableOpacity>
+                        </>
+                    )}
 
                     <TouchableOpacity onPress={() => remove(index)}>
                         <MaterialCommunityIcons
@@ -124,10 +136,6 @@ export default function ListInput(props: ListInputProps) {
                 icon="plus"
                 onPress={add}
             />
-
-            {props.description && (
-                <Text style={style.description}>{props.description}</Text>
-            )}
         </>
     );
 }
